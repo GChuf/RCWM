@@ -1,0 +1,24 @@
+Windows Registry Editor Version 5.00
+
+;TAKE OWNERSHIP, created by Vishal Gupta (AskVG.com)
+;adapted by GChuf
+
+[HKEY_CLASSES_ROOT\*\shell\takeown]
+@="Take Ownership"
+"NoWorkingDirectory"=""
+"Icon"="rcwmimg.dll,-9"
+
+[HKEY_CLASSES_ROOT\*\shell\takeown\command]
+@="cmd.exe /c takeown /f \"%1\" && icacls \"%1\" /grant administrators:F"
+"IsolatedCommand"="cmd.exe /c takeown /f \"%1\" && icacls \"%1\" /grant administrators:F"
+
+[HKEY_CLASSES_ROOT\Directory\shell\takeown]
+@="Take Ownership"
+"NoWorkingDirectory"=""
+"Icon"="rcwmimg.dll,-9"
+
+[HKEY_CLASSES_ROOT\Directory\shell\takeown\command]
+@="cmd.exe /c takeown /F \"%1\" /R /D Y && icacls \"%1\" /grant administrators:F /T /C"
+"IsolatedCommand"="cmd.exe /c takeown /F \"%1\" /R /D Y && icacls \"%1\" /grant administrators:F /T /C"
+
+; end

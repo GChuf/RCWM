@@ -1,0 +1,15 @@
+Windows Registry Editor Version 5.00
+
+;rmdir
+
+[HKEY_CLASSES_ROOT\Directory\shell\rmdir]
+@="Remove Directory"
+"NoWorkingDirectory"=""
+"Icon"="rcwmimg.dll,-2"
+
+[HKEY_CLASSES_ROOT\Directory\shell\rmdir\command]
+@="cmd.exe /c rd /s /q \"%1\" "
+"IsolatedCommand"="cmd.exe /c rd /s /q \"%1\" "
+
+
+;done
