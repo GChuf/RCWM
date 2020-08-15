@@ -33,9 +33,14 @@ for %%I in (.) do set folder=%%~nxI
 echo(
 echo Copying !path! into %basedir%\!folder! ...
 
-IF EXIST "%basedir%"\"!folder!" ( echo Folder with name !folder! already exists, cannot move! 
-) else ( 
-cd /d "%basedir%" && md "!folder!" && C:\Windows\System32\robocopy.exe !path! "!folder!" /E /NFL /NJH /NJS /NC /NS /MT:16 1>nul )
+IF EXIST "%basedir%"\"!folder!" ( echo Folder with name !folder! already exists, cannot move!
+) else (
+rem /NFL for no file names
+rem /NP for no progress
+rem /NJS no job summary
+rem /NJH no job header
+rem NC no class NS no size
+cd /d "%basedir%" && md "!folder!" && C:\Windows\System32\robocopy.exe !path! "!folder!" /E /NP /NJH /NJS /NC /NS /NP /MT:16 )
 rem /E for all subdirectories (also Empty ones)
 )
 
