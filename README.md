@@ -9,6 +9,7 @@ This little magic pack includes:
 - taking ownership of files, or directories with recursion
 - options to boot into Safe Mode from desktop
 - opening Control Panel from desktop
+- running programs with custom priority
 
 You can also remove some right-click menu options, so that your menu doesn't become too cluttered:
 - Pin to Quick menu
@@ -38,3 +39,15 @@ If you don't have the administrator privileges on your Windows OS, I'm afraid yo
 Magic, basically. Right now, the magic happens inside the Windows registry with some help of batch scripting. Some day, this batch magic might evolve into powershell wizardry, but up until now, there was no need for that to happen.
 
 The goal was to simply automate command line tools like robocopy, so that 1) everybody could use it, and 2) it would save some time to those who already know how to use it. While automating the tasks, I've accidentally discovered that I could automate much more than what I thought - and so now, you can select multiple folders to copy/move and paste them all into one folder, just like you can with the regular, slow, lazy windows GUI copy (there are still some problems with overwriting folders, though).
+
+
+
+# Credits
+
+The files for Booting into Safe mode and Running with Priority were heavily influenced by Shawn Brink at tenforums.com
+
+The files for Taking Ownership was heavily influenced by Vishal Gupta at AskVG.com
+
+I changed and adapted all those files, but their ideas and the initial implementations deserve the credit.
+
+Everything else is my own work entirely.

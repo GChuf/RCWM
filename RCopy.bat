@@ -3,9 +3,7 @@ title RCWM: RoboCopy
 color 02
 SETLOCAL EnableDelayedExpansion
 
-IF EXIST C:\Windows\System32\RCWM\rc.log (
-goto start
-) ELSE (
+IF NOT EXIST C:\Windows\System32\RCWM\rc.log (
 mode con:cols=65 lines=9
 echo Source folder not specified!
 echo Right-Click on a folder and select 'RoboCopy Directory'.
@@ -32,15 +30,14 @@ cd /D "!path!"
 rem get folder name
 for %%I in (.) do set folder=%%~nxI
 
-
-echo Merging . . .
 echo(
+echo Copying !path! into %basedir%\!folder! ...
 
-
-IF EXIST "%basedir%"\"!folder!" ( echo Folder with name !folder! already exists, cannot move! ) else ( cd /d "%basedir%" && md "!folder!" && robocopy "!path!" .\"!folder!" /E /NFL /NJH /NJS /NC /NS /MT:16)
+IF EXIST "%basedir%"\"!folder!" ( echo Folder with name !folder! already exists, cannot move! 
+) else ( 
+cd /d "%basedir%" && md "!folder!" && C:\Windows\System32\robocopy.exe !path! "!folder!" /E /NFL /NJH /NJS /NC /NS /MT:16 1>nul )
 rem /E for all subdirectories (also Empty ones)
-
 )
 
-del /f /q C:\Windows\System32\RCWM\move.log
+del /f /q C:\Windows\System32\RCWM\rc.log
 exit
