@@ -69,9 +69,10 @@ echo Created hidden folder at %SystemRoot%\System32\RCWM
 xcopy /f *.bat %SystemRoot%\System32\RCWM 1>nul
 xcopy /f rcwmimg.dll %SystemRoot%\System32 /y 1>nul
 
-rem take ownership of that folder for administrators
+rem take ownership of that folder for administrators & users
 takeown /F %SystemRoot%\System32\RCWM /R /D Y 1>nul
 icacls %SystemRoot%\System32\RCWM /grant administrators:F /T /C 1>nul
+icacls %SystemRoot%\System32\RCWM /grant users:F /T /C 1>nul
 
 echo Copied all files.
 echo Pre-setup complete.
