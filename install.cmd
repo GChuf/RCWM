@@ -171,6 +171,10 @@ color a
 choice /C yn /M "* Do you want to delete Include in Library "
 if %errorlevel% == 1 ( start /w regedit /s DeleteLibrary.reg )
 
+color 9
+choice /C yn /M "* Do you want to delete Add to Windows Media Player "
+if %errorlevel% == 1 ( start /w regedit /s DeleteWinPlayer.reg )
+
 rem color 9
 rem todo choice /C yn /M "* Do you want to delete Print "
 

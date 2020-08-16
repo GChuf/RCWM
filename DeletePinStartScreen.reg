@@ -1,7 +1,8 @@
 Windows Registry Editor Version 5.00
 
-;remove "pin to quick access" from context menu
+;remove "pin to start" from context menu
 
 [-HKEY_CLASSES_ROOT\Folder\shellex\ContextMenuHandlers\PintoStartScreen]
+[-HKEY_CLASSES_ROOT\exefile\shellex\ContextMenuHandlers\PintoStartScreen]
 
 ;done
