@@ -25,6 +25,7 @@ TODO (magic takes time):
 - creating junctions (soft links)
 - your suggestions
 
+![Magic examples](img/RCWM.gif)
 
 
 # Installation
