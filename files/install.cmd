@@ -129,9 +129,9 @@ color a
 choice /C yn /M "* Do you want to add Run with Priority "
 if %errorlevel% == 1 ( start /w regedit /s RunWithPriority.reg )
 
-rem color 9
-rem choice /C yn /M "* Do you want to add Remove Directory "
-rem if %errorlevel% == 1 ( start /w regedit /s RmDir.reg )
+color 9
+choice /C yn /M "* Do you want to add Remove Directory "
+if %errorlevel% == 1 ( start /w regedit /s RmDir.reg )
 
 rem color c
 rem choice /C yn /M "* Do you want to add Control Panel "
