@@ -95,11 +95,33 @@ echo(
 
 color 9
 choice /C yn /M "* Do you want to add RoboCopy "
-if %errorlevel% == 1 ( start /w regedit /s RCopy.reg )
+if %errorlevel% == 1 ( goto RCopySingle ) else ( goto MvDir )
 
+
+:RCopySingle
+choice /C yn /M "** Do you want to add RoboCopy for single directories (recommended) "
+if %errorlevel% == 1 ( start /w regedit /s RCopy.reg && goto MvDir ) else ( goto RCopyBeta )
+
+:RCopyBeta
+choice /C yn /M "** Do you want to add RoboCopy for multiple directories (in beta - check readme) "
+if %errorlevel% == 1 ( start /w regedit /s RCopyMultiple.reg )
+
+
+:MvDir
 color c
 choice /C yn /M "* Do you want to add Move Directory "
-if %errorlevel% == 1 ( start /w regedit /s MvDir.reg )
+if %errorlevel% == 1 ( goto MvDirSingle ) else ( goto Other )
+
+:MvDirSingle
+choice /C yn /M "** Do you want to add Move Directory for single directories (recommended) "
+if %errorlevel% == 1 ( start /w regedit /s MvDir.reg && goto Other ) else ( goto MvDirBeta )
+
+:MvDirBeta
+choice /C yn /M "** Do you want to add Move Directory for multiple directories (in beta - check readme) "
+if %errorlevel% == 1 ( start /w regedit /s MvDirMultiple.reg )
+
+
+:Other
 
 color a
 choice /C yn /M "* Do you want to add Take Ownership "
