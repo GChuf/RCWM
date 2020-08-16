@@ -40,15 +40,32 @@ Magic, basically. Right now, the magic happens inside the Windows registry with 
 
 The goal was to simply automate command line tools like robocopy, so that 1) everybody could use it, and 2) it would save some time to those who already know how to use it. While automating the tasks, I've accidentally discovered that I could automate much more than what I thought - and so now, you can select multiple folders to copy/move and paste them all into one folder, just like you can with the regular, slow, lazy windows GUI copy (there are still some problems with overwriting folders, though, and a bug).
 
-RoboCopy/RoboPaste & Move Directory both use robocopy to do the work. The list of the folders to be copied is first saved into a log file inside C:\Windows\System32\RCWM folder. The folders get appended to this list if you choose to copy/move multiple files. The logs for copy/move are separate of course. This allows to copy more than one folder at a time, but introduces a bug, and can be easily broken if you don't let the operation finish (the log file will not get deleted). This is to be fixed/improved.
-Up until then, please use copying/moving multiple folders cautiously! This is still in "beta" and I advise you to copy/move one folder at a time.
 
+# RoboCopy and Move Directory options
 
+RoboCopy/RoboPaste & Move Directory both use robocopy to do the work. The list of the folders to be copied is first saved into a log file inside the C:\Windows\System32\RCWM folder.
+The default version only works for copying/moving one folder at a time. If you specify a new folder to be copied, the old one (if existing) will be overwritten.
 
+Beta version (multiple folders at a time): the folders get appended to this list inside the log file. This allows to copy more than one folder at a time, but introduces a bug, and can be easily broken if you don't let the operation finish (the log file will not get deleted, which means the folder will get copied again the next time you try to RoboPaste). This is to be fixed/improved.
+
+Up until then, please use the safe version (one folder at a time), or use copying/moving multiple folders cautiously!
 
 # Known bugs
 
 - When selecting multiple folders to be copied/moved, not all of them are saved into the list for copying/moving (~10% loss?)
+
+
+# Tests
+RoboCopy is much faster for copying a large amount of small files.
+RmDir is also faster than "standard" delete.
+
+
+Results from gif:
+Folder info: 1.73GB / 12 089 files
+- rcopy/normal copy: 43s/91s
+- rmdir/normal delete: ~ 3s/4.5s
+
+![Magic tests](img/RCWMtest.gif)
 
 
 # Credits
@@ -60,7 +77,3 @@ The files for Taking Ownership was heavily influenced by Vishal Gupta at AskVG.c
 I changed and adapted all those files, but their ideas and the initial implementations deserve the credit.
 
 Everything else is my own work, with the help of the Internet.
-
-
-
-
