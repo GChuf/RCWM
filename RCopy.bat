@@ -33,7 +33,7 @@ for %%I in (.) do set folder=%%~nxI
 echo(
 echo Copying !path! into %basedir%\!folder! ...
 
-IF EXIST "%basedir%"\"!folder!" ( echo Folder with name !folder! already exists, cannot move!
+IF EXIST "%basedir%"\"!folder!" ( echo Folder with name !folder! already exists, cannot copy! && C:\Windows\System32\timeout /t 3 >nul
 ) else (
 rem /NFL for no file names
 rem /NP for no progress
