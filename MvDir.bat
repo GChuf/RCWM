@@ -6,7 +6,7 @@ SETLOCAL EnableDelayedExpansion
 IF NOT EXIST C:\Windows\System32\RCWM\mv.log (
 mode con:cols=65 lines=9
 echo Source folder not specified!
-echo Right-Click on a folder and select 'RoboCopy Directory'.
+echo Right-Click on a folder and select 'Move Directory'.
 timeout /t 3 >nul
 exit
 )
