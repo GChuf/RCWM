@@ -20,7 +20,6 @@ You can also remove some right-click menu options, so that your menu doesn't bec
 
 
 TODO (magic takes time):
-- removing directories
 - copying files
 - creating junctions (soft links)
 - your suggestions
@@ -31,7 +30,7 @@ TODO (magic takes time):
 # Installation
 
 
-To install the tools: download the zip file, unzip it and run the install.cmd script - after that, you'll only need the two most famous keys: Y and N.
+To install the tools: download the zip file, unzip it and run the install.cmd script inside the "files" folder - after that, you'll only need the two most famous keys: Y and N.
 If you don't have the administrator privileges on your Windows OS, I'm afraid you won't see much magic.
 
 
@@ -42,6 +41,9 @@ Magic, basically. Right now, the magic happens inside the Windows registry with 
 The goal was to simply automate command line tools like robocopy, so that 1) everybody could use it, and 2) it would save some time to those who already know how to use it. While automating the tasks, I've accidentally discovered that I could automate much more than what I thought - and so now, you can select multiple folders to copy/move and paste them all into one folder, just like you can with the regular, slow, lazy windows GUI copy (there are still some problems with overwriting folders, though, and a bug).
 
 RoboCopy/RoboPaste & Move Directory both use robocopy to do the work. The list of the folders to be copied is first saved into a log file inside C:\Windows\System32\RCWM folder. The folders get appended to this list if you choose to copy/move multiple files. The logs for copy/move are separate of course. This allows to copy more than one folder at a time, but introduces a bug, and can be easily broken if you don't let the operation finish (the log file will not get deleted). This is to be fixed/improved.
+Up until then, please use copying/moving multiple folders cautiously! This is still in "beta" and I advise you to copy/move one folder at a time.
+
+
 
 
 # Known bugs
@@ -57,7 +59,7 @@ The files for Taking Ownership was heavily influenced by Vishal Gupta at AskVG.c
 
 I changed and adapted all those files, but their ideas and the initial implementations deserve the credit.
 
-Everything else is my own work, with the help of Internet.
+Everything else is my own work, with the help of the Internet.
 
 
 
