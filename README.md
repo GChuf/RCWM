@@ -31,7 +31,7 @@ TODO (magic takes time):
 
 
 To install the tools: download the zip file, unzip it and run the install.cmd script inside the "files" folder - after that, you'll only need the two most famous keys: Y and N.
-If you don't have the administrator privileges on your Windows OS, I'm afraid you won't see much magic.
+If you don't have the administrator privileges on your Windows OS, some magic might not work properly.
 
 
 # How does it work?
