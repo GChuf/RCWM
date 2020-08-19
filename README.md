@@ -6,7 +6,7 @@ Right Click Windows Magic is a set of right-click menu tools for admins, power u
 This little magic pack includes:
 - robocopy for copying and moving directories (much faster than regular copy)
 - opening CMD or powershell windows into folders or drives
-- taking ownership of files, or directories with recursion
+- taking ownership of files, or directories with recursion (takeown && icacls)
 - options to boot into Safe Mode from desktop
 - opening Control Panel from desktop
 - running programs with custom priority
@@ -70,9 +70,9 @@ Folder info: 1.73GB / 12 089 files
 
 # Credits
 
-The files for Booting into Safe mode and Running with Priority were heavily influenced by Shawn Brink at tenforums.com
+The files for Booting into Safe mode and Running with Priority were heavily influenced by Shawn Brink at [tenforums.com](https://www.tenforums.com/tutorials/1977-windows-10-tutorial-index.html)
 
-The files for Taking Ownership was heavily influenced by Vishal Gupta at AskVG.com
+The files for Taking Ownership was heavily influenced by Vishal Gupta at [AskVG.com](https://www.askvg.com/)
 
 I changed and adapted all those files, but their ideas and the initial implementations deserve the credit.
 
