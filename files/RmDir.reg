@@ -8,8 +8,7 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-2"
 
 [HKEY_CLASSES_ROOT\Directory\shell\rmdir\command]
-@="cmd.exe /c rd /s /q \"%1\" "
-"IsolatedCommand"="cmd.exe /c rd /s /q \"%1\" "
-
+@="cmd /c del /s /q \"%1\"\\* && rd /s /q \"%1\""
+"IsolatedCommand"="cmd /c del /s /q \"%1\"\\* && rd /s /q \"%1\""
 
 ;done
