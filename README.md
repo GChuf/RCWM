@@ -52,7 +52,8 @@ Up until then, please use the safe version (one folder at a time), or use copyin
 
 # Known bugs
 
-- ~~When selecting multiple folders to be copied/moved, not all of them are saved into the list for copying/moving (~10% loss?)~~ Fixed with powershell using mutex
+- <del>When selecting multiple folders to be copied/moved, not all of them are saved into the list for copying/moving (~10% loss?)</del>
+Fixed with powershell using mutex
 
 
 # Tests
