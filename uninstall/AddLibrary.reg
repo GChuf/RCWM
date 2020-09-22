@@ -1,0 +1,13 @@
+Windows Registry Editor Version 5.00
+
+;Add "include in library" back to context menu
+
+[HKEY_CLASSES_ROOT\Folder\ShellEx\ContextMenuHandlers\Library Location]
+@="{3dad6c5d-2167-4cae-9914-f99e41c12cfa}"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Folder\ShellEx\ContextMenuHandlers\Library Location]
+@="{3dad6c5d-2167-4cae-9914-f99e41c12cfa}"
+
+;done
+
+

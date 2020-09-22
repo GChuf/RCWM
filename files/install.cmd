@@ -132,12 +132,8 @@ choice /C yn /M "* Do you want to add Safe Mode "
 if %errorlevel% == 1 ( start /w regedit /s SafeMode.reg )
 
 color c
-choice /C yn /M "* Do you want to add open CMD to background "
-if %errorlevel% == 1 ( start /w regedit /s CMDbackground.reg )
-
-color a
-choice /C yn /M "* Do you want to add open CMD to folders "
-if %errorlevel% == 1 ( start /w regedit /s CMDfolders.reg )
+choice /C yn /M "* Do you want to add open CMD to background/folders/drives "
+if %errorlevel% == 1 ( start /w regedit /s CMD.reg )
 
 color 9
 choice /C yn /M "* Do you want to add open PowerShell to background "
@@ -154,6 +150,11 @@ if %errorlevel% == 1 ( start /w regedit /s RunWithPriority.reg )
 color 9
 choice /C yn /M "* Do you want to add Remove Directory (this deletes symlink contents, not symlinks!) "
 if %errorlevel% == 1 ( start /w regedit /s RmDir.reg )
+
+color c
+choice /C yn /M "* Do you want to increase right-click menu item limit from 15 to 256? "
+if %errorlevel% == 1 ( start /w regedit /s MultipleInvokeMinimum.reg )
+
 
 rem color c
 rem choice /C yn /M "* Do you want to add Control Panel "
@@ -198,10 +199,14 @@ choice /C yn /M "* Do you want to delete Add to Windows Media Player "
 if %errorlevel% == 1 ( start /w regedit /s DeleteWinPlayer.reg )
 
 rem color 9
-rem todo choice /C yn /M "* Do you want to delete Print "
+rem choice /C yn /M "* Do you want to delete Print "
 
 rem color c
-rem todo choice /C yn /M "* Do you want to delete Win Defender "
+rem choice /C yn /M "* Do you want to delete Win Defender "
+
+rem color a
+rem choice /C yn /M "* Do you want to delete Cast to Device "
+
 
 
 :End
