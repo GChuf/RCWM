@@ -2,7 +2,6 @@ Windows Registry Editor Version 5.00
 
 ;Add CMD to right click menu
 
-[-HKEY_CLASSES_ROOT\Directory\shell\runas]
 [HKEY_CLASSES_ROOT\Directory\shell\cmd2]
 @="Open Command Window here"
 "Icon"="rcwmimg.dll,-1"
@@ -11,8 +10,6 @@ Windows Registry Editor Version 5.00
 @="cmd.exe /k cd /d %1"
 
 
-
-[-HKEY_CLASSES_ROOT\Directory\Background\shell\runas]
 [HKEY_CLASSES_ROOT\Directory\Background\shell\cmd2]
 @="Open Command Window here"
 "Icon"="rcwmimg.dll,-1"
@@ -21,8 +18,6 @@ Windows Registry Editor Version 5.00
 @="cmd.exe /k cd /d %V"
 
 
-
-[-HKEY_CLASSES_ROOT\Drive\shell\runas]
 [HKEY_CLASSES_ROOT\Drive\shell\cmd2]
 @="Open Command Window here"
 "Icon"="rcwmimg.dll,-1"
