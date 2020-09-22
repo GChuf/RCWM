@@ -1,0 +1,15 @@
+Windows Registry Editor Version 5.00
+
+;Remove SafeMode from context menu
+
+[-HKEY_CLASSES_ROOT\DesktopBackground\Shell\SafeMode]
+
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\NormalMode]
+
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\SafeMode]
+
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\SafeModeNetwork]
+
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\SafeModeCMD]
+
+;done

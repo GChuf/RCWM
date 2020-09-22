@@ -1,0 +1,10 @@
+Windows Registry Editor Version 5.00
+
+;Add "pin to quick access" back to context menu
+
+[HKEY_CLASSES_ROOT\Folder\shell\pintohome]
+@="AppliesToSystem.ParsingName:<>\"::{679f85cb-0220-4080-b29b-5540cc05aab6}\" AND System.ParsingName:<>\"::{645FF040-5081-101B-9F08-00AA002F954E}\" AND System.IsFolder:=System.StructuredQueryType.Boolean#True"
+
+"MUIVerb"="@shell32.dll,-51377"
+
+;done
