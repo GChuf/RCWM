@@ -22,6 +22,7 @@ You can also remove some right-click menu options, so that your menu doesn't bec
 TODO (magic takes time):
 - copying files
 - creating directory junctions (mklink /D), hard links (mklink /H) and symbolic links [aka soft links] (mklink /J)
+- uninstall script
 - your suggestions
 
 ![Magic examples](img/RCWM.gif)
