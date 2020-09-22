@@ -10,6 +10,7 @@ This little magic pack includes:
 - options to boot into Safe Mode from desktop
 - opening Control Panel from desktop
 - running programs with custom priority
+- options to uninstall the changes you've made
 
 You can also remove some right-click menu options, so that your menu doesn't become too cluttered:
 - Pin to Quick menu
@@ -22,8 +23,8 @@ You can also remove some right-click menu options, so that your menu doesn't bec
 TODO (magic takes time):
 - copying files
 - creating directory junctions (mklink /D), hard links (mklink /H) and symbolic links [aka soft links] (mklink /J)
-- uninstall script
 - reboot to recovery
+- cmd/pwsh opened with admin priv
 - locking folders
 - your suggestions
 
@@ -33,7 +34,7 @@ TODO (magic takes time):
 # Installation
 
 
-To install the tools: download the zip file, unzip it and run the install.cmd script inside the "files" folder - after that, you'll only need the two most famous keys: Y and N.
+To install the tools: download the latest zip file under releases ([here](https://github.com/GChuf/RCWM/releases/latest)), unzip it and run the install.cmd script - after that, you'll only need the two most abused keys: __*Y*__ and __*N*__.
 If you don't have the administrator privileges on your Windows OS, some magic might not work properly.
 
 
@@ -76,7 +77,7 @@ Folder info: 1.73GB / 12 089 files
 
 The files for Booting into Safe mode and Running with Priority were heavily influenced by Shawn Brink at [tenforums.com](https://www.tenforums.com/tutorials/1977-windows-10-tutorial-index.html)
 
-The files for Taking Ownership was heavily influenced by Vishal Gupta at [AskVG.com](https://www.askvg.com/)
+The TakeOwn.reg for Taking Ownership was heavily influenced by Vishal Gupta at [AskVG.com](https://www.askvg.com/)
 
 I changed and adapted all those files, but their ideas and the initial implementations deserve the credit.
 
