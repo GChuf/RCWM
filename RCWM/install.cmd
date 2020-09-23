@@ -148,7 +148,7 @@ choice /C yn /M "* Do you want to add Remove Directory (this deletes symlink con
 if %errorlevel% == 1 ( start /w regedit /s RmDir.reg )
 
 color 9
-choice /C yn /M "* Do you want to increase right-click menu item limit from 15 to 256? "
+choice /C yn /M "* Do you want to increase right-click menu item limit from 15 to unlimited? "
 if %errorlevel% == 1 ( start /w regedit /s MultipleInvokeMinimum.reg )
 
 
