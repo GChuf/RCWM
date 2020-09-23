@@ -41,9 +41,14 @@ echo *********************************
 echo(
 echo(
 
+
 rem Fun Fact: 'echo(' is faster and safer than 'echo.'
 
 rem If folder already exist ask if user wants to overwrite files.
+
+cd files
+
+
 IF EXIST "%SystemRoot%\System32\RCWM" ( echo RCWM folder already exists! && choice /C yn /M "Overwrite existing files " ) else ( goto install )
 
 if %errorlevel% == 1 ( goto update ) else ( echo Keeping old files and copying possible new ones. && robocopy *.bat *.lnk . "%SystemRoot%\System32\RCWM" /XC /XN /XO 1>nul )
