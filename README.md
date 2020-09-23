@@ -59,7 +59,8 @@ Up until then, please use the safe version (one folder at a time), or use copyin
 
 - <del>When selecting multiple folders to be copied/moved, not all of them are saved into the list for copying/moving (~10% loss?)</del>
 Fixed with powershell using mutex
-
+- TakeOwn won't work properly when right-clicking on very large amounts of folders (some folders' permissions won't be changed - so you need to do it twice)
+Changing ownership of large amounts of recursive folders works fine though.
 
 # Tests
 RoboCopy is much faster for copying a large amount of small files.
