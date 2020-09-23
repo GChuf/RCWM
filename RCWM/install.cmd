@@ -136,22 +136,18 @@ choice /C yn /M "* Do you want to add open CMD to background/folders/drives "
 if %errorlevel% == 1 ( start /w regedit /s CMD.reg )
 
 color 9
-choice /C yn /M "* Do you want to add open PowerShell to background "
-if %errorlevel% == 1 ( start /w regedit /s PWSHbackground.reg )
+choice /C yn /M "* Do you want to add open PowerShell to background/folders/drives "
+if %errorlevel% == 1 ( start /w regedit /s pwrshell.reg )
 
 color c
-choice /C yn /M "* Do you want to add open PowerShell to folders "
-if %errorlevel% == 1 ( start /w regedit /s PWSHfolders.reg )
-
-color a
 choice /C yn /M "* Do you want to add Run with Priority "
 if %errorlevel% == 1 ( start /w regedit /s RunWithPriority.reg )
 
-color 9
+color a
 choice /C yn /M "* Do you want to add Remove Directory (this deletes symlink contents, not symlinks!) "
 if %errorlevel% == 1 ( start /w regedit /s RmDir.reg )
 
-color c
+color 9
 choice /C yn /M "* Do you want to increase right-click menu item limit from 15 to 256? "
 if %errorlevel% == 1 ( start /w regedit /s MultipleInvokeMinimum.reg )
 
