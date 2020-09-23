@@ -25,6 +25,7 @@ TODO (magic takes time):
 - creating directory junctions (mklink /D), hard links (mklink /H) and symbolic links [aka soft links] (mklink /J)
 - reboot to recovery
 - cmd/pwsh opened with admin priv
+- rmdir needs to work with admin priv
 - locking folders
 - your suggestions
 
