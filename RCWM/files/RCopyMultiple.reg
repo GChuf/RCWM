@@ -21,7 +21,7 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-6"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste\command]
-@="powershell.exe C:\\Windows\\System32\\RCWM\\rcp.ps1"
+@="cmd /c powershell C:\\Windows\\System32\\RCWM\\rcp.ps1"
 
 ; end
 
