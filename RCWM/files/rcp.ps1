@@ -1,3 +1,21 @@
+#flags used when robocopying (overwrites files):
+
+#/E :: copy subdirectories, including Empty ones
+#/NP :: No Progress - don't display percentage copied
+#/NJH :: No Job Header
+#/NJS :: No Job Summary
+#/NC :: No Class - don't log file classes
+#/NS :: No Size - don't log file sizes
+#/MT[:n] :: Do multi-threaded copies with n threads (default 8)
+
+
+#when merging, these are added to not overwrite any files:
+
+#/XC :: eXclude Changed files.
+#/XN :: eXclude Newer files.
+#/XO :: eXclude Older files.
+ 
+
 #check if rc.log exists
 If ( (Test-Path C:\Windows\System32\RCWM\rc.log) -eq $false ) {
 	echo "List of folders to be copied does not exist!"
@@ -20,9 +38,7 @@ $BaseDirDisp += $BaseDir
 $BaseDirDisp += '"'
 
 
-
 [string[]]$array = Get-Content -Path C:\Windows\System32\RCWM\rc.log
-
 
 
 If ( $array.length -eq 1 ) {
@@ -111,20 +127,7 @@ If ( $copy -eq $True ) {
 
 			New-Item -Path ".\$folder" -ItemType Directory | Out-Null
 
-			#create robocopy command
-			#$rc = 'C:\Windows\System32\robocopy.exe "'
-			$rc += '"'
-			$rc += $path
-			$rc += '" ".\'
-			$rc += $folder
-			$rc += '" ' 
-			$rc += '/E /NP /NJH /NJS /NC /NS /NP /MT:16"'
-			#$rc += '"'
-			#robocopy
-			#echo $rc
-			#$rc
-			#$rc
-			C:\Windows\System32\robocopy.exe "$path" "$folder" /E /NP /NJH /NJS /NC /NS /NP /MT:16
+			C:\Windows\System32\robocopy.exe "$path" "$folder" /E /NP /NJH /NJS /NC /NS /MT:16
 			
 			#delete first line here?
 			(Get-Content C:\Windows\System32\RCWM\rc.log | Select-Object -Skip 1) | Set-Content C:\Windows\System32\RCWM\rc.log		
@@ -156,24 +159,15 @@ If ( $copy -eq $True ) {
 		
 							New-Item -Path ".\$folder" -ItemType Directory | Out-Null
 
-							$rc += '"'
-							$rc += $path
-							$rc += '" ".\'
-							$rc += $folder
-							$rc += '" ' 
-							$rc += '/E /NP /NJH /NJS /NC /NS /NP /MT:16"'
-
-							C:\Windows\System32\robocopy.exe "$path" "$folder" /E /NP /NJH /NJS /NC /NS /NP /MT:16
+							C:\Windows\System32\robocopy.exe "$path" "$folder" /E /NP /NJH /NJS /NC /NS /MT:16
 							
 							(Get-Content C:\Windows\System32\RCWM\rc.log | Select-Object -Skip 1) | Set-Content C:\Windows\System32\RCWM\rc.log		
 							echo "Finished overwriting $folder"		
 						}
 
-
 					}
 					{"m", "merge" -contains $_} {
 						Write-Host "Merging ..."
-						
 						
 						
 						for ($i=0; $i -lt $merge.length; $i++) {
@@ -182,25 +176,17 @@ If ( $copy -eq $True ) {
 		
 							New-Item -Path ".\$folder" -ItemType Directory | Out-Null
 
-							$rc += '"'
-							$rc += $path
-							$rc += '" ".\'
-							$rc += $folder
-							$rc += '" ' 
-							$rc += '/E /NP /NJH /NJS /NC /NS /NP /MT:16"'
-
-							C:\Windows\System32\robocopy.exe "$path" "$folder" /E /NP /NJH /NJS /NC /NS /NP /MT:16
+							C:\Windows\System32\robocopy.exe "$path" "$folder" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:16
 							
 							(Get-Content C:\Windows\System32\RCWM\rc.log | Select-Object -Skip 1) | Set-Content C:\Windows\System32\RCWM\rc.log		
 							echo "Finished merging $folder"		
-						}						
+						}					
 						
 
 						
 					}
 					{"A", "abort" -contains $_} {
 						Write-Host "Aborted copying the remaining folders."
-					
 					
 					
 						#todo duplication, kinda. prompt is not the same text
@@ -241,7 +227,7 @@ If ( $copy -eq $True ) {
 			} Until ($Valid)
 		
 
-		} 
+		}
 
 
 
@@ -252,6 +238,7 @@ If ( $copy -eq $True ) {
 	Start-Sleep 2
 
 }
+
 
 
 
