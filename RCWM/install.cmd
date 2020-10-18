@@ -56,11 +56,13 @@ if %errorlevel% == 1 ( goto Add ) else ( goto RemoveOptions )
 :install
 
 md %SystemRoot%\System32\RCWM
-rem attrib +h +s %SystemRoot%\System32\RCWM
-rem echo Created hidden folder at %SystemRoot%\System32\RCWM
+attrib +h +s %SystemRoot%\System32\RCWM
+echo Created hidden folder at %SystemRoot%\System32\RCWM
 
 xcopy /f *.bat %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.ps1 %SystemRoot%\System32\RCWM /y 1>nul
+xcopy /f *.lnk %SystemRoot%\System32\RCWM /y 1>nul
+
 xcopy /f rcwmimg.dll %SystemRoot%\System32 /y 1>nul
 
 rem take ownership of that folder for administrators & users
@@ -88,20 +90,21 @@ goto start
 
 echo(
 
-color 9
+color a
 choice /C yn /M "* Do you want to add RoboCopy "
 if %errorlevel% == 1 ( goto RCopy ) else ( goto MvDir )
 
-
+color 9
 :RCopy
 choice /C sm /M "** Do you want to add RoboCopy for single or multiple directories "
 if %errorlevel% == 1 ( start /w regedit /s RCopy.reg && goto MvDir ) else ( start /w regedit /s RCopyMultiple.reg && goto MvDir )
 
+color c
 :MvDir
 choice /C yn /M "* Do you want to add Move Directory "
 if %errorlevel% == 1 ( goto MvDirC ) else ( goto Other )
 
-
+color a
 :MvDirC
 choice /C sm /M "** Do you want to add Move Directory for single or multiple directories "
 if %errorlevel% == 1 ( start /w regedit /s MvDir.reg && goto Other ) else ( start /w regedit /s MvDirMultiple.reg && goto Other )
@@ -110,6 +113,14 @@ if %errorlevel% == 1 ( start /w regedit /s MvDir.reg && goto Other ) else ( star
 
 :Other
 
+color 9
+choice /C yn /M "* Do you want to add open CMD to background/folders/drives "
+if %errorlevel% == 1 ( start /w regedit /s CMD.reg )
+
+color c
+choice /C yn /M "* Do you want to add open PowerShell to background/folders/drives "
+if %errorlevel% == 1 ( start /w regedit /s pwrshell.reg )
+
 color a
 choice /C yn /M "* Do you want to add Take Ownership "
 if %errorlevel% == 1 ( start /w regedit /s TakeOwn.reg )
@@ -117,14 +128,6 @@ if %errorlevel% == 1 ( start /w regedit /s TakeOwn.reg )
 color 9
 choice /C yn /M "* Do you want to add Safe Mode "
 if %errorlevel% == 1 ( start /w regedit /s SafeMode.reg )
-
-color c
-choice /C yn /M "* Do you want to add open CMD to background/folders/drives "
-if %errorlevel% == 1 ( start /w regedit /s CMD.reg )
-
-color 9
-choice /C yn /M "* Do you want to add open PowerShell to background/folders/drives "
-if %errorlevel% == 1 ( start /w regedit /s pwrshell.reg )
 
 color c
 choice /C yn /M "* Do you want to add Run with Priority "
@@ -206,4 +209,5 @@ echo(
 timeout /t 1 > nul
 
 pause
+
 
