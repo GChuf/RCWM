@@ -17,6 +17,8 @@ if '%errorlevel%' NEQ '0' (
     pause
 )
 
+pushd "%CD%"
+cd /d "%~dp0"
 
 
 echo(
@@ -37,7 +39,7 @@ cd files
 rem If folder already exist ask if user wants to overwrite files.
 IF EXIST "%SystemRoot%\System32\RCWM" ( echo RCWM folder already exists! && choice /C yn /M "Overwrite existing files " ) else ( goto install )
 
-if %errorlevel% == 1 ( goto update ) else ( echo Keeping old files and copying possible new ones. && robocopy *.bat *.lnk . "%SystemRoot%\System32\RCWM" /XC /XN /XO 1>nul )
+if %errorlevel% == 1 ( goto update ) else ( echo Keeping old files and copying possible new ones. && robocopy *.bat *.lnk *.ps1 . "%SystemRoot%\System32\RCWM" /XC /XN /XO 1>nul )
 
 
 :start
@@ -54,10 +56,11 @@ if %errorlevel% == 1 ( goto Add ) else ( goto RemoveOptions )
 :install
 
 md %SystemRoot%\System32\RCWM
-attrib +h +s %SystemRoot%\System32\RCWM
-echo Created hidden folder at %SystemRoot%\System32\RCWM
+rem attrib +h +s %SystemRoot%\System32\RCWM
+rem echo Created hidden folder at %SystemRoot%\System32\RCWM
 
-xcopy /f *.bat %SystemRoot%\System32\RCWM 1>nul
+xcopy /f *.bat %SystemRoot%\System32\RCWM /y 1>nul
+xcopy /f *.ps1 %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f rcwmimg.dll %SystemRoot%\System32 /y 1>nul
 
 rem take ownership of that folder for administrators & users
@@ -73,6 +76,7 @@ goto start
 :update
 
 xcopy /f *.bat %SystemRoot%\System32\RCWM /y 1>nul
+xcopy /f *.ps1 %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.lnk %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f rcwmimg.dll %SystemRoot%\System32 /y 1>nul
 echo Copied new files.
@@ -202,3 +206,4 @@ echo(
 timeout /t 1 > nul
 
 pause
+
