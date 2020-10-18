@@ -8,14 +8,20 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-5"
 
 [HKEY_CLASSES_ROOT\Directory\shell\rcopy\command]
-@="cmd.exe /c echo \"%1\">>C:\\Windows\\System32\\RCWM\\rc.log"
-"IsolatedCommand"="cmd.exe /c echo \"%1\">>C:\\Windows\\System32\\RCWM\\rc.log"
+@="powershell.exe -command \"$m = New-Object System.Threading.Mutex($false, \\\"R\\\"); $m.WaitOne()>$NULL; \\\"%V\\\"|out-file \"C:\\windows\\system32\\rcwm\\rc.log\" -append -encoding UTF8; $m.ReleaseMutex()\""
+"IsolatedCommand"="powershell.exe -command \"$m = New-Object System.Threading.Mutex($false, \\\"R\\\"); $m.WaitOne()>$NULL; \\\"\\\"%V\\\"\\\"|out-file \"C:\\windows\\system32\\rcwm\\rc.log\" -append -encoding UTF8; $m.ReleaseMutex()\""
+;$m = New-Object System.Threading.Mutex($false, "R")
+;$m.WaitOne() > $NULL
+;(Get-Item .).FullName | out-file "C:\windows\system32\rcwm\rc.log" -append -Encoding UTF8
+;$m.ReleaseMutex()
+
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste]
 @="RoboPaste"
 "Icon"="rcwmimg.dll,-6"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste\command]
-@="cmd.exe /c C:\\Windows\\System32\\RCWM\\RCopyMultiple.bat"
+@="powershell.exe C:\\Windows\\System32\\RCWM\\rcp.ps1"
 
 ; end
+

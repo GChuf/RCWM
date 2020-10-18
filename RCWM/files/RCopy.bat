@@ -1,48 +1,64 @@
 @echo off
-title RCWM: RoboCopy
-color 02
-SETLOCAL EnableDelayedExpansion
 
-IF NOT EXIST C:\Windows\System32\RCWM\rc.log (
-mode con:cols=65 lines=9
+IF EXIST C:\Windows\System32\RCWM\rc.log (
+goto start
+) ELSE (
 echo Source folder not specified!
-echo Right-Click on a folder and select 'RoboCopy Directory'.
-timeout /t 3 >nul
+echo Right-Click and 'RoboCopy' a folder.
+timeout /t 3 > nul
 exit
 )
 
 :start
-
 wmic process where name="cmd.exe" CALL setpriority 256 >nul
 wmic process where name="conhost.exe" CALL setpriority 256 >nul
+set curdir=%cd%
+set /P folder=<C:\Windows\System32\RCWM\rc.log
+cd %folder%
+for %%I in (.) do set fname=%%~nxI
+cd "%curdir%"
 
-rem get path into which I will copy folders/files
-set basedir=%cd%
-
-rem loop
-for /f "delims=" %%a in (C:\Windows\System32\RCWM\rc.log) do (
-
-
-rem set path which is to be copied and cd into it to get folder name
-set path=%%a
-cd /D "!path!"
-
-rem get folder name
-for %%I in (.) do set folder=%%~nxI
-
-echo(
-echo Copying !path! into %basedir%\!folder! ...
-
-IF EXIST "%basedir%"\"!folder!" ( echo Folder with name !folder! already exists, cannot copy! && C:\Windows\System32\timeout /t 3 >nul
-) else (
-rem /NFL for no file names
-rem /NP for no progress
-rem /NJS no job summary
-rem /NJH no job header
-rem NC no class NS no size
-cd /d "%basedir%" && md "!folder!" && C:\Windows\System32\robocopy.exe !path! "!folder!" /E /NP /NJH /NJS /NC /NS /NP /MT:16 )
-rem /E for all subdirectories (also Empty ones)
+IF EXIST %fname% (
+goto :f1
+) ELSE (
+goto :f2
 )
 
+:f1
+IF EXIST %fname%\NUL (
+echo Folder with the same name already exists!
+goto :choice
+) ELSE (
+echo File with the same name already exists!
+echo Cannot continue!
+pause
+exit
+)
+
+:f2
+echo.
+echo Copying . . .
+echo.
+md "%fname%"
+cd "%fname%"
+robocopy %folder% . /E /NP /NJH /NJS /NC /NS /NP /MT:16
 del /f /q C:\Windows\System32\RCWM\rc.log
+exit
+
+:choice
+choice /C yn /M "Merge folders"
+goto option%errorlevel%
+
+:option1
+echo.
+echo Merging . . .
+echo.
+cd "%fname%"
+robocopy %folder% . /E /NP /NJH /NJS /NC /NS /NP /MT:16
+del /f /q C:\Windows\System32\RCWM\rc.log
+exit
+
+:option2
+echo Exiting . . .
+timeout /t 1 1>NUL
 exit
