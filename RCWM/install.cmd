@@ -100,30 +100,22 @@ echo(
 
 color 9
 choice /C yn /M "* Do you want to add RoboCopy "
-if %errorlevel% == 1 ( goto RCopySingle ) else ( goto MvDir )
+if %errorlevel% == 1 ( goto RCopy ) else ( goto MvDir )
 
 
-:RCopySingle
-choice /C yn /M "** Do you want to add RoboCopy for single directories (recommended) "
-if %errorlevel% == 1 ( start /w regedit /s RCopy.reg && goto MvDir ) else ( goto RCopyBeta )
-
-:RCopyBeta
-choice /C yn /M "** Do you want to add RoboCopy for multiple directories (in beta - check readme) "
-if %errorlevel% == 1 ( start /w regedit /s RCopyMultiple.reg )
-
+:RCopy
+choice /C sm /M "** Do you want to add RoboCopy for single or multiple directories "
+if %errorlevel% == 1 ( start /w regedit /s RCopy.reg && goto MvDir ) else ( start /w regedit /s RCopyMultiple.reg && goto MvDir )
 
 :MvDir
-color c
 choice /C yn /M "* Do you want to add Move Directory "
-if %errorlevel% == 1 ( goto MvDirSingle ) else ( goto Other )
+if %errorlevel% == 1 ( goto MvDirC ) else ( goto Other )
 
-:MvDirSingle
-choice /C yn /M "** Do you want to add Move Directory for single directories (recommended) "
-if %errorlevel% == 1 ( start /w regedit /s MvDir.reg && goto Other ) else ( goto MvDirBeta )
 
-:MvDirBeta
-choice /C yn /M "** Do you want to add Move Directory for multiple directories (in beta - check readme) "
-if %errorlevel% == 1 ( start /w regedit /s MvDirMultiple.reg )
+:MvDirC
+choice /C sm /M "** Do you want to add Move Directory for single or multiple directories "
+if %errorlevel% == 1 ( start /w regedit /s MvDir.reg && goto Other ) else ( start /w regedit /s MvDirMultiple.reg && goto Other )
+
 
 
 :Other
@@ -153,7 +145,7 @@ choice /C yn /M "* Do you want to add Remove Directory (this deletes symlink con
 if %errorlevel% == 1 ( start /w regedit /s RmDir.reg )
 
 color 9
-choice /C yn /M "* Do you want to increase right-click menu item limit from 15 to unlimited? "
+choice /C yn /M "* Do you want to increase right-click menu item limit from 15 to 32? "
 if %errorlevel% == 1 ( start /w regedit /s MultipleInvokeMinimum.reg )
 
 
