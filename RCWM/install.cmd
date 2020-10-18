@@ -12,23 +12,10 @@ REM Taken from: https://stackoverflow.com/questions/11525056/how-to-create-a-bat
 )
 
 if '%errorlevel%' NEQ '0' (
-    title GetAdmin
-    echo Requesting admin privileges ...
-    goto UACPrompt
-) else ( goto gotAdmin )
-
-:UACPrompt
-    echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
-    set params= %*
-    echo UAC.ShellExecute "cmd.exe", "/c ""%~s0"" %params:"=""%", "", "runas", 1 >> "%temp%\getadmin.vbs"
-
-    "%temp%\getadmin.vbs"
-    del "%temp%\getadmin.vbs"
-    exit /B
-
-:gotAdmin
-    pushd "%CD%"
-    CD /D "%~dp0"
+    echo You need to run this script with administrator privileges!!!
+    echo You can continue anyway, but some functionalities might not work.
+    pause
+)
 
 
 
@@ -44,11 +31,10 @@ echo(
 
 rem Fun Fact: 'echo(' is faster and safer than 'echo.'
 
-rem If folder already exist ask if user wants to overwrite files.
 
 cd files
 
-
+rem If folder already exist ask if user wants to overwrite files.
 IF EXIST "%SystemRoot%\System32\RCWM" ( echo RCWM folder already exists! && choice /C yn /M "Overwrite existing files " ) else ( goto install )
 
 if %errorlevel% == 1 ( goto update ) else ( echo Keeping old files and copying possible new ones. && robocopy *.bat *.lnk . "%SystemRoot%\System32\RCWM" /XC /XN /XO 1>nul )
