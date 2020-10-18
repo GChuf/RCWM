@@ -13,11 +13,12 @@ This little magic pack includes:
 - options to uninstall the changes you've made
 
 You can also remove some right-click menu options, so that your menu doesn't become too cluttered:
-- Pin to Quick menu
+- Pin to Quick access
 - Pin to Start Screen
 - Include in Library
 - Send To
-- Share 
+- Share
+- Add to Windows Media Player
 
 
 TODO (magic takes time):
@@ -26,7 +27,9 @@ TODO (magic takes time):
 - reboot to recovery
 - cmd/pwsh opened with admin priv
 - rmdir needs to work with admin priv
-- locking folders
+- move away from mutexes for robocopy
+- adding other admin tools to right click in background
+- locking folders with passwords?
 - your suggestions
 
 ![Magic examples](img/RCWM.gif)
@@ -48,20 +51,28 @@ The goal was to simply automate command line tools like robocopy, so that 1) eve
 
 # RoboCopy and Move Directory options
 
-RoboCopy/RoboPaste & Move Directory both use robocopy to do the work. The list of the folders to be copied is first saved into a log file inside the C:\Windows\System32\RCWM folder.
-The default version only works for copying/moving one folder at a time. If you specify a new folder to be copied, the old one (if existing) will be overwritten.
+RoboCopy/RoboPaste & Move Directory both use robocopy to do the work. 
+You have two options: you can copy multiple or single directories at a time.
 
-Beta version (multiple folders at a time): the folders get appended to this list inside the log file. This allows to copy more than one folder at a time, but introduces a bug, and can be easily broken if you don't let the operation finish (the log file will not get deleted, which means the folder will get copied again the next time you try to RoboPaste). This is to be fixed/improved.
+__Multiple__:
+The list of the folder paths to be copied is appended to the log file inside the *C:\Windows\System32\RCWM* folder. Then the script goes through a for loop to copy all of them.
 
-Up until then, please use the safe version (one folder at a time), or use copying/moving multiple folders cautiously!
+I don't recommend RoboCopying (appending to the log file) more than 30 folders at a time. Poweshell uses mutexes to append the folders to the log file and calling multiple instances causes a stack overflow.
+
+You can paste as many folders as you like, though.
+
+__Single__:
+The folder to be copied is written into a file and overwrites any previous folder paths stored there. If you specify a new folder to be copied, the old one (if existing) will be overwritten.
+
 
 # Known bugs
 
-- <del>When selecting multiple folders to be copied/moved, not all of them are saved into the list for copying/moving (~10% loss?)</del>
-Fixed with powershell using mutex
 - TakeOwn won't work properly when right-clicking on very large amounts of folders (some folders' permissions won't be changed - so you need to do it twice)
 Changing ownership of large amounts of recursive folders works fine though.
-- RoboCopy and MoveDir stopped working when using powershell mutex scripts - work in progress to move existing batch script into powershell to solve the problem. Apparently CMD doesn't like powershell outputs ... ?
+- <del>When selecting multiple folders to be copied/moved, not all of them are saved into the list for copying/moving (~10% loss?)</del>
+Fixed with powershell using mutex
+- <del>RoboCopy and MoveDir stopped working when using powershell mutex scripts - work in progress to move existing batch script into powershell to solve the problem. Apparently CMD doesn't like powershell outputs ... </del>?
+Fixed by using utf-8 encoding in powershell
 
 # Tests
 RoboCopy is much faster for copying a large amount of small files.
