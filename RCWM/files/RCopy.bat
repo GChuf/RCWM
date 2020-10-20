@@ -14,6 +14,9 @@ wmic process where name="cmd.exe" CALL setpriority 256 >nul
 wmic process where name="conhost.exe" CALL setpriority 256 >nul
 set curdir=%cd%
 set /P folder=<C:\Windows\System32\RCWM\rc.log
+
+IF NOT EXIST %folder% (echo Source folder does not exist! && timeout /t 1 >nul && echo Exiting . . . && timeout /t 1 > nul && exit)
+
 cd /d %folder%
 for %%I in (.) do set fname=%%~nxI
 cd /d "%curdir%"
@@ -27,9 +30,6 @@ goto :f2
 :f1
 IF EXIST %fname%\NUL (
 echo Folder with the same name already exists!
-echo %fname%
-echo %folder%
-echo %cd%
 goto :choice
 ) ELSE (
 echo File with the same name already exists!
