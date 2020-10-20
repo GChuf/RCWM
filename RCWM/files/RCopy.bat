@@ -44,14 +44,14 @@ echo Copying . . .
 echo.
 md "%fname%"
 cd "%fname%"
-robocopy %folder% . /E /NP /NJH /NJS /NC /NS /NP /MT:16
+robocopy %folder% . /E /NP /NJH /NJS /NC /NS /MT:16
 del /f /q C:\Windows\System32\RCWM\rc.log
 echo Finished!
 timeout /t 1 1>NUL
 exit
 
 :choice
-choice /C yn /M "Merge folders"
+choice /C moc /M "Merge/Overwrite/Cancel?"
 goto option%errorlevel%
 
 :option1
@@ -59,12 +59,20 @@ echo.
 echo Merging . . .
 echo.
 cd "%fname%"
-robocopy %folder% . /E /NP /NJH /NJS /NC /NS /NP /MT:16
+robocopy %folder% . /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:16
 del /f /q C:\Windows\System32\RCWM\rc.log
 exit
 
 :option2
+echo.
+echo Overwriting . . .
+echo.
+cd "%fname%"
+robocopy %folder% . /E /NP /NJH /NJS /NC /NS /MT:16
+del /f /q C:\Windows\System32\RCWM\rc.log
+exit
+
+:option3
 echo Exiting . . .
 timeout /t 1 1>NUL
 exit
-
