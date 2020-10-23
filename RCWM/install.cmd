@@ -56,6 +56,8 @@ if %errorlevel% == 1 ( goto Add ) else ( goto RemoveOptions )
 :install
 
 md %SystemRoot%\System32\RCWM
+md %SystemRoot%\System32\RCWM\rc
+md %SystemRoot%\System32\RCWM\mv
 attrib +h +s %SystemRoot%\System32\RCWM
 echo Created hidden folder at %SystemRoot%\System32\RCWM
 
