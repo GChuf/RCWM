@@ -15,13 +15,13 @@ wmic process where name="conhost.exe" CALL setpriority 256 >nul
 set curdir=%cd%
 set /P folder=<C:\Windows\System32\RCWM\mv.log
 
-IF NOT EXIST %folder% (echo Source folder does not exist! && timeout /t 1 >nul && echo Exiting . . . && timeout /t 1 > nul && exit)
+IF NOT EXIST "%folder%" (echo Source folder does not exist! && timeout /t 1 >nul && echo Exiting . . . && timeout /t 1 > nul && exit)
 
 cd /d %folder%
 for %%I in (.) do set fname=%%~nxI
 cd /d "%curdir%"
 
-IF EXIST %fname% (
+IF EXIST "%fname%" (
 goto :f1
 ) ELSE (
 goto :f2
@@ -44,7 +44,8 @@ echo Moving . . .
 echo.
 md "%fname%"
 cd "%fname%"
-robocopy %folder% . /MOV /E /NP /NJH /NJS /NC /NS /MT:16
+robocopy "%folder%" . /MOV /E /NP /NJH /NJS /NC /NS /MT:16
+rd "%folder%"
 del /f /q C:\Windows\System32\RCWM\mv.log
 echo Finished!
 timeout /t 1 1>NUL
@@ -60,6 +61,7 @@ echo Merging . . .
 echo.
 cd "%fname%"
 robocopy %folder% . /MOV /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:16
+rd "%folder%"
 del /f /q C:\Windows\System32\RCWM\mv.log
 exit
 
@@ -69,6 +71,7 @@ echo Overwriting . . .
 echo.
 cd "%fname%"
 robocopy %folder% . /MOV /E /NP /NJH /NJS /NC /NS /MT:16
+rd "%folder%"
 del /f /q C:\Windows\System32\RCWM\mv.log
 exit
 
