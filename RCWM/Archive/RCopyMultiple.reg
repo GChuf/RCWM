@@ -1,0 +1,27 @@
+Windows Registry Editor Version 5.00
+
+;robocopy
+
+[HKEY_CLASSES_ROOT\Directory\shell\rcopy]
+@="RoboCopy"
+"NoWorkingDirectory"=""
+"Icon"="rcwmimg.dll,-5"
+
+[HKEY_CLASSES_ROOT\Directory\shell\rcopy\command]
+@="powershell.exe -command \"$m = New-Object System.Threading.Mutex($false, \\\"R\\\"); $m.WaitOne()>$NULL; \\\"%V\\\"|out-file \"C:\\windows\\system32\\rcwm\\rc.log\" -append -encoding UTF8; $m.ReleaseMutex()\""
+"IsolatedCommand"="powershell.exe -command \"$m = New-Object System.Threading.Mutex($false, \\\"R\\\"); $m.WaitOne()>$NULL; \\\"\\\"%V\\\"\\\"|out-file \"C:\\windows\\system32\\rcwm\\rc.log\" -append -encoding UTF8; $m.ReleaseMutex()\""
+;$m = New-Object System.Threading.Mutex($false, "R")
+;$m.WaitOne() > $NULL
+;(Get-Item .).FullName | out-file "C:\windows\system32\rcwm\rc.log" -append -Encoding UTF8
+;$m.ReleaseMutex()
+
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste]
+@="RoboPaste"
+"Icon"="rcwmimg.dll,-6"
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste\command]
+@="cmd /c powershell C:\\Windows\\System32\\RCWM\\rcp.ps1"
+
+; end
+
