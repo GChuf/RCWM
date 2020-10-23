@@ -16,14 +16,20 @@
 #/XO :: eXclude Older files.
  
 
-#check if rc.log exists
-If ( (Test-Path C:\Windows\System32\RCWM\rc.log) -eq $false ) {
+
+#todo
+#check if file exists
+#check if source folder exists
+
+#check if list of folders to be copied exist
+
+If (  (Test-Path "C:\Windows\System32\RCWM\rc\*" -PathType Leaf) -eq $false ) {
 	echo "List of folders to be copied does not exist!"
 	Start-Sleep 1
 	echo "Create one by right-clicking on folders and selecting 'RoboCopy'."
 	Start-Sleep 3
-	exit
-}	
+	#exit
+}
 
 
 #set high process priority
@@ -37,8 +43,10 @@ $BaseDirDisp = '"'
 $BaseDirDisp += $BaseDir
 $BaseDirDisp += '"'
 
+#get array of contents of files inside C:\windows\system32\rcwm\rc (that would be the pathnames to copy)
+$files = get-childitem "C:\windows\system32\rcwm\rc"
+[string[]]$array = Get-Content $files.fullName
 
-[string[]]$array = Get-Content -Path C:\Windows\System32\RCWM\rc.log
 
 
 If ( $array.length -eq 1 ) {
@@ -70,15 +78,15 @@ Do {
 				Switch ($prompt) {
 				
 					default {
-					Write-Host "Not a valid entry."
-					$Valid = $False
+						Write-Host "Not a valid entry."
+						$Valid = $False
 					}	
 					
 					{"y", "yes" -contains $_} {
-					Remove-Item C:\Windows\System32\RCWM\rc.log
-					Write-Host "List deleted."
-					Start-Sleep 2
-					exit
+						Remove-Item C:\Windows\System32\RCWM\rc\*
+						Write-Host "List deleted."
+						Start-Sleep 2
+						exit
 					}
 					
 					{"n", "no" -contains $_} {
@@ -112,6 +120,10 @@ If ( $copy -eq $True ) {
 		#get folder name
 		$folder = $path.split("\")[-1]
 
+	#todo
+	#does source folder exist? do i need to check?
+
+
 
 		#if exist folder
 		
@@ -127,11 +139,15 @@ If ( $copy -eq $True ) {
 
 			New-Item -Path ".\$folder" -ItemType Directory | Out-Null
 
-			C:\Windows\System32\robocopy.exe "$path" "$folder" /E /NP /NJH /NJS /NC /NS /MT:16
+			C:\Windows\System32\robocopy.exe "$path" "$folder" /E /NP /NJH /NJS /NC /NS /MT:32
 			
 			#delete first line here?
-			(Get-Content C:\Windows\System32\RCWM\rc.log | Select-Object -Skip 1) | Set-Content C:\Windows\System32\RCWM\rc.log		
+			#(Get-Content C:\Windows\System32\RCWM\rc.log | Select-Object -Skip 1) | Set-Content C:\Windows\System32\RCWM\rc.log		
 			#Start-Sleep 20		
+			
+			#todo
+			#should I output everything into one file so I can delete first lines????
+			#no ... user will be asked to merge anyway.
 			echo "Finished copying $folder"				
 		}
 
@@ -140,7 +156,7 @@ If ( $copy -eq $True ) {
 		#if merge array exists
 		if ($merge) {
 		
-		Write-host "Successfully copied" '$array.length - $merge.length' "out of" $array.length "folders."
+		Write-host "Successfully copied" $($array.length - $merge.length) "out of" $array.length "folders."
 		#todo merge acts like before array
 		Write-host "The following" $merge.length "folders already exist inside" $BaseDirDisp":"
 		$merge
@@ -151,17 +167,17 @@ If ( $copy -eq $True ) {
 				Switch ($prompt) {
 					{"o", "overwrite" -contains $_} {
 						echo "Overwriting ..."
-		
-		
+
+
 						for ($i=0; $i -lt $merge.length; $i++) {
 							$path = $merge[$i]
 							$folder = $path.split("\")[-1]
-		
+
 							New-Item -Path ".\$folder" -ItemType Directory | Out-Null
 
-							C:\Windows\System32\robocopy.exe "$path" "$folder" /E /NP /NJH /NJS /NC /NS /MT:16
+							C:\Windows\System32\robocopy.exe "$path" "$folder" /E /NP /NJH /NJS /NC /NS /MT:32
 							
-							(Get-Content C:\Windows\System32\RCWM\rc.log | Select-Object -Skip 1) | Set-Content C:\Windows\System32\RCWM\rc.log		
+							#(Get-Content C:\Windows\System32\RCWM\rc.log | Select-Object -Skip 1) | Set-Content C:\Windows\System32\RCWM\rc.log		
 							echo "Finished overwriting $folder"		
 						}
 
@@ -173,37 +189,37 @@ If ( $copy -eq $True ) {
 						for ($i=0; $i -lt $merge.length; $i++) {
 							$path = $merge[$i]
 							$folder = $path.split("\")[-1]
-		
+
 							New-Item -Path ".\$folder" -ItemType Directory | Out-Null
 
-							C:\Windows\System32\robocopy.exe "$path" "$folder" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:16
+							C:\Windows\System32\robocopy.exe "$path" "$folder" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
 							
-							(Get-Content C:\Windows\System32\RCWM\rc.log | Select-Object -Skip 1) | Set-Content C:\Windows\System32\RCWM\rc.log		
+							#(Get-Content C:\Windows\System32\RCWM\rc.log | Select-Object -Skip 1) | Set-Content C:\Windows\System32\RCWM\rc.log		
 							echo "Finished merging $folder"		
 						}					
 						
 
-						
+
 					}
 					{"A", "abort" -contains $_} {
 						Write-Host "Aborted copying the remaining folders."
-					
-					
+
+
 						#todo duplication, kinda. prompt is not the same text
 						Do {
 							[string]$prompt = Read-Host -Prompt "Delete list of remaining folders? (Y/N)"
 							Switch ($prompt) {
 							
 								default {
-								Write-Host "Not a valid entry."
-								$Valid = $False
+									Write-Host "Not a valid entry."
+									$Valid = $False
 								}	
 								
 								{"y", "yes" -contains $_} {
-								Remove-Item C:\Windows\System32\RCWM\rc.log
-								Write-Host "List deleted."
-								Start-Sleep 2
-								exit
+									Remove-Item C:\Windows\System32\RCWM\rc\*
+									Write-Host "List deleted."
+									Start-Sleep 2
+									exit
 								}
 								
 								{"n", "no" -contains $_} {
@@ -217,7 +233,6 @@ If ( $copy -eq $True ) {
 
 
 
-						
 					}				
 					default {
 						Write-Host "Not a valid entry."
@@ -231,15 +246,9 @@ If ( $copy -eq $True ) {
 
 
 
-
 	echo ""
 	echo "Finished!"
-	Remove-Item C:\Windows\System32\RCWM\rc.log
+	Remove-Item C:\Windows\System32\RCWM\rc\*
 	Start-Sleep 2
 
 }
-
-
-
-
-

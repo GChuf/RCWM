@@ -8,13 +8,8 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-5"
 
 [HKEY_CLASSES_ROOT\Directory\shell\rcopy\command]
-@="powershell.exe -command \"$m = New-Object System.Threading.Mutex($false, \\\"R\\\"); $m.WaitOne()>$NULL; \\\"%V\\\"|out-file \"C:\\windows\\system32\\rcwm\\rc.log\" -append -encoding UTF8; $m.ReleaseMutex()\""
-"IsolatedCommand"="powershell.exe -command \"$m = New-Object System.Threading.Mutex($false, \\\"R\\\"); $m.WaitOne()>$NULL; \\\"\\\"%V\\\"\\\"|out-file \"C:\\windows\\system32\\rcwm\\rc.log\" -append -encoding UTF8; $m.ReleaseMutex()\""
-;$m = New-Object System.Threading.Mutex($false, "R")
-;$m.WaitOne() > $NULL
-;(Get-Item .).FullName | out-file "C:\windows\system32\rcwm\rc.log" -append -Encoding UTF8
-;$m.ReleaseMutex()
-
+@="cmd.exe /k cd /d %1 && powershell.exe C:\\windows\\system32\\rcwm\\rcopy.ps1 && exit"
+"IsolatedCommand"="cmd.exe cd /d %1 && powershell.exe C:\\windows\\system32\\rcwm\\rcopy.ps1 && exit"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste]
 @="RoboPaste"

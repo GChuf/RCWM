@@ -138,9 +138,13 @@ choice /C yn /M "* Do you want to add Remove Directory (this deletes symlink con
 if %errorlevel% == 1 ( start /w regedit /s RmDir.reg )
 
 color 9
-choice /C yn /M "* Do you want to increase right-click menu item limit from 15 to 32? "
-if %errorlevel% == 1 ( start /w regedit /s MultipleInvokeMinimum.reg )
-
+choice /C yn /M "* Do you want to increase right-click menu item limit from 15 to 31? "
+if %errorlevel% == 1 ( 
+start /w regedit /s MultipleInvokeMinimum.reg
+echo(
+echo Right-click menu options will now appear for any number of selected files, but will only work correctly up until 31!!
+echo If you select more than 31, only one folder will be actually selected. )
+echo(
 
 rem color c
 rem choice /C yn /M "* Do you want to add Control Panel "
@@ -209,5 +213,3 @@ echo(
 timeout /t 1 > nul
 
 pause
-
-
