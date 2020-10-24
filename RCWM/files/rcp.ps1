@@ -173,8 +173,6 @@ If ( $copy -eq $True ) {
 							$path = $merge[$i]
 							$folder = $path.split("\")[-1]
 
-							New-Item -Path ".\$folder" -ItemType Directory | Out-Null
-
 							C:\Windows\System32\robocopy.exe "$path" "$folder" /E /NP /NJH /NJS /NC /NS /MT:32
 							
 							#(Get-Content C:\Windows\System32\RCWM\rc.log | Select-Object -Skip 1) | Set-Content C:\Windows\System32\RCWM\rc.log		
@@ -189,8 +187,6 @@ If ( $copy -eq $True ) {
 						for ($i=0; $i -lt $merge.length; $i++) {
 							$path = $merge[$i]
 							$folder = $path.split("\")[-1]
-
-							New-Item -Path ".\$folder" -ItemType Directory | Out-Null
 
 							C:\Windows\System32\robocopy.exe "$path" "$folder" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
 							
