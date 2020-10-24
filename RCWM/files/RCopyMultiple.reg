@@ -19,4 +19,3 @@ Windows Registry Editor Version 5.00
 @="cmd /c powershell C:\\Windows\\System32\\RCWM\\rcp.ps1"
 
 ; end
-
