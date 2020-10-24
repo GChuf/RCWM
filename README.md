@@ -55,19 +55,21 @@ RoboCopy/RoboPaste & Move Directory both use robocopy to do the work.
 You have two options: you can copy multiple or single directories at a time.
 
 __Multiple__:
-The list of the folder paths to be copied is appended to the log file inside the *C:\Windows\System32\RCWM* folder. Then the script goes through a for loop to copy all of them.
+The list of the folder paths to be copied is saved inside multiple files in the *C:\Windows\System32\RCWM\{rc || mv}* folder. Then the script goes through a powershell for loop to copy all of them.
 
-I don't recommend RoboCopying (appending to the log file) more than 30 folders at a time. Poweshell uses mutexes to append the folders to the log file and calling multiple instances causes a stack overflow.
+I don't recommend RoboCopying/Moving more than 30 folders at a time (the default windows limit for right-click options is 15, you can increase it to 31 in the install script - see the *MultipleInvokeMinimum.reg* file for more info). Calling multiple (powershell) instances for saving the list of files to be copied can use a lot of resources . . .
 
-You can paste as many folders as you like, though.
+You can paste as many folders as you like, though. Recursive copying/moving is also never a problem.
+
+Use this option if you intend to use RoboCopy a lot. I'd recommend reading the rcp/rcm powershell files to understand how the scripts work.
 
 __Single__:
-The folder to be copied is written into a file and overwrites any previous folder paths stored there. If you specify a new folder to be copied, the old one (if existing) will be overwritten.
+The folder to be copied is written into a file and overwrites any previous folder paths stored there. If you specify a new folder to be copied, the old one (if existing) will be overwritten. It is simpler and faster, and it only uses batch scripting.
 
 
 # Known bugs
 
-- TakeOwn won't work properly when right-clicking on very large amounts of folders (some folders' permissions won't be changed - so you need to do it twice)
+- TakeOwn won't work properly when right-clicking on very large amounts of folders (some folders' permissions won't be changed - so you need to do it twice)?
 Changing ownership of large amounts of recursive folders works fine though.
 - <del>When selecting multiple folders to be copied/moved, not all of them are saved into the list for copying/moving (~10% loss?)</del>
 Fixed with powershell using mutex
