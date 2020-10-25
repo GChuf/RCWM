@@ -245,6 +245,6 @@ If ( $copy -eq $True ) {
 	echo ""
 	echo "Finished!"
 	Remove-Item C:\Windows\System32\RCWM\rc\*
-	Start-Sleep 2
+	Start-Sleep 1
 
 }
