@@ -31,10 +31,12 @@ goto :f2
 IF EXIST %fname%\NUL (
 echo Folder with the same name already exists!
 echo Cannot continue!
+timeout /t 2 1>NUL
+exit
 ) ELSE (
 echo File with the same name already exists!
 echo Cannot continue!
-pause
+timeout /t 2 1>NUL
 exit
 )
 
