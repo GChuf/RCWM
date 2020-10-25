@@ -64,8 +64,11 @@ You can paste as many folders as you like, though. Recursive copying/moving is a
 Use this option if you intend to use RoboCopy a lot. I'd recommend reading the rcp/rcm powershell files to understand how the scripts work.
 
 __Single__:
-The folder to be copied is written into a file and overwrites any previous folder paths stored there. If you specify a new folder to be copied, the old one (if existing) will be overwritten. It is simpler and faster, and it only uses batch scripting.
+The folder to be copied is written into a file and __overwrites__ any previous folder paths stored there. If you specify a new folder to be copied, the old one (if existing) will be overwritten. It is simpler and faster, and it only uses batch scripting.
 
+
+RoboCopy (multiple) versus Move Directory (single):
+![Single vs Multiple](img/sm.gif)
 
 # Known bugs
 
