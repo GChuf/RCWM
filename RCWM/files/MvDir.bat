@@ -30,7 +30,7 @@ goto :f2
 :f1
 IF EXIST %fname%\NUL (
 echo Folder with the same name already exists!
-goto :choice
+echo Cannot continue!
 ) ELSE (
 echo File with the same name already exists!
 echo Cannot continue!
@@ -48,34 +48,5 @@ robocopy "%folder%" . /MOV /E /NP /NJH /NJS /NC /NS /MT:16
 rd "%folder%"
 del /f /q C:\Windows\System32\RCWM\mv.log
 echo Finished!
-timeout /t 1 1>NUL
-exit
-
-:choice
-choice /C moc /M "Merge/Overwrite/Cancel?"
-goto option%errorlevel%
-
-:option1
-echo.
-echo Merging . . .
-echo.
-cd "%fname%"
-robocopy %folder% . /MOV /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:16
-rd "%folder%"
-del /f /q C:\Windows\System32\RCWM\mv.log
-exit
-
-:option2
-echo.
-echo Overwriting . . .
-echo.
-cd "%fname%"
-robocopy %folder% . /MOV /E /NP /NJH /NJS /NC /NS /MT:16
-rd "%folder%"
-del /f /q C:\Windows\System32\RCWM\mv.log
-exit
-
-:option3
-echo Exiting . . .
 timeout /t 1 1>NUL
 exit
