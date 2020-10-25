@@ -47,7 +47,7 @@ echo.
 md "%fname%"
 cd "%fname%"
 robocopy "%folder%" . /MOV /E /NP /NJH /NJS /NC /NS /MT:16
-rd "%folder%"
+rd /s /q "%folder%"
 del /f /q C:\Windows\System32\RCWM\mv.log
 echo Finished!
 timeout /t 1 1>NUL
