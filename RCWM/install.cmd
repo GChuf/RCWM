@@ -148,9 +148,9 @@ echo Right-click menu options will now appear for any number of selected files, 
 echo If you select more than 31, only one folder will be actually selected. )
 echo(
 
-rem color c
-rem choice /C yn /M "* Do you want to add Control Panel "
-rem if %errorlevel% == 1 ( start /w regedit /s ControlPanel.reg )
+color c
+choice /C yn /M "* Do you want to add Control Panel "
+if %errorlevel% == 1 ( start /w regedit /s ControlPanel.reg )
 
 
 :RemoveOptions
@@ -165,10 +165,6 @@ if %errorlevel% == 1 ( goto Remove ) else ( goto End )
 :Remove
 
 echo(
-
-color c
-choice /C yn /M "* Do you want to delete Share "
-if %errorlevel% == 1 ( start /w regedit /s DeleteShare.reg )
 
 color a
 choice /C yn /M "* Do you want to delete Pin to quick access "
@@ -189,6 +185,10 @@ if %errorlevel% == 1 ( start /w regedit /s DeleteLibrary.reg )
 color 9
 choice /C yn /M "* Do you want to delete Add to Windows Media Player "
 if %errorlevel% == 1 ( start /w regedit /s DeleteWinPlayer.reg )
+
+color c
+choice /C yn /M "* Do you want to delete Share "
+if %errorlevel% == 1 ( start /w regedit /s DeleteShare.reg )
 
 rem color 9
 rem choice /C yn /M "* Do you want to delete Print "
