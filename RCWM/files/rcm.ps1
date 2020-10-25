@@ -170,6 +170,6 @@ If ( $copy -eq $True ) {
 	echo ""
 	echo "Finished!"
 	Remove-Item C:\Windows\System32\RCWM\mv\*
-	Start-Sleep 2
+	Start-Sleep 1
 
 }
