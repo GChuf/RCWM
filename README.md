@@ -68,6 +68,7 @@ The folder to be copied is written into a file and __overwrites__ any previous f
 
 
 RoboCopy (multiple) versus Move Directory (single):
+
 ![Single vs Multiple](img/sm.gif)
 
 # Known bugs
