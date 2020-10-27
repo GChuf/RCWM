@@ -97,7 +97,7 @@ Folder info: 1.73GB / 12 089 files
 
 The files for Booting into Safe mode and Running with Priority were heavily influenced by Shawn Brink at [tenforums.com](https://www.tenforums.com/tutorials/1977-windows-10-tutorial-index.html)
 
-The TakeOwn.reg for Taking Ownership was heavily influenced by Vishal Gupta at [AskVG.com](https://www.askvg.com/)
+The TakeOwn.reg files for Taking Ownership were heavily influenced by Vishal Gupta at [AskVG.com](https://www.askvg.com/) & Shawn Brink.
 
 I changed and adapted all those files, but their ideas and the initial implementations deserve the credit.
 
