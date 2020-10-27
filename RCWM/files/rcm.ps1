@@ -14,12 +14,7 @@
 #/XC :: eXclude Changed files.
 #/XN :: eXclude Newer files.
 #/XO :: eXclude Older files.
- 
 
-
-#todo
-#check if file exists
-#check if source folder exists
 
 #check if list of folders to be copied exist
 
@@ -70,13 +65,13 @@ Do {
 		{"y", "yes" -contains $_} {
 			$copy = $True
 		}
-		
+
 		{"n", "no" -contains $_} {
 	
 			Do {
 				[string]$prompt = Read-Host -Prompt "Delete list of folders? (Y/N)"
 				Switch ($prompt) {
-				
+
 					default {
 						Write-Host "Not a valid entry."
 						$Valid = $False
@@ -94,14 +89,13 @@ Do {
 						Start-Sleep 3
 						exit
 					}
-	
+
 				}
 			} Until ($Valid)		
-			
+
 		}
 	}
 } Until ($Valid)
-
 
 
 
@@ -109,7 +103,7 @@ If ( $copy -eq $True ) {
 
 	write-host "Begin moving ..."
 	write-host ""
-	
+
 
 	for ($i=0; $i -lt $array.length; $i++) {
 
@@ -120,51 +114,41 @@ If ( $copy -eq $True ) {
 		#get folder name
 		$folder = $path.split("\")[-1]
 
-	#todo
-	#does source folder exist? do i need to check?
+		#does source folder exist?
+		if (-not ($path | Test-Path))
+			echo "Source folder" $path "does not exist. Continuing."
+			continue
+		}
 
-
-
-		#if exist folder
+		#if exist folder (or file)
 		
 		If (Test-Path $basedir\$folder) {
 			#store folders for merge prompt
-			#overwrite - or just copy
 			[string[]]$merge += $path
-		} else {
-			#todo -to so 3 linije zdej
-			#echo "Copying" $path "..."
 			
+		} else {
+
 			#make new directory with the same name as the folder being copied
 
 			New-Item -Path ".\$folder" -ItemType Directory | Out-Null
 
 			C:\Windows\System32\robocopy.exe "$path" "$folder" /MOVE /E /NP /NJH /NJS /NC /NS /MT:32
 			
-			#delete first line here?
-			#(Get-Content C:\Windows\System32\RCWM\mv.log | Select-Object -Skip 1) | Set-Content C:\Windows\System32\RCWM\mv.log		
-			#Start-Sleep 20		
-			
-			#todo
-			#should I output everything into one file so I can delete first lines????
-			#no ... user will be asked to merge anyway.
-			echo "Finished copying $folder"				
+			echo "Finished copying $folder"
 		}
 
-	}	
+	}
 
 		#if merge array exists
 		if ($merge) {
 		
 			Write-host "Successfully moved" $($array.length - $merge.length) "out of" $array.length "folders."
-			#todo merge acts like before array
 			Write-host "The following" $merge.length "folders already exist inside" $BaseDirDisp":"
 			$merge
 			Write-host "Cannot move these files! Deleting the list of files ..."
 			Remove-Item C:\Windows\System32\RCWM\mv\*		
-			Start-Sleep 3		
+			Start-Sleep 3
 		}
-
 
 
 	echo ""
