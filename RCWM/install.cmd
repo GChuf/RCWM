@@ -128,7 +128,7 @@ choice /C yn /M "* Do you want to add Take Ownership to files and directories"
 if %errorlevel% == 1 ( start /w regedit /s TakeOwn.reg )
 
 color 9
-choice /C yn /M "* Do you want to add Take Ownership to drives (All but OS drive)"
+choice /C yn /M "* Do you want to add Take Ownership to drives (All but C:\ drive)"
 if %errorlevel% == 1 ( start /w regedit /s TakeOwnDrive.reg )
 
 color c
