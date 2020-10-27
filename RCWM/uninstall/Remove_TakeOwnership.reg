@@ -8,4 +8,7 @@ Windows Registry Editor Version 5.00
 [-HKEY_CLASSES_ROOT\Directory\shell\takeown]
 [-HKEY_CLASSES_ROOT\Directory\shell\runas]
 
+[-HKEY_CLASSES_ROOT\Drive\shell\takeown]
+[-HKEY_CLASSES_ROOT\Drive\shell\runas]
+
 ; end
