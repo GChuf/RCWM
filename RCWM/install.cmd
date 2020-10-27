@@ -124,22 +124,26 @@ choice /C yn /M "* Do you want to add open PowerShell to background/folders/driv
 if %errorlevel% == 1 ( start /w regedit /s pwrshell.reg )
 
 color a
-choice /C yn /M "* Do you want to add Take Ownership "
+choice /C yn /M "* Do you want to add Take Ownership to files and directories"
 if %errorlevel% == 1 ( start /w regedit /s TakeOwn.reg )
 
 color 9
+choice /C yn /M "* Do you want to add Take Ownership to drives (All but OS drive)"
+if %errorlevel% == 1 ( start /w regedit /s TakeOwnDrive.reg )
+
+color c
 choice /C yn /M "* Do you want to add Safe Mode "
 if %errorlevel% == 1 ( start /w regedit /s SafeMode.reg )
 
-color c
+color a
 choice /C yn /M "* Do you want to add Run with Priority "
 if %errorlevel% == 1 ( start /w regedit /s RunWithPriority.reg )
 
-color a
+color 9
 choice /C yn /M "* Do you want to add Remove Directory (this deletes symlink contents, not symlinks!) "
 if %errorlevel% == 1 ( start /w regedit /s RmDir.reg )
 
-color 9
+color c
 choice /C yn /M "* Do you want to increase right-click menu item limit from 15 to 31? "
 if %errorlevel% == 1 ( 
 start /w regedit /s MultipleInvokeMinimum.reg
@@ -148,7 +152,7 @@ echo Right-click menu options will now appear for any number of selected files, 
 echo If you select more than 31, only one folder will be actually selected. )
 echo(
 
-color c
+color a
 choice /C yn /M "* Do you want to add Control Panel "
 if %errorlevel% == 1 ( start /w regedit /s ControlPanel.reg )
 
