@@ -14,8 +14,8 @@
 
 [HKEY_CLASSES_ROOT\*\shell\takeown\command]
 
-@="cmd.exe /c takeown /f \"%1\" && icacls \"%1\" /grant *S-1-3-4:F administrators:F" /C /L"
-"IsolatedCommand"="cmd.exe /c takeown /f \"%1\" && icacls \"%1\" /grant *S-1-3-4:F administrators:F" /C /L"
+@="cmd.exe /c takeown /f \"%1\" && icacls \"%1\" /grant *S-1-3-4:F" /C /L"
+"IsolatedCommand"="cmd.exe /c takeown /f \"%1\" && icacls \"%1\" /grant *S-1-3-4:F" /C /L"
 
 
 [HKEY_CLASSES_ROOT\Directory\shell\takeown]
@@ -24,5 +24,5 @@
 "NoWorkingDirectory"=""
 
 [HKEY_CLASSES_ROOT\Directory\shell\takeown\command]
-@="cmd.exe /c takeown /f \"%1\" /R /D Y && icacls \"%1\" /grant *S-1-3-4:F administrators:F /T /C /L"
-"IsolatedCommand"="cmd.exe /c takeown /f \"%1\" /R /D Y && icacls \"%1\" /grant *S-1-3-4:F administrators:F /T /C /L"
+@="cmd.exe /c takeown /f \"%1\" /R /D Y && icacls \"%1\" /grant *S-1-3-4:F /T /C /L"
+"IsolatedCommand"="cmd.exe /c takeown /f \"%1\" /R /D Y && icacls \"%1\" /grant *S-1-3-4:F /T /C /L"
