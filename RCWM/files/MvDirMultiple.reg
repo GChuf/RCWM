@@ -3,7 +3,7 @@ Windows Registry Editor Version 5.00
 ;move dir
 
 [HKEY_CLASSES_ROOT\Directory\shell\mvdir]
-@="Move This Directory"
+@="Move These Directories"
 "NoWorkingDirectory"=""
 "Icon"="rcwmimg.dll,-3"
 
@@ -12,7 +12,7 @@ Windows Registry Editor Version 5.00
 "IsolatedCommand"="cmd.exe cd /d %1 && powershell.exe C:\\windows\\system32\\rcwm\\mvdir.ps1 && exit"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir]
-@="Move Directory Here"
+@="Move Directories Here"
 "Icon"="rcwmimg.dll,-4"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir\command]

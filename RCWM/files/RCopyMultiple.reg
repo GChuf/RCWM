@@ -3,7 +3,7 @@ Windows Registry Editor Version 5.00
 ;robocopy
 
 [HKEY_CLASSES_ROOT\Directory\shell\rcopy]
-@="RoboCopy"
+@="RoboCopy Directories"
 "NoWorkingDirectory"=""
 "Icon"="rcwmimg.dll,-5"
 
@@ -12,7 +12,7 @@ Windows Registry Editor Version 5.00
 "IsolatedCommand"="cmd.exe cd /d %1 && powershell.exe C:\\windows\\system32\\rcwm\\rcopy.ps1 && exit"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste]
-@="RoboPaste"
+@="RoboPaste Directories"
 "Icon"="rcwmimg.dll,-6"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste\command]

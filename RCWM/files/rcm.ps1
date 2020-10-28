@@ -115,7 +115,7 @@ If ( $copy -eq $True ) {
 		$folder = $path.split("\")[-1]
 
 		#does source folder exist?
-		if (-not ($path | Test-Path))
+		if (-not ($path | Test-Path)) {
 			echo "Source folder" $path "does not exist. Continuing."
 			continue
 		}
@@ -130,7 +130,7 @@ If ( $copy -eq $True ) {
 
 			#make new directory with the same name as the folder being copied
 
-			New-Item -Path ".\$folder" -ItemType Directory | Out-Null
+			New-Item -Path ".\$folder" -ItemType Directory > $null
 
 			C:\Windows\System32\robocopy.exe "$path" "$folder" /MOVE /E /NP /NJH /NJS /NC /NS /MT:32
 			
