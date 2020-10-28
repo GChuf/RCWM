@@ -15,7 +15,7 @@ wmic process where name="conhost.exe" CALL setpriority 256 >nul
 set curdir=%cd%
 set /P folder=<C:\Windows\System32\RCWM\mv.log
 
-IF NOT EXIST "%folder%" (echo Source folder does not exist! && timeout /t 1 >nul && echo Exiting . . . && timeout /t 1 > nul && exit)
+IF NOT EXIST %folder% (echo Source folder does not exist! && timeout /t 1 >nul && echo Exiting . . . && timeout /t 1 > nul && exit)
 
 cd /d %folder%
 for %%I in (.) do set fname=%%~nxI
@@ -45,9 +45,8 @@ echo.
 echo Moving . . .
 echo.
 md "%fname%"
-cd "%fname%"
-robocopy "%folder%" . /MOV /E /NP /NJH /NJS /NC /NS /MT:16
-rd /s /q "%folder%"
+robocopy %folder% "%fname%" /MOV /E /NP /NJH /NJS /NC /NS /MT:16
+rd /s /q %folder%
 del /f /q C:\Windows\System32\RCWM\mv.log
 echo Finished!
 timeout /t 1 1>NUL
