@@ -28,7 +28,7 @@ goto :f2
 )
 
 :f1
-IF EXIST %fname%\NUL (
+IF EXIST "%fname%\NUL" (
 echo Folder with the same name already exists!
 goto :choice
 ) ELSE (
