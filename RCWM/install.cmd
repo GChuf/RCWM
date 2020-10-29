@@ -44,6 +44,9 @@ if %errorlevel% == 1 ( goto update ) else ( echo Keeping old files and copying p
 
 :start
 
+rem Unblock ps1 files
+powershell Unblock-File C:\Windows\System32\RCWM\*.ps1; exit
+
 echo(
 echo Choose the options that you want to apply to your right-click menu.
 echo You will be asked separately for each option (divided into Add and Remove sections).
