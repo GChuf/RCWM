@@ -27,7 +27,6 @@ TODO (magic takes time):
 - reboot to recovery
 - cmd/pwsh opened with admin priv
 - rmdir needs to work with admin priv
-- move away from mutexes for robocopy
 - adding other admin tools to right click in background
 - locking folders with passwords?
 - your suggestions
