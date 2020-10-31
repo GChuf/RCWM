@@ -11,6 +11,10 @@ Windows Registry Editor Version 5.00
 @="cmd /k cd /d %1 && powershell Set-ExecutionPolicy Bypass -Scope Process; C:\\windows\\system32\\rcwm\\rcopy.ps1 && exit"
 "IsolatedCommand"="cmd /k cd /d %1 && powershell Set-ExecutionPolicy Bypass -Scope Process; C:\\windows\\system32\\rcwm\\rcopy.ps1 && exit"
 
+; opening it inside powershell instead of cmd ...
+; "powershell.exe -noexit -command \"cd \"\"%V\"\"\"; Set-ExecutionPolicy Bypass -Scope Process; C:\\windows\\system32\\rcwm\\rcopy.ps1; exit
+; ... is actually worse.
+
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste]
 @="RoboPaste Directories"
 "Icon"="rcwmimg.dll,-6"
