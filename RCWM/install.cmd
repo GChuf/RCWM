@@ -25,10 +25,27 @@ echo(
 echo *********************************
 echo ****** RCWM Install Script ******
 echo *********************************
-echo ************************v1.1*****
+echo ************************v1.2*****
+echo * https://github.com/GChuf/RCWM *
 echo *********************************
 echo(
 echo(
+
+
+rem powershell version check
+FOR /F "tokens=* USEBACKQ" %%F IN (`powershell $psversiontable.psversion.major`) DO (
+SET pwsh=%%F
+)
+
+IF %pwsh% LSS 5 (
+    IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version older than 5 on 32bit CPU. ) else ( echo Using powershell version older than 5 on 64bit CPU. )
+	echo Modifying powershell scripts for compatibility with older powershell versions . . .
+	rem this removes -NoNewLine switch which was introduced in Powershell v5
+	powershell (Get-Content C:\Windows\System32\RCWM\rcopy.ps1 ).Replace(' -NoNewline','') | Out-File C:\Windows\System32\RCWM\rcopy.ps1
+	powershell (Get-Content C:\Windows\System32\RCWM\mvdir.ps1 ).Replace(' -NoNewline','') | Out-File C:\Windows\System32\RCWM\mvdir.ps1
+ ) ELSE (
+	IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version 5 or newer on 32bit CPU. ) else ( echo Using powershell version 5 or newer on 64bit CPU. )
+)
 
 
 rem Fun Fact: 'echo(' is faster and safer than 'echo.'
@@ -40,7 +57,6 @@ rem If folder already exist ask if user wants to overwrite files.
 IF EXIST "%SystemRoot%\System32\RCWM" ( echo RCWM folder already exists! && choice /C yn /M "Overwrite existing files " ) else ( goto install )
 
 if %errorlevel% == 1 ( goto update ) else ( echo Keeping old files and copying possible new ones. && robocopy *.bat *.lnk *.ps1 . "%SystemRoot%\System32\RCWM" /XC /XN /XO 1>nul )
-
 
 :start
 
@@ -99,7 +115,7 @@ color a
 choice /C yn /M "* Do you want to add RoboCopy "
 if %errorlevel% == 1 ( goto RCopy ) else ( goto MvDir )
 
-color 9
+color b
 :RCopy
 choice /C sm /M "** Do you want to add RoboCopy for single or multiple directories "
 if %errorlevel% == 1 ( start /w regedit /s RCopy.reg && goto MvDir ) else ( start /w regedit /s RCopyMultiple.reg && goto MvDir )
@@ -118,19 +134,24 @@ if %errorlevel% == 1 ( start /w regedit /s MvDir.reg && goto Other ) else ( star
 
 :Other
 
-color 9
+color b
 choice /C yn /M "* Do you want to add open CMD to background/folders/drives "
 if %errorlevel% == 1 ( start /w regedit /s CMD.reg )
 
 color c
 choice /C yn /M "* Do you want to add open PowerShell to background/folders/drives "
-if %errorlevel% == 1 ( start /w regedit /s pwrshell.reg )
+if %errorlevel% == 1 ( 
+
+IF %pwsh% LSS 5 ( 
+   IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( start /w regedit /s pwrshell32.reg ) else ( start /w regedit /s pwrshell64.reg )
+ ) ELSE ( start /w regedit /s pwrshell.reg )
+)
 
 color a
 choice /C yn /M "* Do you want to add Take Ownership to files and directories"
 if %errorlevel% == 1 ( start /w regedit /s TakeOwn.reg )
 
-color 9
+color b
 choice /C yn /M "* Do you want to add Take Ownership to drives (All but C:\ drive)"
 if %errorlevel% == 1 ( start /w regedit /s TakeOwnDrive.reg )
 
@@ -142,7 +163,7 @@ color a
 choice /C yn /M "* Do you want to add Run with Priority "
 if %errorlevel% == 1 ( start /w regedit /s RunWithPriority.reg )
 
-color 9
+color b
 choice /C yn /M "* Do you want to add Remove Directory (this deletes symlink contents, not symlinks!) "
 if %errorlevel% == 1 ( start /w regedit /s RmDir.reg )
 
@@ -177,7 +198,7 @@ color a
 choice /C yn /M "* Do you want to delete Pin to quick access "
 if %errorlevel% == 1 ( start /w regedit /s DeletePinQuick.reg )
 
-color 9
+color b
 choice /C yn /M "* Do you want to delete Pin to Start "
 if %errorlevel% == 1 ( start /w regedit /s DeletePinStartScreen.reg )
 
@@ -189,7 +210,7 @@ color a
 choice /C yn /M "* Do you want to delete Include in Library "
 if %errorlevel% == 1 ( start /w regedit /s DeleteLibrary.reg )
 
-color 9
+color b
 choice /C yn /M "* Do you want to delete Add to Windows Media Player "
 if %errorlevel% == 1 ( start /w regedit /s DeleteWinPlayer.reg )
 
@@ -197,7 +218,7 @@ color c
 choice /C yn /M "* Do you want to delete Share "
 if %errorlevel% == 1 ( start /w regedit /s DeleteShare.reg )
 
-rem color 9
+rem color b
 rem choice /C yn /M "* Do you want to delete Print "
 
 rem color c
