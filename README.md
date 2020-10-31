@@ -74,6 +74,7 @@ RoboCopy (multiple) versus Move Directory (single):
 
 - TakeOwn won't work properly when right-clicking on very large amounts of folders (some folders' permissions won't be changed - so you need to do it twice)?
 Changing ownership of large amounts of recursive folders works fine though.
+- Run with Priority won't show the menu to choose with which priority to run a program - please report if this happens to you
 - <del>When selecting multiple folders to be copied/moved, not all of them are saved into the list for copying/moving (~10% loss?)</del>
 Fixed with powershell using mutex
 - <del>RoboCopy and MoveDir stopped working when using powershell mutex scripts - work in progress to move existing batch script into powershell to solve the problem. Apparently CMD doesn't like powershell outputs ... </del>?
