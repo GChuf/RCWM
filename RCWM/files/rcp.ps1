@@ -216,7 +216,6 @@ If ( $copy -eq $True ) {
 
 		}
 
-
 	echo ""
 	echo "Finished!"
 	Remove-Item C:\Windows\System32\RCWM\rc\*
