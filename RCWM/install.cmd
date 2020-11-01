@@ -20,7 +20,7 @@ if '%errorlevel%' NEQ '0' (
 pushd "%CD%"
 cd /d "%~dp0"
 
-
+rem Fun Fact: 'echo(' is faster and safer than 'echo.'
 echo(
 echo *********************************
 echo ****** RCWM Install Script ******
@@ -32,6 +32,8 @@ echo(
 echo(
 
 
+cd files
+
 rem powershell version check
 FOR /F "tokens=* USEBACKQ" %%F IN (`powershell $psversiontable.psversion.major`) DO (
 SET pwsh=%%F
@@ -41,31 +43,30 @@ IF %pwsh% LSS 5 (
     IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version older than 5 on 32bit CPU. ) else ( echo Using powershell version older than 5 on 64bit CPU. )
 	echo Modifying powershell scripts for compatibility with older powershell versions . . .
 	rem this removes -NoNewLine switch which was introduced in Powershell v5
-	powershell "echo '$n = -join ((0,1,2,3,4,5,6,7,8,9,\"a\",\"b\",\"c\",\"d\",\"e\",\"f\")|get-random -count 6)' | Out-File C:\Windows\System32\RCWM\rcopy.ps1"
-	powershell "echo '(get-location).path|out-file C:\windows\system32\rcwm\rc\$n -encoding UTF8'|Out-File C:\Windows\System32\RCWM\rcopy.ps1 -Append"
+	powershell "echo '$n = -join ((0,1,2,3,4,5,6,7,8,9,\"a\",\"b\",\"c\",\"d\",\"e\",\"f\")|get-random -count 6)' | Out-File rcopy.ps1"
+	powershell "echo '(get-location).path|out-file C:\windows\system32\rcwm\rc\$n -encoding UTF8'|Out-File rcopy.ps1 -Append"
 
-	powershell "echo '$n = -join ((0,1,2,3,4,5,6,7,8,9,\"a\",\"b\",\"c\",\"d\",\"e\",\"f\")|get-random -count 6)' | Out-File C:\Windows\System32\RCWM\mvdir.ps1"
-	powershell "echo '(get-location).path|out-file C:\windows\system32\rcwm\mv\$n -encoding UTF8'|Out-File C:\Windows\System32\RCWM\mvdir.ps1 -Append"
+	powershell "echo '$n = -join ((0,1,2,3,4,5,6,7,8,9,\"a\",\"b\",\"c\",\"d\",\"e\",\"f\")|get-random -count 6)' | Out-File mvdir.ps1"
+	powershell "echo '(get-location).path|out-file C:\windows\system32\rcwm\mv\$n -encoding UTF8'|Out-File mvdir.ps1 -Append"
 
  ) ELSE (
 	IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version 5 or newer on 32bit CPU. ) else ( echo Using powershell version 5 or newer on 64bit CPU. )
 )
 
 
-rem Fun Fact: 'echo(' is faster and safer than 'echo.'
+rem Unblock ps1 files (not entirely necessary)
+rem Won't work on older powershell versions, so output error message to $nul
+powershell Unblock-File *.ps1 > $nul; exit
 
-
-cd files
 
 rem If folder already exist ask if user wants to overwrite files.
 IF EXIST "%SystemRoot%\System32\RCWM" ( echo RCWM folder already exists! && choice /C yn /M "Overwrite existing files " ) else ( goto install )
 
 if %errorlevel% == 1 ( goto update ) else ( echo Keeping old files and copying possible new ones. && robocopy *.bat *.lnk *.ps1 . "%SystemRoot%\System32\RCWM" /XC /XN /XO 1>nul )
 
+
 :start
 
-rem Unblock ps1 files
-powershell Unblock-File C:\Windows\System32\RCWM\*.ps1; exit
 
 echo(
 echo Choose the options that you want to apply to your right-click menu.
@@ -102,6 +103,8 @@ goto start
 
 :update
 
+md %SystemRoot%\System32\RCWM\rc 2>nul
+md %SystemRoot%\System32\RCWM\mv 2>nul
 xcopy /f *.bat %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.ps1 %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.lnk %SystemRoot%\System32\RCWM /y 1>nul
