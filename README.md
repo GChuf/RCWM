@@ -79,6 +79,8 @@ Changing ownership of large amounts of recursive folders works fine though.
 Fixed with powershell using mutex
 - <del>RoboCopy and MoveDir stopped working when using powershell mutex scripts - work in progress to move existing batch script into powershell to solve the problem. Apparently CMD doesn't like powershell outputs ... </del>?
 Fixed by using utf-8 encoding in powershell
+- powershell scripts (robocopy, mvdir, open powershell) don't work with directories with \[square brackets\] in their names.
+- rmdir and robocopy sometimes need admin privileges (robocopy throws error 5)
 
 # Tests
 RoboCopy is much faster for copying a large amount of small files.
