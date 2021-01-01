@@ -175,8 +175,12 @@ choice /C yn /M "* Do you want to add Run with Priority "
 if %errorlevel% == 1 ( start /w regedit /s RunWithPriority.reg )
 
 color b
-choice /C yn /M "* Do you want to add Remove Directory (this deletes symlink contents, not symlinks!) "
+choice /C yn /M "* Do you want to add Remove Directory (careful - using this will delete symlink contents, not symlinks!) "
 if %errorlevel% == 1 ( start /w regedit /s RmDir.reg )
+
+color b
+if %errorlevel% == 0 ( choice /C yn /M "* Do you want to add Remove Directory without symlink content deletion (slower than the previous option) " )
+if %errorlevel% == 1 ( start /w regedit /s RmDirS.reg )
 
 color a
 choice /C yn /M "* Do you want to add Control Panel "
