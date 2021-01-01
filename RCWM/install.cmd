@@ -145,6 +145,10 @@ color b
 choice /C yn /M "* Do you want to add open CMD to background/folders/drives "
 if %errorlevel% == 1 ( start /w regedit /s CMD.reg )
 
+color b
+choice /C yn /M "* Do you want to add open CMD to (shift! + right click) "
+if %errorlevel% == 1 ( start /w regedit /s CMDshift.reg )
+
 color c
 choice /C yn /M "* Do you want to add open PowerShell to background/folders/drives "
 if %errorlevel% == 1 ( 
