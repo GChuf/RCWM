@@ -163,12 +163,8 @@ choice /C yn /M "* Do you want to add Take Ownership to files and directories"
 if %errorlevel% == 1 ( start /w regedit /s TakeOwn.reg )
 
 color b
-choice /C yn /M "* Do you want to add Take Ownership to drives (All but C:\ drive)"
+choice /C yn /M "* Do you want to add Take Ownership to drives (All but C:\ drive) "
 if %errorlevel% == 1 ( start /w regedit /s TakeOwnDrive.reg )
-
-color c
-choice /C yn /M "* Do you want to add Safe Mode "
-if %errorlevel% == 1 ( start /w regedit /s SafeMode.reg )
 
 color a
 choice /C yn /M "* Do you want to add Run with Priority "
@@ -190,6 +186,13 @@ color a
 choice /C yn /M "* Do you want to add Reboot to Recovery to 'This PC' "
 if %errorlevel% == 1 ( start /w regedit /s RebootToRecovery.reg )
 
+color c
+choice /C yn /M "* Do you want to add Safe Mode to 'This PC' "
+if %errorlevel% == 1 ( start /w regedit /s SafeMode.reg )
+
+color c
+choice /C yn /M "* Do you want to add 'This PC' shortcut to Desktop "
+if %errorlevel% == 1 ( start /w regedit /s ThisPC.reg ) 
 
 color c
 choice /C yn /M "* Do you want to increase right-click menu item limit from 15 to 31? "
