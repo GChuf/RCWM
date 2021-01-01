@@ -1,0 +1,11 @@
+﻿Windows Registry Editor Version 5.00
+
+;stolen and adapted from an unknown source
+
+[HKEY_CLASSES_ROOT\CLSID\{20D04FE0-3AEA-1069-A2D8-08002B30309D}\shell\Reboot to Recovery]
+"Icon"="C:\\Windows\\System32\\imageres.dll,-110"
+
+[HKEY_CLASSES_ROOT\CLSID\{20D04FE0-3AEA-1069-A2D8-08002B30309D}\shell\Reboot to Recovery\command]
+@="shutdown.exe -r -o -f -t 0"
+
+;done
