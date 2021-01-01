@@ -8,6 +8,7 @@ This little magic pack includes:
 - opening CMD or powershell windows into folders or drives
 - taking ownership of files, or directories with recursion (takeown && icacls)
 - options to boot into Safe Mode from desktop
+- option to reboot to recovery (right-click This PC icon)
 - opening Control Panel from desktop
 - running programs with custom priority
 - options to uninstall the changes you've made
@@ -24,9 +25,9 @@ You can also remove some right-click menu options, so that your menu doesn't bec
 TODO (magic takes time):
 - copying files
 - creating directory junctions (mklink /D), hard links (mklink /H) and symbolic links [aka soft links] (mklink /J)
-- reboot to recovery
 - cmd/pwsh opened with admin priv
 - rmdir needs to work with admin priv
+- mvdir/rcopy also need to work with admin priv
 - adding other admin tools to right click in background
 - locking folders with passwords?
 - your suggestions
@@ -76,12 +77,15 @@ RoboCopy (multiple) versus Move Directory (single):
 Changing ownership of large amounts of recursive folders works fine though.
 - Run with Priority won't show the menu to choose with which priority to run a program - please report if this happens to you
 - <del>When selecting multiple folders to be copied/moved, not all of them are saved into the list for copying/moving (~10% loss?)</del>
-Fixed with powershell using mutex
+<delFixed with powershell using mutex<del>
+Fixed by saving folder paths into files generated with random names
 - <del>RoboCopy and MoveDir stopped working when using powershell mutex scripts - work in progress to move existing batch script into powershell to solve the problem. Apparently CMD doesn't like powershell outputs ... </del>?
 Fixed by using utf-8 encoding in powershell
-- powershell scripts (robocopy, mvdir, open powershell) don't work with directories with \[square brackets\] in their names.
+- <del>powershell scripts (robocopy, mvdir, open powershell) don't work with directories with \[square brackets\] in their names.<del>
+Fixed by using -literalPath option
 - rmdir and robocopy sometimes need admin privileges (robocopy throws error 5)
-
+- RCWM is not thoroughly tested on Windows 7
+  
 # Tests
 RoboCopy is much faster for copying a large amount of small files.
 RmDir is also faster than "standard" delete.
@@ -92,14 +96,14 @@ Folder info: 1.73GB / 12 089 files
 - rcopy/normal copy: 43s/91s
 - rmdir/normal delete: ~ 3s/4.5s
 
-![Magic tests](img/RCWMtest.gif)
-
 
 # Credits
 
 The files for Booting into Safe mode and Running with Priority were heavily influenced by Shawn Brink at [tenforums.com](https://www.tenforums.com/tutorials/1977-windows-10-tutorial-index.html)
 
 The TakeOwn.reg files for Taking Ownership were heavily influenced by Vishal Gupta at [AskVG.com](https://www.askvg.com/) & Shawn Brink.
+
+The Reboot to Recovery option was found somewhere on the internet a while ago. Unfortunately, I cannot remember who the original author is.
 
 I changed and adapted all those files, but their ideas and the initial implementations deserve the credit.
 
