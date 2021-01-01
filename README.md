@@ -76,12 +76,12 @@ RoboCopy (multiple) versus Move Directory (single):
 - TakeOwn won't work properly when right-clicking on very large amounts of folders (some folders' permissions won't be changed - so you need to do it twice)?
 Changing ownership of large amounts of recursive folders works fine though.
 - Run with Priority won't show the menu to choose with which priority to run a program - please report if this happens to you
-- <del>When selecting multiple folders to be copied/moved, not all of them are saved into the list for copying/moving (~10% loss?)</del>
-<delFixed with powershell using mutex<del>
+- <del>When selecting multiple folders to be copied/moved, not all of them are saved into the list for copying/moving (~10% loss?)
+Fixed with powershell using mutex</del>
 Fixed by saving folder paths into files generated with random names
 - <del>RoboCopy and MoveDir stopped working when using powershell mutex scripts - work in progress to move existing batch script into powershell to solve the problem. Apparently CMD doesn't like powershell outputs ... </del>?
 Fixed by using utf-8 encoding in powershell
-- <del>powershell scripts (robocopy, mvdir, open powershell) don't work with directories with \[square brackets\] in their names.<del>
+- <del>powershell scripts (robocopy, mvdir, open powershell) don't work with directories with \[square brackets\] in their names.</del>
 Fixed by using -literalPath option
 - rmdir and robocopy sometimes need admin privileges (robocopy throws error 5)
 - RCWM is not thoroughly tested on Windows 7
@@ -91,10 +91,12 @@ RoboCopy is much faster for copying a large amount of small files.
 RmDir is also faster than "standard" delete.
 
 
-Results from gif:
+Test results on my machine on an SSD disk:
 Folder info: 1.73GB / 12 089 files
 - rcopy/normal copy: 43s/91s
 - rmdir/normal delete: ~ 3s/4.5s
+
+Results may vary based on your computer and disk - but wherever there are small files, you should benefit.
 
 
 # Credits
