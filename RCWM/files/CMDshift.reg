@@ -1,0 +1,11 @@
+﻿Windows Registry Editor Version 5.00
+
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\cmdshift]
+@="Open Command Window here"
+"ShowBasedOnVelocityId"=dword:639bc8
+"Extended"=""
+"NoWorkingDirectory"=""
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\cmdshift\command]
+@="cmd.exe /k cd /d %V"
