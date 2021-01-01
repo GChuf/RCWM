@@ -1,1 +1,1 @@
-(get-location).path|out-file C:\windows\system32\rcwm\mv\$(get-random -maximum 0x8FFFFF) -encoding UTF8 -NoNewline
+(get-location).path|out-file C:\windows\system32\rcwm\mv\$(get-random -maximum 0x98967F) -encoding UTF8 -NoNewline
