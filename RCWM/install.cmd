@@ -178,6 +178,15 @@ color b
 choice /C yn /M "* Do you want to add Remove Directory (this deletes symlink contents, not symlinks!) "
 if %errorlevel% == 1 ( start /w regedit /s RmDir.reg )
 
+color a
+choice /C yn /M "* Do you want to add Control Panel "
+if %errorlevel% == 1 ( start /w regedit /s ControlPanel.reg )
+
+color a
+choice /C yn /M "* Do you want to add Reboot to Recovery to 'This PC' "
+if %errorlevel% == 1 ( start /w regedit /s RebootToRecovery.reg )
+
+
 color c
 choice /C yn /M "* Do you want to increase right-click menu item limit from 15 to 31? "
 if %errorlevel% == 1 ( 
@@ -187,9 +196,7 @@ echo Right-click menu options will now appear for any number of selected files, 
 echo If you select more than 31, only one folder will be actually selected. )
 echo(
 
-color a
-choice /C yn /M "* Do you want to add Control Panel "
-if %errorlevel% == 1 ( start /w regedit /s ControlPanel.reg )
+
 
 
 :RemoveOptions
