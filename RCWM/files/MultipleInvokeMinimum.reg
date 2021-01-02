@@ -1,11 +1,13 @@
 Windows Registry Editor Version 5.00
 
-;Bump right-click menu options from 15 to 31 folders
+;Bump right-click menu options from 15 to 32 items
 ;note: right-click menu options will now appear no matter how many folders you select
-;but will only work properly up until 31 (32-1)
-;increase limit in hex for more
+;but will only work properly up until 32
+;increase limit in hexadecimal for more
+;dword 21 == (2 * 16^1) + (1 * 16^0) == decimal 33
+;subtract 1 to get actual number of files you can select with right-click
 
 [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer]
-"MultipleInvokePromptMinimum"=dword:20
+"MultipleInvokePromptMinimum"=dword:21
 
 ;done
