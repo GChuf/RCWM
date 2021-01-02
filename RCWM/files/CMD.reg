@@ -15,7 +15,7 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-1"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\cmd2\command]
-@="cmd.exe /k cd /d %V"
+@="cmd.exe"
 
 
 [HKEY_CLASSES_ROOT\Drive\shell\cmd2]
