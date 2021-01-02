@@ -1,0 +1,58 @@
+Windows Registry Editor Version 5.00
+
+; cmd.exe mklink
+
+[HKEY_CLASSES_ROOT\Directory\Shell\mklink]
+"MUIVerb"="Link Source"
+"Icon"="rcwmimg.dll,-8"
+
+[HKEY_CLASSES_ROOT\Directory\Shell\mklink\command]
+@="cmd.exe /c echo %1>C:\\Windows\\System32\\RCWM\\dl.log"
+;dir link
+
+[HKEY_CLASSES_ROOT\*\shell\mklink]
+@="Link Source"
+"Icon"="rcwmimg.dll,-8"
+
+[HKEY_CLASSES_ROOT\*\shell\mklink\command]
+@="cmd.exe /c echo %1>C:\\Windows\\System32\\RCWM\\fl.log"
+;file link
+
+
+
+[HKEY_CLASSES_ROOT\Directory\Background\Shell\mklink]
+"MUIVerb"="Link Destination"
+"SubCommands"="SymbolicLink;DirectoryJunction;HardLink"
+"Icon"="rcwmimg.dll,-8"
+"Position"=-
+
+
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\SymbolicLink]
+@="Symbolic Link"
+"Icon"="rcwmimg.dll,-8"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\SymbolicLink\command]
+@="cmd /c powershell Set-ExecutionPolicy Bypass -Scope Process; C:\\Windows\\System32\\RCWM\\sl.ps1"
+
+
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\DirectoryJunction]
+@="Directory Juntion"
+"Icon"="rcwmimg.dll,-8"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\DirectoryJunction\command]
+@="cmd /c powershell Set-ExecutionPolicy Bypass -Scope Process; C:\\Windows\\System32\\RCWM\\dj.ps1"
+
+
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\HardLink]
+@="HardLink"
+"Icon"="rcwmimg.dll,-8"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\HardLink\command]
+@="cmd /c powershell Set-ExecutionPolicy Bypass -Scope Process; C:\\Windows\\System32\\RCWM\\hl.ps1"
+
+
+
+;
