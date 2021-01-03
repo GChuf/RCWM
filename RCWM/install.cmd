@@ -265,6 +265,12 @@ echo If you select more than that, only one folder will be actually selected.
 )
 
 echo(
+color c
+choice /C yn /M "Do you want to cmd.exe to always be opened as admin "
+if %errorlevel% == 1 ( start /w regedit /s CMDadmin.reg ) 
+
+
+echo(
 
 color d
 echo(
