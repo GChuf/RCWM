@@ -115,14 +115,14 @@ If ( $copy -eq $True ) {
 		$folder = $path.split("\")[-1]
 
 		#does source folder exist?
-		if (-not ($path | Test-Path)) {
+		if (-not ( Test-Path -literalpath "$path" )) {
 			echo "Source folder" $path "does not exist. Continuing."
 			continue
 		}
 
 		#if exist folder (or file)
 		
-		If (Test-Path $basedir\$folder) {
+		If (Test-Path -literalPath ".\$folder") {
 			#store folders for merge prompt
 			#overwrite - or just copy
 			[string[]]$merge += $path
