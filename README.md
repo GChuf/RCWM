@@ -7,10 +7,12 @@ This little magic pack includes:
 - robocopy for copying and moving directories (much faster than regular copy)
 - opening CMD or powershell windows into folders or drives
 - taking ownership of files, or directories with recursion (takeown && icacls)
-- options to boot into Safe Mode from desktop
-- option to reboot to recovery (right-click This PC icon)
+- options to boot into Safe Mode (from This PC icon)
+- option to Reboot to Recovery (from This PC icon)
 - opening Control Panel from desktop
 - running programs with custom priority
+- option to always open cmd as admin
+- making symbolic/hard links
 - options to uninstall the changes you've made
 
 You can also remove some right-click menu options, so that your menu doesn't become too cluttered:
@@ -24,11 +26,10 @@ You can also remove some right-click menu options, so that your menu doesn't bec
 
 TODO (magic takes time):
 - copying files
-- creating directory junctions (mklink /D), hard links (mklink /H) and symbolic links [aka soft links] (mklink /J)
-- cmd/pwsh opened with admin priv
-- rmdir needs to work with admin priv
-- mvdir/rcopy also need to work with admin priv
+- directory juntions for multiple files/folders
+- pwsh opened with admin priv
 - adding other admin tools to right click in background
+- creating powershell .exe files to make some things faster/nicer
 - locking folders with passwords?
 - your suggestions
 
@@ -83,7 +84,7 @@ Fixed by saving folder paths into files generated with random names
 Fixed by using utf-8 encoding in powershell
 - <del>powershell scripts (robocopy, mvdir, open powershell) don't work with directories with \[square brackets\] in their names.</del>
 Fixed by using -literalPath option
-- rmdir and robocopy sometimes need admin privileges (robocopy throws error 5)
+- rmdir and robocopy sometimes need admin privileges (robocopy throws error 5) - if you experience this, takeown or always running cmd as admin will help
 - RCWM is not thoroughly tested on Windows 7
   
 # Tests
