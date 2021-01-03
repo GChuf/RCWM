@@ -194,10 +194,6 @@ color c
 choice /C yn /M "* Do you want to add Safe Mode to 'This PC' "
 if %errorlevel% == 1 ( start /w regedit /s SafeMode.reg )
 
-color c
-choice /C yn /M "* Do you want to add 'This PC' shortcut to Desktop "
-if %errorlevel% == 1 ( start /w regedit /s ThisPC.reg ) 
-
 echo(
 
 :RemoveOptions
@@ -246,21 +242,29 @@ rem choice /C yn /M "* Do you want to delete Win Defender "
 rem color a
 rem choice /C yn /M "* Do you want to delete Cast to Device "
 
+
+:End
+
+echo(
 color c
-choice /C yn /M "* Do you want to increase right-click menu item limit (default is 15) "
+choice /C yn /M "Do you want to add 'This PC' shortcut to Desktop "
+if %errorlevel% == 1 ( start /w regedit /s ThisPC.reg ) 
+
+echo(
+color c
+choice /C yn /M "Do you want to increase right-click menu item limit (default is 15) "
 if %errorlevel% == 1 ( 
 
 choice /C 123 /M "* Increase to 32[1], 64[2] or 128[3] "
 if %errorlevel% == 1 ( start /w regedit /s MultipleInvokeMinimum.reg )
 if %errorlevel% == 2 ( start /w regedit /s MultipleInvokeMinimum64.reg )
 if %errorlevel% == 3 ( start /w regedit /s MultipleInvokeMinimum128.reg )
-echo(
 
 echo Right-click menu options will now appear for any number of selected files, but will only work correctly up until whatever number you selected!!
 echo If you select more than that, only one folder will be actually selected. 
 )
 
-:End
+echo(
 
 color d
 echo(
