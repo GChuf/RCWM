@@ -22,19 +22,26 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\Directory\Background\Shell\mklink]
 "MUIVerb"="Link Destination"
-"SubCommands"="SymbolicLink;DirectoryJunction;HardLink"
+"SubCommands"="SymbolicLinkF;SymbolicLinkD;DirectoryJunction;HardLink"
 "Icon"="rcwmimg.dll,-8"
 "Position"=-
 
 
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\SymbolicLink]
-@="Symbolic Link"
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\SymbolicLinkF]
+@="Symbolic Link (file)"
 "Icon"="rcwmimg.dll,-8"
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\SymbolicLink\command]
-@="cmd /c powershell Set-ExecutionPolicy Bypass -Scope Process; C:\\Windows\\System32\\RCWM\\sl.ps1"
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\SymbolicLinkF\command]
+@="cmd /c powershell Set-ExecutionPolicy Bypass -Scope Process; C:\\Windows\\System32\\RCWM\\SymbolicLinkFile.bat"
 
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\SymbolicLinkD]
+@="Symbolic Link (dir)"
+"Icon"="rcwmimg.dll,-8"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\SymbolicLinkD\command]
+@="cmd /c powershell Set-ExecutionPolicy Bypass -Scope Process; C:\\Windows\\System32\\RCWM\\SymbolicLink.bat"
 
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\DirectoryJunction]
@@ -42,16 +49,16 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-8"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\DirectoryJunction\command]
-@="cmd /c powershell Set-ExecutionPolicy Bypass -Scope Process; C:\\Windows\\System32\\RCWM\\dj.ps1"
+@="cmd /c powershell Set-ExecutionPolicy Bypass -Scope Process; C:\\Windows\\System32\\RCWM\\directorylink.bat"
 
 
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\HardLink]
-@="HardLink"
+@="Hard Link"
 "Icon"="rcwmimg.dll,-8"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\HardLink\command]
-@="cmd /c powershell Set-ExecutionPolicy Bypass -Scope Process; C:\\Windows\\System32\\RCWM\\hl.ps1"
+@="cmd /c powershell Set-ExecutionPolicy Bypass -Scope Process; C:\\Windows\\System32\\RCWM\\hardlink.bat"
 
 
 

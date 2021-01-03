@@ -183,6 +183,10 @@ choice /C yn /M "* Do you want to add Control Panel "
 if %errorlevel% == 1 ( start /w regedit /s ControlPanel.reg )
 
 color a
+choice /C yn /M "* Do you want to add symbolic/hard links "
+if %errorlevel% == 1 ( start /w regedit /s Links.reg )
+
+color a
 choice /C yn /M "* Do you want to add Reboot to Recovery to 'This PC' "
 if %errorlevel% == 1 ( start /w regedit /s RebootToRecovery.reg )
 
