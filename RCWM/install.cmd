@@ -171,12 +171,12 @@ choice /C yn /M "* Do you want to add Run with Priority "
 if %errorlevel% == 1 ( start /w regedit /s RunWithPriority.reg )
 
 color b
-choice /C yn /M "* Do you want to add Remove Directory (careful - using this will delete symlink contents, not symlinks!) "
-if %errorlevel% == 1 ( start /w regedit /s RmDir.reg )
-
-color b
-if %errorlevel% == 0 ( choice /C yn /M "* Do you want to add Remove Directory without symlink content deletion (slower than the previous option) " )
+choice /C yn /M "* Do you want to add Remove Directory (fastest option - but careful - using this will delete symlink contents, not symlinks!) "
+if %errorlevel% == 1 ( start /w regedit /s RmDir.reg
+) else (
+if %errorlevel% == 2 ( choice /C yn /M "* Do you want to add Remove Directory without symlink content deletion (slower than the previous option) " )
 if %errorlevel% == 1 ( start /w regedit /s RmDirS.reg )
+)
 
 color a
 choice /C yn /M "* Do you want to add Control Panel "
@@ -259,7 +259,7 @@ choice /C 123 /M "* Increase to 32[1], 64[2] or 128[3] "
 if %errorlevel% == 1 ( start /w regedit /s MultipleInvokeMinimum.reg )
 if %errorlevel% == 2 ( start /w regedit /s MultipleInvokeMinimum64.reg )
 if %errorlevel% == 3 ( start /w regedit /s MultipleInvokeMinimum128.reg )
-
+echo(
 echo Right-click menu options will now appear for any number of selected files, but will only work correctly up until whatever number you selected!!
 echo If you select more than that, only one folder will be actually selected. 
 )
@@ -278,7 +278,9 @@ echo(
 echo Finished!
 echo(
 echo You can delete all downloaded files now.
+echo(
 echo The batch files are located inside %SystemRoot%\System32\RCWM.
+echo You can play with them if you want.
 rem if you want to change batch files inside RCWM, give your users all necessary permissions.
 echo(
 timeout /t 1 > nul
