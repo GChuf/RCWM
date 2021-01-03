@@ -28,7 +28,7 @@ goto :f2
 )
 
 :f1
-IF EXIST "%fname%\NUL" (
+IF EXIST "%fname%\" (
 echo Folder with the same name already exists!
 echo Cannot continue!
 timeout /t 2 1>NUL
