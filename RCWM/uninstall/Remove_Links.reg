@@ -1,0 +1,7 @@
+Windows Registry Editor Version 5.00
+
+[-HKEY_CLASSES_ROOT\*\shell\mklink]
+[-HKEY_CLASSES_ROOT\Directory\Shell\mklink]
+[-HKEY_CLASSES_ROOT\Directory\Background\Shell\mklink]
+
+;
