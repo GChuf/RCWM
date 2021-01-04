@@ -46,5 +46,4 @@ mklink "%curdir%\%f%" "%file%"
 del /f /q C:\Windows\System32\RCWM\fl.log
 echo Finished!
 timeout /t 1 1>NUL
-pause
 exit
