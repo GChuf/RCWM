@@ -166,11 +166,11 @@ color b
 choice /C yn /M "* Do you want to add Take Ownership to drives (All but C:\ drive) "
 if %errorlevel% == 1 ( start /w regedit /s TakeOwnDrive.reg )
 
-color a
+color c
 choice /C yn /M "* Do you want to add Run with Priority "
 if %errorlevel% == 1 ( start /w regedit /s RunWithPriority.reg )
 
-color b
+color a
 choice /C yn /M "* Do you want to add Remove Directory (fastest option - but careful - using this will delete symlink contents, not symlinks!) "
 if %errorlevel% == 1 ( start /w regedit /s RmDir.reg
 ) else (
@@ -178,11 +178,11 @@ if %errorlevel% == 2 ( choice /C yn /M "* Do you want to add Remove Directory wi
 if %errorlevel% == 1 ( start /w regedit /s RmDirS.reg )
 )
 
-color a
+color b
 choice /C yn /M "* Do you want to add Control Panel "
 if %errorlevel% == 1 ( start /w regedit /s ControlPanel.reg )
 
-color a
+color c
 choice /C yn /M "* Do you want to add symbolic/hard links "
 if %errorlevel% == 1 ( start /w regedit /s Links.reg )
 
@@ -190,7 +190,7 @@ color a
 choice /C yn /M "* Do you want to add Reboot to Recovery to 'This PC' "
 if %errorlevel% == 1 ( start /w regedit /s RebootToRecovery.reg )
 
-color c
+color b
 choice /C yn /M "* Do you want to add Safe Mode to 'This PC' "
 if %errorlevel% == 1 ( start /w regedit /s SafeMode.reg )
 
@@ -242,16 +242,21 @@ rem choice /C yn /M "* Do you want to delete Win Defender "
 rem color a
 rem choice /C yn /M "* Do you want to delete Cast to Device "
 
+rem color a
+rem choice /C yn /M "* Do you want to delete Give access to "
+
+rem color a
+rem choice /C yn /M "* Do you want to delete Restore previous versions "
 
 :End
 
 echo(
-color c
+color a
 choice /C yn /M "Do you want to add 'This PC' shortcut to Desktop "
 if %errorlevel% == 1 ( start /w regedit /s ThisPC.reg ) 
 
 echo(
-color c
+color b
 choice /C yn /M "Do you want to increase right-click menu item limit (default is 15) "
 if %errorlevel% == 1 ( 
 
