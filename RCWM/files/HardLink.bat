@@ -35,10 +35,12 @@ echo File with the same name already exists!
 echo Cannot continue!
 timeout /t 3
 exit
-
 )
 
 :f2
+
+IF %curdir~0,1% == %file~0,1% (
+
 echo.
 echo Creating hard link . . .
 echo.
@@ -46,5 +48,13 @@ mklink /H "%curdir%\%f%" "%file%"
 del /f /q C:\Windows\System32\RCWM\fl.log
 echo Finished!
 timeout /t 1 1>NUL
-pause
 exit
+
+) ELSE (
+
+echo Cannot make hard link on separate drives!
+echo Exiting . . .
+timeout /t 1 1>NUL
+exit
+
+)
