@@ -25,6 +25,7 @@ You can also remove some right-click menu options, so that your menu doesn't bec
 
 
 TODO (magic takes time):
+- takeown for files (.exe and other)
 - copying files
 - directory juntions for multiple files/folders
 - pwsh opened with admin priv
