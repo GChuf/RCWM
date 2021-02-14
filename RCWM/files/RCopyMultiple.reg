@@ -8,8 +8,8 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-5"
 
 [HKEY_CLASSES_ROOT\Directory\shell\rcopy\command]
-@="powershell.exe -noexit -command Set-Location -literalPath '%V';Set-ExecutionPolicy Bypass -Scope Process; C:\\windows\\system32\\rcwm\\rcopy.ps1;exit"
-"IsolatedCommand"="powershell.exe -noexit -command Set-Location -literalPath '%V';Set-ExecutionPolicy Bypass -Scope Process; C:\\windows\\system32\\rcwm\\rcopy.ps1;exit"
+@="powershell.exe -noexit -command Set-Location -literalPath \\\"%V\\\";Set-ExecutionPolicy Bypass -Scope Process; C:\\windows\\system32\\rcwm\\rcopy.ps1;exit"
+"IsolatedCommand"="powershell.exe -noexit -command Set-Location -literalPath \\\"%V\\\";Set-ExecutionPolicy Bypass -Scope Process; C:\\windows\\system32\\rcwm\\rcopy.ps1;exit"
 
 ; opening it inside powershell instead of cmd:
 ; "powershell.exe -noexit -command \"cd \"\"%V\"\"\"; Set-ExecutionPolicy Bypass -Scope Process; C:\\windows\\system32\\rcwm\\rcopy.ps1; exit

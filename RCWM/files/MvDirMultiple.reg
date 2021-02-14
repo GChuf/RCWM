@@ -8,8 +8,8 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-3"
 
 [HKEY_CLASSES_ROOT\Directory\shell\mvdir\command]
-@="powershell.exe -noexit -command Set-Location -literalPath '%V';Set-ExecutionPolicy Bypass -Scope Process; C:\\windows\\system32\\rcwm\\mvdir.ps1;exit"
-"IsolatedCommand"="powershell.exe -noexit -command Set-Location -literalPath '%V';Set-ExecutionPolicy Bypass -Scope Process; C:\\windows\\system32\\rcwm\\mvdir.ps1;exit"
+@="powershell.exe -noexit -command Set-Location -literalPath \\\"%V\\\";Set-ExecutionPolicy Bypass -Scope Process; C:\\windows\\system32\\rcwm\\mvdir.ps1;exit"
+"IsolatedCommand"="powershell.exe -noexit -command Set-Location -literalPath \\\"%V\\\";Set-ExecutionPolicy Bypass -Scope Process; C:\\windows\\system32\\rcwm\\mvdir.ps1;exit"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir]
 @="Move Directories Here"
