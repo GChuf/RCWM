@@ -233,20 +233,27 @@ color c
 choice /C yn /M "* Do you want to delete Share "
 if %errorlevel% == 1 ( start /w regedit /s DeleteShare.reg )
 
+color a
+choice /C yn /M "* Do you want to delete Previous Versions tab in explorer "
+if %errorlevel% == 1 ( start /w regedit /s DeletePrevVersons.reg)
+
+color b
+choice /C yn /M "* Do you want to delete Scan with Windows Defender "
+if %errorlevel% == 1 ( start /w regedit /s DeleteScanDefender.reg )
+
+
 rem color b
 rem choice /C yn /M "* Do you want to delete Print "
-
-rem color c
-rem choice /C yn /M "* Do you want to delete Win Defender "
 
 rem color a
 rem choice /C yn /M "* Do you want to delete Cast to Device "
 
-rem color a
+rem color b
 rem choice /C yn /M "* Do you want to delete Give access to "
 
-rem color a
+rem color b
 rem choice /C yn /M "* Do you want to delete Restore previous versions "
+
 
 :End
 
