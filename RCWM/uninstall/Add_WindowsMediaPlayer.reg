@@ -9,4 +9,38 @@ Windows Registry Editor Version 5.00
 @="Add to Windows Media Player list"
 "AppId"="{45597c98-80f6-4549-84ff-752cf55e2d29}"
 
+
+[HKEY_CLASSES_ROOT\CLSID\{45597c98-80f6-4549-84ff-752cf55e2d29}\LocalServer32]
+@="\"%ProgramFiles(x86)%\\Windows Media Player\wmplayer.exe\" /Enqueue"
+
+[HKEY_CLASSES_ROOT\CLSID\{45597c98-80f6-4549-84ff-752cf55e2d29}\SupportedProtocols]
+"dlna-playsingle"=""
+"http"=""
+"mms"=""
+"rtsp"=""
+"rtsps"=""
+"rtspu"=""
+
+
+[HKEY_CLASSES_ROOT\AppID\{ed1d0fdf-4414-470a-a56d-cfb68623fc58}]
+@="Play with Windows Media Player"
+
+[HKEY_CLASSES_ROOT\CLSID\{ed1d0fdf-4414-470a-a56d-cfb68623fc58}]
+@="Play with Windows Media Player"
+"AppId"="{ed1d0fdf-4414-470a-a56d-cfb68623fc58}"
+
+
+
+[HKEY_CLASSES_ROOT\CLSID\{ed1d0fdf-4414-470a-a56d-cfb68623fc58}\LocalServer32]
+@="\"%ProgramFiles(x86)%\\Windows Media Player\wmplayer.exe\" /Play"
+
+[HKEY_CLASSES_ROOT\CLSID\{ed1d0fdf-4414-470a-a56d-cfb68623fc58}\SupportedProtocols]
+"dlna-playsingle"=""
+"http"=""
+"mms"=""
+"rtsp"=""
+"rtsps"=""
+"rtspu"=""
+
+
 ;done
