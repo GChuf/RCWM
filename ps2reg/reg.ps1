@@ -1,0 +1,1 @@
+New-ItemProperty -Path "HKCU:\rc" -Name $args[0] -Value ""
