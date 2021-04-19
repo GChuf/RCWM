@@ -22,6 +22,10 @@ You can also remove some right-click menu options, so that your menu doesn't bec
 - Send To
 - Share
 - Add to Windows Media Player
+- Scan with Windows Defender
+
+Other removals:
+- "Version" tab inside explorer
 
 
 TODO (magic takes time):
