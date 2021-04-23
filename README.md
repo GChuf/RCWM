@@ -35,6 +35,7 @@ TODO (magic takes time):
 - pwsh opened with admin priv
 - adding other admin tools to right click in background
 - creating powershell .exe files to make some things faster/nicer
+- remove "cast to device", check "add to win media player list"
 - locking folders with passwords?
 - your suggestions
 
