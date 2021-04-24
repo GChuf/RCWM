@@ -14,6 +14,7 @@ This little magic pack includes:
 - option to always open cmd as admin
 - making symbolic/hard links
 - options to uninstall the changes you've made
+- options to MoveTo / SendTo folder (from Windows 7)
 
 You can also remove some right-click menu options, so that your menu doesn't become too cluttered:
 - Pin to Quick access
