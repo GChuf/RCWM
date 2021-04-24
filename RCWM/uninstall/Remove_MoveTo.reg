@@ -1,0 +1,7 @@
+Windows Registry Editor Version 5.00
+
+;Remove Move To from context menu
+
+[-HKEY_CLASSES_ROOT\AllFilesystemObjects\shellex\ContextMenuHandlers\MoveToFolder]
+
+; end
