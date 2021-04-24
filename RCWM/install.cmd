@@ -194,6 +194,16 @@ color b
 choice /C yn /M "* Do you want to add Safe Mode to 'This PC' "
 if %errorlevel% == 1 ( start /w regedit /s SafeMode.reg )
 
+color c
+choice /C yn /M "* Do you want to add Copy To Folder "
+if %errorlevel% == 1 ( start /w regedit /s CopyToFolder.reg )
+
+color a
+choice /C yn /M "* Do you want to add Move To Folder "
+if %errorlevel% == 1 ( start /w regedit /s MoveToFolder.reg )
+
+
+
 echo(
 
 :RemoveOptions
