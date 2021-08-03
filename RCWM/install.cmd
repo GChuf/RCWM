@@ -202,7 +202,9 @@ color a
 choice /C yn /M "* Do you want to add Move To Folder "
 if %errorlevel% == 1 ( start /w regedit /s MoveToFolder.reg )
 
-
+color b
+choice /C yn /M "* Do you want to add Sign Off to desktop background "
+if %errorlevel% == 1 ( start /w regedit /s Logoff.reg )
 
 echo(
 
