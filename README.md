@@ -32,6 +32,7 @@ Other removals:
 
 TODO (magic takes time):
 - takeown for files (.exe and other)
+- robocopy mirror option
 - copying files
 - directory juntions for multiple files/folders
 - pwsh opened with admin priv
