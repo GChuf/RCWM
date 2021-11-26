@@ -1,7 +1,7 @@
 # Right Click Windows Magic
 
 
-Right Click Windows Magic is a set of right-click menu tools for admins, power users and other magic beings. If you consider yerself a wizard and would like to save yourself some time and headaches, this is the right set of tools for you.
+Right Click Windows Magic is a set of right-click (context) menu tools for admins, power users and other magic beings. If you consider yerself a wizard and would like to save yourself some time and headaches, this is the right set of context menu tools for you.
 
 This little magic pack includes:
 - robocopy for copying and moving directories (much faster than regular copy)
