@@ -55,8 +55,8 @@ IF %pwsh% LSS 5 (
 
 
 rem Unblock ps1 files (not entirely necessary)
-rem Won't work on older powershell versions, so output error message to $nul
-powershell Unblock-File *.ps1 > $nul; exit
+rem Won't work on older powershell versions, so output error message to NUL
+powershell Unblock-File *.ps1 > NUL; exit
 
 
 rem If folder already exist ask if user wants to overwrite files.
@@ -154,8 +154,8 @@ choice /C yn /M "* Do you want to add open PowerShell to background/folders/driv
 if %errorlevel% == 1 ( 
 
 IF %pwsh% LSS 5 ( 
-   IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( start /w regedit /s pwrshell32.reg ) else ( start /w regedit /s pwrshell64.reg )
- ) ELSE ( start /w regedit /s pwrshell.reg )
+    IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( start /w regedit /s pwrshell32.reg ) else ( start /w regedit /s pwrshell64.reg )
+) ELSE ( start /w regedit /s pwrshell.reg )
 )
 
 color a
@@ -277,7 +277,7 @@ if %errorlevel% == 1 ( start /w regedit /s ThisPC.reg )
 echo(
 color b
 choice /C yn /M "Do you want to increase right-click menu item limit (default is 15) "
-if %errorlevel% == 1 ( 
+if %errorlevel% == 1 (
 
 choice /C 123 /M "* Increase to 32[1], 64[2] or 128[3] "
 if %errorlevel% == 1 ( start /w regedit /s MultipleInvokeMinimum.reg )
@@ -286,6 +286,9 @@ if %errorlevel% == 3 ( start /w regedit /s MultipleInvokeMinimum128.reg )
 echo(
 echo Right-click menu options will now appear for any number of selected files, but will only work correctly up until whatever number you selected!!
 echo If you select more than that, only one folder will be actually selected. 
+) else (
+choice /C yn /M "Do you want to revert right-click menu item limit back to default (15) "
+if %errorlevel% == 2 ( reg delete HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer /v MultipleInvokePromptMinimum /f >NUL)
 )
 
 echo(
