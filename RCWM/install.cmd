@@ -2,6 +2,9 @@
 title RCWM Install Script
 color 3
 
+rem https://stackoverflow.com/questions/8610597/batch-file-choice-commands-errorlevel-returns-0
+SETLOCAL EnableDelayedExpansion
+
 
 REM Get Admin Privileges
 REM Taken from: https://stackoverflow.com/questions/11525056/how-to-create-a-batch-file-to-run-cmd-as-administrator
@@ -25,7 +28,7 @@ echo(
 echo *********************************
 echo ****** RCWM Install Script ******
 echo *********************************
-echo ************************v1.3*****
+echo ************************v1.4*****
 echo * https://github.com/GChuf/RCWM *
 echo *********************************
 echo(
@@ -35,9 +38,7 @@ echo(
 cd files
 
 rem powershell version check
-FOR /F "tokens=* USEBACKQ" %%F IN (`powershell $psversiontable.psversion.major`) DO (
-SET pwsh=%%F
-)
+FOR /F "tokens=* USEBACKQ" %%F IN (`powershell $psversiontable.psversion.major`) DO ( SET pwsh=%%F )
 
 IF %pwsh% LSS 5 (
     IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version older than 5 on 32bit CPU. ) else ( echo Using powershell version older than 5 on 64bit CPU. )
@@ -49,7 +50,7 @@ IF %pwsh% LSS 5 (
 	powershell "echo '$n = -join ((0,1,2,3,4,5,6,7,8,9,\"a\",\"b\",\"c\",\"d\",\"e\",\"f\")|get-random -count 6)' | Out-File mvdir.ps1"
 	powershell "echo '(get-location).path|out-file C:\windows\system32\rcwm\mv\$n -encoding UTF8'|Out-File mvdir.ps1 -Append"
 
- ) ELSE (
+) ELSE (
 	IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version 5 or newer on 32bit CPU. ) else ( echo Using powershell version 5 or newer on 64bit CPU. )
 )
 
@@ -72,6 +73,20 @@ echo(
 echo Choose the options that you want to apply to your right-click menu.
 echo You will be asked separately for each option (divided into Add and Remove sections).
 echo(
+
+
+FOR /F "tokens=*" %%g IN ('powershell "([Environment]::OSVersion).Version.Major"') do (SET WinVer=%%g)
+echo(
+
+IF %WinVer% == 11 (
+    choice /C yn /M "Do you want to enable old context menu in Windows 11 "
+	if !errorlevel! == 1 (
+	    start /w regedit /s Win11AddOldContextMenu.reg
+	)
+)
+
+echo(
+color c
 
 choice /C yn /M "Do you want to Add right-click menu options "
 if %errorlevel% == 1 ( goto Add ) else ( goto RemoveOptions )
