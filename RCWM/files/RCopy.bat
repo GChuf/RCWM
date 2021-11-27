@@ -1,5 +1,8 @@
 @echo off
 
+rem utf-8: https://docs.microsoft.com/en-us/windows/win32/intl/code-page-identifiers
+chcp 65001 >NUL
+
 IF EXIST C:\Windows\System32\RCWM\rc.log (
 goto start
 ) ELSE (
