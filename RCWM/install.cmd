@@ -6,6 +6,12 @@ rem https://stackoverflow.com/questions/8610597/batch-file-choice-commands-error
 SETLOCAL EnableDelayedExpansion
 
 
+#after v1.5
+reg add "HKCU\rc" /f >NUL
+reg add "HKCU\mv" /f >NUL
+reg add "HKCU\mir" /f >NUL
+
+
 REM Get Admin Privileges
 REM Taken from: https://stackoverflow.com/questions/11525056/how-to-create-a-batch-file-to-run-cmd-as-administrator
     IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" (
