@@ -6,9 +6,7 @@ chcp 65000 > nul
 
 rem Match the exact case where the only key in the registry is the '(default)'
 rem Win7 specific (powershell v4)
-
 FOR /F "tokens=*" %%g IN ('powershell "if ((Get-ItemProperty HKCU:\RCWM\rc | out-string -stream | select -last 4 -first 2) -match 'default\)    :') { echo 0 } else { echo 1 }"') do (SET E=%%g)
-
 
 IF %E% == 0 (
 echo Source folder not specified!
@@ -18,18 +16,16 @@ exit
 ) ELSE (
 goto start )
 
-
 :start
 
-rem wmic process where name="cmd.exe" CALL setpriority 256 1>NUL
-rem wmic process where name="conhost.exe" CALL setpriority 256 1>NUL
+wmic process where name="cmd.exe" CALL setpriority 128 2>nul 1>nul
+wmic process where name="conhost.exe" CALL setpriority 128 2>nul 1>nul
 
 set curdir=%cd%
 
-
 FOR /F "tokens=*" %%g IN ('powershell "((Get-ItemProperty HKCU:\RCWM\rc | out-string -stream) | ? {$_.trim() -ne \"\" } | select -last 1) -replace \".{3}$\""') do (SET folder=%%g)
 
-IF NOT EXIST "%folder%" (echo Source folder does not exist: %folder% && timeout /t 1 >nul && echo Exiting . . . && timeout /t 2 > nul && exit)
+IF NOT EXIST "%folder%" (echo Source folder does not exist: %folder% && timeout /t 1 >nul && echo Exiting . . . && timeout /t 2 > nul && exit )
 cd /d %folder%
 for %%I in (.) do set fname=%%~nxI
 cd /d "%curdir%"
