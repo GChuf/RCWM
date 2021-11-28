@@ -1,7 +1,7 @@
 @echo off
-FOR /F "tokens=*" %%g IN ('powershell "((Get-ItemProperty HKCU:\rc | out-string -stream) | ? {$_.trim() -ne \"\" }).length"') do (SET E=%%g)
+FOR /F "tokens=*" %%g IN ('powershell "((Get-ItemProperty HKCU:\RCWM\rc | out-string -stream) | ? {$_.trim() -ne \"\" }).length"') do (SET E=%%g)
 
-chcp 65001
+chcp 65001 > nul
 
 IF %E% == 0 (
 echo Source folder not specified!
@@ -20,9 +20,9 @@ rem wmic process where name="conhost.exe" CALL setpriority 256 1>NUL
 set curdir=%cd%
 
 
-FOR /F "tokens=*" %%g IN ('powershell "((Get-ItemProperty HKCU:\rc | out-string -stream) | ? {$_.trim() -ne \"\" } | select -first 1) -replace \".{3}$\""') do (SET folder=%%g)
+FOR /F "tokens=*" %%g IN ('powershell "((Get-ItemProperty HKCU:\RCWM\rc | out-string -stream) | ? {$_.trim() -ne \"\" } | select -first 1) -replace \".{3}$\""') do (SET folder=%%g)
 
-IF NOT EXIST "%folder%" (echo Source folder does not exist {%folder%}! && timeout /t 1 >nul && echo Exiting . . . && timeout /t 2 > nul && exit)
+IF NOT EXIST "%folder%" (echo Source folder does not exist: %folder% && timeout /t 1 >nul && echo Exiting . . . && timeout /t 2 > nul && exit)
 cd /d %folder%
 for %%I in (.) do set fname=%%~nxI
 cd /d "%curdir%"
@@ -35,7 +35,7 @@ goto :f2
 
 :f1
 IF EXIST "%fname%\" (
-echo Folder with the same name already exists {%fname%}!
+echo Folder with the same name already exists: %fname%
 goto :choice
 ) ELSE (
 echo File with the same name already exists!
@@ -50,8 +50,8 @@ echo Copying . . .
 echo.
 md "%fname%"
 robocopy "%folder%" "%fname%" /E /NP /NJH /NJS /NC /NS /MT:16
-reg delete "HKCU\rc" /f >NUL
-reg add "HKCU\rc" /f >NUL
+reg delete "HKCU\RCWM\rc" /f >NUL
+reg add "HKCU\RCWM\rc" /f >NUL
 echo Finished!
 timeout /t 1 1>NUL
 exit
@@ -65,8 +65,8 @@ echo.
 echo Merging . . .
 echo.
 robocopy "%folder%" "%fname%" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:16
-reg delete "HKCU\rc" /f >NUL
-reg add "HKCU\rc" /f >NUL
+reg delete "HKCU\RCWM\rc" /f >NUL
+reg add "HKCU\RCWM\rc" /f >NUL
 exit
 
 :option2
@@ -74,8 +74,8 @@ echo.
 echo Overwriting . . .
 echo.
 robocopy "%folder%" "%fname%" /E /NP /NJH /NJS /NC /NS /MT:16
-reg delete "HKCU\rc" /f >NUL
-reg add "HKCU\rc" /f >NUL
+reg delete "HKCU\RCWM\rc" /f >NUL
+reg add "HKCU\RCWM\rc" /f >NUL
 exit
 
 :option3
