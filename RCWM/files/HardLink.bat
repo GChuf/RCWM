@@ -23,7 +23,7 @@ set curdir=%cd%
 
 FOR /F "tokens=*" %%g IN ('powershell "((Get-ItemProperty HKCU:\RCWM\fl | out-string -stream) | ? {$_.trim() -ne \"\" } | select -first 1) -replace \".{3}$\""') do (SET file=%%g)
 
-IF NOT EXIST "%file%" (echo Link Source does not exist! && timeout /t 1 >nul && echo Exiting . . . && timeout /t 1 > nul && exit )
+IF NOT EXIST "%file%" (echo Link Source does not exist: %file% && timeout /t 1 >nul && echo Exiting . . . && timeout /t 1 > nul && exit )
 
 for %%F in ("%file%") do set f=%%~nxF
 

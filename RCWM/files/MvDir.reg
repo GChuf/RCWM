@@ -1,6 +1,6 @@
 Windows Registry Editor Version 5.00
 
-;robocopy
+;robocopy move
 
 [HKEY_CLASSES_ROOT\Directory\shell\mvdir]
 @="Move This Directory"
