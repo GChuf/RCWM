@@ -1,11 +1,13 @@
 @echo off
 
-rem chcp 65001 does not seem to work
-echo 1
+rem 65000: UTF-7
+rem 65001: UTF-8 does not work on Win7
+chcp 65000 > nul
+
 rem Match the exact case where the only key in the registry is the '(default)'
 rem Win7 specific (powershell v4)
 
-FOR /F "tokens=*" %%g IN ('powershell "if ((Get-ItemProperty HKCU:\rc | out-string -stream | select -last 4 -first 2) -match 'default\)    :') { echo 0 } else { echo 1 }"') do (SET E=%%g)
+FOR /F "tokens=*" %%g IN ('powershell "if ((Get-ItemProperty HKCU:\RCWM\rc | out-string -stream | select -last 4 -first 2) -match 'default\)    :') { echo 0 } else { echo 1 }"') do (SET E=%%g)
 
 
 IF %E% == 0 (
@@ -25,7 +27,7 @@ rem wmic process where name="conhost.exe" CALL setpriority 256 1>NUL
 set curdir=%cd%
 
 
-FOR /F "tokens=*" %%g IN ('powershell "((Get-ItemProperty HKCU:\rc | out-string -stream) | ? {$_.trim() -ne \"\" } | select -last 1) -replace \".{3}$\""') do (SET folder=%%g)
+FOR /F "tokens=*" %%g IN ('powershell "((Get-ItemProperty HKCU:\RCWM\rc | out-string -stream) | ? {$_.trim() -ne \"\" } | select -last 1) -replace \".{3}$\""') do (SET folder=%%g)
 
 IF NOT EXIST "%folder%" (echo Source folder does not exist: %folder% && timeout /t 1 >nul && echo Exiting . . . && timeout /t 2 > nul && exit)
 cd /d %folder%
@@ -40,7 +42,7 @@ goto :f2
 
 :f1
 IF EXIST "%fname%\" (
-echo Folder with the same name already exists {%fname%}!
+echo Folder with the same name already exists!
 goto :choice
 ) ELSE (
 echo File with the same name already exists!
@@ -55,8 +57,8 @@ echo Copying . . .
 echo.
 md "%fname%"
 robocopy "%folder%" "%fname%" /E /NP /NJH /NJS /NC /NS /MT:16
-reg delete "HKCU\rc" /f >NUL
-reg add "HKCU\rc" /f >NUL
+reg delete "HKCU\RCWM\rc" /f >NUL
+reg add "HKCU\RCWM\rc" /f >NUL
 echo Finished!
 timeout /t 1 1>NUL
 exit
@@ -70,8 +72,8 @@ echo.
 echo Merging . . .
 echo.
 robocopy "%folder%" "%fname%" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:16
-reg delete "HKCU\rc" /f >NUL
-reg add "HKCU\rc" /f >NUL
+reg delete "HKCU\RCWM\rc" /f >NUL
+reg add "HKCU\RCWM\rc" /f >NUL
 exit
 
 :option2
@@ -79,8 +81,8 @@ echo.
 echo Overwriting . . .
 echo.
 robocopy "%folder%" "%fname%" /E /NP /NJH /NJS /NC /NS /MT:16
-reg delete "HKCU\rc" /f >NUL
-reg add "HKCU\rc" /f >NUL
+reg delete "HKCU\RCWM\rc" /f >NUL
+reg add "HKCU\RCWM\rc" /f >NUL
 exit
 
 :option3
