@@ -8,8 +8,7 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-3"
 
 [HKEY_CLASSES_ROOT\Directory\shell\mvdir\command]
-@="cmd.exe /c echo \"%1\">C:\\Windows\\System32\\RCWM\\mv.log"
-"IsolatedCommand"="cmd.exe /c echo \"%1\">C:\\Windows\\System32\\RCWM\\mv.log"
+@="cmd.exe /c chcp 65001 > nul && reg delete \"HKCU\\RCWM\\rc\" /f && reg add \"HKCU\\RCWM\\mv\" /v \"%V\" /t REG_SZ"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir]
 @="Move Directory Here"

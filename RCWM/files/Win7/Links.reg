@@ -7,7 +7,7 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-8"
 
 [HKEY_CLASSES_ROOT\Directory\Shell\mklink\command]
-@="cmd.exe /c chcp 65001 > nul && reg delete \"HKCU\\RCWM\\rc\" /f && reg add \"HKCU\\RCWM\\dl\" /v \"%V\" /t REG_SZ"
+@="cmd.exe /c chcp 65000 > nul && reg delete \"HKCU\\RCWM\\rc\" /f && reg add \"HKCU\\RCWM\\dl\" /v \"%V\" /t REG_SZ"
 ;dir link
 
 [HKEY_CLASSES_ROOT\*\shell\mklink]
@@ -15,7 +15,7 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-8"
 
 [HKEY_CLASSES_ROOT\*\shell\mklink\command]
-@="cmd.exe /c chcp 65001 > nul && reg delete \"HKCU\\RCWM\\rc\" /f && reg add \"HKCU\\RCWM\\fl\" /v \"%V\" /t REG_SZ"
+@="cmd.exe /c chcp 65000 > nul && reg delete \"HKCU\\RCWM\\rc\" /f && reg add \"HKCU\\RCWM\\fl\" /v \"%V\" /t REG_SZ"
 ;file link
 
 

@@ -70,6 +70,8 @@ echo.
 robocopy "%folder%" "%fname%" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:16
 reg delete "HKCU\RCWM\rc" /f >NUL
 reg add "HKCU\RCWM\rc" /f >NUL
+echo Finished!
+timeout /t 1 1>NUL
 exit
 
 :option2
@@ -79,6 +81,8 @@ echo.
 robocopy "%folder%" "%fname%" /E /NP /NJH /NJS /NC /NS /MT:16
 reg delete "HKCU\RCWM\rc" /f >NUL
 reg add "HKCU\RCWM\rc" /f >NUL
+echo Finished!
+timeout /t 1 1>NUL
 exit
 
 :option3
