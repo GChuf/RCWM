@@ -10,7 +10,7 @@ FOR /F "tokens=*" %%g IN ('powershell "if ((Get-ItemProperty HKCU:\RCWM\dl | out
 
 IF %E% == 0 (
 echo Source folder not specified!
-echo Right-Click and select a Link Source.
+echo Right-Click on a directory and select a Link Source.
 timeout /t 3 > nul
 exit
 ) ELSE (
