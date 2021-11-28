@@ -2,9 +2,11 @@
 
 rem 65000: UTF-7
 rem 65001: UTF-8 does not work on Win7
-chcp 65001 > nul
+chcp 65000 > nul
 
-FOR /F "tokens=*" %%g IN ('powershell "((Get-ItemProperty HKCU:\RCWM\dl | out-string -stream) | ? {$_.trim() -ne \"\" }).length"') do (SET E=%%g)
+rem Match the exact case where the only key in the registry is the '(default)'
+rem Win7 specific (powershell v4)
+FOR /F "tokens=*" %%g IN ('powershell "if ((Get-ItemProperty HKCU:\RCWM\dl | out-string -stream | select -last 4 -first 2) -match 'default\)    :') { echo 0 } else { echo 1 }"') do (SET E=%%g)
 
 IF %E% == 0 (
 echo Source folder not specified!
@@ -37,12 +39,12 @@ goto :f2
 
 :f1
 IF EXIST "%fname%\" (
-echo Folder with the same name already exists: %fname%
+echo Folder with the same name already exists!
 echo Cannot continue!
 timeout /t 4
 exit
 ) ELSE (
-echo File with the same name already exists: %fname%
+echo File with the same name already exists!
 echo Cannot continue!
 timeout /t 4
 exit
