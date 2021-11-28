@@ -49,15 +49,15 @@ TODO (magic takes time):
 # Installation
 
 
-To install the tools: download the latest zip file under releases ([here](https://github.com/GChuf/RCWM/releases/latest)), unzip it and run the install.cmd script - after that, you'll only need the two most abused keys: __*Y*__ and __*N*__.
+To install the tools: download the latest zip file under releases ([here](https://github.com/GChuf/RCWM/releases/latest)), unzip it and run the install.cmd script __as administrator__ - after that, you'll only need the two most abused keys: __*Y*__ and __*N*__ (and maybe a few others).
 If you don't have the administrator privileges on your Windows OS, some magic might not work properly.
 
 
 # How does it work?
 
-Magic, basically. Right now, the magic happens inside the Windows registry with some help of batch scripting. Some day, this batch magic might evolve into powershell wizardry, but up until now, there was no need for that to happen.
+Magic, basically. Right now, the magic happens inside the Windows registry with some help of batch and powershell scripting. Some day, this batch magic might evolve into powershell wizardry (it's already happening), but up until now, there was no need for that to happen everywhere.
 
-The goal was to simply automate command line tools like robocopy, so that 1) everybody could use it, and 2) it would save some time to those who already know how to use it. While automating the tasks, I've accidentally discovered that I could automate much more than what I thought - and so now, you can select multiple folders to copy/move and paste them all into one folder, just like you can with the regular, slow, lazy windows GUI copy (there are still some problems with overwriting folders, though, and a bug).
+The goal was to automate command line tools like robocopy, so that 1) everybody could use it, and 2) it would save some time to those who already know how to use it. While automating the tasks, I've accidentally discovered that I could automate much more than what I thought - and so now, you can select multiple folders to copy/move and paste them all into one folder, just like you can with the regular, slow, lazy windows GUI copy.
 
 
 # RoboCopy and Move Directory options
@@ -65,17 +65,17 @@ The goal was to simply automate command line tools like robocopy, so that 1) eve
 RoboCopy/RoboPaste & Move Directory both use robocopy to do the work. 
 You have two options: you can copy multiple or single directories at a time.
 
+__Single__:
+The folder to be copied (when you right-click "RoboCopy" is written into a file and __overwrites__ any previous folder paths stored there. If you specify a new folder to be copied, the old one (if existing) will be overwritten. It is simpler and faster.
+
 __Multiple__:
-The list of the folder paths to be copied is saved inside multiple files in the *C:\Windows\System32\RCWM\{rc || mv}* folder. Then the script goes through a powershell for loop to copy all of them.
+The list of the folder paths to be copied is saved inside multiple files in the *C:\Windows\System32\RCWM\{rc || mv}* folder. Then the script goes through a powershell loop to copy all of them.
 
-I don't recommend RoboCopying/Moving more than 30 folders at a time (the default windows limit for right-click options is 15, you can increase it to 31 in the install script - see the *MultipleInvokeMinimum.reg* file for more info). Calling multiple (powershell) instances for saving the list of files to be copied can use a lot of resources . . .
+I don't recommend RoboCopying/Moving more than 30 folders at a time (the default windows limit for right-click options is 15, you can increase it to 31 in the install script - see the *MultipleInvokeMinimum.reg* file for more info). Calling multiple (powershell) instances for saving the list of files to be copied can use a lot of resources . . . Work in progress!
 
-You can paste as many folders as you like, though. Recursive copying/moving is also never a problem.
+You can copy-paste as many folders as you like, though. Recursive copying/moving is also never a problem.
 
 Use this option if you intend to use RoboCopy a lot. I'd recommend reading the rcp/rcm powershell files to understand how the scripts work.
-
-__Single__:
-The folder to be copied is written into a file and __overwrites__ any previous folder paths stored there. If you specify a new folder to be copied, the old one (if existing) will be overwritten. It is simpler and faster, and it only uses batch scripting.
 
 
 RoboCopy (multiple) versus Move Directory (single):
@@ -92,6 +92,7 @@ Fixed with powershell using mutex</del>
 Fixed by saving folder paths into files generated with random names
 - <del>RoboCopy and MoveDir stopped working when using powershell mutex scripts - work in progress to move existing batch script into powershell to solve the problem. Apparently CMD doesn't like powershell outputs ... </del>?
 Fixed by using utf-8 encoding in powershell
+Also fixed some other issues by applying UTF-8 in batch (UTF-7 for Windows7)
 - <del>powershell scripts (robocopy, mvdir, open powershell) don't work with directories with \[square brackets\] in their names.</del>
 Fixed by using -literalPath option
 - rmdir and robocopy sometimes need admin privileges (robocopy throws error 5) - if you experience this, takeown or always running cmd as admin will help
@@ -107,7 +108,7 @@ Folder info: 1.73GB / 12 089 files
 - rcopy/normal copy: 43s/91s
 - rmdir/normal delete: ~ 3s/4.5s
 
-Results may vary based on your computer and disk - but wherever there are small files, you should benefit.
+Results may vary based on your computer and disk - but wherever there are lots of small files, you should benefit.
 
 
 # Credits
