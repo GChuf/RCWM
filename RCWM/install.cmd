@@ -7,10 +7,10 @@ SETLOCAL EnableDelayedExpansion
 
 
 
-ps v2 = win7
-ps v3 = win8, also can be on win7 but not the same
-ps v4 win8.1
-ps v5 win10
+rem ps v2 = win7
+rem ps v3 = win8, also can be on win7 but not the same
+rem ps v4 win8.1
+rem ps v5 win10
 
 rem after v1.5
 reg delete "HKCU\RCWM" /f >NUL
@@ -148,6 +148,12 @@ xcopy /f *.bat %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.ps1 %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.lnk %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f rcwmimg.dll %SystemRoot%\System32 /y 1>nul
+
+rem if powershell version less than 5, overwrite some files with 'windows7' version
+IF %pwsh% LSS 5 (
+    xcopy /f .\Win7\* %SystemRoot%\System32\RCWM /y 1>nul
+)
+
 echo Copied new files.
 echo Pre-setup complete.
 goto start
