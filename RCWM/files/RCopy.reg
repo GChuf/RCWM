@@ -9,12 +9,13 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\Directory\shell\rcopy\command]
 @="cmd.exe /c chcp 65001 > nul && reg delete \"HKCU\\RCWM\\rc\" /f && reg add \"HKCU\\RCWM\\rc\" /v \"%V\" /t REG_SZ"
+"IsolatedCommand"="cmd.exe /c chcp 65001 > nul && reg delete \"HKCU\\RCWM\\rc\" /f && reg add \"HKCU\\RCWM\\rc\" /v \"%V\" /t REG_SZ"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste]
 @="RoboPaste Directory"
 "Icon"="rcwmimg.dll,-6"
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste\command]
 @="cmd.exe /c C:\\Windows\\System32\\RCWM\\Rcopy.bat"
-
+"IsolatedCommand"="cmd.exe /c C:\\Windows\\System32\\RCWM\\Rcopy.bat"
 
 ; end
