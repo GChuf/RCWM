@@ -6,7 +6,13 @@ rem https://stackoverflow.com/questions/8610597/batch-file-choice-commands-error
 SETLOCAL EnableDelayedExpansion
 
 
-#after v1.5
+
+ps v2 = win7
+ps v3 = win8, also can be on win7 but not the same
+ps v4 win8.1
+ps v5 win10
+
+rem after v1.5
 reg delete "HKCU\RCWM" /f >NUL
 reg add "HKCU\RCWM" /f >NUL
 reg add "HKCU\RCWM\rc" /f >NUL
