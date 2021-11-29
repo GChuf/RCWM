@@ -4,10 +4,9 @@ rem 65000: UTF-7
 rem 65001: UTF-8 does not work on Win7
 chcp 65001 > nul
 
-rem get path from registry, remove (default) key
-FOR /F "tokens=*" %%g IN ('powershell "(Get-Item -Path Registry::HKCU\RCWM\rc).Property | ? {$_.trim() -ne '(default)'}"') do (SET E=%%g)
+FOR /F "tokens=*" %%g IN ('powershell "(Get-Item -Path Registry::HKCU\RCWM\fl).Property.length"') do (SET E=%%g)
 
-IF %E% == 0 (
+IF %E% == 1 (
 echo Source file not specified!
 echo Right-Click on a file and select a Link Source.
 timeout /t 3 > nul
@@ -22,7 +21,7 @@ wmic process where name="conhost.exe" CALL setpriority 128 2>nul 1>nul
 
 set curdir=%cd%
 
-FOR /F "tokens=*" %%g IN ('powershell "((Get-ItemProperty HKCU:\RCWM\fl | out-string -stream) | ? {$_.trim() -ne \"\" } | select -first 1) -replace \".{3}$\""') do (SET file=%%g)
+FOR /F "tokens=*" %%g IN ('powershell "(Get-Item -Path Registry::HKCU\RCWM\fl).Property | ? {$_.trim() -ne '(default)'}"') do (SET file=%%g)
 
 IF NOT EXIST "%file%" (echo Link Source does not exist: %file% && timeout /t 1 >nul && echo Exiting . . . && timeout /t 1 > nul && exit )
 
