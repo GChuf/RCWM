@@ -4,9 +4,8 @@ rem 65000: UTF-7
 rem 65001: UTF-8 does not work on Win7
 chcp 65000 > nul
 
-rem Match the exact case where the only key in the registry is the '(default)'
-rem Win7 specific (powershell v4)
-FOR /F "tokens=*" %%g IN ('powershell "if ((Get-ItemProperty HKCU:\RCWM\mv | out-string -stream | select -last 4 -first 2) -match 'default\)    :') { echo 0 } else { echo 1 }"') do (SET E=%%g)
+#get path from registry, remove (default) key
+(Get-Item -Path Registry::HKCU\RCWM\rc).Property | ? {$_.trim() -ne "(default)"}
 
 IF %E% == 0 (
 echo Source folder not specified!

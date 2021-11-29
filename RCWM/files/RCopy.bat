@@ -4,9 +4,8 @@ rem 65000: UTF-7
 rem 65001: UTF-8 does not work on Win7
 chcp 65001 > nul
 
-rem (Get-Item -Path Registry::HKEY_CURRENT_USER\RCWM\rc | Select-Object -ExpandProperty Property)[0]
-rem (Get-Item -Path Registry::HKEY_CURRENT_USER\RCWM\rc | Select-Object -ExpandProperty Property) | ? {$_.trim() -ne "(default)"}
-FOR /F "tokens=*" %%g IN ('powershell "((Get-ItemProperty HKCU:\RCWM\rc | out-string -stream) | ? {$_.trim() -ne \"\" }).length"') do (SET E=%%g)
+#get path from registry, remove (default) key
+(Get-Item -Path Registry::HKCU\RCWM\rc).Property | ? {$_.trim() -ne "(default)"}
 
 IF %E% == 0 (
 echo Source folder not specified!
