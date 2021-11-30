@@ -2,11 +2,11 @@
 
 rem 65000: UTF-7
 rem 65001: UTF-8 does not work on Win7
-chcp 65001 > nul
+chcp 65000 > nul
 
-FOR /F "tokens=*" %%g IN ('powershell "(Get-Item -Path Registry::HKCU\RCWM\fl).Property.length"') do (SET E=%%g)
+FOR /F "tokens=*" %%g IN ('powershell "(Get-Item -Path Registry::HKCU\RCWM\dl).Property.length"') do (SET E=%%g)
 
-IF %E% == 1 (
+IF %E% == 0 (
 echo Source folder not specified!
 echo Right-Click on a directory and select a Link Source.
 timeout /t 3 > nul
@@ -21,9 +21,9 @@ wmic process where name="conhost.exe" CALL setpriority 128 2>nul 1>nul
 
 set curdir=%cd%
 
-FOR /F "tokens=*" %%g IN ('powershell "(Get-Item -Path Registry::HKCU\RCWM\dl).Property | ? {$_.trim() -ne '(default)'}"') do (SET folder=%%g)
+FOR /F "tokens=*" %%g IN ('powershell "(Get-Item -Path Registry::HKCU\RCWM\dl).Property"') do (SET folder=%%g)
 
-IF NOT EXIST "%folder%" (echo Link Source does not exist: %folder% && timeout /t 1 >nul && echo Exiting . . . && timeout /t 1 > nul && exit )
+IF NOT EXIST "%folder%" (echo Link Source does not exist! && timeout /t 1 >nul && echo Exiting . . . && timeout /t 1 > nul && exit )
 
 cd /d "%folder%"
 for %%I in (.) do set fname=%%~nxI
@@ -37,23 +37,24 @@ goto :f2
 
 :f1
 IF EXIST "%fname%\" (
-echo Folder with the same name already exists: %f%
+echo Folder with the same name already exists!
 echo Cannot continue!
 timeout /t 4
 exit
 ) ELSE (
-echo File with the same name already exists: %f%
+echo File with the same name already exists!
 echo Cannot continue!
 timeout /t 4
 exit
+
 )
 
 :f2
 echo.
-echo Creating symbolic link . . .
+echo Creating directory juntion . . .
 echo.
 
-mklink /D "%curdir%\%fname%" "%folder%"
+mklink /J "%curdir%\%fname%" "%folder%"
 
 reg delete "HKCU\RCWM\dl" /f >NUL
 reg add "HKCU\RCWM\dl" /f >NUL
