@@ -6,6 +6,25 @@ rem https://stackoverflow.com/questions/8610597/batch-file-choice-commands-error
 SETLOCAL EnableDelayedExpansion
 
 
+
+rem ps v2 = win7
+rem ps v3 = win8, also can be on win7 but not the same
+rem ps v4 win8.1
+rem ps v5 win10
+
+rem after v1.5
+reg delete "HKCU\RCWM" /f >NUL
+reg add "HKCU\RCWM" /f >NUL
+reg add "HKCU\RCWM\rc" /f >NUL
+reg add "HKCU\RCWM\mv" /f >NUL
+reg add "HKCU\RCWM\mir" /f >NUL
+reg add "HKCU\RCWM\dl" /f >NUL
+reg add "HKCU\RCWM\fl" /f >NUL
+
+rem encoding
+rem powershell.exe ([System.Text.Encoding]::Default).CodePage)
+rem cmd.exe chcp
+
 REM Get Admin Privileges
 REM Taken from: https://stackoverflow.com/questions/11525056/how-to-create-a-batch-file-to-run-cmd-as-administrator
     IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" (
@@ -106,6 +125,12 @@ xcopy /f *.lnk %SystemRoot%\System32\RCWM /y 1>nul
 
 xcopy /f rcwmimg.dll %SystemRoot%\System32 /y 1>nul
 
+rem if powershell version less than 5, overwrite some files with 'windows7' version
+IF %pwsh% LSS 5 (
+    xcopy /f .\Win7\*.bat %SystemRoot%\System32\RCWM /y 1>nul
+	xcopy /f .\Win7\*.reg . /y 1>nul
+)
+
 rem take ownership of that folder for administrators & users
 takeown /F %SystemRoot%\System32\RCWM /R /D Y 1>nul
 icacls %SystemRoot%\System32\RCWM /grant administrators:F /T /C 1>nul
@@ -124,6 +149,13 @@ xcopy /f *.bat %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.ps1 %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.lnk %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f rcwmimg.dll %SystemRoot%\System32 /y 1>nul
+
+rem if powershell version less than 5, overwrite some files with 'windows7' version
+IF %pwsh% LSS 5 (
+    xcopy /f .\Win7\* %SystemRoot%\System32\RCWM /y 1>nul
+	xcopy /f .\Win7\*.reg . /y 1>nul
+)
+
 echo Copied new files.
 echo Pre-setup complete.
 goto start

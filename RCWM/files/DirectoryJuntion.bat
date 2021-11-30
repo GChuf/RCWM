@@ -1,24 +1,29 @@
 @echo off
 
-rem utf-8: https://docs.microsoft.com/en-us/windows/win32/intl/code-page-identifiers
-chcp 65001 >NUL
+rem 65000: UTF-7
+rem 65001: UTF-8 does not work on Win7
+chcp 65001 > nul
 
-IF EXIST C:\Windows\System32\RCWM\dl.log (
-goto start
-) ELSE (
+FOR /F "tokens=*" %%g IN ('powershell "(Get-Item -Path Registry::HKCU\RCWM\dl).Property.length"') do (SET E=%%g)
+
+IF %E% == 1 (
 echo Source folder not specified!
 echo Right-Click on a directory and select a Link Source.
 timeout /t 3 > nul
 exit
-)
+) ELSE (
+goto start )
 
 :start
-wmic process where name="cmd.exe" CALL setpriority 256 >nul
-wmic process where name="conhost.exe" CALL setpriority 256 >nul
-set curdir=%cd%
-set /P folder=<C:\Windows\System32\RCWM\dl.log
 
-IF NOT EXIST "%folder%" (echo Link Source does not exist! && timeout /t 1 >nul && echo Exiting . . . && timeout /t 1 > nul && exit)
+wmic process where name="cmd.exe" CALL setpriority 128 2>nul 1>nul
+wmic process where name="conhost.exe" CALL setpriority 128 2>nul 1>nul
+
+set curdir=%cd%
+
+FOR /F "tokens=*" %%g IN ('powershell "(Get-Item -Path Registry::HKCU\RCWM\fdl).Property | ? {$_.trim() -ne '(default)'}"') do (SET folder=%%g)
+
+IF NOT EXIST "%folder%" (echo Link Source does not exist: %folder% && timeout /t 1 >nul && echo Exiting . . . && timeout /t 1 > nul && exit )
 
 cd /d "%folder%"
 for %%I in (.) do set fname=%%~nxI
@@ -32,12 +37,12 @@ goto :f2
 
 :f1
 IF EXIST "%fname%\" (
-echo Folder with the same name already exists!
+echo Folder with the same name already exists: %fname%
 echo Cannot continue!
 timeout /t 4
 exit
 ) ELSE (
-echo File with the same name already exists!
+echo File with the same name already exists: %fname%
 echo Cannot continue!
 timeout /t 4
 exit
@@ -51,7 +56,8 @@ echo.
 
 mklink /J "%curdir%\%fname%" "%folder%"
 
-del /f /q C:\Windows\System32\RCWM\dl.log
+reg delete "HKCU\RCWM\dl" /f >NUL
+reg add "HKCU\RCWM\dl" /f >NUL
 echo Finished!
 timeout /t 1 1>NUL
 exit

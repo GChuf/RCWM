@@ -2,11 +2,11 @@
 
 rem 65000: UTF-7
 rem 65001: UTF-8 does not work on Win7
-chcp 65001 > nul
+chcp 65000 > nul
 
 FOR /F "tokens=*" %%g IN ('powershell "(Get-Item -Path Registry::HKCU\RCWM\fl).Property.length"') do (SET E=%%g)
 
-IF %E% == 1 (
+IF %E% == 0 (
 echo Source file not specified!
 echo Right-Click on a file and select a Link Source.
 timeout /t 3 > nul
@@ -21,9 +21,9 @@ wmic process where name="conhost.exe" CALL setpriority 128 2>nul 1>nul
 
 set curdir=%cd%
 
-FOR /F "tokens=*" %%g IN ('powershell "(Get-Item -Path Registry::HKCU\RCWM\fl).Property | ? {$_.trim() -ne '(default)'}"') do (SET file=%%g)
+FOR /F "tokens=*" %%g IN ('powershell "(Get-Item -Path Registry::HKCU\RCWM\fl).Property"') do (SET file=%%g)
 
-IF NOT EXIST "%file%" (echo Link Source does not exist: %file% && timeout /t 1 >nul && echo Exiting . . . && timeout /t 1 > nul && exit )
+IF NOT EXIST "%file%" (echo Link Source does not exist! && timeout /t 1 >nul && echo Exiting . . . && timeout /t 1 > nul && exit )
 
 for %%F in ("%file%") do set f=%%~nxF
 
@@ -35,12 +35,12 @@ goto :f2
 
 :f1
 IF EXIST "%f%\" (
-echo Folder with the same name already exists: %f%
+echo Folder with the same name already exists!
 echo Cannot continue!
 timeout /t 3
 exit
 ) ELSE (
-echo File with the same name already exists: %f%
+echo File with the same name already exists!
 echo Cannot continue!
 timeout /t 3
 exit

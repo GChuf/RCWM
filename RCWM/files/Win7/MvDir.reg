@@ -1,0 +1,21 @@
+Windows Registry Editor Version 5.00
+
+;robocopy move
+
+[HKEY_CLASSES_ROOT\Directory\shell\mvdir]
+@="Move This Directory"
+"NoWorkingDirectory"=""
+"Icon"="rcwmimg.dll,-3"
+
+[HKEY_CLASSES_ROOT\Directory\shell\mvdir\command]
+@="cmd.exe /c chcp 65000 > nul && reg delete HKCU\\RCWM\\mv /f && reg add HKCU\\RCWM\\mv /v \"%V\" /t REG_SZ"
+"IsolatedCommand"="cmd.exe /c C:\\Windows\\System32\\RCWM\\MvDir.bat"
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir]
+@="Move Directory Here"
+"Icon"="rcwmimg.dll,-4"
+[HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir\command]
+@="cmd.exe /c C:\\Windows\\System32\\RCWM\\MvDir.bat"
+"IsolatedCommand"="cmd.exe /c C:\\Windows\\System32\\RCWM\\MvDir.bat"
+
+; end
