@@ -127,7 +127,8 @@ xcopy /f rcwmimg.dll %SystemRoot%\System32 /y 1>nul
 
 rem if powershell version less than 5, overwrite some files with 'windows7' version
 IF %pwsh% LSS 5 (
-    xcopy /f .\Win7\* %SystemRoot%\System32\RCWM /y 1>nul
+    xcopy /f .\Win7\*.bat %SystemRoot%\System32\RCWM /y 1>nul
+	xcopy /f .\Win7\*.reg . /y 1>nul
 )
 
 rem take ownership of that folder for administrators & users
@@ -152,6 +153,7 @@ xcopy /f rcwmimg.dll %SystemRoot%\System32 /y 1>nul
 rem if powershell version less than 5, overwrite some files with 'windows7' version
 IF %pwsh% LSS 5 (
     xcopy /f .\Win7\* %SystemRoot%\System32\RCWM /y 1>nul
+	xcopy /f .\Win7\*.reg . /y 1>nul
 )
 
 echo Copied new files.
