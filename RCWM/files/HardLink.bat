@@ -48,7 +48,7 @@ exit
 
 :f2
 
-IF %curdir~0,1% == %file~0,1% (
+IF %curdir:~0,1% == %file:~0,1% (
 
 echo.
 echo Creating hard link . . .
