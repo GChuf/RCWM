@@ -4,9 +4,9 @@ rem 65000: UTF-7
 rem 65001: UTF-8 does not work on Win7
 chcp 65001 > nul
 
-FOR /F "tokens=*" %%g IN ('powershell "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\RCWM\rc).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\RCWM\rc).property }"') do (SET folder=%%g)
+FOR /F "tokens=*" %%g IN ('powershell "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\RCWM\fl).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\RCWM\fl).property }"') do (SET file=%%g)
 
-IF %folder% == 0 (
+IF %file% == 0 (
 echo Source file not specified!
 echo Right-Click on a file and select a Link Source.
 timeout /t 3 > nul
