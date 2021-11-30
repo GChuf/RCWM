@@ -66,10 +66,10 @@ RoboCopy/RoboPaste & Move Directory both use robocopy to do the work.
 You have two options: you can copy multiple or single directories at a time.
 
 __Single__:
-The folder to be copied (when you right-click "RoboCopy" is written into a file and __overwrites__ any previous folder paths stored there. If you specify a new folder to be copied, the old one (if existing) will be overwritten. It is simpler and faster.
+The folder (directory path) to be copied (when you right-click "RoboCopy") is written into registry and __overwrites__ any previous folder paths stored there. If you specify a new folder to be copied, the old one (if existing) will be overwritten. It is simpler and faster.
 
 __Multiple__:
-The list of the folder paths to be copied is saved inside multiple files in the *C:\Windows\System32\RCWM\{rc || mv}* folder. Then the script goes through a powershell loop to copy all of them.
+The list of the folder paths to be copied is saved inside multiple files in the *C:\Windows\System32\RCWM\{rc || mv}* folder. Then the script goes through a powershell loop to copy all of them. This will eventually go into registry as well.
 
 I don't recommend RoboCopying/Moving more than 30 folders at a time (the default windows limit for right-click options is 15, you can increase it to 31 in the install script - see the *MultipleInvokeMinimum.reg* file for more info). Calling multiple (powershell) instances for saving the list of files to be copied can use a lot of resources . . . Work in progress!
 
