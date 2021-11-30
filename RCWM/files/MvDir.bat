@@ -5,9 +5,8 @@ rem 65001: UTF-8 does not work on Win7
 chcp 65001 > nul
 
 FOR /F "tokens=*" %%g IN ('powershell "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\RCWM\mv).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\RCWM\mv).property }"') do (SET folder=%%g)
-echo %folder%
-pause
-IF %folder% == 0 (
+
+IF "%folder%" == 0 (
 echo Source folder not specified!
 echo Right-Click and select 'Move Directory'.
 timeout /t 3 > nul

@@ -6,7 +6,7 @@ chcp 65001 > nul
 
 FOR /F "tokens=*" %%g IN ('powershell "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\RCWM\dl).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\RCWM\dl).property }"') do (SET folder=%%g)
 
-IF %folder% == 0 (
+IF "%folder%" == 0 (
 echo Source folder not specified!
 echo Right-Click on a directory and select a Link Source.
 timeout /t 3 > nul

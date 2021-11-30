@@ -6,7 +6,7 @@ chcp 65000 > nul
 
 FOR /F "tokens=*" %%g IN ('powershell "(Get-Item -Path Registry::HKCU\RCWM\fl).Property.length"') do (SET E=%%g)
 
-IF %E% == 0 (
+IF "%E%" == 0 (
 echo Source file not specified!
 echo Right-Click on a file and select a Link Source.
 timeout /t 3 > nul
