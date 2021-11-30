@@ -21,7 +21,7 @@ wmic process where name="conhost.exe" CALL setpriority 128 2>nul 1>nul
 
 set curdir=%cd%
 
-FOR /F "tokens=*" %%g IN ('powershell "(Get-Item -Path Registry::HKCU\RCWM\fl).Property | ? {$_.trim() -ne '(default)'}"') do (SET folder=%%g)
+FOR /F "tokens=*" %%g IN ('powershell "(Get-Item -Path Registry::HKCU\RCWM\rc).Property | ? {$_.trim() -ne '(default)'}"') do (SET folder=%%g)
 
 IF NOT EXIST "%folder%" (echo Source folder does not exist: %folder% && timeout /t 1 >nul && echo Exiting . . . && timeout /t 2 > nul && exit )
 cd /d %folder%

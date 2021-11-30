@@ -1,4 +1,4 @@
-@echo off
+﻿@echo off
 
 rem 65000: UTF-7
 rem 65001: UTF-8 does not work on Win7
