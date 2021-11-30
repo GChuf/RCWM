@@ -96,7 +96,6 @@ Also fixed some other issues by applying UTF-8 in batch (UTF-7 for Windows7)
 - <del>powershell scripts (robocopy, mvdir, open powershell) don't work with directories with \[square brackets\] in their names.</del>
 Fixed by using -literalPath option
 - rmdir and robocopy sometimes need admin privileges (robocopy throws error 5) - if you experience this, takeown or always running cmd as admin will help
-- RCWM is not thoroughly tested on Windows 7
   
 # Tests
 RoboCopy is much faster for copying a large amount of small files.
