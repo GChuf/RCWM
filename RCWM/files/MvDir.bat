@@ -4,9 +4,10 @@ rem 65000: UTF-7
 rem 65001: UTF-8 does not work on Win7
 chcp 65001 > nul
 
-FOR /F "tokens=*" %%g IN ('powershell "(Get-Item -Path Registry::HKCU\RCWM\mv).Property.length"') do (SET E=%%g)
-
-IF %E% == 1 (
+FOR /F "tokens=*" %%g IN ('powershell "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\RCWM\mv).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\RCWM\mv).property }"') do (SET folder=%%g)
+echo %folder%
+pause
+IF %folder% == 0 (
 echo Source folder not specified!
 echo Right-Click and select 'Move Directory'.
 timeout /t 3 > nul
@@ -20,8 +21,6 @@ wmic process where name="cmd.exe" CALL setpriority 128 2>nul 1>nul
 wmic process where name="conhost.exe" CALL setpriority 128 2>nul 1>nul
 
 set curdir=%cd%
-
-FOR /F "tokens=*" %%g IN ('powershell "(Get-Item -Path Registry::HKCU\RCWM\mv).Property | ? {$_.trim() -ne '(default)'}"') do (SET folder=%%g)
 
 IF NOT EXIST "%folder%" (echo Source folder does not exist: %folder% && timeout /t 1 >nul && echo Exiting . . . && timeout /t 1 > nul && exit )
 cd /d %folder%

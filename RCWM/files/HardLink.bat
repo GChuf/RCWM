@@ -4,9 +4,9 @@ rem 65000: UTF-7
 rem 65001: UTF-8 does not work on Win7
 chcp 65001 > nul
 
-FOR /F "tokens=*" %%g IN ('powershell "(Get-Item -Path Registry::HKCU\RCWM\fl).Property.length"') do (SET E=%%g)
+FOR /F "tokens=*" %%g IN ('powershell "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\RCWM\rc).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\RCWM\rc).property }"') do (SET folder=%%g)
 
-IF %E% == 1 (
+IF %folder% == 0 (
 echo Source file not specified!
 echo Right-Click on a file and select a Link Source.
 timeout /t 3 > nul
@@ -20,8 +20,6 @@ wmic process where name="cmd.exe" CALL setpriority 128 2>nul 1>nul
 wmic process where name="conhost.exe" CALL setpriority 128 2>nul 1>nul
 
 set curdir=%cd%
-
-FOR /F "tokens=*" %%g IN ('powershell "(Get-Item -Path Registry::HKCU\RCWM\fl).Property | ? {$_.trim() -ne '(default)'}"') do (SET file=%%g)
 
 IF NOT EXIST "%file%" (echo Link Source does not exist: %file% && timeout /t 1 >nul && echo Exiting . . . && timeout /t 1 > nul && exit )
 
