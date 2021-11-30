@@ -23,7 +23,7 @@ set curdir=%cd%
 
 FOR /F "tokens=*" %%g IN ('powershell "(Get-Item -Path Registry::HKCU\RCWM\rc).Property"') do (SET folder=%%g)
 
-IF NOT EXIST "%folder%" (echo Source folder does not exist: %folder% && timeout /t 1 >nul && echo Exiting . . . && timeout /t 2 > nul && exit )
+IF NOT EXIST "%folder%" (echo Source folder does not exist! && timeout /t 1 >nul && echo Exiting . . . && timeout /t 2 > nul && exit )
 cd /d %folder%
 for %%I in (.) do set fname=%%~nxI
 cd /d "%curdir%"
