@@ -7,7 +7,7 @@ Windows Registry Editor Version 5.00
 
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\signout\command]
-@="logoff /f"
-"IsolatedCommand"="logoff /f"
+@="logoff"
+"IsolatedCommand"="logoff"
 
 ;done
