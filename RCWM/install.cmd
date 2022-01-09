@@ -35,8 +35,8 @@ REM Taken from: https://stackoverflow.com/questions/11525056/how-to-create-a-bat
 
 if '%errorlevel%' NEQ '0' (
     echo You need to run this script with administrator privileges!!!
-    echo You can continue anyway, but some functionalities might not work.
     pause
+    exit
 )
 
 pushd "%CD%"
