@@ -16,16 +16,6 @@
 #/XO :: eXclude Older files.
 
 
-#check if list of folders to be copied exist
-
-If (  (Test-Path "C:\Windows\System32\RCWM\rc\*" -PathType Leaf) -eq $false ) {
-	echo "List of folders to be copied does not exist!"
-	Start-Sleep 1
-	echo "Create one by right-clicking on folders and selecting 'RoboCopy'."
-	Start-Sleep 3
-	#exit
-}
-
 
 #set high process priority
 $process = Get-Process -Id $pid
@@ -39,12 +29,21 @@ $BaseDirDisp += $BaseDir
 $BaseDirDisp += '"'
 
 #get array of contents of files inside C:\windows\system32\rcwm\rc (that would be the pathnames to copy)
-$files = get-childitem "C:\windows\system32\rcwm\rc"
-[string[]]$array = Get-Content $files.fullName
 
 
 
-If ( $array.length -eq 1 ) {
+
+$array = (Get-Item -Path Registry::HKCU\RCWM\rc).property
+
+
+
+#check if list of folders to be copied exist
+if ( $array.length -eq 0 ) {
+	echo "List of folders to be copied does not exist!"
+	Start-Sleep 1
+	echo "Create one by right-clicking on folders and selecting 'RoboCopy'."
+	Start-Sleep 3
+} elseif ( $array.length -eq 1 ) {
 	Write-host "You're about to copy the following folder into" $BaseDirDisp":"
 } else {
 	Write-host "You're about to copy the following" $array.length "folders into" $BaseDirDisp":"
@@ -78,7 +77,7 @@ Do {
 					}	
 
 					{"y", "yes" -contains $_} {
-						Remove-Item C:\Windows\System32\RCWM\rc\*
+						reg delete "HKCU\RCWM\rc" /f > nul
 						Write-Host "List deleted."
 						Start-Sleep 2
 						exit
@@ -191,7 +190,7 @@ If ( $copy -eq $True ) {
 								}	
 
 								{"y", "yes" -contains $_} {
-									Remove-Item C:\Windows\System32\RCWM\rc\*
+									reg delete "HKCU\RCWM\rc" /f > nul
 									Write-Host "List deleted."
 									Start-Sleep 2
 									exit
@@ -218,7 +217,7 @@ If ( $copy -eq $True ) {
 
 	echo ""
 	echo "Finished!"
-	Remove-Item C:\Windows\System32\RCWM\rc\*
+	reg delete "HKCU\RCWM\rc" /f > nul
 	Start-Sleep 1
 
 }
