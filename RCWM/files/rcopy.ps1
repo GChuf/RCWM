@@ -1,1 +1,1 @@
-New-ItemProperty -Path "HKCU:\RCWM\rc" -Name "$args[0]"
+New-ItemProperty -Path "HKCU:\RCWM\rc" -Name "$args" | out-null
