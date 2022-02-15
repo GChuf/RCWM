@@ -38,7 +38,8 @@ $BaseDirDisp += '"'
 
 $array = (Get-Item -Path Registry::HKCU\RCWM\rc).property 2> $null
 
-
+#if first "path" in array is "(default)", we delete it.
+if ($array[0] -eq "(default)") {$array = $array[1..($array.Length-1)]}
 
 #check if list of folders to be copied exist
 if ( $array.length -eq 0 ) {
