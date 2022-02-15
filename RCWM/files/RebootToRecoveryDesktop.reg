@@ -1,0 +1,11 @@
+﻿Windows Registry Editor Version 5.00
+
+;stolen and adapted from an unknown source
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\Reboot to Recovery]
+"Icon"="C:\\Windows\\System32\\imageres.dll,-110"
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\Reboot to Recovery\command]
+@="shutdown.exe -r -o -f -t 0"
+
+;done
