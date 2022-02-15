@@ -33,7 +33,7 @@ $BaseDirDisp += '"'
 
 
 
-$array = (Get-Item -Path Registry::HKCU\RCWM\rc).property
+$array = (Get-Item -Path Registry::HKCU\RCWM\rc).property 2> $null
 
 
 
@@ -43,6 +43,7 @@ if ( $array.length -eq 0 ) {
 	Start-Sleep 1
 	echo "Create one by right-clicking on folders and selecting 'RoboCopy'."
 	Start-Sleep 3
+	exit
 } elseif ( $array.length -eq 1 ) {
 	Write-host "You're about to copy the following folder into" $BaseDirDisp":"
 } else {
@@ -77,7 +78,7 @@ Do {
 					}	
 
 					{"y", "yes" -contains $_} {
-						reg delete "HKCU\RCWM\rc" /f > nul
+						reg delete "HKCU\RCWM\rc" /f | Out-Null
 						Write-Host "List deleted."
 						Start-Sleep 2
 						exit
@@ -190,7 +191,7 @@ If ( $copy -eq $True ) {
 								}	
 
 								{"y", "yes" -contains $_} {
-									reg delete "HKCU\RCWM\rc" /f > nul
+									reg delete "HKCU\RCWM\rc" /f | Out-Null
 									Write-Host "List deleted."
 									Start-Sleep 2
 									exit
@@ -217,7 +218,7 @@ If ( $copy -eq $True ) {
 
 	echo ""
 	echo "Finished!"
-	reg delete "HKCU\RCWM\rc" /f > nul
+	reg delete "HKCU\RCWM\rc" /f | Out-Null
 	Start-Sleep 1
 
 }
