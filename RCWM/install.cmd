@@ -241,9 +241,16 @@ color a
 choice /C yn /M "* Do you want to add Reboot to Recovery to 'This PC' "
 if %errorlevel% == 1 ( start /w regedit /s RebootToRecovery.reg )
 
+color a
+choice /C yn /M "* Do you want to add Reboot to Recovery to Desktop "
+if %errorlevel% == 1 ( start /w regedit /s RebootToRecoveryDesktop.reg )
+
 color b
 choice /C yn /M "* Do you want to add Safe Mode to 'This PC' "
 if %errorlevel% == 1 ( start /w regedit /s SafeMode.reg )
+
+choice /C yn /M "* Do you want to add Safe Mode to Desktop "
+if %errorlevel% == 1 ( start /w regedit /s SafeModeDesktop.reg )
 
 color c
 choice /C yn /M "* Do you want to add Copy To Folder "
