@@ -61,13 +61,13 @@ FOR /F "tokens=* USEBACKQ" %%F IN (`powershell $psversiontable.psversion.major`)
 
 IF %pwsh% LSS 5 (
     IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version older than 5 on 32bit CPU. ) else ( echo Using powershell version older than 5 on 64bit CPU. )
-	echo Modifying powershell scripts for compatibility with older powershell versions . . .
+	rem echo Modifying powershell scripts for compatibility with older powershell versions . . .
 	rem this removes -NoNewLine switch which was introduced in Powershell v5
-	powershell "echo '$n = -join ((0,1,2,3,4,5,6,7,8,9,\"a\",\"b\",\"c\",\"d\",\"e\",\"f\")|get-random -count 6)' | Out-File rcopy.ps1"
-	powershell "echo '(get-location).path|out-file C:\windows\system32\rcwm\rc\$n -encoding UTF8'|Out-File rcopy.ps1 -Append"
+	rem powershell "echo '$n = -join ((0,1,2,3,4,5,6,7,8,9,\"a\",\"b\",\"c\",\"d\",\"e\",\"f\")|get-random -count 6)' | Out-File rcopy.ps1"
+	rem powershell "echo '(get-location).path|out-file C:\windows\system32\rcwm\rc\$n -encoding UTF8'|Out-File rcopy.ps1 -Append"
 
-	powershell "echo '$n = -join ((0,1,2,3,4,5,6,7,8,9,\"a\",\"b\",\"c\",\"d\",\"e\",\"f\")|get-random -count 6)' | Out-File mvdir.ps1"
-	powershell "echo '(get-location).path|out-file C:\windows\system32\rcwm\mv\$n -encoding UTF8'|Out-File mvdir.ps1 -Append"
+	rem powershell "echo '$n = -join ((0,1,2,3,4,5,6,7,8,9,\"a\",\"b\",\"c\",\"d\",\"e\",\"f\")|get-random -count 6)' | Out-File mvdir.ps1"
+	rem powershell "echo '(get-location).path|out-file C:\windows\system32\rcwm\mv\$n -encoding UTF8'|Out-File mvdir.ps1 -Append"
 
 ) ELSE (
 	IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version 5 or newer on 32bit CPU. ) else ( echo Using powershell version 5 or newer on 64bit CPU. )
@@ -116,13 +116,14 @@ if %errorlevel% == 1 ( goto Add ) else ( goto RemoveOptions )
 md %SystemRoot%\System32\RCWM
 md %SystemRoot%\System32\RCWM\rc
 md %SystemRoot%\System32\RCWM\mv
+md %SystemRoot%\RCWM
 attrib +h +s %SystemRoot%\System32\RCWM
 echo Created hidden folder at %SystemRoot%\System32\RCWM
 
 xcopy /f *.bat %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.ps1 %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.lnk %SystemRoot%\System32\RCWM /y 1>nul
-
+xcopy /f .\bin\*.exe %SystemRoot%\RCWM /y 1>nul
 xcopy /f rcwmimg.dll %SystemRoot%\System32 /y 1>nul
 
 rem if powershell version less than 5, overwrite some files with 'windows7' version
@@ -136,6 +137,10 @@ takeown /F %SystemRoot%\System32\RCWM /R /D Y 1>nul
 icacls %SystemRoot%\System32\RCWM /grant administrators:F /T /C 1>nul
 icacls %SystemRoot%\System32\RCWM /grant users:F /T /C 1>nul
 
+takeown /F %SystemRoot%\RCWM /R /D Y 1>nul
+icacls %SystemRoot%\RCWM /grant administrators:F /T /C 1>nul
+icacls %SystemRoot%\RCWM /grant users:F /T /C 1>nul
+
 echo Copied all files.
 echo Pre-setup complete.
 goto start
@@ -145,9 +150,11 @@ goto start
 
 md %SystemRoot%\System32\RCWM\rc 2>nul
 md %SystemRoot%\System32\RCWM\mv 2>nul
+md %SystemRoot%\RCWM 2>nul
 xcopy /f *.bat %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.ps1 %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.lnk %SystemRoot%\System32\RCWM /y 1>nul
+xcopy /f .\bin\*.exe %SystemRoot%\RCWM /y 1>nul
 xcopy /f rcwmimg.dll %SystemRoot%\System32 /y 1>nul
 
 rem if powershell version less than 5, overwrite some files with 'windows7' version
