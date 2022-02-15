@@ -28,7 +28,7 @@ $BaseDirDisp = '"'
 $BaseDirDisp += $BaseDir
 $BaseDirDisp += '"'
 
-#get array of contents of files inside C:\windows\system32\rcwm\rc (that would be the pathnames to copy)
+#get array of contents of paths inside HKCU\RCWM\rc
 
 
 
@@ -78,7 +78,7 @@ Do {
 					}	
 
 					{"y", "yes" -contains $_} {
-						reg delete "HKCU\RCWM\rc" /f | Out-Null
+						Remove-ItemProperty -Path "HKCU:\RCWM\rc" -Name * | Out-Null
 						Write-Host "List deleted."
 						Start-Sleep 2
 						exit
@@ -191,7 +191,7 @@ If ( $copy -eq $True ) {
 								}	
 
 								{"y", "yes" -contains $_} {
-									reg delete "HKCU\RCWM\rc" /f | Out-Null
+									Remove-ItemProperty -Path "HKCU:\RCWM\rc" -Name * | Out-Null
 									Write-Host "List deleted."
 									Start-Sleep 2
 									exit
@@ -218,7 +218,7 @@ If ( $copy -eq $True ) {
 
 	echo ""
 	echo "Finished!"
-	reg delete "HKCU\RCWM\rc" /f | Out-Null
+	Remove-ItemProperty -Path "HKCU:\RCWM\rc" -Name * | Out-Null
 	Start-Sleep 1
 
 }
