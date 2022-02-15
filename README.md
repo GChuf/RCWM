@@ -17,6 +17,7 @@ This little magic pack includes:
 - options to uninstall the changes you've made
 - options to MoveTo / SendTo folder (from Windows 7)
 - signing out from desktop background
+- opening GodMode
 
 You can also remove some right-click menu options, so that your menu doesn't become too cluttered:
 - Pin to Quick access
