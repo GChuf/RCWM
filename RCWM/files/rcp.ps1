@@ -17,6 +17,9 @@
 
 
 
+#exe files for writing paths into registry are made by ps2exe
+#.\ps2exe.ps1 -inputFile .\rcopy.ps1 -outputfile rcopyS.exe -title 'RCWM Rcopy' -version '1.6.0' -x86 -noConsole -sta
+
 #set high process priority
 $process = Get-Process -Id $pid
 $process.PriorityClass = 'High' 
