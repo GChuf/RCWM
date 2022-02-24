@@ -61,14 +61,6 @@ FOR /F "tokens=* USEBACKQ" %%F IN (`powershell $psversiontable.psversion.major`)
 
 IF %pwsh% LSS 5 (
     IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version older than 5 on 32bit CPU. ) else ( echo Using powershell version older than 5 on 64bit CPU. )
-	rem echo Modifying powershell scripts for compatibility with older powershell versions . . .
-	rem this removes -NoNewLine switch which was introduced in Powershell v5
-	rem powershell "echo '$n = -join ((0,1,2,3,4,5,6,7,8,9,\"a\",\"b\",\"c\",\"d\",\"e\",\"f\")|get-random -count 6)' | Out-File rcopy.ps1"
-	rem powershell "echo '(get-location).path|out-file C:\windows\system32\rcwm\rc\$n -encoding UTF8'|Out-File rcopy.ps1 -Append"
-
-	rem powershell "echo '$n = -join ((0,1,2,3,4,5,6,7,8,9,\"a\",\"b\",\"c\",\"d\",\"e\",\"f\")|get-random -count 6)' | Out-File mvdir.ps1"
-	rem powershell "echo '(get-location).path|out-file C:\windows\system32\rcwm\mv\$n -encoding UTF8'|Out-File mvdir.ps1 -Append"
-
 ) ELSE (
 	IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version 5 or newer on 32bit CPU. ) else ( echo Using powershell version 5 or newer on 64bit CPU. )
 )
