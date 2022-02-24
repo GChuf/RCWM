@@ -16,30 +16,31 @@
 #/XO :: eXclude Older files.
 
 
-
-#exe files for writing paths into registry are made by ps2exe
-#.\ps2exe.ps1 -inputFile .\rcopy.ps1 -outputfile rcopyS.exe -title 'RCWM Rcopy' -version '1.6.0' -x86 -noConsole -sta
-
 #set high process priority
 $process = Get-Process -Id $pid
 $process.PriorityClass = 'High' 
 
 
 #get cd
-$BaseDir = (pwd).path
-$BaseDirDisp = '"'
-$BaseDirDisp += $BaseDir
-$BaseDirDisp += '"'
-
-#get array of contents of paths inside HKCU\RCWM\rc
+#$BaseDir = (pwd).path
+$BaseDirDisp = '"' + (pwd).path + '"'
 
 
+#copy / move
+$command = $args[0]
+
+#single / multiple
+$mode = $args[1]
+
+if ($command -eq "mv") {
+	$flag = "/MOV"
+}
 
 
-$array = (Get-Item -Path Registry::HKCU\RCWM\rc).property 2> $null
+#get array of contents of paths inside HKCU\RCWM\mode
+$array = (Get-Item -Path Registry::HKCU\RCWM\$command).property 2> $null
 
-#if first "path" in array is "(default)", we delete it.
-if ($array[0] -eq "(default)") {$array = $array[1..($array.Length-1)]}
+
 
 #check if list of folders to be copied exist
 if ( $array.length -eq 0 ) {
@@ -82,7 +83,7 @@ Do {
 					}	
 
 					{"y", "yes" -contains $_} {
-						Remove-ItemProperty -Path "HKCU:\RCWM\rc" -Name * | Out-Null
+						Remove-ItemProperty -Path "HKCU:\RCWM\$command" -Name * | Out-Null
 						Write-Host "List deleted."
 						Start-Sleep 2
 						exit
@@ -136,7 +137,7 @@ If ( $copy -eq $True ) {
 
 			New-Item -Path ".\$folder" -ItemType Directory  > $null
 
-			C:\Windows\System32\robocopy.exe "$path" "$folder" /E /NP /NJH /NJS /NC /NS /MT:32
+			C:\Windows\System32\robocopy.exe "$path" "$folder" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
 			
 			echo "Finished copying $folder"
 		}
@@ -162,7 +163,7 @@ If ( $copy -eq $True ) {
 							$path = $merge[$i]
 							$folder = $path.split("\")[-1]
 
-							C:\Windows\System32\robocopy.exe "$path" "$folder" /E /NP /NJH /NJS /NC /NS /MT:32
+							C:\Windows\System32\robocopy.exe "$path" "$folder" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
 
 							echo "Finished overwriting $folder"
 						}
@@ -175,7 +176,7 @@ If ( $copy -eq $True ) {
 							$path = $merge[$i]
 							$folder = $path.split("\")[-1]
 
-							C:\Windows\System32\robocopy.exe "$path" "$folder" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
+							C:\Windows\System32\robocopy.exe "$path" "$folder" "$flag" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
 									
 							echo "Finished merging $folder"
 						}					
@@ -195,7 +196,7 @@ If ( $copy -eq $True ) {
 								}	
 
 								{"y", "yes" -contains $_} {
-									Remove-ItemProperty -Path "HKCU:\RCWM\rc" -Name * | Out-Null
+									Remove-ItemProperty -Path "HKCU:\RCWM\$command" -Name * | Out-Null
 									Write-Host "List deleted."
 									Start-Sleep 2
 									exit
@@ -222,7 +223,7 @@ If ( $copy -eq $True ) {
 
 	echo ""
 	echo "Finished!"
-	Remove-ItemProperty -Path "HKCU:\RCWM\rc" -Name * | Out-Null
+	Remove-ItemProperty -Path "HKCU:\RCWM\$command" -Name * | Out-Null
 	Start-Sleep 1
 
 }
