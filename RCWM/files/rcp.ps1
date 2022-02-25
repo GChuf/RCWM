@@ -32,8 +32,20 @@ $command = $args[0]
 #single / multiple
 $mode = $args[1]
 
-if ($command -eq "mv") {
+if ($command -eq "move") {
 	$flag = "/MOV"
+	$string1 = "moved"
+	$string2 = "'Move Directory'"
+	$string3 = "moving"
+	$reg = "mv"
+} else {
+	
+	$flag=""
+	$string1 = "copied"
+	$string2 = "'RoboCopy'"
+	$string3 = "copying"
+	$reg = "cp"
+	
 }
 
 
@@ -47,15 +59,15 @@ if ( $array[0] -eq "(default)" ) {
 
 #check if list of folders to be copied exist
 if ( $array.length -eq 0 ) {
-	echo "List of folders to be copied does not exist!"
+	echo "List of folders to be $string1 does not exist!"
 	Start-Sleep 1
-	echo "Create one by right-clicking on folders and selecting 'RoboCopy'."
+	echo "Create one by right-clicking on folders and selecting $string2."
 	Start-Sleep 3
 	exit
 } elseif ( $array.length -eq 1 ) {
-	Write-host "You're about to copy the following folder into" $BaseDirDisp":"
+	Write-host "You're about to $command the following folder into" $BaseDirDisp":"
 } else {
-	Write-host "You're about to copy the following" $array.length "folders into" $BaseDirDisp":"
+	Write-host "You're about to $command the following" $array.length "folders into" $BaseDirDisp":"
 }
 	$array
 
@@ -86,7 +98,7 @@ Do {
 					}	
 
 					{"y", "yes" -contains $_} {
-						Remove-ItemProperty -Path "HKCU:\RCWM\$command" -Name * | Out-Null
+						Remove-ItemProperty -Path "HKCU:\RCWM\$reg" -Name * | Out-Null
 						Write-Host "List deleted."
 						Start-Sleep 2
 						exit
@@ -109,7 +121,7 @@ Do {
 
 If ( $copy -eq $True ) {
 
-	write-host "Begin copying ..."
+	write-host "Begin $string3 ..."
 	write-host ""
 
 
@@ -142,7 +154,7 @@ If ( $copy -eq $True ) {
 
 			C:\Windows\System32\robocopy.exe "$path" "$folder" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
 			
-			echo "Finished copying $folder"
+			echo "Finished $string3 $folder"
 		}
 
 	}
@@ -187,7 +199,7 @@ If ( $copy -eq $True ) {
 
 					}
 					{"A", "abort" -contains $_} {
-						Write-Host "Aborted copying the remaining folders."
+						Write-Host "Aborted $string3 the remaining folders."
 
 						Do {
 							[string]$prompt = Read-Host -Prompt "Delete list of remaining folders? (Y/N)"
@@ -199,7 +211,7 @@ If ( $copy -eq $True ) {
 								}	
 
 								{"y", "yes" -contains $_} {
-									Remove-ItemProperty -Path "HKCU:\RCWM\$command" -Name * | Out-Null
+									Remove-ItemProperty -Path "HKCU:\RCWM\$reg" -Name * | Out-Null
 									Write-Host "List deleted."
 									Start-Sleep 2
 									exit
@@ -226,7 +238,7 @@ If ( $copy -eq $True ) {
 
 	echo ""
 	echo "Finished!"
-	Remove-ItemProperty -Path "HKCU:\RCWM\$command" -Name * | Out-Null
+	Remove-ItemProperty -Path "HKCU:\RCWM\$reg" -Name * | Out-Null
 	Start-Sleep 1
 
 }
