@@ -40,7 +40,10 @@ if ($command -eq "mv") {
 #get array of contents of paths inside HKCU\RCWM\mode
 $array = (Get-Item -Path Registry::HKCU\RCWM\$command).property 2> $null
 
-
+#delete '(default)' in first place
+if ( $array[0] -eq "(default)" ) {
+	$array = $array[1..($array.Length-1)]
+}
 
 #check if list of folders to be copied exist
 if ( $array.length -eq 0 ) {
