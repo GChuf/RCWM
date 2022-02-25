@@ -78,7 +78,7 @@ rem powershell version check
 FOR /F "tokens=* USEBACKQ" %%F IN (`powershell $psversiontable.psversion.major`) DO ( SET pwsh=%%F )
 
 
-IF %pwsh% LSS 5 (
+IF !pwsh! LSS 5 (
     IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version older than 5 on 32bit CPU. ) else ( echo Using powershell version older than 5 on 64bit CPU. )
 ) ELSE (
     IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version 5 or newer on 32bit CPU. ) else ( echo Using powershell version 5 or newer on 64bit CPU. )
@@ -140,7 +140,7 @@ xcopy /f .\bin\*.exe %SystemRoot%\RCWM /y 1>nul
 xcopy /f rcwmimg.dll %SystemRoot%\System32 /y 1>nul
 
 rem if powershell version less than 5, overwrite some files with 'windows7' version
-IF %pwsh% LSS 5 (
+IF !pwsh! LSS 5 (
     xcopy /f .\Win7\*.bat %SystemRoot%\System32\RCWM /y 1>nul
 	xcopy /f .\Win7\*.reg . /y 1>nul
 )
@@ -171,7 +171,7 @@ xcopy /f .\bin\*.exe %SystemRoot%\RCWM /y 1>nul
 xcopy /f rcwmimg.dll %SystemRoot%\System32 /y 1>nul
 
 rem if powershell version less than 5, overwrite some files with 'windows7' version
-IF %pwsh% LSS 5 (
+IF !pwsh! LSS 5 (
     xcopy /f .\Win7\* %SystemRoot%\System32\RCWM /y 1>nul
 	xcopy /f .\Win7\*.reg . /y 1>nul
 )
@@ -220,7 +220,7 @@ color c
 choice /C yn /M "* Do you want to add open PowerShell to background/folders/drives "
 if %errorlevel% == 1 ( 
 
-IF %pwsh% LSS 5 ( 
+IF !pwsh! LSS 5 ( 
     IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( start /w regedit /s pwrshell32.reg ) else ( start /w regedit /s pwrshell64.reg )
 ) ELSE ( start /w regedit /s pwrshell.reg )
 )
