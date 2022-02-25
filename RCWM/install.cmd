@@ -56,25 +56,26 @@ echo(
 
 cd files
 
-rem powershell version check
-FOR /F "tokens=* USEBACKQ" %%F IN (`powershell $psversiontable.psversion.major`) DO ( SET pwsh=%%F )
-
-
-IF EXIST "C:\Program Files\PowerShell\71" (
-
+IF EXIST "C:\Program Files\PowerShell\7" (
     FOR /F "tokens=* USEBACKQ" %%F IN (`pwsh -command $psversiontable.psversion.major`) DO ( SET pwsh7=%%F )
-
-) else (echo "pwsh7 not found" )
-
-
-IF %pwsh7% EQU 7 (
-	IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version 7 on 32bit CPU. ) else ( echo Using powershell version 7 on 64bit CPU. )
+	goto pwsh7
 ) ELSE (
-	IF %pwsh7% GTR 7 (
-		IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using unknown powershell version greater than 7 on 32bit CPU. ) else ( echo Using unknown powershell version greater than 7 on 4bit CPU. )
-	)
+	goto pwsh
+)
+	
+:pwsh7
+IF %pwsh7% LEQ 7 (
+	IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version 7 on 32bit CPU. ) else ( echo Using powershell version 7 on 64bit CPU. )
+	
+) ELSE (
+	IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using unknown powershell version greater than 7 on 32bit CPU. ) else ( echo Using unknown powershell version greater than 7 on 64bit CPU. )
 )
 
+goto pwshdone
+
+:pwsh
+rem powershell version check
+FOR /F "tokens=* USEBACKQ" %%F IN (`powershell $psversiontable.psversion.major`) DO ( SET pwsh=%%F )
 
 
 IF %pwsh% LSS 5 (
@@ -83,6 +84,8 @@ IF %pwsh% LSS 5 (
     IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version 5 or newer on 32bit CPU. ) else ( echo Using powershell version 5 or newer on 64bit CPU. )
 )
 
+
+:pwshdone
 
 rem Unblock ps1 files (not entirely necessary)
 rem Won't work on older powershell versions, so output error message to NUL
