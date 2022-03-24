@@ -192,7 +192,7 @@ if %errorlevel% == 1 ( goto RCopy ) else ( goto MvDir )
 color b
 :RCopy
 choice /C sm /M "** Do you want to add RoboCopy for single or multiple directories "
-if %errorlevel% == 1 ( start /w regedit /s RCopy.reg && goto MvDir ) else ( start /w regedit /s RCopyMultiple.reg && goto MvDir )
+if %errorlevel% == 1 ( start /w regedit /s RCopySingle.reg && goto MvDir ) else ( start /w regedit /s RCopyMultiple.reg && goto MvDir )
 
 color c
 :MvDir
@@ -202,7 +202,7 @@ if %errorlevel% == 1 ( goto MvDirC ) else ( goto Other )
 color a
 :MvDirC
 choice /C sm /M "** Do you want to add Move Directory for single or multiple directories "
-if %errorlevel% == 1 ( start /w regedit /s MvDir.reg && goto Other ) else ( start /w regedit /s MvDirMultiple.reg && goto Other )
+if %errorlevel% == 1 ( start /w regedit /s MvDirSingle.reg && goto Other ) else ( start /w regedit /s MvDirMultiple.reg && goto Other )
 
 
 
