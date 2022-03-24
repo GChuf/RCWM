@@ -29,27 +29,25 @@ $BaseDirDisp = '"' + (pwd).path + '"'
 #copy / move
 $command = $args[0]
 
-#single / multiple
+#single / multi
 $mode = $args[1]
 
-if ($command -eq "move") {
+if ($command -eq "mv") {
 	$flag = "/MOV"
 	$string1 = "moved"
 	$string2 = "'Move Directory'"
 	$string3 = "moving"
 	$reg = "mv"
-} else {
-	
+} else { #cp
 	$flag=""
 	$string1 = "copied"
 	$string2 = "'RoboCopy'"
 	$string3 = "copying"
 	$reg = "cp"
-	
 }
 
 
-#get array of contents of paths inside HKCU\RCWM\mode
+#get array of contents of paths inside HKCU\RCWM\command
 $array = (Get-Item -Path Registry::HKCU\RCWM\$command).property 2> $null
 
 #delete '(default)' in first place
