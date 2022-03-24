@@ -37,13 +37,11 @@ if ($command -eq "mv") {
 	$string1 = "moved"
 	$string2 = "'Move Directory'"
 	$string3 = "moving"
-	$reg = "mv"
-} else { #cp
+} else { #rc
 	$flag=""
 	$string1 = "copied"
 	$string2 = "'RoboCopy'"
 	$string3 = "copying"
-	$reg = "cp"
 }
 
 
@@ -100,7 +98,7 @@ Do {
 					}	
 
 					{"y", "yes" -contains $_} {
-						Remove-ItemProperty -Path "HKCU:\RCWM\$reg" -Name * | Out-Null
+						Remove-ItemProperty -Path "HKCU:\RCWM\$command" -Name * | Out-Null
 						Write-Host "List deleted."
 						Start-Sleep 2
 						exit
@@ -213,7 +211,7 @@ If ( $copy -eq $True ) {
 								}	
 
 								{"y", "yes" -contains $_} {
-									Remove-ItemProperty -Path "HKCU:\RCWM\$reg" -Name * | Out-Null
+									Remove-ItemProperty -Path "HKCU:\RCWM\$command" -Name * | Out-Null
 									Write-Host "List deleted."
 									Start-Sleep 2
 									exit
@@ -240,7 +238,7 @@ If ( $copy -eq $True ) {
 
 	echo ""
 	echo "Finished!"
-	Remove-ItemProperty -Path "HKCU:\RCWM\$reg" -Name * | Out-Null
+	Remove-ItemProperty -Path "HKCU:\RCWM\$command" -Name * | Out-Null
 	Start-Sleep 1
 
 }
