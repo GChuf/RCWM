@@ -1,0 +1,21 @@
+Windows Registry Editor Version 5.00
+
+;move dir
+
+[HKEY_CLASSES_ROOT\Directory\shell\mvdir]
+@="Move These Directories"
+"NoWorkingDirectory"=""
+"Icon"="rcwmimg.dll,-3"
+
+[HKEY_CLASSES_ROOT\Directory\shell\mvdir\command]
+@="C:\\Windows\\RCWM\\mvdirS.exe \"%V\""
+"IsolatedCommand"="C:\\Windows\\RCWM\\mvdirS.exe \"%V\""
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir]
+@="Move Directories Here"
+"Icon"="rcwmimg.dll,-4"
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir\command]
+@="cmd /c powershell Set-ExecutionPolicy Bypass -Scope Process; C:\\Windows\\System32\\RCWM\\rcm.ps1 mv single"
+
+; end
