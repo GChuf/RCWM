@@ -15,6 +15,9 @@
 #/XN :: eXclude Newer files.
 #/XO :: eXclude Older files.
 
+#Set UTF-8 encoding
+[console]::InputEncoding = [text.utf8encoding]::UTF8
+[system.console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 #set high process priority
 $process = Get-Process -Id $pid
