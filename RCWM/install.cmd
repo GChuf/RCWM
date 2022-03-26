@@ -227,7 +227,7 @@ IF !pwsh! LSS 5 (
 
 color a
 choice /C yn /M "* Do you want to add God Mode "
-if %errorlevel% == 1 ( start /w regedit /s GodMode.reg && md C:\windows\system32\RCWM\GodMode.{ED7BA470-8E54-465E-825C-99712043E01C} >NUL)
+if %errorlevel% == 1 ( start /w regedit /s GodMode.reg && md C:\windows\system32\RCWM\GodMode.{ED7BA470-8E54-465E-825C-99712043E01C} 2>NUL)
 
 color a
 choice /C yn /M "* Do you want to add Take Ownership to files and directories"
