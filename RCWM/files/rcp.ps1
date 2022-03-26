@@ -32,9 +32,6 @@ $BaseDirDisp = '"' + (pwd).path + '"'
 #copy / move
 $command = $args[0]
 
-#single / multi
-$mode = $args[1]
-
 if ($command -eq "mv") {
 	$flag = "/MOV"
 	$string1 = "moved"
