@@ -26,7 +26,7 @@ $process.PriorityClass = 'High'
 
 #get cd
 #$BaseDir = (pwd).path
-$BaseDirDisp = '"' + (pwd).path + '"'
+$BaseDirDisp = '"' + $args[1] + '"'
 
 
 #copy / move
