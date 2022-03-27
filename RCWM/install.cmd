@@ -136,7 +136,7 @@ echo Created hidden folder at %SystemRoot%\System32\RCWM
 xcopy /f *.bat %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.ps1 %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.lnk %SystemRoot%\System32\RCWM /y 1>nul
-xcopy /f .\bin\*.exe %SystemRoot%\RCWM /y 1>nul
+xcopy /f .\bin\*.exe %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f rcwmimg.dll %SystemRoot%\System32 /y 1>nul
 
 rem if powershell version less than 5, overwrite some files with 'windows7' version
@@ -167,7 +167,7 @@ md %SystemRoot%\RCWM 2>nul
 xcopy /f *.bat %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.ps1 %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.lnk %SystemRoot%\System32\RCWM /y 1>nul
-xcopy /f .\bin\*.exe %SystemRoot%\RCWM /y 1>nul
+xcopy /f .\bin\*.exe %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f rcwmimg.dll %SystemRoot%\System32 /y 1>nul
 
 rem if powershell version less than 5, overwrite some files with 'windows7' version
