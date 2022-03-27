@@ -53,13 +53,22 @@ if ($command -eq "mv") {
 $array = (Get-Item -Path Registry::HKCU\RCWM\$command).property 2> $null
 
 #delete '(default)' in first place
-if ( $array[0] -eq "(default)" ) {
-	if ($array.length -eq 1) {
-		$array = $null
-	} else {
-		$array = $array[1..($array.Length-1)]
+
+try {
+	if ( $array[0] -eq "(default)" ) {
+		if ($array.length -eq 1) {
+			$array = $null
+		} else {
+			$array = $array[1..($array.Length-1)]
+		}
+	} elseif ( $array -eq "(default)" ) { #empty registry and powershell v2
+		echo "List of folders to be $string1 does not exist!"
+		Start-Sleep 1
+		echo "Create one by right-clicking on folders and selecting $string2."
+		Start-Sleep 3
+		exit
 	}
-} elseif ( $array -eq "(default)" ) { #empty registry and powershell v2
+} catch {
 	echo "List of folders to be $string1 does not exist!"
 	Start-Sleep 1
 	echo "Create one by right-clicking on folders and selecting $string2."
@@ -136,15 +145,12 @@ If ( $copy -eq $True ) {
 	write-host ""
 
 
-	for ($i=0; $i -lt $array.length; $i++) {
-
-		#get folder path
-		$path = $array[$i]
+	foreach ($path in $array) {
 
 		#get folder name
 
 		if ($psversiontable.PSVersion.Major -eq 2) {
-		$folder = ($path -split "\\")
+		$folder = ($path -split "\\")[-1]
 		} else {
 		$folder = $path.split("\")[-1]
 		}
