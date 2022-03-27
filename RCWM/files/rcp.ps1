@@ -24,6 +24,8 @@ $process = Get-Process -Id $pid
 $process.PriorityClass = 'High' 
 
 
+
+
 #get cd
 #$BaseDir = (pwd).path
 $BaseDirDisp = '"' + $args[1] + '"'
@@ -71,7 +73,8 @@ if ( $array.length -eq 0 ) {
 } else {
 	Write-host "You're about to $string4 the following" $array.length "folders into" $BaseDirDisp":"
 }
-	$array
+
+$array
 
 #Prompt
 Do {
@@ -132,9 +135,11 @@ If ( $copy -eq $True ) {
 		#get folder path
 		$path = $array[$i]
 
-
 		#get folder name
 		$folder = $path.split("\")[-1]
+
+		#concatenation has to be done like this
+		$destination = $args[1] + "\" + $folder
 
 		#does source folder exist?
 		if (-not ( Test-Path -literalpath "$path" )) {
@@ -144,7 +149,7 @@ If ( $copy -eq $True ) {
 
 		#if exist folder (or file)
 		
-		If (Test-Path -literalPath ".\$folder") {
+		If (Test-Path -literalPath "$destination") {
 			#store folders for merge prompt
 			#overwrite - or just copy
 			[string[]]$merge += $path
@@ -152,9 +157,9 @@ If ( $copy -eq $True ) {
 
 			#make new directory with the same name as the folder being copied
 
-			New-Item -Path ".\$folder" -ItemType Directory  > $null
+			New-Item -Path "$destination" -ItemType Directory  > $null
 
-			C:\Windows\System32\robocopy.exe "$path" "$folder" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
+			C:\Windows\System32\robocopy.exe "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
 			
 			if ($command -eq "mv") { 
 				cmd.exe /c rd /s /q "$path"
@@ -183,8 +188,9 @@ If ( $copy -eq $True ) {
 						for ($i=0; $i -lt $merge.length; $i++) {
 							$path = $merge[$i]
 							$folder = $path.split("\")[-1]
+							$destination = "$args[1]\$folder"
 
-							C:\Windows\System32\robocopy.exe "$path" "$folder" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
+							C:\Windows\System32\robocopy.exe "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
 
 							if ($command -eq "mv") { 
 								cmd.exe /c cmd.exe /c rd /s /q "$path"
@@ -200,8 +206,9 @@ If ( $copy -eq $True ) {
 						for ($i=0; $i -lt $merge.length; $i++) {
 							$path = $merge[$i]
 							$folder = $path.split("\")[-1]
+							$destination = "$args[1]\$folder"
 
-							C:\Windows\System32\robocopy.exe "$path" "$folder" "$flag" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
+							C:\Windows\System32\robocopy.exe "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
 									
 							if ($command -eq "mv") { 
 								cmd.exe /c rd /s /q "$path"
@@ -254,5 +261,4 @@ If ( $copy -eq $True ) {
 	echo "Finished!"
 	Remove-ItemProperty -Path "HKCU:\RCWM\$command" -Name * | Out-Null
 	Start-Sleep 1
-
 }
