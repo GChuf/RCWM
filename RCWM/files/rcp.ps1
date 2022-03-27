@@ -156,6 +156,10 @@ If ( $copy -eq $True ) {
 
 			C:\Windows\System32\robocopy.exe "$path" "$folder" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
 			
+			if ($command -eq "mv") { 
+				cmd.exe /c rd /s /q "$path"
+			}
+			
 			echo "Finished $string3 $folder"
 		}
 
@@ -182,6 +186,10 @@ If ( $copy -eq $True ) {
 
 							C:\Windows\System32\robocopy.exe "$path" "$folder" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
 
+							if ($command -eq "mv") { 
+								cmd.exe /c cmd.exe /c rd /s /q "$path"
+							}
+
 							echo "Finished overwriting $folder"
 						}
 
@@ -194,6 +202,10 @@ If ( $copy -eq $True ) {
 							$folder = $path.split("\")[-1]
 
 							C:\Windows\System32\robocopy.exe "$path" "$folder" "$flag" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
+									
+							if ($command -eq "mv") { 
+								cmd.exe /c rd /s /q "$path"
+							}
 									
 							echo "Finished merging $folder"
 						}					
