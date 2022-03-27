@@ -57,8 +57,14 @@ if ( $array[0] -eq "(default)" ) {
 	if ($array.length -eq 1) {
 		$array = $null
 	} else {
-	$array = $array[1..($array.Length-1)]
+		$array = $array[1..($array.Length-1)]
 	}
+} elseif ( $array -eq "(default)" ) { #empty registry and powershell v2
+	echo "List of folders to be $string1 does not exist!"
+	Start-Sleep 1
+	echo "Create one by right-clicking on folders and selecting $string2."
+	Start-Sleep 3
+	exit
 }
 
 #check if list of folders to be copied exist
@@ -136,7 +142,12 @@ If ( $copy -eq $True ) {
 		$path = $array[$i]
 
 		#get folder name
+
+		if ($psversiontable.PSVersion.Major -eq 2) {
+		$folder = ($path -split "\\")
+		} else {
 		$folder = $path.split("\")[-1]
+		}
 
 		#concatenation has to be done like this
 		$destination = $args[1] + "\" + $folder
