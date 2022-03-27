@@ -37,11 +37,13 @@ if ($command -eq "mv") {
 	$string1 = "moved"
 	$string2 = "'Move Directory'"
 	$string3 = "moving"
+    $string4 = "move"
 } else { #rc
 	$flag=""
 	$string1 = "copied"
 	$string2 = "'RoboCopy'"
 	$string3 = "copying"
+    $string4 = "copy"
 }
 
 
@@ -65,9 +67,9 @@ if ( $array.length -eq 0 ) {
 	Start-Sleep 3
 	exit
 } elseif ( $array.length -eq 1 ) {
-	Write-host "You're about to $command the following folder into" $BaseDirDisp":"
+	Write-host "You're about to $string4 the following folder into" $BaseDirDisp":"
 } else {
-	Write-host "You're about to $command the following" $array.length "folders into" $BaseDirDisp":"
+	Write-host "You're about to $string4 the following" $array.length "folders into" $BaseDirDisp":"
 }
 	$array
 
