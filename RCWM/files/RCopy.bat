@@ -19,7 +19,8 @@ goto start )
 wmic process where name="cmd.exe" CALL setpriority 128 2>nul 1>nul
 wmic process where name="conhost.exe" CALL setpriority 128 2>nul 1>nul
 
-set curdir=%cd%
+rem "current dir" as argument
+set curdir=%1%
 
 IF NOT EXIST "%folder%" (echo Source folder does not exist: %folder% && timeout /t 1 >nul && echo Exiting . . . && timeout /t 2 > nul && exit )
 cd /d %folder%
