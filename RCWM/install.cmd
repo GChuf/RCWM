@@ -172,7 +172,7 @@ xcopy /f .\bin\*.exe %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f rcwmimg.dll %SystemRoot%\System32 /y 1>nul
 
 rem if powershell version less than 5, overwrite some files with 'windows7' version
-IF !pwsh! LSS 5 (
+IF !pwsh! LSS 4 (
 	xcopy /f .\Win7\*.bat %SystemRoot%\System32\RCWM /y 1>nul
 	xcopy /f .\Win7\bin\*.exe %SystemRoot%\System32\RCWM /y 1>nul
 	xcopy /f .\Win7\*.reg . /y 1>nul
@@ -222,7 +222,7 @@ color c
 choice /C yn /M "* Do you want to add open PowerShell to background/folders/drives "
 if %errorlevel% == 1 ( 
 
-IF !pwsh! LSS 5 ( 
+IF !pwsh! LSS 4 ( 
     IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( start /w regedit /s pwrshell32.reg ) else ( start /w regedit /s pwrshell64.reg )
 ) ELSE ( start /w regedit /s pwrshell.reg )
 )
