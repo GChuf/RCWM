@@ -24,8 +24,6 @@ $process = Get-Process -Id $pid
 $process.PriorityClass = 'High' 
 
 
-
-
 #get cd
 #$BaseDir = (pwd).path
 $BaseDirDisp = '"' + $args[1] + '"'
@@ -48,15 +46,15 @@ if ($command -eq "mv") {
     $string4 = "copy"
 }
 
-
 #get array of contents of paths inside HKCU\RCWM\command
 $array = (Get-Item -Path Registry::HKCU\RCWM\$command).property 2> $null
 
 #delete '(default)' in first place
+$arrayLength = ($array|measure).count
 
 try {
 	if ( $array[0] -eq "(default)" ) {
-		if ($array.length -eq 1) {
+		if ($arrayLength -eq 1) {
 			$array = $null
 		} else {
 			$array = $array[1..($array.Length-1)]
@@ -77,13 +75,15 @@ try {
 }
 
 #check if list of folders to be copied exist
-if ( $array.length -eq 0 ) {
+if ( $arrayLength -eq 0 ) {
 	echo "List of folders to be $string1 does not exist!"
 	Start-Sleep 1
 	echo "Create one by right-clicking on folders and selecting $string2."
 	Start-Sleep 3
 	exit
-} elseif ( $array.length -eq 1 ) {
+} elseif ( $arrayLength -eq 1 ) {
+	
+	
 	Write-host "You're about to $string4 the following folder into" $BaseDirDisp":"
 } else {
 	Write-host "You're about to $string4 the following" $array.length "folders into" $BaseDirDisp":"
