@@ -32,19 +32,36 @@ $BaseDirDisp = '"' + $args[1] + '"'
 #copy / move
 $command = $args[0]
 
+#single/multiple
+$mode = $args[2]
+
 if ($command -eq "mv") {
 	$flag = "/MOV"
 	$string1 = "moved"
 	$string2 = "'Move Directory'"
 	$string3 = "moving"
     $string4 = "move"
-} else { #rc
+} elseif  ($command -eq "rc")  #rc
 	$flag=""
 	$string1 = "copied"
 	$string2 = "'RoboCopy'"
 	$string3 = "copying"
     $string4 = "copy"
 }
+
+
+#add mirror command
+
+
+
+if ($mode -eq "s") {
+	$string10 = "List of folders to be $string1 does not exist!"
+	$string11 = "Create the list by right-clicking on folders and selecting $string2."
+} elseif ($mode -eq "m") { #m
+	$string10 = "Folder to be $string1 does not exist!"
+	$string11 = "Create one by right-clicking on a folder and selecting $string2."
+}
+
 
 #get array of contents of paths inside HKCU\RCWM\command
 $array = (Get-Item -Path Registry::HKCU\RCWM\$command).property 2> $null
@@ -60,16 +77,16 @@ try {
 			$array = $array[1..($array.Length-1)]
 		}
 	} elseif ( $array -eq "(default)" ) { #empty registry and powershell v2
-		echo "List of folders to be $string1 does not exist!"
+		echo $string10
 		Start-Sleep 1
-		echo "Create one by right-clicking on folders and selecting $string2."
+		echo $string11
 		Start-Sleep 3
 		exit
 	}
 } catch {
-	echo "List of folders to be $string1 does not exist!"
+	echo $string10
 	Start-Sleep 1
-	echo "Create one by right-clicking on folders and selecting $string2."
+	echo $string11
 	Start-Sleep 3
 	exit
 }
@@ -81,63 +98,69 @@ if ( $arrayLength -eq 0 ) {
 	echo "Create one by right-clicking on folders and selecting $string2."
 	Start-Sleep 3
 	exit
-} elseif ( $arrayLength -eq 1 ) {
-	
-	
-	Write-host "You're about to $string4 the following folder into" $BaseDirDisp":"
-} else {
-	Write-host "You're about to $string4 the following" $array.length "folders into" $BaseDirDisp":"
 }
 
-$array
+#skip prompt on single mode
+if ($mode -eq "m") {
 
-#Prompt
-Do {
-	$Valid = $True
-	[string]$prompt = Read-Host -Prompt "Is this okay? (Y/N)"
-	Switch ($prompt) {
-
-		default {
-			Write-Host "Not a valid entry."
-			$Valid = $False
-		}	
-
-		{"y", "yes" -contains $_} {
-			$copy = $True
-		}
-		
-		{"n", "no" -contains $_} {
-
-			Do {
-				[string]$prompt = Read-Host -Prompt "Delete list of folders? (Y/N)"
-				Switch ($prompt) {
-				
-					default {
-						Write-Host "Not a valid entry."
-						$Valid = $False
-					}	
-
-					{"y", "yes" -contains $_} {
-						Remove-ItemProperty -Path "HKCU:\RCWM\$command" -Name * | Out-Null
-						Write-Host "List deleted."
-						Start-Sleep 2
-						exit
-					}
-
-					{"n", "no" -contains $_} {
-						Write-Host "Aborting."
-						Start-Sleep 3
-						exit
-					}
-
-				}
-			} Until ($Valid)
-
-		}
+	if ( $arrayLength -eq 1 ) {
+		Write-host "You're about to $string4 the following folder into" $BaseDirDisp":"
+	} else {
+		Write-host "You're about to $string4 the following" $array.length "folders into" $BaseDirDisp":"
 	}
-} Until ($Valid)
 
 
+	$array
+
+	#Prompt
+	Do {
+		$Valid = $True
+		[string]$prompt = Read-Host -Prompt "Is this okay? (Y/N)"
+		Switch ($prompt) {
+
+			default {
+				Write-Host "Not a valid entry."
+				$Valid = $False
+			}	
+
+			{"y", "yes" -contains $_} {
+				$copy = $True
+			}
+			
+			{"n", "no" -contains $_} {
+
+				Do {
+					[string]$prompt = Read-Host -Prompt "Delete list of folders? (Y/N)"
+					Switch ($prompt) {
+					
+						default {
+							Write-Host "Not a valid entry."
+							$Valid = $False
+						}	
+
+						{"y", "yes" -contains $_} {
+							Remove-ItemProperty -Path "HKCU:\RCWM\$command" -Name * | Out-Null
+							Write-Host "List deleted."
+							Start-Sleep 2
+							exit
+						}
+
+						{"n", "no" -contains $_} {
+							Write-Host "Aborting."
+							Start-Sleep 3
+							exit
+						}
+
+					}
+				} Until ($Valid)
+
+			}
+		}
+	} Until ($Valid)
+	
+} else { #on single mode just set $copy to $True
+	$copy = $True
+}
 
 If ( $copy -eq $True ) {
 
@@ -160,12 +183,13 @@ If ( $copy -eq $True ) {
 
 		#does source folder exist?
 		if (-not ( Test-Path -literalpath "$path" )) {
-			echo "Source folder" $path "does not exist. Continuing."
+			echo "Source folder" $path "does not exist."
 			continue
 		}
 
 		#if exist folder (or file)
-		
+
+
 		If (Test-Path -literalPath "$destination") {
 			#store folders for merge prompt
 			#overwrite - or just copy
@@ -181,7 +205,7 @@ If ( $copy -eq $True ) {
 			if ($command -eq "mv") { 
 				cmd.exe /c rd /s /q "$path"
 			}
-			
+
 			echo "Finished $string3 $folder"
 		}
 
@@ -230,7 +254,6 @@ If ( $copy -eq $True ) {
 							if ($command -eq "mv") { 
 								cmd.exe /c rd /s /q "$path"
 							}
-									
 							echo "Finished merging $folder"
 						}					
 
