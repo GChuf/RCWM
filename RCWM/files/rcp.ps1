@@ -196,6 +196,10 @@ If ( $copy -eq $True ) {
 			[string[]]$merge += $path
 		} else {
 
+			echo "destination is"
+			echo $destination
+			Test-Path -literalPath "$destination"
+			Test-Path -literalPath $destination
 			#make new directory with the same name as the folder being copied
 
 			New-Item -Path "$destination" -ItemType Directory  > $null
@@ -229,7 +233,7 @@ If ( $copy -eq $True ) {
 						for ($i=0; $i -lt $merge.length; $i++) {
 							$path = $merge[$i]
 							$folder = $path.split("\")[-1]
-							$destination = "$args[1]\$folder"
+							$destination = $args[1] + "\" + $folder
 
 							C:\Windows\System32\robocopy.exe "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
 
@@ -247,7 +251,7 @@ If ( $copy -eq $True ) {
 						for ($i=0; $i -lt $merge.length; $i++) {
 							$path = $merge[$i]
 							$folder = $path.split("\")[-1]
-							$destination = "$args[1]\$folder"
+							$destination = $args[1] + "\" + $folder
 
 							C:\Windows\System32\robocopy.exe "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
 									
