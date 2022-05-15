@@ -90,12 +90,18 @@ rem Won't work on older powershell versions, so output error message to NUL
 powershell Unblock-File *.ps1 > NUL; exit
 
 rem if using pwshv7, replace powershell -> pwsh
-
 IF !pwsh7! GEQ 7 (
 	powershell -command "(Get-Content .\MvDirSingle.reg) -Replace 'powershell', 'pwsh' | Set-Content .\MvDirSingle.reg"
 	powershell -command "(Get-Content .\MvDirMultiple.reg) -Replace 'powershell', 'pwsh' | Set-Content .\MvDirMultiple.reg"
 	powershell -command "(Get-Content .\RCopySingle.reg) -Replace 'powershell', 'pwsh' | Set-Content .\RCopySingle.reg"
 	powershell -command "(Get-Content .\RCopyMultiple.reg) -Replace 'powershell', 'pwsh' | Set-Content .\RCopyMultiple.reg"
+)
+
+rem if powershell version less than 4, overwrite some files with 'windows7' version
+IF !pwsh! LSS 4 (
+	xcopy /f .\Win7\*.bat . /y 1>nul
+	xcopy /f .\Win7\*.reg . /y 1>nul
+	xcopy /f .\Win7\bin\*.exe .\bin /y 1>nul
 )
 
 rem If folder already exist ask if user wants to overwrite files.
@@ -143,13 +149,6 @@ xcopy /f *.lnk %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f .\bin\*.exe %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f rcwmimg.dll %SystemRoot%\System32 /y 1>nul
 
-rem if powershell version less than 4, overwrite some files with 'windows7' version
-IF !pwsh! LSS 4 (
-	xcopy /f .\Win7\*.bat %SystemRoot%\System32\RCWM /y 1>nul
-	xcopy /f .\Win7\bin\*.exe %SystemRoot%\System32\RCWM /y 1>nul
-	xcopy /f .\Win7\*.reg . /y 1>nul
-)
-
 rem take ownership of that folder for administrators & users
 takeown /F %SystemRoot%\System32\RCWM /R /D Y 1>nul
 icacls %SystemRoot%\System32\RCWM /grant administrators:F /T /C 1>nul
@@ -173,13 +172,6 @@ xcopy /f *.ps1 %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.lnk %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f .\bin\*.exe %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f rcwmimg.dll %SystemRoot%\System32 /y 1>nul
-
-rem if powershell version less than 4, overwrite some files with 'windows7' version
-IF !pwsh! LSS 4 (
-	xcopy /f .\Win7\*.bat %SystemRoot%\System32\RCWM /y 1>nul
-	xcopy /f .\Win7\bin\*.exe %SystemRoot%\System32\RCWM /y 1>nul
-	xcopy /f .\Win7\*.reg . /y 1>nul
-)
 
 echo Copied new files.
 echo Pre-setup complete.
