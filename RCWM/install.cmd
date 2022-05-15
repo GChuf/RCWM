@@ -62,11 +62,10 @@ IF EXIST "C:\Program Files\PowerShell\7" (
 ) ELSE (
 	goto pwsh
 )
-	
+
 :pwsh7
 IF %pwsh7% LEQ 7 (
 	IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version 7 on 32bit CPU. ) else ( echo Using powershell version 7 on 64bit CPU. )
-	
 ) ELSE (
 	IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using unknown powershell version greater than 7 on 32bit CPU. ) else ( echo Using unknown powershell version greater than 7 on 64bit CPU. )
 )
@@ -84,16 +83,23 @@ IF !pwsh! LSS 4 (
     IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version 4 or newer on 32bit CPU. ) else ( echo Using powershell version 4 or newer on 64bit CPU. )
 )
 
-
 :pwshdone
 
 rem Unblock ps1 files (not entirely necessary)
 rem Won't work on older powershell versions, so output error message to NUL
 powershell Unblock-File *.ps1 > NUL; exit
 
+rem if using pwshv7, replace powershell -> pwsh
+
+IF %pwsh7% GEQ 7 (
+	powershell -command "(Get-Content .\MvDirSingle.reg) -Replace 'powershell', 'pwsh' | Set-Content .\MvDirSingle.reg"
+	powershell -command "(Get-Content .\MvDirMultiple.reg) -Replace 'powershell', 'pwsh' | Set-Content .\MvDirMultiple.reg"
+	powershell -command "(Get-Content .\RCopySingle.reg) -Replace 'powershell', 'pwsh' | Set-Content .\RCopySingle.reg"
+	powershell -command "(Get-Content .\RCopyMultiple.reg) -Replace 'powershell', 'pwsh' | Set-Content .\RCopyMultiple.reg"
+)
 
 rem If folder already exist ask if user wants to overwrite files.
-IF EXIST "%SystemRoot%\System32\RCWM" ( echo RCWM folder already exists! && choice /C yn /M "Overwrite existing files " ) else ( goto install )
+IF EXIST "%SystemRoot%\System32\RCWM" ( echo RCWM folder already exists && choice /C yn /M "Overwrite existing files (recommended)" ) else ( goto install )
 
 if %errorlevel% == 1 ( goto update ) else ( echo Keeping old files and copying possible new ones. && robocopy *.bat *.lnk *.ps1 . "%SystemRoot%\System32\RCWM" /XC /XN /XO 1>nul )
 
