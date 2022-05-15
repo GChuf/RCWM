@@ -58,11 +58,11 @@ cd files
 
 IF EXIST "C:\Program Files\PowerShell\7" (
     FOR /F "tokens=* USEBACKQ" %%F IN (`pwsh -command $psversiontable.psversion.major`) DO ( SET pwsh7=%%F )
-	rem if using pwshv7, replace powershell -> pwsh
-	powershell -command "(Get-Content .\MvDirSingle.reg) -Replace 'powershell', 'pwsh' | Set-Content .\MvDirSingle.reg"
-	powershell -command "(Get-Content .\MvDirMultiple.reg) -Replace 'powershell', 'pwsh' | Set-Content .\MvDirMultiple.reg"
-	powershell -command "(Get-Content .\RCopySingle.reg) -Replace 'powershell', 'pwsh' | Set-Content .\RCopySingle.reg"
-	powershell -command "(Get-Content .\RCopyMultiple.reg) -Replace 'powershell', 'pwsh' | Set-Content .\RCopyMultiple.reg"
+	rem if using pwshv7, replace powershell -> pwsh + delete execution policy which doesnt work anymore
+	powershell -command "(Get-Content .\MvDirSingle.reg) -Replace 'powershell Set-ExecutionPolicy Bypass -Scope Process;', 'pwsh' | Set-Content .\MvDirSingle.reg"
+	powershell -command "(Get-Content .\MvDirMultiple.reg) -Replace 'powershell Set-ExecutionPolicy Bypass -Scope Process;', 'pwsh' | Set-Content .\MvDirMultiple.reg"
+	powershell -command "(Get-Content .\RCopySingle.reg) -Replace 'powershell Set-ExecutionPolicy Bypass -Scope Process;', 'pwsh' | Set-Content .\RCopySingle.reg"
+	powershell -command "(Get-Content .\RCopyMultiple.reg) -Replace 'powershell Set-ExecutionPolicy Bypass -Scope Process;', 'pwsh' | Set-Content .\RCopyMultiple.reg"
 	goto pwsh7
 ) ELSE (
 	goto pwsh
