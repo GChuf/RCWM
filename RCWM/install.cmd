@@ -58,14 +58,23 @@ cd files
 
 IF EXIST "C:\Program Files\PowerShell\7" (
     FOR /F "tokens=* USEBACKQ" %%F IN (`pwsh -command $psversiontable.psversion.major`) DO ( SET pwsh7=%%F )
+	rem if using pwshv7, replace powershell -> pwsh
+	powershell -command "(Get-Content .\MvDirSingle.reg) -Replace 'powershell', 'pwsh' | Set-Content .\MvDirSingle.reg"
+	powershell -command "(Get-Content .\MvDirMultiple.reg) -Replace 'powershell', 'pwsh' | Set-Content .\MvDirMultiple.reg"
+	powershell -command "(Get-Content .\RCopySingle.reg) -Replace 'powershell', 'pwsh' | Set-Content .\RCopySingle.reg"
+	powershell -command "(Get-Content .\RCopyMultiple.reg) -Replace 'powershell', 'pwsh' | Set-Content .\RCopyMultiple.reg"
 	goto pwsh7
 ) ELSE (
 	goto pwsh
 )
 
 :pwsh7
-IF !pwsh7! LEQ 7 (
-	IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version 7 on 32bit CPU. ) else ( echo Using powershell version 7 on 64bit CPU. )
+IF %pwsh7% LEQ 7 (
+	IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( 
+		echo Using powershell version 7 on 32bit CPU.
+	) else ( 
+		echo Using powershell version 7 on 64bit CPU.
+	)
 ) ELSE (
 	IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using unknown powershell version greater than 7 on 32bit CPU. ) else ( echo Using unknown powershell version greater than 7 on 64bit CPU. )
 )
@@ -78,7 +87,15 @@ FOR /F "tokens=* USEBACKQ" %%F IN (`powershell $psversiontable.psversion.major`)
 
 
 IF !pwsh! LSS 4 (
-    IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version older than 4 on 32bit CPU. && echo You might encounter encoding issues with special characters in older powershell versions) else ( echo Using powershell version older than 4 on 64bit CPU. && echo You might encounter encoding issues with special characters in older powershell versions)
+    IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( 
+		echo Using powershell version older than 4 on 32bit CPU. && echo You might encounter encoding issues with special characters in older powershell versions
+		rem if powershell version less than 4, overwrite some files with 'windows7' version
+		xcopy /f .\Win7\*.bat . /y 1>nul
+		xcopy /f .\Win7\*.reg . /y 1>nul
+		xcopy /f .\Win7\bin\*.exe .\bin /y 1>nul
+	) else ( 
+		echo Using powershell version older than 4 on 64bit CPU. && echo You might encounter encoding issues with special characters in older powershell versions
+	)
 ) ELSE (
     IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version 4 or newer on 32bit CPU. ) else ( echo Using powershell version 4 or newer on 64bit CPU. )
 )
@@ -89,20 +106,6 @@ rem Unblock ps1 files (not entirely necessary)
 rem Won't work on older powershell versions, so output error message to NUL
 powershell Unblock-File *.ps1 > NUL; exit
 
-rem if using pwshv7, replace powershell -> pwsh
-IF !pwsh7! GEQ 7 (
-	powershell -command "(Get-Content .\MvDirSingle.reg) -Replace 'powershell', 'pwsh' | Set-Content .\MvDirSingle.reg"
-	powershell -command "(Get-Content .\MvDirMultiple.reg) -Replace 'powershell', 'pwsh' | Set-Content .\MvDirMultiple.reg"
-	powershell -command "(Get-Content .\RCopySingle.reg) -Replace 'powershell', 'pwsh' | Set-Content .\RCopySingle.reg"
-	powershell -command "(Get-Content .\RCopyMultiple.reg) -Replace 'powershell', 'pwsh' | Set-Content .\RCopyMultiple.reg"
-)
-
-rem if powershell version less than 4, overwrite some files with 'windows7' version
-IF !pwsh! LSS 4 (
-	xcopy /f .\Win7\*.bat . /y 1>nul
-	xcopy /f .\Win7\*.reg . /y 1>nul
-	xcopy /f .\Win7\bin\*.exe .\bin /y 1>nul
-)
 
 rem If folder already exist ask if user wants to overwrite files.
 IF EXIST "%SystemRoot%\System32\RCWM" ( echo RCWM folder already exists && choice /C yn /M "Overwrite existing files (recommended)" ) else ( goto install )
