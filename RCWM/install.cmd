@@ -133,8 +133,6 @@ if %errorlevel% == 1 ( goto Add ) else ( goto RemoveOptions )
 :install
 
 md %SystemRoot%\System32\RCWM
-md %SystemRoot%\System32\RCWM\rc
-md %SystemRoot%\System32\RCWM\mv
 md %SystemRoot%\RCWM
 attrib +h +s %SystemRoot%\System32\RCWM
 echo Created hidden folder at %SystemRoot%\System32\RCWM
@@ -168,8 +166,7 @@ goto start
 
 :update
 
-md %SystemRoot%\System32\RCWM\rc 2>nul
-md %SystemRoot%\System32\RCWM\mv 2>nul
+md %SystemRoot%\System32\RCWM 2>nul
 md %SystemRoot%\RCWM 2>nul
 xcopy /f *.bat %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.ps1 %SystemRoot%\System32\RCWM /y 1>nul
