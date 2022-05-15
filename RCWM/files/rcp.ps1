@@ -195,11 +195,6 @@ If ( $copy -eq $True ) {
 			#overwrite - or just copy
 			[string[]]$merge += $path
 		} else {
-
-			echo "destination is"
-			echo $destination
-			Test-Path -literalPath "$destination"
-			Test-Path -literalPath $destination
 			#make new directory with the same name as the folder being copied
 
 			New-Item -Path "$destination" -ItemType Directory  > $null
