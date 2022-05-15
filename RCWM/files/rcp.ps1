@@ -41,7 +41,7 @@ if ($command -eq "mv") {
 	$string2 = "'Move Directory'"
 	$string3 = "moving"
     $string4 = "move"
-} elseif  ($command -eq "rc")  #rc
+} elseif  ($command -eq "rc") { #rc
 	$flag=""
 	$string1 = "copied"
 	$string2 = "'RoboCopy'"
