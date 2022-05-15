@@ -78,10 +78,10 @@ rem powershell version check
 FOR /F "tokens=* USEBACKQ" %%F IN (`powershell $psversiontable.psversion.major`) DO ( SET pwsh=%%F )
 
 
-IF !pwsh! LSS 5 (
-    IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version older than 5 on 32bit CPU. ) else ( echo Using powershell version older than 5 on 64bit CPU. )
+IF !pwsh! LSS 4 (
+    IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version older than 4 on 32bit CPU. && echo You might encounter encoding issues with special characters in older powershell versions) else ( echo Using powershell version older than 4 on 64bit CPU. && echo You might encounter encoding issues with special characters in older powershell versions)
 ) ELSE (
-    IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version 5 or newer on 32bit CPU. ) else ( echo Using powershell version 5 or newer on 64bit CPU. )
+    IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version 4 or newer on 32bit CPU. ) else ( echo Using powershell version 4 or newer on 64bit CPU. )
 )
 
 
@@ -139,8 +139,8 @@ xcopy /f *.lnk %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f .\bin\*.exe %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f rcwmimg.dll %SystemRoot%\System32 /y 1>nul
 
-rem if powershell version less than 5, overwrite some files with 'windows7' version
-IF !pwsh! LSS 5 (
+rem if powershell version less than 4, overwrite some files with 'windows7' version
+IF !pwsh! LSS 4 (
 	xcopy /f .\Win7\*.bat %SystemRoot%\System32\RCWM /y 1>nul
 	xcopy /f .\Win7\bin\*.exe %SystemRoot%\System32\RCWM /y 1>nul
 	xcopy /f .\Win7\*.reg . /y 1>nul
@@ -171,7 +171,7 @@ xcopy /f *.lnk %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f .\bin\*.exe %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f rcwmimg.dll %SystemRoot%\System32 /y 1>nul
 
-rem if powershell version less than 5, overwrite some files with 'windows7' version
+rem if powershell version less than 4, overwrite some files with 'windows7' version
 IF !pwsh! LSS 4 (
 	xcopy /f .\Win7\*.bat %SystemRoot%\System32\RCWM /y 1>nul
 	xcopy /f .\Win7\bin\*.exe %SystemRoot%\System32\RCWM /y 1>nul
