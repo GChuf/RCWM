@@ -26,15 +26,29 @@ $process.PriorityClass = 'High'
 
 #get cd
 #$BaseDir = (pwd).path
-$BaseDirDisp = '"' + $args[1] + '"'
 
 
 #copy / move
 $command = $args[0]
 
 #single/multiple
-$mode = $args[2]
+#fix issues with ending backslash when copying into drives like C:\
 
+If ($args[2] -eq $null)
+	{
+	$mode = $args[1].substring(4,1)
+	$args[1] = $args[1].substring(0,2) + '\'
+	}
+else
+	{
+	$mode = $args[2]
+	$BaseDirDisp = '"' + $args[1] + '"'
+	}
+
+
+$BaseDirDisp = '"' + $args[1] + '"'
+	
+	
 if ($command -eq "mv") {
 	$flag = "/MOV"
 	$string1 = "moved"
@@ -188,7 +202,6 @@ If ( $copy -eq $True ) {
 		}
 
 		#if exist folder (or file)
-
 
 		If (Test-Path -literalPath "$destination") {
 			#store folders for merge prompt
