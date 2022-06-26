@@ -88,14 +88,16 @@ FOR /F "tokens=* USEBACKQ" %%F IN (`powershell $psversiontable.psversion.major`)
 
 IF !pwsh! LSS 4 (
     IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( 
-		echo Using powershell version older than 4 on 32bit CPU. && echo You might encounter encoding issues with special characters in older powershell versions
+		echo Using powershell version older than 4 on 32bit CPU. && echo You might encounter encoding issues with special characters in older powershell versions!!
 		rem if powershell version less than 4, overwrite some files with 'windows7' version
-		xcopy /f .\Win7\*.bat . /y 1>nul
-		xcopy /f .\Win7\*.reg . /y 1>nul
-		xcopy /f .\Win7\bin\*.exe .\bin /y 1>nul
 	) else ( 
-		echo Using powershell version older than 4 on 64bit CPU. && echo You might encounter encoding issues with special characters in older powershell versions
+		echo Using powershell version older than 4 on 64bit CPU. && echo You might encounter encoding issues with special characters in older powershell versions!!
 	)
+
+	xcopy /f .\Win7\*.bat . /y 1>nul
+	xcopy /f .\Win7\*.reg . /y 1>nul
+	xcopy /f .\Win7\bin\*.exe .\bin /y 1>nul
+
 ) ELSE (
     IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version 4 or newer on 32bit CPU. ) else ( echo Using powershell version 4 or newer on 64bit CPU. )
 )
