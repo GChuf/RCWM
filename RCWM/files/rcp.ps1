@@ -68,15 +68,6 @@ if ($command -eq "mv") {
 
 
 
-if ($mode -eq "s") {
-	$string10 = "List of folders to be $string1 does not exist!"
-	$string11 = "Create the list by right-clicking on folders and selecting $string2."
-} elseif ($mode -eq "m") { #m
-	$string10 = "Folder to be $string1 does not exist!"
-	$string11 = "Create one by right-clicking on a folder and selecting $string2."
-}
-
-
 #get array of contents of paths inside HKCU\RCWM\command
 $array = (Get-Item -Path Registry::HKCU\RCWM\$command).property 2> $null
 
@@ -107,11 +98,19 @@ try {
 
 #check if list of folders to be copied exist
 if ( $arrayLength -eq 0 ) {
-	echo "List of folders to be $string1 does not exist!"
-	Start-Sleep 1
-	echo "Create one by right-clicking on folders and selecting $string2."
-	Start-Sleep 3
-	exit
+	if ($mode -eq "s") {
+		echo "List of folders to be $string1 does not exist!"
+		Start-Sleep 1
+		echo "Create the list by right-clicking on folders and selecting $string2."
+		Start-Sleep 3
+		exit
+	} elseif ($mode -eq "m") {
+		echo "Folder to be $string1 does not exist!"
+		Start-Sleep 1
+		echo "Create one by right-clicking on a folder and selecting $string2."
+		Start-Sleep 3
+		exit
+	}
 }
 
 #skip prompt on single mode
