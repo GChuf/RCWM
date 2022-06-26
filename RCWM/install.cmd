@@ -144,7 +144,6 @@ if %errorlevel% == 1 ( goto Add ) else ( goto RemoveOptions )
 :install
 
 md %SystemRoot%\System32\RCWM
-md %SystemRoot%\RCWM
 attrib +h +s %SystemRoot%\System32\RCWM
 echo Created hidden folder at %SystemRoot%\System32\RCWM
 
@@ -159,9 +158,6 @@ takeown /F %SystemRoot%\System32\RCWM /R /D Y 1>nul
 icacls %SystemRoot%\System32\RCWM /grant administrators:F /T /C 1>nul
 icacls %SystemRoot%\System32\RCWM /grant users:F /T /C 1>nul
 
-takeown /F %SystemRoot%\RCWM /R /D Y 1>nul
-icacls %SystemRoot%\RCWM /grant administrators:F /T /C 1>nul
-icacls %SystemRoot%\RCWM /grant users:F /T /C 1>nul
 
 echo Copied all files.
 echo Pre-setup complete.
