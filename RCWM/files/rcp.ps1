@@ -98,13 +98,13 @@ try {
 
 #check if list of folders to be copied exist
 if ( $arrayLength -eq 0 ) {
-	if ($mode -eq "s") {
+	if ($mode -eq "m") {
 		echo "List of folders to be $string1 does not exist!"
 		Start-Sleep 1
 		echo "Create the list by right-clicking on folders and selecting $string2."
 		Start-Sleep 3
 		exit
-	} elseif ($mode -eq "m") {
+	} elseif ($mode -eq "s") {
 		echo "Folder to be $string1 does not exist!"
 		Start-Sleep 1
 		echo "Create one by right-clicking on a folder and selecting $string2."
