@@ -166,8 +166,8 @@ goto start
 
 :update
 
+del /f /q %SystemRoot%\System32\RCWM 2>nul
 md %SystemRoot%\System32\RCWM 2>nul
-md %SystemRoot%\RCWM 2>nul
 xcopy /f *.bat %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.ps1 %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.lnk %SystemRoot%\System32\RCWM /y 1>nul
