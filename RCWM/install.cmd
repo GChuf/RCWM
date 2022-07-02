@@ -16,6 +16,7 @@ rem after v1.5
 reg delete "HKCU\RCWM" /f >NUL
 reg add "HKCU\RCWM" /f >NUL
 reg add "HKCU\RCWM\rc" /f >NUL
+reg add "HKCU\RCWM\rcs" /f >NUL
 reg add "HKCU\RCWM\mv" /f >NUL
 reg add "HKCU\RCWM\mir" /f >NUL
 reg add "HKCU\RCWM\dl" /f >NUL
@@ -205,6 +206,11 @@ if %errorlevel% == 1 ( start /w regedit /s MvDirSingle.reg && goto Other ) else 
 
 
 :Other
+
+color c
+choice /C yn /M "* Do you want to add RoboCopy to copy Folder Structure only (exclude files) "
+if %errorlevel% == 1 ( start /w regedit /s RCopyStructure.reg )
+
 
 color b
 choice /C yn /M "* Do you want to add open CMD to background/folders/drives "
