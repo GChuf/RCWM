@@ -8,19 +8,16 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-5"
 
 [HKEY_CLASSES_ROOT\Directory\shell\rcopy\command]
-@="powershell.exe -noexit -command Set-ExecutionPolicy Bypass -Scope Process; C:\\windows\\system32\\rcwm\\rcopy.ps1 \\\"%V\\\";exit"
-"IsolatedCommand"="powershell.exe -noexit -command Set-ExecutionPolicy Bypass -Scope Process; C:\\windows\\system32\\rcwm\\rcopy.ps1 \\\"%V\\\";exit"
+@="C:\\Windows\\System32\\RCWM\\rcopyM.exe \"%V\""
+"IsolatedCommand"="C:\\Windows\\System32\\RCWM\\rcopyM.exe \"%V\""
 
-; opening it inside powershell instead of cmd:
-; "powershell.exe -noexit -command \"cd \"\"%V\"\"\"; Set-ExecutionPolicy Bypass -Scope Process; C:\\windows\\system32\\rcwm\\rcopy.ps1; exit
-; ... is actually worse.
-; however I need literal path to open folders with [square brackets] inside
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste]
 @="RoboPaste Directories"
 "Icon"="rcwmimg.dll,-6"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste\command]
-@="cmd /c powershell Set-ExecutionPolicy Bypass -Scope Process; C:\\Windows\\System32\\RCWM\\rcp.ps1"
+@="cmd /c powershell Set-ExecutionPolicy Bypass -Scope Process; C:\\Windows\\System32\\RCWM\\rcp.ps1 rc \"%V\" m"
+"IsolatedCommand"="cmd /c powershell Set-ExecutionPolicy Bypass -Scope Process; C:\\Windows\\System32\\RCWM\\rcp.ps1 rc \"%V\" m"
 
 ; end

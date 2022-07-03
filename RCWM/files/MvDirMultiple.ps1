@@ -1,0 +1,3 @@
+[console]::InputEncoding = [text.utf8encoding]::UTF8
+[console]::OutputEncoding = [System.Text.Encoding]::UTF8
+New-ItemProperty -Path "HKCU:\RCWM\mv" -Name "$args"

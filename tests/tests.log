@@ -1,0 +1,10 @@
+TESTS
+
+1.
+measure-command {for ($i=1;$i -le 1000; $i++){(Get-Item -Path Registry::HKCU\RCWM\mv).property -eq $a; (Get-Item -Path Registry::HKCU\RCWM\rc).property -eq $a; (Get-Item -Path Registry::HKCU\RCWM\dl).property -eq $a}}
+
+powershell v5.1:
+TotalMilliseconds : 277.7056
+
+pwsh v7.2.1:
+TotalMilliseconds : 187.1662

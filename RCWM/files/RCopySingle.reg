@@ -8,14 +8,16 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-5"
 
 [HKEY_CLASSES_ROOT\Directory\shell\rcopy\command]
-@="cmd.exe /c chcp 65000 > nul && reg delete HKCU\\RCWM\\rc /f && reg add HKCU\\RCWM\\rc /v \"%V\" /t REG_SZ"
-"IsolatedCommand"="cmd.exe /c chcp 65000 > nul && reg delete HKCU\\RCWM\\rc /f && reg add HKCU\\RCWM\\rc /v \"%V\" /t REG_SZ"
+@="C:\\Windows\\System32\\RCWM\\rcopyS.exe \"%V\""
+"IsolatedCommand"="C:\\Windows\\System32\\RCWM\\rcopyS.exe \"%V\""
+
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste]
 @="RoboPaste Directory"
 "Icon"="rcwmimg.dll,-6"
+
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste\command]
-@="cmd.exe /c C:\\Windows\\System32\\RCWM\\Rcopy.bat"
-"IsolatedCommand"="cmd.exe /c C:\\Windows\\System32\\RCWM\\Rcopy.bat"
+@="cmd /c powershell Set-ExecutionPolicy Bypass -Scope Process; C:\\Windows\\System32\\RCWM\\rcp.ps1 rc \"%V\" s"
+"IsolatedCommand"="cmd /c powershell Set-ExecutionPolicy Bypass -Scope Process; C:\\Windows\\System32\\RCWM\\rcp.ps1 rc \"%V\" s"
 
 ; end

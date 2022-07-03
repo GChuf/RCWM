@@ -8,12 +8,13 @@ This little magic pack includes:
 - robocopy for copying and moving directories (much faster than regular copy)
 - opening CMD or powershell windows into folders or drives
 - taking ownership of files, or directories with recursion (takeown && icacls)
-- options to boot into Safe Mode (from This PC icon)
-- option to Reboot to Recovery (from This PC icon)
-- opening Control Panel from desktop
+- options to boot into Safe Mode
+- option to Reboot to Recovery
+- opening Control Panel
 - running programs with custom priority
 - option to always open cmd as admin
 - making symbolic/hard links
+- opening "God Mode"
 - options to uninstall the changes you've made
 - options to MoveTo / SendTo folder (from Windows 7)
 - signing out from desktop background
@@ -39,7 +40,6 @@ TODO (magic takes time):
 - directory juntions for multiple files/folders
 - pwsh opened with admin priv
 - adding other admin tools to right click in background
-- creating powershell .exe files to make some things faster/nicer
 - remove "cast to device", check "add to win media player list"
 - locking folders with passwords?
 - your suggestions
@@ -70,13 +70,11 @@ __Single__:
 The folder (directory path) to be copied (when you right-click "RoboCopy") is written into registry and __overwrites__ any previous folder paths stored there. If you specify a new folder to be copied, the old one (if existing) will be overwritten. It is simpler and faster.
 
 __Multiple__:
-The list of the folder paths to be copied is saved inside multiple files in the *C:\Windows\System32\RCWM\{rc || mv}* folder. Then the script goes through a powershell loop to copy all of them. This will eventually go into registry as well.
+The list of the folder paths to be copied is __appended__ to registry under *C:\Windows\System32\RCWM\{rc || mv}* keys. Then the script goes through a powershell loop to copy all of them.
 
-I don't recommend RoboCopying/Moving more than 30 folders at a time (the default windows limit for right-click options is 15, you can increase it to 31 in the install script - see the *MultipleInvokeMinimum.reg* file for more info). Calling multiple (powershell) instances for saving the list of files to be copied can use a lot of resources . . . Work in progress!
+By default, you can only select up to 15 folders to be copied (the default windows limit for right-click options is 15, you can increase it to 31 or more in the install script - see the *MultipleInvokeMinimum.reg* file for more info). Recursive copying/moving is also never a problem (you can have as many subfolders as you like).
 
-You can copy-paste as many folders as you like, though. Recursive copying/moving is also never a problem.
-
-Use this option if you intend to use RoboCopy a lot. I'd recommend reading the rcp/rcm powershell files to understand how the scripts work.
+Use this option if you intend to use RoboCopy a lot. I'd recommend reading the rcp.ps1 powershell file to understand how the script works.
 
 
 RoboCopy (multiple) versus Move Directory (single):
