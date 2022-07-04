@@ -8,8 +8,8 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-5"
 
 [HKEY_CLASSES_ROOT\Directory\shell\rcopys\command]
-@="cmd.exe /c chcp 65001 > nul && reg delete \"HKCU\\RCWM\\rcs\" /f > nul && reg add \"HKCU\\RCWM\\rcs\" /v \"%V\" /t REG_SZ > nul"
-"IsolatedCommand"="cmd.exe /c chcp 65001 > nul && reg delete \"HKCU\\RCWM\\rcs\" /f > nul && reg add \"HKCU\\RCWM\\rcs\" /v \"%V\" /t REG_SZ > nul"
+@="cmd.exe /c chcp 65001 > nul && reg delete \"HKCU\\RCWM\\rcs\" /f > nul && reg add \"HKCU\\RCWM\\rcs\" /v \\\"%V\\\" /t REG_SZ > nul"
+"IsolatedCommand"="cmd.exe /c chcp 65001 > nul && reg delete \"HKCU\\RCWM\\rcs\" /f > nul && reg add \"HKCU\\RCWM\\rcs\" /v \\\"%V\\\" /t REG_SZ > nul"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpastes]
 @="RoboPaste Structure"
