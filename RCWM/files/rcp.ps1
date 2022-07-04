@@ -44,9 +44,6 @@ else
 	$mode = $args[2]
 	$BaseDirDisp = '"' + $args[1] + '"'
 	}
-
-
-$BaseDirDisp = '"' + $args[1] + '"'
 	
 	
 if ($command -eq "mv") {
