@@ -24,9 +24,24 @@ $process = Get-Process -Id $pid
 $process.PriorityClass = 'High' 
 
 
+function NoListAvailable {
+	if ($mode -eq "m") {
+		echo "List of folders to be $string1 does not exist!"
+		Start-Sleep 1
+		echo "Create the list by right-clicking on folders and selecting $string2."
+		Start-Sleep 3
+		exit
+	} elseif ($mode -eq "s") {
+		echo "Folder to be $string1 does not exist!"
+		Start-Sleep 1
+		echo "Create one by right-clicking on a folder and selecting $string2."
+		Start-Sleep 3
+		exit
+	}
+}
+
 #get cd
 #$BaseDir = (pwd).path
-
 
 #copy / move
 $command = $args[0]
@@ -44,7 +59,6 @@ else
 	$mode = $args[2]
 	$BaseDirDisp = '"' + $args[1] + '"'
 	}
-	
 	
 if ($command -eq "mv") {
 	$flag = "/MOV"
@@ -64,7 +78,6 @@ if ($command -eq "mv") {
 #add mirror command
 
 
-
 #get array of contents of paths inside HKCU\RCWM\command
 $array = (Get-Item -Path Registry::HKCU\RCWM\$command).property 2> $null
 
@@ -79,35 +92,15 @@ try {
 			$array = $array[1..($array.Length-1)]
 		}
 	} elseif ( $array -eq "(default)" ) { #empty registry and powershell v2
-		echo $string10
-		Start-Sleep 1
-		echo $string11
-		Start-Sleep 3
-		exit
+		NoListAvailable
 	}
 } catch {
-	echo $string10
-	Start-Sleep 1
-	echo $string11
-	Start-Sleep 3
-	exit
+	NoListAvailable
 }
 
 #check if list of folders to be copied exist
 if ( $arrayLength -eq 0 ) {
-	if ($mode -eq "m") {
-		echo "List of folders to be $string1 does not exist!"
-		Start-Sleep 1
-		echo "Create the list by right-clicking on folders and selecting $string2."
-		Start-Sleep 3
-		exit
-	} elseif ($mode -eq "s") {
-		echo "Folder to be $string1 does not exist!"
-		Start-Sleep 1
-		echo "Create one by right-clicking on a folder and selecting $string2."
-		Start-Sleep 3
-		exit
-	}
+	NoListAvailable
 }
 
 #skip prompt on single mode
@@ -118,7 +111,6 @@ if ($mode -eq "m") {
 	} else {
 		Write-host "You're about to $string4 the following" $array.length "folders into" $BaseDirDisp":"
 	}
-
 
 	$array
 
@@ -163,7 +155,6 @@ if ($mode -eq "m") {
 
 					}
 				} Until ($Valid)
-
 			}
 		}
 	} Until ($Valid)
@@ -176,7 +167,6 @@ If ( $copy -eq $True ) {
 
 	write-host "Begin $string3 ..."
 	write-host ""
-
 
 	foreach ($path in $array) {
 
@@ -216,7 +206,6 @@ If ( $copy -eq $True ) {
 
 			echo "Finished $string3 $folder"
 		}
-
 	}
 
 		#if merge array exists
@@ -263,7 +252,7 @@ If ( $copy -eq $True ) {
 								cmd.exe /c rd /s /q "$path"
 							}
 							echo "Finished merging $folder"
-						}					
+						}
 
 
 					}
@@ -291,10 +280,8 @@ If ( $copy -eq $True ) {
 									Start-Sleep 3
 									exit
 								}
-
 							}
 						} Until ($Valid)
-
 					}
 					default {
 						Write-Host "Not a valid entry."
@@ -302,7 +289,6 @@ If ( $copy -eq $True ) {
 					}
 				}
 			} Until ($Valid)
-
 		}
 
 	echo ""
