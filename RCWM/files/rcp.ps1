@@ -53,7 +53,6 @@ If (($args[2][-1] -eq "'" ) -and ($args[2][-2] -eq "\" )){ #pwsh v5
 	$pasteIntoDirectory = $args[2].substring(0,2)
 } else {
 	$pasteIntoDirectory = $args[2]
-	echo "not matched"
 }
 
 $pasteDirectoryDisplay = "'" + $pasteIntoDirectory + "'"
