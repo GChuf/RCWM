@@ -45,21 +45,18 @@ function NoListAvailable {
 
 #copy / move
 $command = $args[0]
+$mode = $args[1]
 
-#single/multiple
-#fix issues with ending backslash when copying into drives like C:\
 
-If ($args[2] -eq $null)
-	{
-	$mode = $args[1].substring(4,1)
-	$args[1] = $args[1].substring(0,2) + '\'
-	}
-else
-	{
-	$mode = $args[2]
-	$BaseDirDisp = '"' + $args[1] + '"'
-	}
-	
+#fix issues with trailing backslash when copying directly into drives - like C:\
+
+If ($args[2][-1] -eq '\') {
+	$pasteIntoDirectoryDirectory = $args[2] + '"'
+} else {
+	$pasteIntoDirectoryDirectory = $args[2]
+}
+
+
 if ($command -eq "mv") {
 	$flag = "/MOV"
 	$string1 = "moved"
@@ -179,7 +176,7 @@ If ( $copy -eq $True ) {
 		}
 
 		#concatenation has to be done like this
-		$destination = $args[1] + "\" + $folder
+		$destination = $pasteIntoDirectory + "\" + $folder
 
 		#does source folder exist?
 		if (-not ( Test-Path -literalpath "$path" )) {
@@ -226,7 +223,7 @@ If ( $copy -eq $True ) {
 						for ($i=0; $i -lt $merge.length; $i++) {
 							$path = $merge[$i]
 							$folder = $path.split("\")[-1]
-							$destination = $args[1] + "\" + $folder
+							$destination = $pasteIntoDirectory + "\" + $folder
 
 							C:\Windows\System32\robocopy.exe "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
 
@@ -244,7 +241,7 @@ If ( $copy -eq $True ) {
 						for ($i=0; $i -lt $merge.length; $i++) {
 							$path = $merge[$i]
 							$folder = $path.split("\")[-1]
-							$destination = $args[1] + "\" + $folder
+							$destination = $pasteIntoDirectory + "\" + $folder
 
 							C:\Windows\System32\robocopy.exe "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
 									
