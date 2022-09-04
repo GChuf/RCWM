@@ -53,6 +53,7 @@ If (($args[2][-1] -eq "'" ) -and ($args[2][-2] -eq "\" )){
 	$pasteIntoDirectory = $args[2]
 }
 
+$pasteDirectoryDisplay = "'" + $pasteIntoDirectory + "'"
 
 if ($command -eq "mv") {
 	$flag = "/MOV"
@@ -101,9 +102,9 @@ if ( $arrayLength -eq 0 ) {
 if ($mode -eq "m") {
 
 	if ( $arrayLength -eq 1 ) {
-		Write-host "You're about to $string4 the following folder into" $pasteIntoDirectory":"
+		Write-host "You're about to $string4 the following folder into" $pasteDirectoryDisplay":"
 	} else {
-		Write-host "You're about to $string4 the following" $array.length "folders into" $pasteIntoDirectory":"
+		Write-host "You're about to $string4 the following" $array.length "folders into" $pasteDirectoryDisplay":"
 	}
 
 	$array
@@ -209,7 +210,7 @@ If ( $copy -eq $True ) {
 
 		Write-host "Successfully copied" $($array.length - $merge.length) "out of" $array.length "folders."
 
-		Write-host "The following" $merge.length "folders already exist inside" $pasteIntoDirectory":"
+		Write-host "The following" $merge.length "folders already exist inside" $pasteDirectoryDisplay":"
 		$merge
 
 			Do {
@@ -290,5 +291,5 @@ If ( $copy -eq $True ) {
 	echo ""
 	echo "Finished!"
 	Remove-ItemProperty -Path "HKCU:\RCWM\$command" -Name * | Out-Null
-	Start-Sleep 100
+	Start-Sleep 1
 }
