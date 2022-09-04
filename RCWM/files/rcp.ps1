@@ -192,8 +192,7 @@ If ( $copy -eq $True ) {
 		} else {
 			#make new directory with the same name as the folder being copied
 
-			cd $pasteIntoDirectory
-			New-Item -Path "$folder" -ItemType Directory  > $null
+			New-Item -Path "$destination" -ItemType Directory  > $null
 
 			C:\Windows\System32\robocopy.exe "$path" "$folder" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
 			
