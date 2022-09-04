@@ -290,8 +290,8 @@ If ( $copy -eq $True ) {
 			} Until ($Valid)
 		}
 
-	echo ""
-	echo "Finished!"
 	Remove-ItemProperty -Path "HKCU:\RCWM\$command" -Name * | Out-Null
+	echo ""
+	Write-Host "Finished!" -ForegroundColor blue
 	Start-Sleep 1
 }
