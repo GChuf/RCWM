@@ -49,8 +49,7 @@ $mode = $args[1]
 
 If (($args[2][-1] -eq "'" ) -and ($args[2][-2] -eq "\" )){ #pwsh v5
 	$pasteIntoDirectory = $args[2].substring(1,2)
-} elseif {
-	(($args[2][-1] -eq '"' ) -and ($args[2][-2] -eq ':' )){ #pwsh v7
+} elseif (($args[2][-1] -eq '"' ) -and ($args[2][-2] -eq ':' )){ #pwsh v7
 	$pasteIntoDirectory = $args[2].substring(0,2)
 } else {
 	$pasteIntoDirectory = $args[2]
@@ -197,7 +196,7 @@ If ( $copy -eq $True ) {
 		} else {
 			#make new directory with the same name as the folder being copied
 
-			New-Item -Path "$destination" -ItemType Directory  > $null
+			New-Item -Path "$destination" -ItemType Directory > $null
 
 			C:\Windows\System32\robocopy.exe "$path" "$folder" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
 			
