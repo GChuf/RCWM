@@ -40,20 +40,17 @@ function NoListAvailable {
 	}
 }
 
-#get cd
-#$BaseDir = (pwd).path
-
 #copy / move
 $command = $args[0]
 $mode = $args[1]
 
 
 #fix issues with trailing backslash when copying directly into drives - like C:\
-
-If ($args[2][-1] -eq '\') {
-	$pasteIntoDirectoryDirectory = $args[2] + '"'
+#no need for this in pwsh v7
+If (($args[2][-1] -eq "'" ) -and ($args[2][-2] -eq "\" )){
+	$pasteIntoDirectory = $args[2].substring(1,2)
 } else {
-	$pasteIntoDirectoryDirectory = $args[2]
+	$pasteIntoDirectory = $args[2]
 }
 
 
@@ -104,9 +101,9 @@ if ( $arrayLength -eq 0 ) {
 if ($mode -eq "m") {
 
 	if ( $arrayLength -eq 1 ) {
-		Write-host "You're about to $string4 the following folder into" $BaseDirDisp":"
+		Write-host "You're about to $string4 the following folder into" $pasteIntoDirectory":"
 	} else {
-		Write-host "You're about to $string4 the following" $array.length "folders into" $BaseDirDisp":"
+		Write-host "You're about to $string4 the following" $array.length "folders into" $pasteIntoDirectory":"
 	}
 
 	$array
@@ -175,6 +172,8 @@ If ( $copy -eq $True ) {
 		$folder = $path.split("\")[-1]
 		}
 
+
+
 		#concatenation has to be done like this
 		$destination = $pasteIntoDirectory + "\" + $folder
 
@@ -193,9 +192,10 @@ If ( $copy -eq $True ) {
 		} else {
 			#make new directory with the same name as the folder being copied
 
-			New-Item -Path "$destination" -ItemType Directory  > $null
+			cd $pasteIntoDirectory
+			New-Item -Path "$folder" -ItemType Directory  > $null
 
-			C:\Windows\System32\robocopy.exe "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
+			C:\Windows\System32\robocopy.exe "$path" "$folder" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
 			
 			if ($command -eq "mv") { 
 				cmd.exe /c rd /s /q "$path"
@@ -210,7 +210,7 @@ If ( $copy -eq $True ) {
 
 		Write-host "Successfully copied" $($array.length - $merge.length) "out of" $array.length "folders."
 
-		Write-host "The following" $merge.length "folders already exist inside" $BaseDirDisp":"
+		Write-host "The following" $merge.length "folders already exist inside" $pasteIntoDirectory":"
 		$merge
 
 			Do {
@@ -291,5 +291,5 @@ If ( $copy -eq $True ) {
 	echo ""
 	echo "Finished!"
 	Remove-ItemProperty -Path "HKCU:\RCWM\$command" -Name * | Out-Null
-	Start-Sleep 1
+	Start-Sleep 100
 }
