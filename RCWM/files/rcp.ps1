@@ -46,11 +46,15 @@ $mode = $args[1]
 
 
 #fix issues with trailing backslash when copying directly into drives - like C:\
-#no need for this in pwsh v7
-If (($args[2][-1] -eq "'" ) -and ($args[2][-2] -eq "\" )){
+
+If (($args[2][-1] -eq "'" ) -and ($args[2][-2] -eq "\" )){ #pwsh v5
 	$pasteIntoDirectory = $args[2].substring(1,2)
+} elseif {
+	(($args[2][-1] -eq '"' ) -and ($args[2][-2] -eq ':' )){ #pwsh v7
+	$pasteIntoDirectory = $args[2].substring(0,2)
 } else {
 	$pasteIntoDirectory = $args[2]
+	echo "not matched"
 }
 
 $pasteDirectoryDisplay = "'" + $pasteIntoDirectory + "'"
