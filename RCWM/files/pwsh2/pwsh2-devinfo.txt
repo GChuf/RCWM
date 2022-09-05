@@ -1,0 +1,7 @@
+Registry calls a batch file (rcp.cmd) to which 3 arguments are passed (modes [rc/mv, s/m], and the directory in which the context menu was opened ['%V']).
+Args (%V -> %3) are then passed into powershell script (rcp.ps1).
+
+The powershell script is called through a shortcut in order to make sure the correct console font will be selected (able to display unicode characters).
+Otherwise, an uncatchable error ("A device attached to the system is not functioning") fries your brain.
+Batch file was a necessary evil to successfully pass arguments to powershell script called through the shortcut. If you find another way, let me know (but for your own sanity, don't try this at home ...)
+
