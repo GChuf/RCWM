@@ -99,6 +99,20 @@ IF !pwsh! LSS 4 (
 	xcopy /f .\Win7\*.bat . /y 1>nul
 	xcopy /f .\Win7\*.reg . /y 1>nul
 	xcopy /f .\Win7\bin\*.exe .\bin /y 1>nul
+	
+	rem copy the shortcuts, regs and rcp.cmd
+	xcopy /f .\pwsh2\* . /y 1>nul
+	
+	rem shortcut hack - explained in the devinfo
+	rem generate all 4, then decide which one to actually take
+	
+	rem call .ps1 script in same dir
+	powershell Set-ExecutionPolicy Bypass -Scope Process; .\pwsh2\shortcuts.ps1 %cd%
+
+
+	rem win7 or win8?
+	rem bypass or not?
+	xcopy /f .\pwsh2\pwsh7.lnk . /y 1>nul
 
 ) ELSE (
     IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version 4 or newer on 32bit CPU. ) else ( echo Using powershell version 4 or newer on 64bit CPU. )
@@ -149,6 +163,7 @@ md %SystemRoot%\System32\RCWM
 attrib +h +s %SystemRoot%\System32\RCWM
 echo Created hidden folder at %SystemRoot%\System32\RCWM
 
+xcopy /f *.cmd %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.bat %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.ps1 %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.lnk %SystemRoot%\System32\RCWM /y 1>nul
@@ -170,6 +185,7 @@ goto start
 
 del /f /q %SystemRoot%\System32\RCWM 2>nul
 md %SystemRoot%\System32\RCWM 2>nul
+xcopy /f *.cmd %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.bat %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.ps1 %SystemRoot%\System32\RCWM /y 1>nul
 xcopy /f *.lnk %SystemRoot%\System32\RCWM /y 1>nul
