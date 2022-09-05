@@ -2,21 +2,21 @@ Windows Registry Editor Version 5.00
 
 ;robocopy
 
-[HKEY_CLASSES_ROOT\Directory\shell\rcopy]
+[HKEY_CLASSES_ROOT\Directory\shell\mvdir]
 @="RoboCopy Directory"
 "NoWorkingDirectory"=""
 "Icon"="rcwmimg.dll,-5"
 
-[HKEY_CLASSES_ROOT\Directory\shell\rcopy\command]
+[HKEY_CLASSES_ROOT\Directory\shell\mvdir\command]
 @="C:\\Windows\\System32\\RCWM\\mvdirS.exe \"%V\""
 "IsolatedCommand"="C:\\Windows\\System32\\RCWM\\mvdirS.exe \"%V\""
 
 
-[HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste]
+[HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir]
 @="RoboPaste Directory"
 "Icon"="rcwmimg.dll,-6"
 
-[HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste\command]
+[HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir\command]
 @="cmd.exe /c C:\\Windows\\System32\\RCWM\\rcp.cmd mv s '%V'
 "IsolatedCommand"="cmd.exe /c C:\\Windows\\System32\\RCWM\\rcp.cmd mv s '%V'
 
