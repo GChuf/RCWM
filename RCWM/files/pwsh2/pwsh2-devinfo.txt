@@ -5,3 +5,6 @@ The powershell script is called through a shortcut in order to make sure the cor
 Otherwise, an uncatchable error ("A device attached to the system is not functioning") fries your brain.
 Batch file was a necessary evil to successfully pass arguments to powershell script called through the shortcut. If you find another way, let me know (but for your own sanity, don't try this at home ...)
 
+
+Saving actual directories is always done through an .exe file, which is basically a powershell script but packaged into an .exe with the help of a hacked-down version of ingo karstein's script.
+Why not a batch script into an exe? because I could not get the "arguments" to work with a packaged batch file.
