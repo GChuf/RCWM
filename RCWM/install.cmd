@@ -6,21 +6,11 @@ rem https://stackoverflow.com/questions/8610597/batch-file-choice-commands-error
 SETLOCAL EnableDelayedExpansion
 
 
-
 rem ps v2 = win7
 rem ps v3 = win8, also can be on win7 but not the same
 rem ps v4 win8.1
 rem ps v5 win10
 
-rem after v1.5
-reg delete "HKCU\RCWM" /f >NUL
-reg add "HKCU\RCWM" /f >NUL
-reg add "HKCU\RCWM\rc" /f >NUL
-reg add "HKCU\RCWM\rcs" /f >NUL
-reg add "HKCU\RCWM\mv" /f >NUL
-reg add "HKCU\RCWM\mir" /f >NUL
-reg add "HKCU\RCWM\dl" /f >NUL
-reg add "HKCU\RCWM\fl" /f >NUL
 
 rem encoding
 rem powershell.exe ([System.Text.Encoding]::Default).CodePage)
@@ -28,7 +18,7 @@ rem cmd.exe chcp
 
 REM Get Admin Privileges
 REM Taken from: https://stackoverflow.com/questions/11525056/how-to-create-a-batch-file-to-run-cmd-as-administrator
-    IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" (
+IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" (
 >nul 2>&1 "%SYSTEMROOT%\SysWOW64\cacls.exe" "%SYSTEMROOT%\SysWOW64\config\system"
 ) ELSE (
 >nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
@@ -43,14 +33,14 @@ if '%errorlevel%' NEQ '0' (
 pushd "%CD%"
 cd /d "%~dp0"
 
-rem Fun Fact: 'echo(' is faster and safer than 'echo.'
+rem Fun Fact: 'echo(' is faster and "safer" than 'echo.'
 echo(
-echo *********************************
-echo ****** RCWM Install Script ******
-echo *********************************
-echo ************************v2.0*****
-echo * https://github.com/GChuf/RCWM *
-echo *********************************
+echo ***********************************
+echo ******* RCWM Install Script *******
+echo ***********************************
+echo *************************v2.0******
+echo ** https://github.com/GChuf/RCWM **
+echo ***********************************
 echo(
 echo(
 
@@ -140,8 +130,11 @@ echo You will be asked separately for each option (divided into Add and Remove s
 echo(
 
 
+choice /C CA /M "Do you want to install RCWM for [C]urrent user only, or for [A]ll users "
+if %errorlevel% == 1 ( powershell Set-ExecutionPolicy Bypass -Scope Process; ..\PrepareUsers.ps1 "current" ) else ( powershell Set-ExecutionPolicy Bypass -Scope Process; ..\PrepareUsers.ps1 "all" )
+
+
 FOR /F "tokens=*" %%g IN ('powershell "([Environment]::OSVersion).Version.Major"') do (SET WinVer=%%g)
-echo(
 
 IF %WinVer% == 11 (
     choice /C yn /M "Do you want to enable old context menu in Windows 11 "
@@ -151,7 +144,7 @@ IF %WinVer% == 11 (
 )
 
 echo(
-color c
+
 
 choice /C yn /M "Do you want to Add right-click menu options "
 if %errorlevel% == 1 ( goto Add ) else ( goto RemoveOptions )
