@@ -326,7 +326,7 @@ choice /C yn /M "* Do you want to delete Send To "
 if %errorlevel% == 1 ( start /w regedit /s DeleteSendTo.reg )
 
 color a
-choice /C yn /M "* Do you want to delete Include in Library "
+choice /C yn /M "* Do you want to delete Include in Library (only possible to remove for ALL users) "
 if %errorlevel% == 1 ( start /w regedit /s DeleteLibrary.reg )
 
 color b
