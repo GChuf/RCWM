@@ -69,24 +69,22 @@ write-host "       noConsole = The resulting EXE file starts without a console w
 write-host ""
 }
 
-$psversion = 0
 
-if($PSVersionTable.PSVersion.Major -eq 4) {
+if($PSVersionTable.PSVersion.Major -ge 4) {
     $psversion = 4
-    write-host "You are using PowerShell 4.0."
+    #write-host "You are using PowerShell 4.0 or newer."
 }
 
 if($PSVersionTable.PSVersion.Major -eq 3) {
     $psversion = 3
-    write-host "You are using PowerShell 3.0."
+    #write-host "You are using PowerShell 3.0."
 }
 
 if($PSVersionTable.PSVersion.Major -eq 2) {
     $psversion = 2
-    write-host "You are using PowerShell 2.0."
+    #write-host "You are using PowerShell 2.0."
 }
 
-$psversion = 4
 
 if( [string]::IsNullOrEmpty($inputFile) -or [string]::IsNullOrEmpty($outputFile) ) {
     write-host "INPUT FILE AND OUTPUT FILE NOT SPECIFIED!"
@@ -121,21 +119,6 @@ if( !$runtime20 -and !$runtime30 -and !$runtime40 ) {
 }
 
 
-
-if( $psversion -lt 3 -and $runtime30 ) {
-    Write-Host "YOU NEED TO RUN PS2EXE IN AN POWERSHELL 3.0 ENVIRONMENT"
-    Write-Host "  TO USE PARAMETER -runtime30"
-    write-host
-    exit -1
-}
-
-if( $psversion -lt 4 -and $runtime40 ) {
-    Write-Host "YOU NEED TO RUN PS2EXE IN AN POWERSHELL 4.0 ENVIRONMENT"
-    Write-Host "  TO USE PARAMETER -runtime40"
-    write-host
-    exit -1
-}
-
 write-host ""
 
 
@@ -160,15 +143,6 @@ if( $runtime30 -or $runtime40 ) {
     [System.AppDomain]::CurrentDomain.Load($n) | Out-Null
     $referenceAssembies += ([System.AppDomain]::CurrentDomain.GetAssemblies() | ? { $_.ManifestModule.Name -ieq "System.Core.dll" } | select -First 1).location
 }
-
-if( $runtime20 -and $runtime40 ) {
-	echo "2040"
-    $n = new-object System.Reflection.AssemblyName("System.Core, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")
-    [System.AppDomain]::CurrentDomain.Load($n) | Out-Null
-    $referenceAssembies += ([System.AppDomain]::CurrentDomain.GetAssemblies() | ? { $_.ManifestModule.Name -ieq "System.Core.dll" } | select -First 1).location
-}
-
-
 
 
 
@@ -207,27 +181,6 @@ if( $content -eq $null ) {
 }
 $scriptInp = [string]::Join("`r`n", $content)
 $script = [System.Convert]::ToBase64String(([System.Text.Encoding]::UTF8.GetBytes($scriptInp)))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -734,53 +687,6 @@ $forms
 	}
 "@
 #endregion
-
-
-
-
-
-
-
-#####
-#####
-#####
-#####
-#####
-#####
-#####
-#####
-#####
-##########
-#####
-#####
-#####
-##########
-#####
-#####
-#####
-##########
-#####
-#####
-#####
-##########
-#####
-#####
-#####
-#####
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
