@@ -47,55 +47,7 @@ echo(
 
 cd files
 
-IF EXIST "C:\Program Files\PowerShell\7" (
-    FOR /F "tokens=* USEBACKQ" %%F IN (`pwsh -command $psversiontable.psversion.major`) DO ( SET pwsh7=%%F )
-	goto pwsh7
-) ELSE (
-	goto pwsh
-)
-
-:pwsh7
-IF %pwsh7% LEQ 7 (
-	IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( 
-		echo Using powershell version 7 on 32bit CPU.
-	) else ( 
-		echo Using powershell version 7 on 64bit CPU.
-	)
-) ELSE (
-	IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using unknown powershell version greater than 7 on 32bit CPU. ) else ( echo Using unknown powershell version greater than 7 on 64bit CPU. )
-)
-
-goto pwshdone
-
-:pwsh
-rem powershell version check
-FOR /F "tokens=* USEBACKQ" %%F IN (`powershell $psversiontable.psversion.major`) DO ( SET pwsh=%%F )
-
-
-IF !pwsh! LSS 4 (
-    IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( 
-		echo Using powershell version older than 4 on 32bit CPU.
-		rem if powershell version less than 4, overwrite some files with 'windows7' version
-	) else ( 
-		echo Using powershell version older than 4 on 64bit CPU.
-	)
-
-	rem shortcut hack - explained in the devinfo
-	rem generate all 4, then decide which one to actually take
-	rem call .ps1 script in same dir
-	powershell Set-ExecutionPolicy Bypass -Scope Process; .\shortcuts.ps1 %cd%
-
-
-) ELSE (
-    IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version 4 or newer on 32bit CPU. ) else ( echo Using powershell version 4 or newer on 64bit CPU. )
-)
-
-:pwshdone
-
-rem Unblock ps1 files (not entirely necessary)
-rem Won't work on older powershell versions, so output error message to NUL
-powershell Unblock-File *.ps1 > NUL; exit
-
+powershell InitialSetup.ps1
 
 rem If folder already exist ask if user wants to overwrite files.
 IF EXIST "%SystemRoot%\System32\RCWM" ( echo RCWM folder already exists && choice /C yn /M "Overwrite existing files (recommended)" ) else ( goto install )
