@@ -1,9 +1,5 @@
 Windows Registry Editor Version 5.00
 
-[HKEY_CURRENT_USER\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers]
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers]
 "C:\\windows\\system32\\cmd.exe"="~ RUNASADMIN"
-
-;HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers
-;for all users
-
 ;

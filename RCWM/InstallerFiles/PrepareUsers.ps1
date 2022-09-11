@@ -90,9 +90,21 @@ if ($mode -eq "current" ) {
 	$files = Get-ChildItem ".\Temp" -Filter *.reg
 	
 	foreach ($file in $files){
-		(Get-Content $file) -Replace 'HKEY_CLASSES_ROOT', 'HKEY_CURRENT_USER' | Set-Content $file
+		Get-Content $file -Replace 'HKEY_CLASSES_ROOT', 'HKEY_CURRENT_USER' | Set-Content $file
 		#KEY_USERS\S-1-5-21-117113989-4160453655-1229134872-1001
 	}
+	
+	#exceptions
+	#MultipleInvokeMinimum
+	Get-Content ".\Temp\MultipleInvokeMinimum.reg" -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER' | Set-Content ".\Temp\MultipleInvokeMinimum.reg"
+	Get-Content ".\Temp\MultipleInvokeMinimum64.reg" -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER' | Set-Content ".\Temp\MultipleInvokeMinimum64.reg"
+	Get-Content ".\Temp\MultipleInvokeMinimum128.reg" -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER' | Set-Content ".\Temp\MultipleInvokeMinimum128.reg"
+	Get-Content ".\Temp\Win11AddOldContextMenu.reg" -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER' | Set-Content ".\Temp\Win11AddOldContextMenu.reg"
+	Get-Content ".\Temp\ThisPC.reg" -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER' | Set-Content ".\Temp\ThisPC.reg"
+	Get-Content ".\Temp\CMDAdmin.reg" -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER' | Set-Content ".\Temp\CMDAdmin.reg"
+	
+	#include in library is only configured for all users.
+	
 }
 
 
