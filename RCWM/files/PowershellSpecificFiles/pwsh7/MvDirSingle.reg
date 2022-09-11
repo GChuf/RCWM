@@ -1,0 +1,23 @@
+Windows Registry Editor Version 5.00
+
+;move dir
+
+[HKEY_CLASSES_ROOT\Directory\shell\mvdir]
+@="Move Directory"
+"NoWorkingDirectory"=""
+"Icon"="rcwmimg.dll,-3"
+
+[HKEY_CLASSES_ROOT\Directory\shell\mvdir\command]
+@="C:\\Windows\\System32\\RCWM\\mvdirS.exe \"%V\""
+"IsolatedCommand"="C:\\Windows\\System32\\RCWM\\mvdirS.exe \"%V\""
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir]
+@="Move Directory Here"
+"Icon"="rcwmimg.dll,-4"
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir\command]
+@="pwsh -NoProfile C:\\Windows\\System32\\RCWM\\rcp.ps1 mv s \"%V\""
+"IsolatedCommand"="pwsh -NoProfile C:\\Windows\\System32\\RCWM\\rcp.ps1 mv s \"%V\""
+
+
+; end

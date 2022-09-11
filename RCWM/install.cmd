@@ -97,7 +97,7 @@ IF !pwsh! LSS 4 (
 	rem generate all 4, then decide which one to actually take
 	
 	rem call .ps1 script in same dir
-	powershell Set-ExecutionPolicy Bypass -Scope Process; .\pwsh2\shortcuts.ps1 %cd%
+	powershell Set-ExecutionPolicy Bypass -Scope Process; .\shortcuts.ps1 %cd%
 
 
 	rem win7 or win8?

@@ -1,0 +1,9 @@
+Windows Registry Editor Version 5.00
+
+;robocopy mirror remove
+
+[-HKEY_CLASSES_ROOT\Directory\shell\mirror]
+
+[-HKEY_CLASSES_ROOT\Directory\Background\shell\mirror]
+
+;

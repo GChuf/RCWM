@@ -1,0 +1,23 @@
+Windows Registry Editor Version 5.00
+
+;robocopy
+
+[HKEY_CLASSES_ROOT\Directory\shell\rcopy]
+@="RoboCopy Directories"
+"NoWorkingDirectory"=""
+"Icon"="rcwmimg.dll,-5"
+
+[HKEY_CLASSES_ROOT\Directory\shell\rcopy\command]
+@="C:\\Windows\\System32\\RCWM\\rcopyM.exe \"%V\""
+"IsolatedCommand"="C:\\Windows\\System32\\RCWM\\rcopyM.exe \"%V\""
+
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste]
+@="RoboPaste Directories"
+"Icon"="rcwmimg.dll,-6"
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste\command]
+@="pwsh -NoProfile C:\\Windows\\System32\\RCWM\\rcp.ps1 rc m \"%V\""
+"IsolatedCommand"="pwsh -NoProfile C:\\Windows\\System32\\RCWM\\rcp.ps1 rc m \"%V\""
+
+; end
