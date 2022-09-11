@@ -13,93 +13,19 @@ param([string]$inputFile=$null, [string]$outputFile=$null, [switch]$verbose, [sw
 <##                                                                            ##>
 <##      This script was created using PowerGUI (http://www.powergui.org)      ##>
 <##             ... and Windows PowerShell ISE v4.0                            ##>
-<##      	                        while (!me.ShouldExit && !mre.WaitOne(2))  ##>
+<##      	                                                               ##>
 <################################################################################>
 
-if( !$nested ) {
-    Write-Host "PS2EXE; v0.5.0.0 by Ingo Karstein (http://blog.karstein-consulting.com)"
-    Write-Host ""
-} else {
-    write-host "PowerShell 2.0 environment started..."
-    Write-Host ""
-}
 
-if( $runtime20 -eq $true -and $runtime30 -eq $true ) {
-    write-host "YOU CANNOT USE SWITCHES -runtime20 AND -runtime30 AT THE SAME TIME!"
-    exit -1
-}
-
-if( $sta -eq $true -and $mta -eq $true ) {
-    write-host "YOU CANNOT USE SWITCHES -sta AND -eta AT THE SAME TIME!"
-    exit -1
-}
+#Write-Host "PS2EXE; v0.5.0.0 by Ingo Karstein (http://blog.karstein-consulting.com)"
 
 
-if( [string]::IsNullOrEmpty($inputFile) -or [string]::IsNullOrEmpty($outputFile) ) {
-Write-Host "Usage:"
-Write-Host ""
-Write-Host "    powershell.exe -command ""&'.\ps2exe.ps1' [-inputFile] '<file_name>'"
-write-host "                   [-outputFile] '<file_name>' "
-write-host "                   [-verbose] [-debug] [-runtime20] [-runtime30]"""
-Write-Host ""       
-Write-Host "       inputFile = PowerShell script that you want to convert to EXE"       
-Write-Host "      outputFile = destination EXE file name"       
-Write-Host "         verbose = Output verbose informations - if any"       
-Write-Host "           debug = generate debug informations for output file" 
-Write-Host "           debug = generate debug informations for output file"       
-Write-Host "       runtime20 = this switch forces PS2EXE to create a config file for" 
-write-host "                   the generated EXE that contains the ""supported .NET"
-write-host "                   Framework versions"" setting for .NET Framework 2.0"
-write-host "                   for PowerShell 2.0"
-Write-Host "       runtime30 = this switch forces PS2EXE to create a config file for" 
-write-host "                   the generated EXE that contains the ""supported .NET"
-write-host "                   Framework versions"" setting for .NET Framework 4.0"
-write-host "                   for PowerShell 3.0"
-Write-Host "       runtime40 = this switch forces PS2EXE to create a config file for" 
-write-host "                   the generated EXE that contains the ""supported .NET"
-write-host "                   Framework versions"" setting for .NET Framework 4.0"
-write-host "                   for PowerShell 4.0"
-Write-Host "            lcid = Location ID for the compiled EXE. Current user"
-write-host "                   culture if not specified." 
-Write-Host "             x86 = Compile for 32-bit runtime only"
-Write-Host "             x64 = Compile for 64-bit runtime only"
-Write-Host "             sta = Single Thread Apartment Mode"
-Write-Host "             mta = Multi Thread Apartment Mode"
-write-host "       noConsole = The resulting EXE file starts without a console window just like a Windows Forms app."
-write-host ""
-}
-
-
-if($PSVersionTable.PSVersion.Major -ge 4) {
-    $psversion = 4
-    #write-host "You are using PowerShell 4.0 or newer."
-}
-
-if($PSVersionTable.PSVersion.Major -eq 3) {
-    $psversion = 3
-    #write-host "You are using PowerShell 3.0."
-}
-
-if($PSVersionTable.PSVersion.Major -eq 2) {
-    $psversion = 2
-    #write-host "You are using PowerShell 2.0."
-}
-
-
-if( [string]::IsNullOrEmpty($inputFile) -or [string]::IsNullOrEmpty($outputFile) ) {
-    write-host "INPUT FILE AND OUTPUT FILE NOT SPECIFIED!"
-    exit -1
-}
 
 $inputFile = (new-object System.IO.FileInfo($inputFile)).FullName
 
 $outputFile = (new-object System.IO.FileInfo($outputFile)).FullName
 
 
-if( !(Test-Path $inputFile -PathType Leaf ) ) {
-	Write-Host "INPUT FILE $($inputFile) NOT FOUND!"
-	exit -1
-}
 
 if( !([string]::IsNullOrEmpty($iconFile) ) ) {
 	if( !(Test-Path (join-path (split-path $inputFile) $iconFile) -PathType Leaf ) ) {
@@ -119,7 +45,6 @@ if( !$runtime20 -and !$runtime30 -and !$runtime40 ) {
 }
 
 
-write-host ""
 
 
 Set-Location (Split-Path $MyInvocation.MyCommand.Path)
@@ -183,13 +108,8 @@ $scriptInp = [string]::Join("`r`n", $content)
 $script = [System.Convert]::ToBase64String(([System.Text.Encoding]::UTF8.GetBytes($scriptInp)))
 
 
-
-
-
 #region program frame
     $culture = ""
-
-
 	
 	$forms = @"
 		    internal class ReadKeyForm 
@@ -198,11 +118,9 @@ $script = [System.Convert]::ToBase64String(([System.Text.Encoding]::UTF8.GetByte
 				public ReadKeyForm() {}
 
 			}
-			
 
 "@	
-
-		
+	
 
 	$programFrame = @"
 
@@ -485,7 +403,6 @@ $forms
 	    }
 
 
-
 	    internal class PS2EXEHost : PSHost
 	    {
 			private const bool CONSOLE = false;
@@ -614,7 +531,6 @@ $forms
                 $culture
 
 	            PS2EXE me = new PS2EXE();
-
 	            PS2EXEHostUI ui = new PS2EXEHostUI();
 	            PS2EXEHost host = new PS2EXEHost(me);
 	            System.Threading.ManualResetEvent mre = new System.Threading.ManualResetEvent(false);
@@ -664,12 +580,7 @@ $forms
 
 	                    myRunSpace.Close();
 	                }
-					
-					
-					
-					
-					
-					
+	
 					
 	            }
 	            catch (Exception ex)
@@ -687,8 +598,6 @@ $forms
 	}
 "@
 #endregion
-
-
 
 
 #region EXE Config file

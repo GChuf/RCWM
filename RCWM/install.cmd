@@ -49,12 +49,6 @@ cd files
 
 IF EXIST "C:\Program Files\PowerShell\7" (
     FOR /F "tokens=* USEBACKQ" %%F IN (`pwsh -command $psversiontable.psversion.major`) DO ( SET pwsh7=%%F )
-	rem if using pwshv7, replace powershell -> pwsh + delete execution policy which doesnt work anymore
-	rem powershell -command "(Get-Content .\MvDirSingle.reg) -Replace 'powershell Set-ExecutionPolicy Bypass -Scope Process;', 'pwsh' | Set-Content .\MvDirSingle.reg"
-	xcopy .\pwsh7\MvDirSingle.reg . /Y > nul
-	xcopy .\pwsh7\MvDirMultiple.reg . /Y > nul
-	xcopy .\pwsh7\RCopySingle.reg . /Y > nul
-	xcopy .\pwsh7\RCopyMultiple.reg . /Y > nul
 	goto pwsh7
 ) ELSE (
 	goto pwsh
@@ -80,29 +74,17 @@ FOR /F "tokens=* USEBACKQ" %%F IN (`powershell $psversiontable.psversion.major`)
 
 IF !pwsh! LSS 4 (
     IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( 
-		echo Using powershell version older than 4 on 32bit CPU. && echo You might encounter encoding issues with special characters in older powershell versions!!
+		echo Using powershell version older than 4 on 32bit CPU.
 		rem if powershell version less than 4, overwrite some files with 'windows7' version
 	) else ( 
-		echo Using powershell version older than 4 on 64bit CPU. && echo You might encounter encoding issues with special characters in older powershell versions!!
+		echo Using powershell version older than 4 on 64bit CPU.
 	)
 
-	xcopy /f .\Win7\*.bat . /y 1>nul
-	xcopy /f .\Win7\*.reg . /y 1>nul
-	xcopy /f .\Win7\bin\*.exe .\bin /y 1>nul
-	
-	rem copy the shortcuts, regs and rcp.cmd
-	xcopy /f .\pwsh2\* . /y 1>nul
-	
 	rem shortcut hack - explained in the devinfo
 	rem generate all 4, then decide which one to actually take
-	
 	rem call .ps1 script in same dir
 	powershell Set-ExecutionPolicy Bypass -Scope Process; .\shortcuts.ps1 %cd%
 
-
-	rem win7 or win8?
-	rem bypass or not?
-	xcopy /f .\pwsh2\pwsh7.lnk . /y 1>nul
 
 ) ELSE (
     IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version 4 or newer on 32bit CPU. ) else ( echo Using powershell version 4 or newer on 64bit CPU. )

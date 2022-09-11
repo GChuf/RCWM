@@ -75,6 +75,7 @@ if ($mode -eq "all" ) {
 
 }
 
+	Write-Host "Preparing files ..."
 	#Copy all files to Temp, copy specific files to Temp and overwrite old ones
 
 	New-Item Temp
@@ -106,6 +107,13 @@ if ($mode -eq "current" ) {
 	#include in library is only configured for all users.
 	
 }
+
+	#Generate .exe files
+	..\ps2exe\bin.ps1
+	
+	if ($os -lt 10) { #Generate shortcuts for win7 and win8
+		.\InstallerFiles\shortcuts.ps1
+	}
 
 
 Write-Host "Preparation finished."
