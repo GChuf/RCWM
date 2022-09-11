@@ -1,0 +1,22 @@
+Windows Registry Editor Version 5.00
+
+;robocopy
+
+[HKEY_CLASSES_ROOT\Directory\shell\mirror]
+@="Mirror Source Directory"
+"NoWorkingDirectory"=""
+"Icon"="rcwmimg.dll,-20"
+
+[HKEY_CLASSES_ROOT\Directory\shell\mirror\command]
+@="C:\\Windows\\System32\\RCWM\\mirror.exe \"%V\""
+"IsolatedCommand"="C:\\Windows\\System32\\RCWM\\rcopyS.exe \"%V\""
+
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\mirror]
+@="Mirror Destination Directory"
+"Icon"="rcwmimg.dll,-19"
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\mirror\command]
+@="cmd /c pwsh C:\\Windows\\System32\\RCWM\\rcp.ps1 rc mir \"%V\""
+"IsolatedCommand"="cmd /c pwsh C:\\Windows\\System32\\RCWM\\rcp.ps1 rc mir \"%V\""
+; end
