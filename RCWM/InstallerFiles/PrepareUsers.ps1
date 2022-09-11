@@ -4,6 +4,9 @@ echo $a
 
 $mode = $args
 
+$ps = $psversiontable.psversion.major
+$os = [System.Environment]::OSVersion.Version.Major
+
 $users = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
 
 if ($mode -eq "all" ) { 
@@ -41,9 +44,10 @@ if ($mode -eq "all" ) {
 		New-Item -Path mv | Out-Null
 		New-Item -Path rc | Out-Null
 		New-Item -Path rcs | Out-Null
-		
-		Write-Host "Prepared RCWM for user at " -NoNewLine; Write-Host $userPath -ForegroundColor red -NoNewLine; Write-Host " with user ID " -NoNewLine; Write-Host $userGUID -ForegroundColor red
+
+		Write-Host "Prepared registry for user at " -NoNewLine; Write-Host $userPath -ForegroundColor red -NoNewLine; Write-Host " with user ID " -NoNewLine; Write-Host $userGUID -ForegroundColor red
 	}
+
 
 } else {
 	
@@ -65,19 +69,31 @@ if ($mode -eq "all" ) {
 	New-Item -Path mv | Out-Null
 	New-Item -Path rc | Out-Null
 	New-Item -Path rcs | Out-Null
+
+
+	Write-Host "Prepared registry for user at " -NoNewLine; Write-Host $userPath -ForegroundColor red -NoNewLine; Write-Host " with user ID " -NoNewLine; Write-Host $userGUID -ForegroundColor red
+
+}
+
+	#Copy all files to Temp, copy specific files to Temp and overwrite old ones
+
+	New-Item Temp
+	Copy-Item -Path ".\ExecutionFiles\*" -Destination ".\Temp"
+	Copy-Item -Path ".\RegistryFiles\*" -Destination ".\Temp"
+	Copy-Item -Path ".\PowershellSpecificFiles\pwsh$ps\*" -Destination ".\Temp"
+	Copy-Item -Path ".\OSSpecificFiles\Win$os\*" -Destination ".\Temp"
+
+
+if ($mode -eq "current" ) {
+	#change registry files to only apply to current user.
 	
-	
-	#replace in .reg files
-	$files = Get-ChildItem . -Filter *.reg
+	$files = Get-ChildItem ".\Temp" -Filter *.reg
 	
 	foreach ($file in $files){
-		
 		(Get-Content $file) -Replace 'HKEY_CLASSES_ROOT', 'HKEY_CURRENT_USER' | Set-Content $file
 		#KEY_USERS\S-1-5-21-117113989-4160453655-1229134872-1001
 	}
-	
-
-	
-	Write-Host "Prepared RCWM for user at " -NoNewLine; Write-Host $userPath -ForegroundColor red -NoNewLine; Write-Host " with user ID " -NoNewLine; Write-Host $userGUID -ForegroundColor red
-
 }
+
+
+Write-Host "Preparation finished."
