@@ -25,7 +25,7 @@ IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" (
 )
 
 if '%errorlevel%' NEQ '0' (
-    echo You need to run this script with administrator privileges!!!
+    echo You need to run this script with administrator privileges
     pause
     exit
 )
@@ -47,73 +47,7 @@ echo(
 
 cd files
 
-IF EXIST "C:\Program Files\PowerShell\7" (
-    FOR /F "tokens=* USEBACKQ" %%F IN (`pwsh -command $psversiontable.psversion.major`) DO ( SET pwsh7=%%F )
-	rem if using pwshv7, replace powershell -> pwsh + delete execution policy which doesnt work anymore
-	rem powershell -command "(Get-Content .\MvDirSingle.reg) -Replace 'powershell Set-ExecutionPolicy Bypass -Scope Process;', 'pwsh' | Set-Content .\MvDirSingle.reg"
-	xcopy .\pwsh7\MvDirSingle.reg . /Y > nul
-	xcopy .\pwsh7\MvDirMultiple.reg . /Y > nul
-	xcopy .\pwsh7\RCopySingle.reg . /Y > nul
-	xcopy .\pwsh7\RCopyMultiple.reg . /Y > nul
-	goto pwsh7
-) ELSE (
-	goto pwsh
-)
-
-:pwsh7
-IF %pwsh7% LEQ 7 (
-	IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( 
-		echo Using powershell version 7 on 32bit CPU.
-	) else ( 
-		echo Using powershell version 7 on 64bit CPU.
-	)
-) ELSE (
-	IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using unknown powershell version greater than 7 on 32bit CPU. ) else ( echo Using unknown powershell version greater than 7 on 64bit CPU. )
-)
-
-goto pwshdone
-
-:pwsh
-rem powershell version check
-FOR /F "tokens=* USEBACKQ" %%F IN (`powershell $psversiontable.psversion.major`) DO ( SET pwsh=%%F )
-
-
-IF !pwsh! LSS 4 (
-    IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( 
-		echo Using powershell version older than 4 on 32bit CPU. && echo You might encounter encoding issues with special characters in older powershell versions!!
-		rem if powershell version less than 4, overwrite some files with 'windows7' version
-	) else ( 
-		echo Using powershell version older than 4 on 64bit CPU. && echo You might encounter encoding issues with special characters in older powershell versions!!
-	)
-
-	xcopy /f .\Win7\*.bat . /y 1>nul
-	xcopy /f .\Win7\*.reg . /y 1>nul
-	xcopy /f .\Win7\bin\*.exe .\bin /y 1>nul
-	
-	rem copy the shortcuts, regs and rcp.cmd
-	xcopy /f .\pwsh2\* . /y 1>nul
-	
-	rem shortcut hack - explained in the devinfo
-	rem generate all 4, then decide which one to actually take
-	
-	rem call .ps1 script in same dir
-	powershell Set-ExecutionPolicy Bypass -Scope Process; .\pwsh2\shortcuts.ps1 %cd%
-
-
-	rem win7 or win8?
-	rem bypass or not?
-	xcopy /f .\pwsh2\pwsh7.lnk . /y 1>nul
-
-) ELSE (
-    IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" ( echo Using powershell version 4 or newer on 32bit CPU. ) else ( echo Using powershell version 4 or newer on 64bit CPU. )
-)
-
-:pwshdone
-
-rem Unblock ps1 files (not entirely necessary)
-rem Won't work on older powershell versions, so output error message to NUL
-powershell Unblock-File *.ps1 > NUL; exit
-
+powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\InitialSetup.ps1
 
 rem If folder already exist ask if user wants to overwrite files.
 IF EXIST "%SystemRoot%\System32\RCWM" ( echo RCWM folder already exists && choice /C yn /M "Overwrite existing files (recommended)" ) else ( goto install )
@@ -131,9 +65,9 @@ echo(
 
 
 choice /C CA /M "Do you want to install RCWM for [C]urrent user only, or for [A]ll users "
-if %errorlevel% == 1 ( powershell Set-ExecutionPolicy Bypass -Scope Process; ..\PrepareUsers.ps1 "current" ) else ( powershell Set-ExecutionPolicy Bypass -Scope Process; ..\PrepareUsers.ps1 "all" )
+if %errorlevel% == 1 ( powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\PrepareUsers.ps1 "current" ) else ( powershell Set-ExecutionPolicy Bypass -Scope Process; ..\PrepareUsers.ps1 "all" )
 
-
+cd Temp
 FOR /F "tokens=*" %%g IN ('powershell "([Environment]::OSVersion).Version.Major"') do (SET WinVer=%%g)
 
 IF %WinVer% == 11 (
@@ -326,7 +260,7 @@ choice /C yn /M "* Do you want to delete Send To "
 if %errorlevel% == 1 ( start /w regedit /s DeleteSendTo.reg )
 
 color a
-choice /C yn /M "* Do you want to delete Include in Library "
+choice /C yn /M "* Do you want to delete Include in Library (only possible to remove for ALL users) "
 if %errorlevel% == 1 ( start /w regedit /s DeleteLibrary.reg )
 
 color b

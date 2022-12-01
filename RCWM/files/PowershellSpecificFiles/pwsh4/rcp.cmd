@@ -1,0 +1,1 @@
+C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe C:\Users\g\Desktop\pwsh.lnk %1 %2 %3

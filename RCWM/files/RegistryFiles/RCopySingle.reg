@@ -1,0 +1,22 @@
+Windows Registry Editor Version 5.00
+
+;robocopy
+
+[HKEY_CLASSES_ROOT\Directory\shell\rcopy]
+@="RoboCopy Directory"
+"NoWorkingDirectory"=""
+"Icon"="rcwmimg.dll,-5"
+
+[HKEY_CLASSES_ROOT\Directory\shell\rcopy\command]
+@="C:\\Windows\\System32\\RCWM\\rcopyS.exe \"%V\""
+"IsolatedCommand"="C:\\Windows\\System32\\RCWM\\rcopyS.exe \"%V\""
+
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste]
+@="RoboPaste Directory"
+"Icon"="rcwmimg.dll,-6"
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste\command]
+@="cmd /c powershell Set-ExecutionPolicy Bypass -Scope Process; C:\\Windows\\System32\\RCWM\\rcp.ps1 rc s '%V'"
+"IsolatedCommand"="cmd /c powershell Set-ExecutionPolicy Bypass -Scope Process; C:\\Windows\\System32\\RCWM\\rcp.ps1 rc s '%V'"
+; end
