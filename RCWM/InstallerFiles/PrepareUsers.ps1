@@ -7,6 +7,14 @@ $os = [System.Environment]::OSVersion.Version.Major
 
 $users = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
 
+
+#Check if %SystemRoot% equals C:\Windows
+
+if ($env:SystemRoot -ne "C:\Windows") {
+	Write-Host "SystemRoots other than 'C:\Windows' not implemented yet. This installation will be broken." -ForegroundColor red
+}
+
+
 if ($mode -eq "all" ) { 
 
 	#if only one user, $user.Length returns nothing (????????)
@@ -95,37 +103,44 @@ if ($mode -eq "current" ) {
 	$files = Get-ChildItem ".\Temp\*.reg"
 	
 	foreach ($file in $files){
-		(Get-Content $file) -Replace 'HKEY_CLASSES_ROOT', 'HKEY_CURRENT_USER' | Set-Content $file
+		(Get-Content $file) -Replace 'HKEY_CLASSES_ROOT', 'HKEY_CURRENT_USER\Software\Classes\' | Set-Content $file
 		#KEY_USERS\S-1-5-21-117113989-4160453655-1229134872-1001
 	}
 	
 	#exceptions
 	#MultipleInvokeMinimum
-	(Get-Content ".\Temp\MultipleInvokeMinimum.reg") -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER' | Set-Content ".\Temp\MultipleInvokeMinimum.reg"
-	(Get-Content ".\Temp\MultipleInvokeMinimum64.reg") -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER' | Set-Content ".\Temp\MultipleInvokeMinimum64.reg"
-	(Get-Content ".\Temp\MultipleInvokeMinimum128.reg") -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER' | Set-Content ".\Temp\MultipleInvokeMinimum128.reg"
-	(Get-Content ".\Temp\Win11AddOldContextMenu.reg") -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER' | Set-Content ".\Temp\Win11AddOldContextMenu.reg"
-	(Get-Content ".\Temp\ThisPC.reg") -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER' | Set-Content ".\Temp\ThisPC.reg"
-	(Get-Content ".\Temp\CMDAdmin.reg") -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER' | Set-Content ".\Temp\CMDAdmin.reg"
+	(Get-Content ".\Temp\MultipleInvokeMinimum.reg") -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER\Software\Classes\' | Set-Content ".\Temp\MultipleInvokeMinimum.reg"
+	(Get-Content ".\Temp\MultipleInvokeMinimum64.reg") -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER\Software\Classes\' | Set-Content ".\Temp\MultipleInvokeMinimum64.reg"
+	(Get-Content ".\Temp\MultipleInvokeMinimum128.reg") -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER\Software\Classes\' | Set-Content ".\Temp\MultipleInvokeMinimum128.reg"
+	(Get-Content ".\Temp\Win11AddOldContextMenu.reg") -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER\Software\Classes\' | Set-Content ".\Temp\Win11AddOldContextMenu.reg"
+	(Get-Content ".\Temp\ThisPC.reg") -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER\Software\Classes\' | Set-Content ".\Temp\ThisPC.reg"
+	(Get-Content ".\Temp\CMDAdmin.reg") -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER\Software\Classes\' | Set-Content ".\Temp\CMDAdmin.reg"
 	
 	#include in library is only configured for all users.
 	
 }
 
-	#Generate .exe files
-	#don't touch this very fragile part ...
-	New-Item Temp\bin -ItemType "directory" 2>&1>$null
-	powershell .\Temp\ps2exe.ps1 -inputfile Temp\RCopySingle.ps1 -outputfile Temp\bin\rcopyS.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\rcopy.ico -verbose
-	powershell .\Temp\ps2exe.ps1 -inputfile Temp\RCopyMultiple.ps1 -outputfile Temp\bin\rcopyM.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\rcopy.ico -verbose
-	powershell .\Temp\ps2exe.ps1 -inputfile Temp\MvDirSingle.ps1 -outputfile Temp\bin\mvdirS.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\move.ico -verbose
-	powershell .\Temp\ps2exe.ps1 -inputfile Temp\MvDirMultiple.ps1 -outputfile Temp\bin\mvdirM.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\move.ico -verbose
-	powershell .\Temp\ps2exe.ps1 -inputfile Temp\DirectoryLinks.ps1 -outputfile Temp\bin\dlink.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\link.ico -verbose
-	powershell .\Temp\ps2exe.ps1 -inputfile Temp\FileLinks.ps1 -outputfile Temp\bin\flink.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\link.ico -verbose
+
+#Generate .exe files
+#don't touch this very fragile part ...
+Write-Host "Generating binary files ..."
+#New-Item Temp\bin -ItemType "directory" 2>&1>$null
+powershell .\Temp\ps2exe.ps1 -inputfile Temp\RCopySingle.ps1 -outputfile Temp\rcopyS.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\rcopy.ico -verbose 2>&1>$null
+powershell .\Temp\ps2exe.ps1 -inputfile Temp\RCopyMultiple.ps1 -outputfile Temp\rcopyM.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\rcopy.ico -verbose 2>&1>$null
+powershell .\Temp\ps2exe.ps1 -inputfile Temp\MvDirSingle.ps1 -outputfile Temp\mvdirS.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\move.ico -verbose 2>&1>$null
+powershell .\Temp\ps2exe.ps1 -inputfile Temp\MvDirMultiple.ps1 -outputfile Temp\mvdirM.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\move.ico -verbose 2>&1>$null
+powershell .\Temp\ps2exe.ps1 -inputfile Temp\DirectoryLinks.ps1 -outputfile Temp\dlink.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\link.ico -verbose 2>&1>$null
+powershell .\Temp\ps2exe.ps1 -inputfile Temp\FileLinks.ps1 -outputfile Temp\flink.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\link.ico -verbose 2>&1>$null
 
 
-	if ($os -lt 10) { #Generate shortcuts for win7 and win8
-		.\InstallerFiles\shortcuts.ps1
-	}
+if ($os -lt 10) { #Generate shortcuts for win7 and win8 -- new win servers(!) confirmed return "10"
+	.\InstallerFiles\shortcuts.ps1
+}
+
+#lastly, copy all generated files to C:\Windows\System32\RCWM
+#this doesnt overwrite??
+#think about update vs install
+Copy-Item -Path ".\Temp\*" -Destination "C:\Windows\System32\RCWM"
 
 
 Write-Host "Preparation finished."

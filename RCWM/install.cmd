@@ -67,7 +67,7 @@ echo(
 choice /C CA /M "Do you want to install RCWM for [C]urrent user only, or for [A]ll users "
 if %errorlevel% == 1 ( powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\PrepareUsers.ps1 "current" ) else ( powershell Set-ExecutionPolicy Bypass -Scope Process; ..\PrepareUsers.ps1 "all" )
 
-
+cd Temp
 FOR /F "tokens=*" %%g IN ('powershell "([Environment]::OSVersion).Version.Major"') do (SET WinVer=%%g)
 
 IF %WinVer% == 11 (
