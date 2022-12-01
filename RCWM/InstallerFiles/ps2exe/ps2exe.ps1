@@ -35,12 +35,12 @@ $outputFile = (new-object System.IO.FileInfo($outputFile)).FullName
 #}
 
 if( !$runtime20 -and !$runtime30 -and !$runtime40 ) {
-    if( $psversion -eq 4 ) {
-		$runtime40 = $true
+    if( $psversion -eq 2 ) {
+		$runtime20 = $true
 	}  elseif( $psversion -eq 3 ) {
         $runtime30 = $true
     } else {
-        $runtime20 = $true
+        $runtime40 = $true
     }
 }
 
@@ -53,10 +53,10 @@ $type = ('System.Collections.Generic.Dictionary`2') -as "Type"
 $type = $type.MakeGenericType( @( ("System.String" -as "Type"), ("system.string" -as "Type") ) )
 $o = [Activator]::CreateInstance($type)
 
-if( $psversion -eq 3 -or $psversion -eq 4 ) {
-    $o.Add("CompilerVersion", "v4.0")
-} else {
+if( $psversion -eq 2 ) {
     $o.Add("CompilerVersion", "v2.0")
+} else { #3,4,later
+    $o.Add("CompilerVersion", "v4.0")
 }
 
 $referenceAssembies = @("System.dll")

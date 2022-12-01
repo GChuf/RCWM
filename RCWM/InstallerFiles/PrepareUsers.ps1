@@ -113,9 +113,16 @@ if ($mode -eq "current" ) {
 }
 
 	#Generate .exe files
-	cd Temp #needed for ps2exe
-	.\GenerateBinaries.ps1
-	
+	#don't touch this very fragile part ...
+	New-Item Temp\bin -ItemType "directory" 2>&1>$null
+	powershell .\Temp\ps2exe.ps1 -inputfile Temp\RCopySingle.ps1 -outputfile Temp\bin\rcopyS.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\rcopy.ico -verbose
+	powershell .\Temp\ps2exe.ps1 -inputfile Temp\RCopyMultiple.ps1 -outputfile Temp\bin\rcopyM.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\rcopy.ico -verbose
+	powershell .\Temp\ps2exe.ps1 -inputfile Temp\MvDirSingle.ps1 -outputfile Temp\bin\mvdirS.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\move.ico -verbose
+	powershell .\Temp\ps2exe.ps1 -inputfile Temp\MvDirMultiple.ps1 -outputfile Temp\bin\mvdirM.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\move.ico -verbose
+	powershell .\Temp\ps2exe.ps1 -inputfile Temp\DirectoryLinks.ps1 -outputfile Temp\bin\dlink.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\link.ico -verbose
+	powershell .\Temp\ps2exe.ps1 -inputfile Temp\FileLinks.ps1 -outputfile Temp\bin\flink.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\link.ico -verbose
+
+
 	if ($os -lt 10) { #Generate shortcuts for win7 and win8
 		.\InstallerFiles\shortcuts.ps1
 	}
