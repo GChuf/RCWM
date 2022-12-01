@@ -21,7 +21,7 @@
 
 #set high process priority
 $process = Get-Process -Id $pid
-$process.PriorityClass = 'High' 
+$process.PriorityClass = 'High'
 
 
 function NoListAvailable {

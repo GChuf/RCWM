@@ -39,7 +39,7 @@ if ($mode -eq "all" or "decide") {
 
 		
 		if ($install -eq True) {
-			#make reg directoriesž
+			#make reg directories
 			
 			#get guid
 			cd REGISTRY::HKEY_USERS
@@ -54,7 +54,7 @@ if ($mode -eq "all" or "decide") {
 			New-Item -Path rcs
 			
 			#copy all .reg files to temp directory for each user and change 'HKEY_CURRENT_USER' string into 'HKEY_USERS\GUID'
-			mkdir $userGUID > null
+			mkdir $userGUID > $null
 			
 			
 			Write-Host "Prepared RCWM for user at " -NoNewLine; Write-Host $userPath -ForegroundColor red -NoNewLine; Write-Host " with user ID " -NoNewLine; Write-Host $userGUID -ForegroundColor red

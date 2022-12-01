@@ -25,7 +25,7 @@ IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" (
 )
 
 if '%errorlevel%' NEQ '0' (
-    echo You need to run this script with administrator privileges!!!
+    echo You need to run this script with administrator privileges
     pause
     exit
 )
@@ -47,7 +47,7 @@ echo(
 
 cd files
 
-powershell InitialSetup.ps1
+powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\InitialSetup.ps1
 
 rem If folder already exist ask if user wants to overwrite files.
 IF EXIST "%SystemRoot%\System32\RCWM" ( echo RCWM folder already exists && choice /C yn /M "Overwrite existing files (recommended)" ) else ( goto install )
@@ -65,7 +65,7 @@ echo(
 
 
 choice /C CA /M "Do you want to install RCWM for [C]urrent user only, or for [A]ll users "
-if %errorlevel% == 1 ( powershell Set-ExecutionPolicy Bypass -Scope Process; ..\PrepareUsers.ps1 "current" ) else ( powershell Set-ExecutionPolicy Bypass -Scope Process; ..\PrepareUsers.ps1 "all" )
+if %errorlevel% == 1 ( powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\PrepareUsers.ps1 "current" ) else ( powershell Set-ExecutionPolicy Bypass -Scope Process; ..\PrepareUsers.ps1 "all" )
 
 
 FOR /F "tokens=*" %%g IN ('powershell "([Environment]::OSVersion).Version.Major"') do (SET WinVer=%%g)

@@ -27,12 +27,12 @@ $outputFile = (new-object System.IO.FileInfo($outputFile)).FullName
 
 
 
-if( !([string]::IsNullOrEmpty($iconFile) ) ) {
-	if( !(Test-Path (join-path (split-path $inputFile) $iconFile) -PathType Leaf ) ) {
-		Write-Host "ICON FILE ""$($iconFile)"" NOT FOUND! IT MUST BE IN THE SAME DIRECTORY AS THE PS-SCRIPT (""$($inputFile)"")."
-		exit -1
-	}
-}
+#if( !([string]::IsNullOrEmpty($iconFile) ) ) {
+#	if( !(Test-Path (join-path (split-path $inputFile) $iconFile) -PathType Leaf ) ) {
+#		Write-Host "ICON FILE ""$($iconFile)"" NOT FOUND! IT MUST BE IN THE SAME DIRECTORY AS THE PS-SCRIPT (""$($inputFile)"")."
+#		exit -1
+#	}
+#}
 
 if( !$runtime20 -and !$runtime30 -and !$runtime40 ) {
     if( $psversion -eq 4 ) {
