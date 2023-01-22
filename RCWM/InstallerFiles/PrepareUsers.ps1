@@ -137,7 +137,8 @@ powershell .\Temp\ps2exe.ps1 -inputfile Temp\FileLinks.ps1 -outputfile Temp\flin
 
 
 if ($os -lt 10) { #Generate shortcuts for win7 and win8 -- new win servers(!) confirmed return "10"
-	.\InstallerFiles\shortcuts.ps1
+	cd PowershellSpecificFiles
+	..\..\InstallerFiles\shortcuts.ps1 
 }
 
 #lastly, copy all generated files to C:\Windows\System32\RCWM
