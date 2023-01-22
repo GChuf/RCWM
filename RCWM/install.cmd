@@ -47,12 +47,22 @@ echo(
 
 cd files
 
+
+rem CHECK v1
+IF EXIST "%SystemRoot%\System32\RCWM" ( echo Old RCWM v1 folder detected && choice /C yn /M "Delete old files " )
+if %errorlevel% == 1 ( del "%SystemRoot%\System32\RCWM" /s /q  1>NUL) else (echo )
+
 powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\InitialSetup.ps1
+
+choice /C CA /M "Do you want to install RCWM for [C]urrent user only, or for [A]ll users "
+if %errorlevel% == 1 ( powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\PrepareUsers.ps1 "current" ) else ( powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\PrepareUsers.ps1 "all" )
+
+
 
 rem If folder already exist ask if user wants to overwrite files.
 IF EXIST "%SystemRoot%\System32\RCWM" ( echo RCWM folder already exists && choice /C yn /M "Overwrite existing files (recommended)" ) else ( goto install )
 
-if %errorlevel% == 1 ( goto update ) else ( echo Keeping old files and copying possible new ones. && robocopy *.bat *.lnk *.ps1 . "%SystemRoot%\System32\RCWM" /XC /XN /XO 1>nul )
+if %errorlevel% == 1 ( goto update ) else ( echo Keeping old files and copying possible new ones. && robocopy .\Temp\* "%SystemRoot%\System32\RCWM" /XC /XN /XO 1>nul )
 
 
 :start
@@ -64,8 +74,7 @@ echo You will be asked separately for each option (divided into Add and Remove s
 echo(
 
 
-choice /C CA /M "Do you want to install RCWM for [C]urrent user only, or for [A]ll users "
-if %errorlevel% == 1 ( powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\PrepareUsers.ps1 "current" ) else ( powershell Set-ExecutionPolicy Bypass -Scope Process; ..\PrepareUsers.ps1 "all" )
+
 
 cd Temp
 FOR /F "tokens=*" %%g IN ('powershell "([Environment]::OSVersion).Version.Major"') do (SET WinVer=%%g)
@@ -90,12 +99,8 @@ md %SystemRoot%\System32\RCWM
 attrib +h +s %SystemRoot%\System32\RCWM
 echo Created hidden folder at %SystemRoot%\System32\RCWM
 
-xcopy /f *.cmd %SystemRoot%\System32\RCWM /y 1>nul
-xcopy /f *.bat %SystemRoot%\System32\RCWM /y 1>nul
-xcopy /f *.ps1 %SystemRoot%\System32\RCWM /y 1>nul
-xcopy /f *.lnk %SystemRoot%\System32\RCWM /y 1>nul
-xcopy /f .\bin\*.exe %SystemRoot%\System32\RCWM /y 1>nul
-xcopy /f rcwmimg.dll %SystemRoot%\System32 /y 1>nul
+xcopy /f .\Temp\* %SystemRoot%\System32\RCWM /y 1>nul
+
 
 rem take ownership of that folder for administrators & users
 takeown /F %SystemRoot%\System32\RCWM /R /D Y 1>nul
@@ -112,12 +117,7 @@ goto start
 
 del /f /q %SystemRoot%\System32\RCWM 2>nul
 md %SystemRoot%\System32\RCWM 2>nul
-xcopy /f *.cmd %SystemRoot%\System32\RCWM /y 1>nul
-xcopy /f *.bat %SystemRoot%\System32\RCWM /y 1>nul
-xcopy /f *.ps1 %SystemRoot%\System32\RCWM /y 1>nul
-xcopy /f *.lnk %SystemRoot%\System32\RCWM /y 1>nul
-xcopy /f .\bin\*.exe %SystemRoot%\System32\RCWM /y 1>nul
-xcopy /f rcwmimg.dll %SystemRoot%\System32 /y 1>nul
+xcopy /f .\Temp\* %SystemRoot%\System32\RCWM /y 1>nul
 
 echo Copied new files.
 echo Pre-setup complete.

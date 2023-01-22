@@ -140,7 +140,8 @@ if ($os -lt 10) { #Generate shortcuts for win7 and win8 -- new win servers(!) co
 #lastly, copy all generated files to C:\Windows\System32\RCWM
 #this doesnt overwrite??
 #think about update vs install
-Copy-Item -Path ".\Temp\*" -Destination "C:\Windows\System32\RCWM"
+#this is done in install.cmd script now
+#Copy-Item -Path ".\Temp\*" -Destination "C:\Windows\System32\RCWM"
 
 
 Write-Host "Preparation finished."
