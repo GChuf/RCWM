@@ -83,10 +83,13 @@ if ($mode -eq "all" ) {
 
 
 	cd $InitialLocation
-	Write-Host "Preparing files ..."
+	Write-Host "Preparing files ..."	
 	#Copy all files to Temp, copy specific files to Temp and overwrite old ones
 
 	New-Item Temp -ItemType "directory" 2>&1>$null
+	#Make sure Temp is clean.
+	cmd.exe /c del Temp\* /s /q 2>&1>$null
+	
 	Copy-Item -Path ".\ExecutionFiles\*" -Destination ".\Temp"
 	Copy-Item -Path ".\RegistryFiles\*" -Destination ".\Temp"
 	

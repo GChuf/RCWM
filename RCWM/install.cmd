@@ -50,7 +50,7 @@ cd files
 
 rem CHECK v1
 IF EXIST "%SystemRoot%\System32\RCWM" ( echo Old RCWM v1 folder detected && choice /C yn /M "Delete old files " )
-if %errorlevel% == 1 ( del "%SystemRoot%\System32\RCWM" /s /q  1>NUL) else (echo )
+if %errorlevel% == 1 ( del "%SystemRoot%\System32\RCWM" /s /q  1>NUL)
 
 powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\InitialSetup.ps1
 
