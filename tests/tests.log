@@ -8,3 +8,19 @@ TotalMilliseconds : 277.7056
 
 pwsh v7.2.1:
 TotalMilliseconds : 187.1662
+
+
+2.
+measure-command { for ($i=5001; $i -le 10000; $i++) {reg add "HKCU\rc" /v "C:\users\$i.txt" /t REG_SZ }}
+
+Seconds           : 13
+Milliseconds      : 974
+TotalMilliseconds : 13974.222
+
+
+measure-command { for ($i=5001; $i -le 10000; $i++) {New-ItemProperty -Path "HKCU:\rc" -Name "C:\users\$i.txt"} }
+
+
+Seconds           : 3
+Milliseconds      : 398
+TotalMilliseconds : 3398.6476

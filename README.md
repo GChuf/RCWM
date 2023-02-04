@@ -35,7 +35,6 @@ Other removals:
 
 TODO (magic takes time):
 - takeown for files (.exe and other)
-- robocopy mirror option
 - copying files
 - directory juntions for multiple files/folders
 - pwsh opened with admin priv
@@ -43,6 +42,16 @@ TODO (magic takes time):
 - remove "cast to device", check "add to win media player list"
 - locking folders with passwords?
 - your suggestions
+
+# What's new in v2:
+- install for individual users now possible
+- speed up reading and writing directory paths to be copied/moved (now done in registry, no writing/reading from files anymore)
+- added .exe file to write directory paths into registry through ps2exe script (no more console flicker)
+- fixed UNC paths when copying/moving
+- fixed encoding issues in windows 7 (powershell v2) - the culprit was the default cmd.exe font
+- moved some batch scripts to powershell
+- included support for powershell v7
+- other minor speed-ups
 
 ![Magic examples](img/RCWM.gif)
 

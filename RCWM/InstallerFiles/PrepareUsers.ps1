@@ -1,45 +1,95 @@
-$initialLocation = (get-location).path
-
-$mode = $args
-
-$ps = $psversiontable.psversion.major
-$os = [System.Environment]::OSVersion.Version.Major
-
-$users = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
+#https://www.lifewire.com/how-to-find-a-users-security-identifier-sid-in-windows-2625149
 
 
-#Check if %SystemRoot% equals C:\Windows
-
-if ($env:SystemRoot -ne "C:\Windows") {
-	Write-Host "SystemRoots other than 'C:\Windows' not implemented yet. This installation will be broken." -ForegroundColor red
-}
-
-
-if ($mode -eq "all" ) { 
-
-	#if only one user, $user.Length returns nothing (????????)
-	if ($users.Length -ge 2) {echo "Preparing RCWM for all users."} else {echo "Only one user found. Preparing RCWM for current user."}
+function LoopThroughUsers() {
+	
+	param([string[]]$mode, [string[]]$users)
+	
+	$allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
+	
+	if ($users.count -ge 2) {
+		Write-Host "Found " -NoNewLine; Write-Host $allUsers.Name.Count -NoNewLine; " total users in registry." 
+		Write-Host "Can prepare RCWM for " -NoNewLine; Write-Host $users.count -NoNewLine; " active users."
+	} else {
+		Write-Host "Found l user in registry." 
+	}
 
 	#write-host "Warning: Future users will see RCWM menu options, but will be unable to use them without reinstalling."
 	#rather install for every user on its own.
 
-	foreach ($user in $users)
-	{
+	if ($mode -eq "decide") {
+	
+		foreach ($user in $users)
+		{
 
-		#get reg path for every user
-		$userRegPath = $user.Name
+			#get reg path for every user
+			$userRegPath = $user
 
-		#ProfileImagePath
-		#C:\Users\root
-		$userPath = (get-itemproperty -path Registry::$userRegPath).ProfileImagePath
+			#ProfileImagePath
+			#C:\Users\root
+			$userPath = (get-itemproperty -path Registry::$userRegPath).ProfileImagePath
+			
+			$UUID = $userRegPath.Split("\")[-1]
+			
+			$currentUserName = $userPath.split('\')[-1]
+			Write-Host ""
+			Write-Host "About to prepare RCWM for user " -NoNewLine; Write-Host $currentUserName -ForegroundColor red
+			
+			while ($true) {
+				$mode = Read-Host "Continue (Y/N)?"
+				if ($mode -ne "Y" -AND $mode -ne "N") {echo "Invalid input!"}
+				else {break}
+			}
+			
+			if ($mode -eq "N") {continue} #go to next user
+			else { RegReplacements -mode "decide" -UUIDs $UUID } #do reg files work
+		}	
+			
+	} elseif ($mode -eq "allcurrent") { #no decide, all users
 		
-		$userGUID = $userRegPath.Split("\")[-1]
-
+		#generate UUIDs array from users array
+		[array]$UUIDs = @()
+		foreach ($user in $users) {
+			$UUIDs += $user.split('\')[-1]
+			#echo "added uuid"
+			#echo $user.split('\')[-1]
+			
+		}
+		
+		RegReplacements -mode "allCurrent" -UUIDs $UUIDs
+	} elseif ($mode -eq "current") {
+	
+	
+	
+		#get current user-name
+		$currUserName = cmd.exe /c whoami
+		
+		Write-Host "About to prepare RCWM for user " -NoNewLine; Write-Host $currUserName.split('\')[-1] -ForegroundColor red
+		while ($true) {
+			$mode = Read-Host "Continue (Y/N)?"
+			if ($mode -ne "Y" -AND $mode -ne "N") {echo "Invalid input!"}
+			else {break}
+		}
+		#todo exit script here
+		if ($mode -eq "N") {write-host "Exiting ..."; start-sleep 2; break}
+	
 		#make reg directories
 		
 		#get guid
-		cd REGISTRY::HKEY_USERS
-		cd $userGUID
+		cd REGISTRY::HKEY_CURRENT_USER
+		
+		#cd $userGUID
+		#$Error[0].Exception.GetType().FullName
+		
+		#try {
+		#	cd $UUID
+			#$Error[0].Exception.GetType().FullName
+		#} catch [System.Security.SecurityException] { #catch user not having the rights to do this
+		#	Write-Host "You don't have the rights to install RCWM for this user!"
+		#	continue
+		#}
+
+		#todo: exception: cd : Requested registry access is not allowed.
 
 		Remove-Item -Path RCWM -Recurse | Out-Null
 		New-Item -Path RCWM  | Out-Null
@@ -51,101 +101,189 @@ if ($mode -eq "all" ) {
 		New-Item -Path rc | Out-Null
 		New-Item -Path rcs | Out-Null
 
-		Write-Host "Prepared registry for user at " -NoNewLine; Write-Host $userPath -ForegroundColor red -NoNewLine; Write-Host " with user ID " -NoNewLine; Write-Host $userGUID -ForegroundColor red
+		Write-Host "Prepared registry for user " -NoNewLine; Write-Host $currUserName -ForegroundColor red -NoNewLine;
+
+		RegReplacements -mode "current" -UUIDs $null
+
+	} else { #allFuture
+		RegReplacements -mode "allFuture"
 	}
-
-
-} else {
-	
-	echo "Preparing RCWM for current user."
-	
-	#current user only
-	$userRegPath = $users[0].Name
-	$userPath = (get-itemproperty -path Registry::$userRegPath).ProfileImagePath
-	$userGUID = $userRegPath.Split("\")[-1]
-
-	cd REGISTRY::HKEY_USERS
-	cd $userGUID
-	Remove-Item -Path RCWM -Recurse | Out-Null
-	New-Item -Path RCWM  | Out-Null
-	cd RCWM
-	New-Item -Path dl | Out-Null
-	New-Item -Path fl | Out-Null
-	New-Item -Path mir | Out-Null
-	New-Item -Path mv | Out-Null
-	New-Item -Path rc | Out-Null
-	New-Item -Path rcs | Out-Null
-
-
-	Write-Host "Prepared registry for user at " -NoNewLine; Write-Host $userPath -ForegroundColor red -NoNewLine; Write-Host " with user ID " -NoNewLine; Write-Host $userGUID -ForegroundColor red
-
 }
 
 
-	cd $InitialLocation
-	Write-Host "Preparing files ..."	
-	#Copy all files to Temp, copy specific files to Temp and overwrite old ones
+function RegReplacements() {
 
-	New-Item Temp -ItemType "directory" 2>&1>$null
-	#Make sure Temp is clean.
-	cmd.exe /c del Temp\* /s /q 2>&1>$null
-	
-	Copy-Item -Path ".\ExecutionFiles\*" -Destination ".\Temp"
-	Copy-Item -Path ".\RegistryFiles\*" -Destination ".\Temp"
-	
-	#Overwrite default files with specific files - if they exist/if applicable
-	Copy-Item -Path ".\PowershellSpecificFiles\pwsh$ps\*" -Destination ".\Temp" 2>&1>$null
-	Copy-Item -Path ".\OSSpecificFiles\Win$os\*" -Destination ".\Temp" 2>&1>$null
-	
-	Copy-Item -Path "..\InstallerFiles\ps2exe\*" -Destination ".\Temp"
+	param($mode, [string[]]$UUIDs)
 
-
-if ($mode -eq "current" ) {
-	#change registry files to only apply to current user.
+	Write-Host "Generating all necessary registry files ..."
+	cd $initialLocation
+	cd ../files
 	
+	
+	#echo "uuids received:"
+	#echo $UUIDs
+
+	#HKCR:
 	$files = Get-ChildItem ".\Temp\*.reg"
 	
-	foreach ($file in $files){
-		(Get-Content $file) -Replace 'HKEY_CLASSES_ROOT', 'HKEY_CURRENT_USER\Software\Classes\' | Set-Content $file
-		#KEY_USERS\S-1-5-21-117113989-4160453655-1229134872-1001
+	#HKLM:
+	$exceptions = Get-ChildItem ".\Temp\Multiple*.reg"
+	$exceptions += Get-ChildItem ".\Temp\Win11*.reg"
+	$exceptions += Get-ChildItem ".\Temp\ThisPC.reg"
+	$exceptions += Get-ChildItem ".\Temp\CMDAdmin.reg"
+
+
+	if ($mode -eq "current") {
+		
+		
+		New-Item .\Temp\CurrentUser -ItemType "directory" 2>&1>$null
+		
+		foreach ($file in $files){
+			$fileName = $file.Name
+			(Get-Content $file) -Replace "HKEY_CLASSES_ROOT\\", "HKEY_CURRENT_USER\Software\Classes\" | Set-Content .\Temp\CurrentUser\$fileName
+			#KEY_USERS\S-1-5-21-117113989-4160453655-1229134872-1001
+		}
+		
+		foreach ($file in $exceptions){
+			$fileName = $file.Name
+			(Get-Content $file) -Replace "HKEY_LOCAL_MACHINE\\", "HKEY_CURRENT_USER\Software\Classes\" | Set-Content .\Temp\CurrentUser\$filename
+		}
+		del .\Temp\*.reg
+		
+	} elseif ($mode -eq "allCurrent" -OR $mode -eq "decide" ) { #decide / allCurrent
+
+
+		foreach ($uuid in $UUIDs) {
+
+			#echo "foreach2"
+			#echo $uuid
+			New-Item .\Temp\$uuid -ItemType "directory" 2>&1>$null
+			
+			foreach ($file in $files){
+				$fileName = $file.Name
+				(Get-Content $file) -Replace "HKEY_CLASSES_ROOT\\", "HKEY_USERS\$uuid\Software\Classes\" | Set-Content .\Temp\$uuid\$fileName
+				#KEY_USERS\S-1-5-21-117113989-4160453655-1229134872-1001
+			}
+			
+			foreach ($file in $exceptions){
+				$fileName = $file.Name
+				(Get-Content $file) -Replace "HKEY_LOCAL_MACHINE\\", "HKEY_USERS\$uuid\Software\Classes\" | Set-Content .\Temp\$uuid\$filename
+			}
+
+		}
+		del .\Temp\*.reg
+	} else { #allFuture - reg files stay the same.
+		#only move files to new directory in temp
+		New-Item .\Temp\ALL -ItemType "directory" 2>&1>$null
+		Move-Item -Path .\Temp\*.reg -Destination .\Temp\ALL
+		del .\Temp\*.reg
 	}
 	
-	#exceptions
-	#MultipleInvokeMinimum
-	(Get-Content ".\Temp\MultipleInvokeMinimum.reg") -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER\Software\Classes\' | Set-Content ".\Temp\MultipleInvokeMinimum.reg"
-	(Get-Content ".\Temp\MultipleInvokeMinimum64.reg") -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER\Software\Classes\' | Set-Content ".\Temp\MultipleInvokeMinimum64.reg"
-	(Get-Content ".\Temp\MultipleInvokeMinimum128.reg") -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER\Software\Classes\' | Set-Content ".\Temp\MultipleInvokeMinimum128.reg"
-	(Get-Content ".\Temp\Win11AddOldContextMenu.reg") -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER\Software\Classes\' | Set-Content ".\Temp\Win11AddOldContextMenu.reg"
-	(Get-Content ".\Temp\ThisPC.reg") -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER\Software\Classes\' | Set-Content ".\Temp\ThisPC.reg"
-	(Get-Content ".\Temp\CMDAdmin.reg") -Replace 'HKEY_LOCAL_MACHINE', 'HKEY_CURRENT_USER\Software\Classes\' | Set-Content ".\Temp\CMDAdmin.reg"
 	
-	#include in library is only configured for all users.
 	
 }
 
-
-#Generate .exe files
-#don't touch this very fragile part ...
-Write-Host "Generating binary files ..."
-#New-Item Temp\bin -ItemType "directory" 2>&1>$null
-powershell .\Temp\ps2exe.ps1 -inputfile Temp\RCopySingle.ps1 -outputfile Temp\rcopyS.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\rcopy.ico -verbose 2>&1>$null
-powershell .\Temp\ps2exe.ps1 -inputfile Temp\RCopyMultiple.ps1 -outputfile Temp\rcopyM.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\rcopy.ico -verbose 2>&1>$null
-powershell .\Temp\ps2exe.ps1 -inputfile Temp\MvDirSingle.ps1 -outputfile Temp\mvdirS.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\move.ico -verbose 2>&1>$null
-powershell .\Temp\ps2exe.ps1 -inputfile Temp\MvDirMultiple.ps1 -outputfile Temp\mvdirM.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\move.ico -verbose 2>&1>$null
-powershell .\Temp\ps2exe.ps1 -inputfile Temp\DirectoryLinks.ps1 -outputfile Temp\dlink.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\link.ico -verbose 2>&1>$null
-powershell .\Temp\ps2exe.ps1 -inputfile Temp\FileLinks.ps1 -outputfile Temp\flink.exe -noconsole -novisualstyles -x86 -nooutput -iconfile Temp\link.ico -verbose 2>&1>$null
+$initialLocation = (get-location).path
 
 
-if ($os -lt 10) { #Generate shortcuts for win7 and win8 -- new win servers(!) confirmed return "10"
-	cd PowershellSpecificFiles
-	..\..\InstallerFiles\shortcuts.ps1 
+#hkey_users might not be available for the user
+#however hklm... returns unavailable users as well. got to check which ones are inactive
+$allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
+#active ones have subkeys? - need to 100% confirm that
+#the other option is this: if I can't enter HKCU\$user, it's either inactive or I don't have permissions.
+#inactive: 
+#System.Management.Automation.ItemNotFoundException
+
+#$users = New-Object -TypeName 'System.Collections.ArrayList';
+[array]$users = @()
+
+
+foreach ($user in $allUsers) {
+
+	cd REGISTRY::HKEY_USERS
+	#echo $user.Name.split('\')[-1]
+	#if no exception, add to users array
+	
+	
+	
+	
+	try {
+		#echo $user.Name.split('\')[-1]
+		#errorAction is absolutely necessary here for try-catch to work properly
+		cd $user.Name.split('\')[-1] -ErrorAction Stop
+		#echo "adding user"
+		#echo $user.Name
+		#$users.Add($user.Name) | Out-Null
+		$users += $user.Name
+		#echo "added user"
+		#$users2 += $user.Name
+		#$Error[0].Exception.GetType().FullName
+	} catch [System.Management.Automation.ItemNotFoundException] {
+		#Write-Host "Found inactive user"
+	} catch {
+		#Write-Host "maybe access denied"
+		#$users.Add($user.Name) | Out-Null
+	}
 }
 
-#lastly, copy all generated files to C:\Windows\System32\RCWM
-#this doesnt overwrite??
-#think about update vs install
-#this is done in install.cmd script now
-#Copy-Item -Path ".\Temp\*" -Destination "C:\Windows\System32\RCWM"
+while ($true) {
+
+	$mode1 = Read-Host "Do you want to install RCWM for [C]urrent user only, [D]ecide for each, or for [A]ll users?"
+	if ($mode1 -eq "C") {break}
+	elseif ($mode1 -eq "D") {break}
+	elseif ($mode1 -eq "A") {break}
+	else {echo "Invalid input!"}
+}
+
+
+if ($mode1 -eq "A") {
+	
+	while ($true) {
+		$mode1 = Read-Host "Do you want to install RCWM for All [C]urrent users only, or for all [F]uture users as well?"
+		if ($mode1 -eq "C") {break}
+		elseif ($mode1 -eq "F") {break}
+		else {echo "Invalid input!"}
+	}
+	
+	
+	
+	if ($mode1 -eq "F") { 
+		#echo "all future, default regedit files"
+		#create new allfuture dir? move all files there?
+		LoopThroughUsers -mode "allFuture"
+		
+	}
+	
+	elseif ($mode1 -eq "C") {
+		echo "all current"
+		LoopThroughUsers -mode "allcurrent" -users $users
+	
+	}
+
+}
+
+
+elseif ($mode1 -eq "D" ) { 
+
+	#echo "calling users loop"
+	#echo $users.count
+	LoopThroughUsers -mode "decide" -users $users
+
+} else {
+	#echo "calling users loop current"
+	LoopThroughUsers -mode "current" -users $null
+
+}
+
+
+
+#Check if %SystemRoot% equals C:\Windows
+#todo: change every C:\windows to %SystemRoot%?
+#if ($env:SystemRoot -ne "C:\Windows") {
+#	Write-Host "SystemRoots other than 'C:\Windows' not implemented yet. This installation will be broken." -ForegroundColor red
+#}
+
+
 
 
 Write-Host "Preparation finished."
