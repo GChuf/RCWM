@@ -8,8 +8,8 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-5"
 
 [HKEY_CLASSES_ROOT\Directory\shell\mvdir\command]
-@="C:\\Windows\\System32\\RCWM\\mvdirS.exe \"%V\""
-"IsolatedCommand"="C:\\Windows\\System32\\RCWM\\mvdirS.exe \"%V\""
+@="C:\\windows\\rcwm\\mvdirS.exe \"%V\""
+"IsolatedCommand"="C:\\windows\\rcwm\\mvdirS.exe \"%V\""
 
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir]
@@ -17,7 +17,7 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-6"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir\command]
-@="cmd.exe /c C:\\Windows\\System32\\RCWM\\rcp.cmd mv s '%V'"
-"IsolatedCommand"="cmd.exe /c C:\\Windows\\System32\\RCWM\\rcp.cmd mv s '%V'"
+@="cmd.exe /c C:\\windows\\rcwm\\rcp.cmd mv s '%V'"
+"IsolatedCommand"="cmd.exe /c C:\\windows\\rcwm\\rcp.cmd mv s '%V'"
 
 ; end

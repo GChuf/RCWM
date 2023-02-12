@@ -3,12 +3,6 @@ $ps = $psversiontable.psversion.major
 $arch = (Get-WmiObject win32_processor | Where-Object{$_.deviceID -eq "CPU0"}).AddressWidth
 $os = [System.Environment]::OSVersion.Version.Major
 
-#check for old rcwm folder
-
-#rem CHECK v1
-#IF EXIST "%SystemRoot%\System32\RCWM" ( echo Old RCWM v1 folder detected && choice /C yn /M "Delete old files " )
-#if %errorlevel% == 1 ( rd "%SystemRoot%\System32\RCWM" /s /q  | Out-Null)
-
 
 #Make sure Temp is clean.
 cmd.exe /c del .\Temp\* /s /q 2>&1>$null
@@ -82,18 +76,18 @@ if ($winver -eq 11) {
 
 function recreateFiles() {
 	#$sysroot = cmd.exe /c echo %systemroot% 
-	cmd.exe /c del /f /q %SystemRoot%\System32\RCWM | Out-Null
-	cmd.exe /c rd /s /q %SystemRoot%\System32\RCWM | Out-Null
-	cmd.exe /c md %SystemRoot%\System32\RCWM | Out-Null
+	cmd.exe /c del /f /q %SystemRoot%\RCWM | Out-Null
+	cmd.exe /c rd /s /q %SystemRoot%\RCWM | Out-Null
+	cmd.exe /c md %SystemRoot%\RCWM | Out-Null
 
 	#copy binaries, shortcuts, icons, .bat and .ps1 files into RCWM folder
 	$sysroot = cmd.exe /c echo %SystemRoot%
-	Copy-Item -Path "Temp\*" -Destination "$sysroot\system32\RCWM"
+	Copy-Item -Path "Temp\*" -Destination "$sysroot\RCWM"
 
 	#take ownership of that folder for administrators & users
-	cmd.exe /c takeown /F %SystemRoot%\System32\RCWM /R /D Y | Out-Null
-	cmd.exe /c icacls %SystemRoot%\System32\RCWM /grant administrators:F /T /C | Out-Null
-	cmd.exe /c icacls %SystemRoot%\System32\RCWM /grant users:F /T /C | Out-Null
+	cmd.exe /c takeown /F %SystemRoot%\RCWM /R /D Y | Out-Null
+	cmd.exe /c icacls %SystemRoot%\RCWM /grant administrators:F /T /C | Out-Null
+	cmd.exe /c icacls %SystemRoot%\RCWM /grant users:F /T /C | Out-Null
 
 	#Files copied.
 	
@@ -101,7 +95,7 @@ function recreateFiles() {
 }
 
 function mergeFiles() {
-	robocopy .\Temp\* "%SystemRoot%\System32\RCWM" /XC /XN /XO | Out-Null
+	robocopy .\Temp\* "%SystemRoot%\RCWM" /XC /XN /XO | Out-Null
 
 	echo "New files copied"
 }
@@ -109,24 +103,41 @@ function mergeFiles() {
 
 function installRCWM() {
 	
-	cmd.exe /c md %SystemRoot%\System32\RCWM
-	#attrib +h +s %SystemRoot%\System32\RCWM
+	cmd.exe /c md %SystemRoot%\RCWM
+	#attrib +h +s %SystemRoot%\RCWM
 
 	#copy binaries, shortcuts, icons, .bat and .ps1 files into RCWM folder
 	$sysroot = cmd.exe /c echo %SystemRoot%
-	Copy-Item -Path "Temp\*" -Destination "$sysroot\system32\RCWM"
+	Copy-Item -Path "Temp\*" -Destination "$sysroot\RCWM"
 
 	#take ownership of that folder for administrators & users
-	cmd.exe /c takeown /F %SystemRoot%\System32\RCWM /R /D Y | Out-Null
-	cmd.exe /c icacls %SystemRoot%\System32\RCWM /grant administrators:F /T /C | Out-Null
-	cmd.exe /c icacls %SystemRoot%\System32\RCWM /grant users:F /T /C | Out-Null
+	cmd.exe /c takeown /F %SystemRoot%\RCWM /R /D Y | Out-Null
+	cmd.exe /c icacls %SystemRoot%\RCWM /grant administrators:F /T /C | Out-Null
+	cmd.exe /c icacls %SystemRoot%\RCWM /grant users:F /T /C | Out-Null
 
 
-	echo "Created directory and copied all files."
+	echo "Created directory at C:\Windows\RCWM and copied all files."
 }
 
 $sysroot = cmd.exe /c echo %SystemRoot%
-$existingFolder = Test-Path -Path "$sysroot\System32\RCWM"
+$existingFolder = Test-Path -Path "$sysroot\RCWM"
+$RCWMv1Folder = Test-Path -Path "$sysroot\System32\RCWM"
+
+if ($RCWMv1Folder -eq $true) {
+	write-host "Old RCWM v1.x folder already detected."
+	while ($true) {
+		$mode1 = Read-Host "Delete old files (recommended) (Y/N)"
+		if ($mode1 -eq "y") {break}
+		elseif ($mode1 -eq "n") {break}
+		else {echo "Invalid input!"}
+	}
+	
+	if ($mode1 -eq "Y") {
+		cmd.exe /c del /f /q %SystemRoot%\System32\RCWM | Out-Null
+		cmd.exe /c rd /s /q %SystemRoot%\System32\RCWM | Out-Null
+	}
+}
+
 
 if ($existingFolder -eq $true) {
 	write-host "RCWM folder already exists."
@@ -144,7 +155,7 @@ if ($existingFolder -eq $true) {
 	#install
 	$sysroot = cmd.exe /c echo %SystemRoot%
 
-	Write-Host "Preparing directory at $sysroot\System32\RCWM"
+	Write-Host "Preparing directory at $sysroot\RCWM"
 	installRCWM
 }
 

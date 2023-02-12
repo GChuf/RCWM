@@ -276,14 +276,4 @@ elseif ($mode1 -eq "D" ) {
 }
 
 
-
-#Check if %SystemRoot% equals C:\Windows
-#todo: change every C:\windows to %SystemRoot%?
-#if ($env:SystemRoot -ne "C:\Windows") {
-#	Write-Host "SystemRoots other than 'C:\Windows' not implemented yet. This installation will be broken." -ForegroundColor red
-#}
-
-
-
-
 Write-Host "Preparation finished."

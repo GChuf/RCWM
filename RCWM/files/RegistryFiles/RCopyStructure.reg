@@ -15,7 +15,7 @@ Windows Registry Editor Version 5.00
 @="RoboPaste Structure"
 "Icon"="rcwmimg.dll,-19"
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpastes\command]
-@="cmd.exe /c C:\\Windows\\System32\\RCWM\\RcopyStructure.bat"
-"IsolatedCommand"="cmd.exe /c C:\\Windows\\System32\\RCWM\\RcopyStructure.bat"
+@="cmd.exe /c C:\\windows\\rcwm\\RcopyStructure.bat"
+"IsolatedCommand"="cmd.exe /c C:\\windows\\rcwm\\RcopyStructure.bat"
 
 ; end

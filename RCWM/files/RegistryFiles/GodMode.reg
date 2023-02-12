@@ -8,7 +8,7 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-17"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\GodMode\command]
-@="explorer C:\\windows\\system32\\RCWM\\GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}"
-"IsolatedCommand"="explorer C:\\windows\\system32\\RCWM\\GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}"
+@="explorer C:\\windows\\rcwm\\GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}"
+"IsolatedCommand"="explorer C:\\windows\\rcwm\\GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}"
 
 ; end

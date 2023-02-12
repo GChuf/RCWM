@@ -8,8 +8,8 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-5"
 
 [HKEY_CLASSES_ROOT\Directory\shell\rcopy\command]
-@="C:\\Windows\\System32\\RCWM\\rcopyM.exe \"%V\""
-"IsolatedCommand"="C:\\Windows\\System32\\RCWM\\rcopyM.exe \"%V\""
+@="C:\\windows\\rcwm\\rcopyM.exe \"%V\""
+"IsolatedCommand"="C:\\windows\\rcwm\\rcopyM.exe \"%V\""
 
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste]
@@ -17,7 +17,7 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-6"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste\command]
-@="cmd.exe /c C:\\Windows\\System32\\RCWM\\rcp.cmd rc m '%V'"
-"IsolatedCommand"="cmd.exe /c C:\\Windows\\System32\\RCWM\\rcp.cmd rc m '%V'"
+@="cmd.exe /c C:\\windows\\rcwm\\rcp.cmd rc m '%V'"
+"IsolatedCommand"="cmd.exe /c C:\\windows\\rcwm\\rcp.cmd rc m '%V'"
 
 ; end

@@ -8,8 +8,8 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-20"
 
 [HKEY_CLASSES_ROOT\Directory\shell\mirror\command]
-@="C:\\Windows\\System32\\RCWM\\mirror.exe \"%V\""
-"IsolatedCommand"="C:\\Windows\\System32\\RCWM\\mirror.exe \"%V\""
+@="C:\\windows\\rcwm\\mirror.exe \"%V\""
+"IsolatedCommand"="C:\\windows\\rcwm\\mirror.exe \"%V\""
 
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\mirror]
@@ -17,6 +17,6 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-20"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\mirror\command]
-@="cmd /c pwsh C:\\Windows\\System32\\RCWM\\rcp.ps1 rc mir \"%V\""
-"IsolatedCommand"="cmd /c pwsh C:\\Windows\\System32\\RCWM\\rcp.ps1 rc mir \"%V\""
+@="cmd /c pwsh C:\\windows\\rcwm\\rcp.ps1 rc mir \"%V\""
+"IsolatedCommand"="cmd /c pwsh C:\\windows\\rcwm\\rcp.ps1 rc mir \"%V\""
 ; end

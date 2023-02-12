@@ -59,7 +59,7 @@ function MultipleInvoke(){
 
 function GodMode(){
 	enableReg -regFile "GodMode.reg"
-	cmd.exe /c md C:\windows\system32\RCWM\GodMode.{ED7BA470-8E54-465E-825C-99712043E01C} 2>NUL
+	cmd.exe /c md C:\windows\RCWM\GodMode.{ED7BA470-8E54-465E-825C-99712043E01C} 2>NUL
 }
 
 function MvDir(){
@@ -135,7 +135,7 @@ function enableReg() {
 	$regs = get-childitem $regFile -depth 1
 	#write-host $regs
 	foreach ($reg in $regs) {
-		regedit $reg
+		regedit /s $reg
 	}
 	#execute regedit for this file in all subdirectories of temp"
 	#regedit /s $regFile
