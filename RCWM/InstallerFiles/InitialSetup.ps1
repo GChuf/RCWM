@@ -135,6 +135,8 @@ if ($RCWMv1Folder -eq $true) {
 	if ($mode1 -eq "Y") {
 		cmd.exe /c del /f /q %SystemRoot%\System32\RCWM | Out-Null
 		cmd.exe /c rd /s /q %SystemRoot%\System32\RCWM | Out-Null
+		write-host "Old files deleted."
+		#todo old registry??
 	}
 }
 

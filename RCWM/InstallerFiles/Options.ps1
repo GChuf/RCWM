@@ -12,7 +12,7 @@ $AddOptions = @(
 	New-Object PSObject -Property @{Name = 'CMD'; RegFile = 'CMD.reg'; Desc = 'Do you want to add open CMD to background/folders/drives'}
 	New-Object PSObject -Property @{Name = 'CMDshift'; RegFile = 'CMDshift.reg'; Desc = 'Do you want to add open CMD to (shift! + right click)'}
 	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add open PowerShell to background/folders/drives'; exception = "powershellCheck"}
-	New-Object PSObject -Property @{Name = 'ControlPanel'; RegFile = 'ControlPanel.reg'; Desc = 'Do you want to add Control Panel'}
+	New-Object PSObject -Property @{Name = 'ControlPanel'; RegFile = 'ControlPanel.reg'; Desc = 'Do you want to add Control Panel to Desktop'}
 	New-Object PSObject -Property @{Name = 'CopyToFolder'; RegFile = 'CopyToFolder.reg'; Desc = 'Do you want to add Copy To Folder'}
 	New-Object PSObject -Property @{Name = 'GodMode'; RegFile = 'GodMode.reg'; Desc = 'Do you want to add God Mode'; exception = "GodMode"}
 	New-Object PSObject -Property @{Name = 'Links'; RegFile = 'Links.reg'; Desc = 'Do you want to add symbolic/hard links'}
@@ -59,7 +59,8 @@ function MultipleInvoke(){
 
 function GodMode(){
 	enableReg -regFile "GodMode.reg"
-	cmd.exe /c md C:\windows\RCWM\GodMode.{ED7BA470-8E54-465E-825C-99712043E01C} 2>NUL
+	#cmd.exe /c md C:\windows\RCWM\GodMode.{ED7BA470-8E54-465E-825C-99712043E01C} 2>NUL
+	cmd.exe /c ..\..\InstallerFiles\GodMode.bat | out-null
 }
 
 function MvDir(){

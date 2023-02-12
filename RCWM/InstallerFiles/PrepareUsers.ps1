@@ -101,7 +101,7 @@ function LoopThroughUsers() {
 		New-Item -Path rc | Out-Null
 		New-Item -Path rcs | Out-Null
 
-		Write-Host "Prepared registry for user " -NoNewLine; Write-Host $currUserName -ForegroundColor red -NoNewLine;
+		Write-Host "Prepared registry for user " -NoNewLine; Write-Host $currUserName -ForegroundColor red;
 
 		RegReplacements -mode "current" -UUIDs $null
 

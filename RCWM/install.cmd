@@ -44,8 +44,19 @@ echo ***********************************
 echo(
 echo(
 
+rem after v1.5
+reg delete "HKCU\RCWM" /f >NUL
+reg add "HKCU\RCWM" /f >NUL
+reg add "HKCU\RCWM\rc" /f >NUL
+reg add "HKCU\RCWM\rcs" /f >NUL
+reg add "HKCU\RCWM\mv" /f >NUL
+reg add "HKCU\RCWM\mir" /f >NUL
+reg add "HKCU\RCWM\dl" /f >NUL
+reg add "HKCU\RCWM\fl" /f >NUL
 
 cd files
+
+
 
 
 powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\InitialSetup.ps1
