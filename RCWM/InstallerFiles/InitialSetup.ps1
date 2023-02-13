@@ -12,6 +12,10 @@ New-Item Temp -ItemType "directory" 2>&1>$null
 #Copy reg files into temp,
 Copy-Item -Path "RegistryFiles\*.reg" -Destination ".\Temp" | Out-Null
 
+#todo new folder for reg files
+#New-Item Temp\TempRegFiles -ItemType "directory" 2>&1>$null
+#Copy-Item -Path "RegistryFiles\*.reg" -Destination ".\Temp\TempRegFiles" | Out-Null
+
 #copy execution files and icons
 Copy-Item -Path "ExecutionFiles\*" -Destination ".\Temp" | Out-Null
 Copy-Item -Path "Icons\*" -Destination ".\Temp" | Out-Null
@@ -48,10 +52,7 @@ powershell .\Temp\ps2exe.ps1 -inputfile .\Temp\DirectoryLinks.ps1 -outputfile .\
 powershell .\Temp\ps2exe.ps1 -inputfile .\Temp\FileLinks.ps1 -outputfile .\Temp\flink.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\link.ico 2>&1>$null
 
 
-
-
 #Files generated.
-
 
 
 #win11 - enable old context menu
@@ -138,6 +139,7 @@ if ($RCWMv1Folder -eq $true) {
 		write-host "Old files deleted."
 		#todo old registry??
 	}
+	Write-Host "It is recommended you also uninstall any previous context menu additions with the provided uninstaller .reg files."
 }
 
 
@@ -171,12 +173,8 @@ try {if(Get-Command pwsh){$global:ps = (Get-Command pwsh).version.major}}
 Catch {}
 $ErrorActionPreference=$oldPreference
 
-
 Write-Host "Using powershell version $ps on $arch bit CPU."
 
 # Unblock ps1 files (not entirely necessary)
 # Won't work on older powershell versions, so output error message to NUL
 #Unblock-File *.ps1 > $null
-
-
-#install/overwrite/update files

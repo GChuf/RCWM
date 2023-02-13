@@ -49,7 +49,7 @@ $MiscOptions = @(
 #exceptions:
 function MultipleInvoke(){
 	while ($true) {
-		$mode1 = Read-Host "Increase to 32[1], 64[2] or 128[3]"
+		$mode1 = Read-Host "* Increase to 32[1], 64[2] or 128[3]"
 		if ($mode1 -eq "1") {enableReg -regFile "MultipleInvokeMinimum.reg"; break}
 		elseif ($mode1 -eq "2") {enableReg -regFile "MultipleInvokeMinimum64.reg"; break}
 		elseif ($mode1 -eq "3") {enableReg -regFile "MultipleInvokeMinimum128.reg"; break}
@@ -65,8 +65,8 @@ function GodMode(){
 
 function MvDir(){
 	while ($true) {
-		$mode1 = Read-Host "Do you want to add 'Move Directory' for [S]ingle directories, or for [M]ultiple?"
-		if ($mode1 -eq "S") {enableReg -regFile "MvDirSingle".reg; break}
+		$mode1 = Read-Host "* Do you want to add 'Move Directory' for [S]ingle directories, or for [M]ultiple?"
+		if ($mode1 -eq "S") {enableReg -regFile "MvDirSingle.reg"; break}
 		elseif ($mode1 -eq "M") {enableReg -regFile "MvDirMultiple.reg"; break}
 		else {echo "Invalid input!"}
 	}
@@ -74,7 +74,7 @@ function MvDir(){
 
 function RCopy() {
 	while ($true) {
-		$mode1 = Read-Host "Do you want to add 'RoboCopy Directory' for [S]ingle directories, or for [M]ultiple?"
+		$mode1 = Read-Host "* Do you want to add 'RoboCopy Directory' for [S]ingle directories, or for [M]ultiple?"
 		if ($mode1 -eq "S") {enableReg -regFile "RCopySingle.reg"; break}
 		elseif ($mode1 -eq "M") {enableReg -regFile "RCopyMultiple.reg"; break}
 		else {echo "Invalid input!"}
@@ -83,8 +83,8 @@ function RCopy() {
 
 function RmDirectory(){
 	while ($true) {
-		Write-Host "The faster Remove Directory option also removes symlink contents, not symlinks themselves."
-		$mode1 = Read-Host "Do you want to add the [F]ast Remove Directory option, or the [S]afer/slower one "
+		Write-Host "* The faster Remove Directory option also removes symlink contents, not symlinks themselves."
+		$mode1 = Read-Host "* Do you want to add the [F]ast Remove Directory option, or the [S]afer/slower one "
 		if ($mode1 -eq "S") {enableReg -regFile "RmDirS.reg"; break}
 		elseif ($mode1 -eq "F") {enableReg -regFile "RmDir.reg"; break}
 		else {echo "Invalid input!"}
@@ -102,14 +102,11 @@ function powershellCheck(){
 	if ($ps -lt 4){
 		if ($arch -eq "amd64"){
 			enableReg -regFile "pwrshell64.reg"
-			echo "ps lt 4, amd64"
 		} else {
 			enableReg -regFile "pwrshell32.reg"
-			echo "ps lt 4, 32"
 		}
 	} else {
 		enableReg -regFile "pwrshell.reg"
-		echo "ps ge 4"
 	}
 
 }
