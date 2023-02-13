@@ -125,7 +125,7 @@ function LoopThroughUsers() {
 		RegReplacements -mode "current" -UUIDs $null
 
 	} else { #allFuture
-		RegReplacements -mode "allFuture"
+		#RegReplacements -mode "allFuture"
 	}
 }
 
@@ -191,15 +191,14 @@ function RegReplacements() {
 
 		}
 		del .\Temp\*.reg
-	} else { #allFuture - reg files stay the same.
-		#only move files to new directory in temp
-		New-Item .\Temp\ALL -ItemType "directory" 2>&1>$null
-		Move-Item -Path .\Temp\*.reg -Destination .\Temp\ALL
-		del .\Temp\*.reg
 	}
-	
-	
-	
+#	else { #allFuture - reg files stay the same.
+		#only move files to new directory in temp
+#		New-Item .\Temp\ALL -ItemType "directory" 2>&1>$null
+#		Move-Item -Path .\Temp\*.reg -Destination .\Temp\ALL
+#		del .\Temp\*.reg
+#	}
+
 }
 
 $initialLocation = (get-location).path
@@ -247,7 +246,7 @@ foreach ($user in $allUsers) {
 
 while ($true) {
 
-	$mode1 = Read-Host "Do you want to install RCWM for [C]urrent user only, [D]ecide for each, or for [A]ll users?"
+	$mode1 = Read-Host "Do you want to install RCWM for [C]urrent user only, [D]ecide for each, or for [A]ll current users?"
 	if ($mode1 -eq "C") {break}
 	elseif ($mode1 -eq "D") {break}
 	elseif ($mode1 -eq "A") {break}
@@ -255,32 +254,32 @@ while ($true) {
 }
 
 
+#if ($mode1 -eq "A") {
+	
+#	while ($true) {
+#		$mode1 = Read-Host "Do you want to install RCWM for All [C]urrent users only, or for all [F]uture users as well?"
+#		if ($mode1 -eq "C") {break}
+#		elseif ($mode1 -eq "F") {break}
+#		else {echo "Invalid input!"}
+#	}
+	
+#	if ($mode1 -eq "F") { 
+#		#echo "all future, default regedit files"
+#		#create new allfuture dir? move all files there?
+#		LoopThroughUsers -mode "allFuture"		
+#	}
+	
+	#elseif ($mode1 -eq "C") {
+		#echo "all current"
+		#LoopThroughUsers -mode "allcurrent" -users $users
+	#}
+#}
+
+
+
 if ($mode1 -eq "A") {
-	
-	while ($true) {
-		$mode1 = Read-Host "Do you want to install RCWM for All [C]urrent users only, or for all [F]uture users as well?"
-		if ($mode1 -eq "C") {break}
-		elseif ($mode1 -eq "F") {break}
-		else {echo "Invalid input!"}
-	}
-	
-	
-	
-	if ($mode1 -eq "F") { 
-		#echo "all future, default regedit files"
-		#create new allfuture dir? move all files there?
-		LoopThroughUsers -mode "allFuture"
-		
-	}
-	
-	elseif ($mode1 -eq "C") {
-		echo "all current"
-		LoopThroughUsers -mode "allcurrent" -users $users
-	
-	}
-
+	LoopThroughUsers -mode "allcurrent" -users $users
 }
-
 
 elseif ($mode1 -eq "D" ) { 
 
