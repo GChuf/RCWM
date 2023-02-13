@@ -1,6 +1,34 @@
 #https://www.lifewire.com/how-to-find-a-users-security-identifier-sid-in-windows-2625149
 
 
+##TODO
+#scrap allFuture? u ant make registry keys for every user in advance
+#unless they all use hkcr/hklm at the same time - not a good idea.
+#solution is to actually implement an exe that saves this all into memory
+
+function prepareRegKeys(){
+	param([string[]]$mode, [string[]]$user)
+	
+	#cd REGISTRY::$user
+	if ($mode -eq "current") {
+		cd REGISTRY::HKEY_CURRENT_USER
+	} else {
+		cd REGISTRY::HKEY_USERS\$user
+	}
+
+	Remove-Item -Path RCWM -Recurse | Out-Null
+	New-Item -Path RCWM  | Out-Null
+	cd RCWM
+	New-Item -Path dl | Out-Null
+	New-Item -Path fl | Out-Null
+	New-Item -Path mir | Out-Null
+	New-Item -Path mv | Out-Null
+	New-Item -Path rc | Out-Null
+	New-Item -Path rcs | Out-Null
+	
+	#Write-Host "Prepared registry for user " -NoNewLine; Write-Host $user -ForegroundColor red;
+}
+
 function LoopThroughUsers() {
 	
 	param([string[]]$mode, [string[]]$users)
@@ -42,7 +70,10 @@ function LoopThroughUsers() {
 			}
 			
 			if ($mode -eq "N") {continue} #go to next user
-			else { RegReplacements -mode "decide" -UUIDs $UUID } #do reg files work
+			else { 
+				prepareRegKeys -user $UUID
+				RegReplacements -mode "decide" -UUIDs $UUID 
+			} #do reg files work
 		}	
 			
 	} elseif ($mode -eq "allcurrent") { #no decide, all users
@@ -50,16 +81,14 @@ function LoopThroughUsers() {
 		#generate UUIDs array from users array
 		[array]$UUIDs = @()
 		foreach ($user in $users) {
-			$UUIDs += $user.split('\')[-1]
+			$UUID = $user.Split("\")[-1]
+			$UUIDs += $UUID
 			#echo "added uuid"
 			#echo $user.split('\')[-1]
-			
+			prepareRegKeys -user $UUID
 		}
-		
 		RegReplacements -mode "allCurrent" -UUIDs $UUIDs
 	} elseif ($mode -eq "current") {
-	
-	
 	
 		#get current user-name
 		$currUserName = cmd.exe /c whoami
@@ -76,7 +105,6 @@ function LoopThroughUsers() {
 		#make reg directories
 		
 		#get guid
-		cd REGISTRY::HKEY_CURRENT_USER
 		
 		#cd $userGUID
 		#$Error[0].Exception.GetType().FullName
@@ -91,17 +119,8 @@ function LoopThroughUsers() {
 
 		#todo: exception: cd : Requested registry access is not allowed.
 
-		Remove-Item -Path RCWM -Recurse | Out-Null
-		New-Item -Path RCWM  | Out-Null
-		cd RCWM
-		New-Item -Path dl | Out-Null
-		New-Item -Path fl | Out-Null
-		New-Item -Path mir | Out-Null
-		New-Item -Path mv | Out-Null
-		New-Item -Path rc | Out-Null
-		New-Item -Path rcs | Out-Null
 
-		Write-Host "Prepared registry for user " -NoNewLine; Write-Host $currUserName -ForegroundColor red;
+		prepareRegKeys -mode "current" -user $UUID
 
 		RegReplacements -mode "current" -UUIDs $null
 

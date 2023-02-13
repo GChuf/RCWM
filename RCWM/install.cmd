@@ -53,7 +53,6 @@ powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\InitialS
 powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\PrepareUsers.ps1
 
 
-
 echo(
 echo Choose the options that you want to apply to your right-click menu.
 echo There are 3 sections: Add options, Remove options, and Miscellaneous.
