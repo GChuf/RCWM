@@ -1,6 +1,5 @@
 param([string]$inputFile=$null, [string]$outputFile=$null, [switch]$verbose, [switch] $debug, [switch]$runtime20, [switch]$x86, [switch]$x64, [switch]$runtime30, [switch]$runtime40, [int]$lcid, [switch]$sta, [switch]$mta, [switch]$noConsole, [switch]$nested, [string]$iconFile=$null)
 
-
 <################################################################################>
 <##                                                                            ##>
 <##      PS2EXE v0.5.0.0  -  http://ps2exe.codeplex.com                        ##>
@@ -16,24 +15,12 @@ param([string]$inputFile=$null, [string]$outputFile=$null, [switch]$verbose, [sw
 <##      	                                                               ##>
 <################################################################################>
 
-
 #Write-Host "PS2EXE; v0.5.0.0 by Ingo Karstein (http://blog.karstein-consulting.com)"
-
-
 
 $inputFile = (new-object System.IO.FileInfo($inputFile)).FullName
 
 $outputFile = (new-object System.IO.FileInfo($outputFile)).FullName
-
-
-
-#if( !([string]::IsNullOrEmpty($iconFile) ) ) {
-#	if( !(Test-Path (join-path (split-path $inputFile) $iconFile) -PathType Leaf ) ) {
-#		Write-Host "ICON FILE ""$($iconFile)"" NOT FOUND! IT MUST BE IN THE SAME DIRECTORY AS THE PS-SCRIPT (""$($inputFile)"")."
-#		exit -1
-#	}
-#}
-
+$psversion = $PSVersionTable.PSVersion.Major
 if( !$runtime20 -and !$runtime30 -and !$runtime40 ) {
     if( $psversion -eq 2 ) {
 		$runtime20 = $true
@@ -43,9 +30,6 @@ if( !$runtime20 -and !$runtime30 -and !$runtime40 ) {
         $runtime40 = $true
     }
 }
-
-
-
 
 Set-Location (Split-Path $MyInvocation.MyCommand.Path)
 
@@ -68,8 +52,6 @@ if( $runtime30 -or $runtime40 ) {
     [System.AppDomain]::CurrentDomain.Load($n) | Out-Null
     $referenceAssembies += ([System.AppDomain]::CurrentDomain.GetAssemblies() | ? { $_.ManifestModule.Name -ieq "System.Core.dll" } | select -First 1).location
 }
-
-
 
 $inputFile = [System.IO.Path]::GetFullPath($inputFile) 
 $outputFile = [System.IO.Path]::GetFullPath($outputFile) 
@@ -107,23 +89,17 @@ if( $content -eq $null ) {
 $scriptInp = [string]::Join("`r`n", $content)
 $script = [System.Convert]::ToBase64String(([System.Text.Encoding]::UTF8.GetBytes($scriptInp)))
 
-
 #region program frame
     $culture = ""
-	
 	$forms = @"
 		    internal class ReadKeyForm 
 		    {
 		        public KeyInfo key = new KeyInfo();
 				public ReadKeyForm() {}
-
 			}
-
 "@	
-	
 
 	$programFrame = @"
-
 	using System;
 	using System.Collections.Generic;
 	using System.Text;
@@ -132,9 +108,7 @@ $script = [System.Convert]::ToBase64String(([System.Text.Encoding]::UTF8.GetByte
 	using PowerShell = System.Management.Automation.PowerShell;
 	using System.Globalization;
 	using System.Management.Automation.Host;
-
 	using System.Runtime.InteropServices;
-
 	namespace ik.PowerShell
 	{
 $forms
@@ -240,7 +214,6 @@ $forms
 
 					ReadKeyForm f = new ReadKeyForm();
 	                return f.key; 
-
 	        }
 
 	        public override void ScrollBufferContents(Rectangle source, Coordinates destination, Rectangle clip, BufferCell fill)
@@ -332,9 +305,7 @@ $forms
 
 	        public override PSCredential PromptForCredential(string caption, string message, string userName, string targetName)
 	        {
-
 	            return null;
-
 	        }
 
 	        public override PSHostRawUserInterface RawUI
@@ -363,24 +334,20 @@ $forms
 	        public override void Write(string value)
 	        {
 
-
 	        }
 
 	        public override void WriteDebugLine(string message)
 	        {
-
 
 	        }
 
 	        public override void WriteErrorLine(string value)
 	        {
 
-
 	        }
 
 	        public override void WriteLine(string value)
 	        {
-
 
 	        }
 
@@ -392,16 +359,13 @@ $forms
 	        public override void WriteVerboseLine(string message)
 	        {
 
-
 	        }
 
 	        public override void WriteWarningLine(string message)
 	        {
 
-
 	        }
 	    }
-
 
 	    internal class PS2EXEHost : PSHost
 	    {
@@ -496,14 +460,11 @@ $forms
 	        }
 	    }
 
-
-
 	    internal interface PS2EXEApp
 	    {
 	        bool ShouldExit { get; set; }
 	        int ExitCode { get; set; }
 	    }
-
 
 	    internal class PS2EXE : PS2EXEApp
 	    {
@@ -534,8 +495,6 @@ $forms
 	            PS2EXEHostUI ui = new PS2EXEHostUI();
 	            PS2EXEHost host = new PS2EXEHost(me);
 	            System.Threading.ManualResetEvent mre = new System.Threading.ManualResetEvent(false);
-
-
 	            try
 	            {
 	                using (Runspace myRunSpace = RunspaceFactory.CreateRunspace(host))
@@ -548,13 +507,11 @@ $forms
 
 	                        powershell.Runspace = myRunSpace;
 
-
 	                        PSDataCollection<PSObject> inp = new PSDataCollection<PSObject>();
 
 	                        PSDataCollection<PSObject> outp = new PSDataCollection<PSObject>();
 
 	                        int separator = 0;
-
 
 	                        string script = System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(@"$($script)"));
 
@@ -563,14 +520,12 @@ $forms
 	                        powershell.AddScript(script);
                         	powershell.AddParameters(paramList.GetRange(0, paramList.Count));
 
-
 	                        powershell.BeginInvoke<PSObject, PSObject>(inp, outp, null, new AsyncCallback(delegate(IAsyncResult ar)
 	                        {
 	                            if (ar.IsCompleted)
 	                                mre.Set();
 	                        }), null);
-							
-							
+
 	                        while (!me.ShouldExit && !mre.WaitOne(10))
 	                        {
 	                        };
@@ -580,25 +535,18 @@ $forms
 
 	                    myRunSpace.Close();
 	                }
-	
-					
 	            }
 	            catch (Exception ex)
 	            {
 
 	            }
 
-
 	            return me.ExitCode;
 	        }
-
-
-
 	    }
 	}
 "@
 #endregion
-
 
 #region EXE Config file
   $configFileForEXE2 = "<?xml version=""1.0"" encoding=""utf-8"" ?>`r`n<configuration><startup><supportedRuntime version=""v2.0.50727""/></startup></configuration>"
