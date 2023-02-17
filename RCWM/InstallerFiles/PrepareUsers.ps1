@@ -270,7 +270,7 @@ while ($true) {
 #		#create new allfuture dir? move all files there?
 #		LoopThroughUsers -mode "allFuture"		
 #	}
-	
+
 	#elseif ($mode1 -eq "C") {
 		#echo "all current"
 		#LoopThroughUsers -mode "allcurrent" -users $users
