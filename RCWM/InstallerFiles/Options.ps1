@@ -130,7 +130,9 @@ function prompt() {
 
 function enableReg() {
 	param([string[]]$regFile)
-	$regs = get-childitem $regFile -depth 1
+	#pwsh v2
+	$regs = get-childitem -path . -recurse -include $regFile
+	#$regs = get-childitem $regFile -depth 1
 	#write-host $regs
 	foreach ($reg in $regs) {
 		regedit /s $reg

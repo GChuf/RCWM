@@ -20,7 +20,7 @@ function prepareRegKeys(){
 	New-Item -Path RCWM  | Out-Null
 	
 	cd RCWM
-	New-ItemProperty -Path . -Name "Version" -Value "2.0.0" -PropertyType String -Force
+	New-ItemProperty -Path . -Name "Version" -Value "2.0.0" -PropertyType String -Force | Out-Null
 	New-Item -Path dl | Out-Null
 	New-Item -Path fl | Out-Null
 	New-Item -Path mir | Out-Null
@@ -169,7 +169,6 @@ function RegReplacements() {
 			$fileName = $file.Name
 			(Get-Content $file) -Replace "HKEY_LOCAL_MACHINE\\", "HKEY_CURRENT_USER\Software\Classes\" | Set-Content .\Temp\CurrentUser\$filename
 		}
-		del .\Temp\*.reg
 		
 	} elseif ($mode -eq "allCurrent" -OR $mode -eq "decide" ) { #decide / allCurrent
 
@@ -186,14 +185,17 @@ function RegReplacements() {
 				#KEY_USERS\S-1-5-21-117113989-4160453655-1229134872-1001
 			}
 			
-			foreach ($file in $exceptions){
+			foreach ($file in $exceptions){  #in powershell2, there can be empty "files" (there is no Win11.reg)
 				$fileName = $file.Name
-				(Get-Content $file) -Replace "HKEY_LOCAL_MACHINE\\", "HKEY_USERS\$uuid\Software\Classes\" | Set-Content .\Temp\$uuid\$filename
+				if ($file.Name -ne $null) {
+					(Get-Content $file) -Replace "HKEY_LOCAL_MACHINE\\", "HKEY_USERS\$uuid\Software\Classes\" | Set-Content .\Temp\$uuid\$fileName
+				}
 			}
 
 		}
-		del .\Temp\*.reg
 	}
+	
+	del .\Temp\*.reg
 #	else { #allFuture - reg files stay the same.
 		#only move files to new directory in temp
 #		New-Item .\Temp\ALL -ItemType "directory" 2>&1>$null

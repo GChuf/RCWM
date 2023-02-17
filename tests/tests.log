@@ -1,5 +1,12 @@
 TESTS
 
+cmd testing:
+set start=%time% && for /l %x in (1, 1, 10) do (cmd /c pwsh C:\users\root\desktop\echo.ps1)
+set end=%time% && echo %start% && echo %end%
+set end=%time% && echo %start% && echo %end%
+
+
+
 1.
 measure-command {for ($i=1;$i -le 1000; $i++){(Get-Item -Path Registry::HKCU\RCWM\mv).property -eq $a; (Get-Item -Path Registry::HKCU\RCWM\rc).property -eq $a; (Get-Item -Path Registry::HKCU\RCWM\dl).property -eq $a}}
 
