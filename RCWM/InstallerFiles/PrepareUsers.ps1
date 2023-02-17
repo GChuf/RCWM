@@ -18,7 +18,9 @@ function prepareRegKeys(){
 
 	Remove-Item -Path RCWM -Recurse | Out-Null
 	New-Item -Path RCWM  | Out-Null
+	
 	cd RCWM
+	New-ItemProperty -Path . -Name "Version" -Value "2.0.0" -PropertyType String -Force
 	New-Item -Path dl | Out-Null
 	New-Item -Path fl | Out-Null
 	New-Item -Path mir | Out-Null
