@@ -2,6 +2,8 @@ Write-Host "Initialising setup ..."
 $ps = $psversiontable.psversion.major
 $arch = (Get-WmiObject win32_processor | Where-Object{$_.deviceID -eq "CPU0"}).AddressWidth
 $os = [System.Environment]::OSVersion.Version.Major
+#win7 and win8 virtual machines both return "6"
+#new win servers(!) return "10"
 
 
 #Make sure Temp is clean.
@@ -25,13 +27,14 @@ Copy-Item -Path "Icons\*" -Destination ".\Temp" | Out-Null
 Copy-Item -Path "PowershellSpecificFiles\pwsh$ps\*" -Destination ".\Temp" -erroraction 'silentlycontinue'
 Copy-Item -Path "OSSpecificFiles\Win$os\*" -Destination ".\Temp" -erroraction 'silentlycontinue'
 
-#generate os-specific files
-if ($os -eq 8) { #Generate shortcuts for win8 -- new win servers(!) confirmed return "10"
+#generate os-specific files - but look for powershell version, not OS version
+#this is only needed so that OS doesn't prompt the user to run the shortcut
+if ($ps -eq 4) { #Generate shortcuts for win8
 	cd PowershellSpecificFiles
 	Write-Host "Generating shortcuts ..."
 	..\InstallerFiles\shortcuts8.ps1 
 }
-elseif ($os -eq 7) { #Generate shortcuts for win7
+elseif ($ps -eq 2) { #Generate shortcuts for win7
 	cd PowershellSpecificFiles
 	Write-Host "Generating shortcuts ..."
 	..\InstallerFiles\shortcuts7.ps1 
@@ -116,7 +119,8 @@ function installRCWM() {
 	cmd.exe /c icacls %SystemRoot%\RCWM /grant administrators:F /T /C | Out-Null
 	cmd.exe /c icacls %SystemRoot%\RCWM /grant users:F /T /C | Out-Null
 
-
+	#add exclusion - just in case
+	powershell -Command Add-MpPreference -ExclusionPath "C:\Windows\RCWM" | Out-Null
 	echo "Created directory at C:\Windows\RCWM and copied all files."
 }
 
