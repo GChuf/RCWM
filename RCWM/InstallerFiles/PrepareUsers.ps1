@@ -168,7 +168,7 @@ function RegReplacements() {
 		foreach ($file in $exceptions){
 			$fileName = $file.Name
 			if ($file.Name -ne $null) {
-				(Get-Content $file) -Replace "HKEY_LOCAL_MACHINE\\", "HKEY_CURRENT_USER\Software\Classes\" | Set-Content .\Temp\CurrentUser\$fileNameame
+				(Get-Content $file) -Replace "HKEY_LOCAL_MACHINE\\", "HKEY_CURRENT_USER\Software\Classes\" | Set-Content .\Temp\CurrentUser\$fileName
 			}
 		}
 		
