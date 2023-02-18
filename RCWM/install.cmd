@@ -1,6 +1,7 @@
 @echo off
+mode con: cols=110 lines=35
 title RCWM Install Script
-color 0
+color 0b
 
 rem https://stackoverflow.com/questions/8610597/batch-file-choice-commands-errorlevel-returns-0
 SETLOCAL EnableDelayedExpansion
