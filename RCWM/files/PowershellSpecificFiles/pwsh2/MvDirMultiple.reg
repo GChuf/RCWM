@@ -5,7 +5,7 @@ Windows Registry Editor Version 5.00
 [HKEY_CLASSES_ROOT\Directory\shell\mvdir]
 @="Move These Directories"
 "NoWorkingDirectory"=""
-"Icon"="rcwmimg.dll,-5"
+"Icon"="rcwmimg.dll,-3"
 
 [HKEY_CLASSES_ROOT\Directory\shell\mvdir\command]
 @="C:\\windows\\rcwm\\mvdirM.exe \"%V\""
@@ -14,7 +14,7 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir]
 @="Move Directories Here"
-"Icon"="rcwmimg.dll,-6"
+"Icon"="rcwmimg.dll,-4"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir\command]
 @="cmd.exe /c C:\\windows\\rcwm\\rcp.cmd mv m '%V'"
