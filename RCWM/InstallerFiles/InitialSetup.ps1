@@ -30,12 +30,10 @@ Copy-Item -Path "OSSpecificFiles\Win$os\*" -Destination ".\Temp" -erroraction 's
 #generate os-specific files - but look for powershell version, not OS version
 #this is only needed so that OS doesn't prompt the user to run the shortcut
 if ($ps -eq 4) { #Generate shortcuts for win8
-	cd PowershellSpecificFiles
 	Write-Host "Generating shortcuts ..."
 	..\InstallerFiles\shortcuts8.ps1 
 }
 elseif ($ps -eq 2) { #Generate shortcuts for win7
-	cd PowershellSpecificFiles
 	Write-Host "Generating shortcuts ..."
 	..\InstallerFiles\shortcuts7.ps1 
 }
