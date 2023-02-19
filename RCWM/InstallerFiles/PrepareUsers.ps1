@@ -27,6 +27,7 @@ function prepareRegKeys(){
 	New-Item -Path mv | Out-Null
 	New-Item -Path rc | Out-Null
 	New-Item -Path rcs | Out-Null
+	New-Item -Path InstallInfo | Out-Null
 	
 	#Write-Host "Prepared registry for user " -NoNewLine; Write-Host $user -ForegroundColor red;
 }
@@ -129,6 +130,9 @@ function LoopThroughUsers() {
 	} else { #allFuture
 		#RegReplacements -mode "allFuture"
 	}
+	
+	del .\Temp\*.reg
+	
 }
 
 
@@ -196,8 +200,7 @@ function RegReplacements() {
 
 		}
 	}
-	
-	del .\Temp\*.reg
+
 #	else { #allFuture - reg files stay the same.
 		#only move files to new directory in temp
 #		New-Item .\Temp\ALL -ItemType "directory" 2>&1>$null
@@ -285,19 +288,23 @@ while ($true) {
 
 if ($mode1 -eq "A") {
 	LoopThroughUsers -mode "allcurrent" -users $users
-}
-
-elseif ($mode1 -eq "D" ) { 
-
-	#echo "calling users loop"
-	#echo $users.count
+} elseif ($mode1 -eq "D" ) { 
 	LoopThroughUsers -mode "decide" -users $users
-
-} else {
-	#echo "calling users loop current"
+} elseif ($mode1 -eq "C" ) {
 	LoopThroughUsers -mode "current" -users $null
-
 }
 
 
 Write-Host "Preparation finished."
+
+
+Write-Host ""
+Write-Host " Choose the options that you want to apply to your right-click menu."
+Write-Host " There are 3 sections: Add options, Remove options, and Miscellaneous."
+Write-Host ""
+
+if ($mode1 -eq "C") { 
+	powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $null
+} else {
+	powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $users
+}

@@ -1,15 +1,14 @@
 @echo off
-mode con: cols=110 lines=35
 title RCWM Install Script
 
-rem Set window size for pwsh 2 and 4
+rem https://stackoverflow.com/questions/8610597/batch-file-choice-commands-errorlevel-returns-0
+SETLOCAL EnableDelayedExpansion
+
+rem Set window size for pwsh 4 and older
 FOR /F "tokens=* USEBACKQ" %%F IN (`powershell $psversiontable.psversion.major`) DO ( SET pwsh=%%F )
 IF !pwsh! LEQ 4 ( mode con: cols=110 lines=35 )
 
 color 0b
-
-rem https://stackoverflow.com/questions/8610597/batch-file-choice-commands-errorlevel-returns-0
-SETLOCAL EnableDelayedExpansion
 
 
 rem ps v2 = win7
@@ -58,13 +57,6 @@ powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\InitialS
 
 powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\PrepareUsers.ps1
 
-
-echo(
-echo Choose the options that you want to apply to your right-click menu.
-echo There are 3 sections: Add options, Remove options, and Miscellaneous.
-echo(
-
-powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1
 
 
 rem choice /C yn /M "Do you want to revert right-click menu item limit back to default (15) "

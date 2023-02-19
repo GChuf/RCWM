@@ -5,6 +5,14 @@ $os = [System.Environment]::OSVersion.Version.Major
 
 cd ..\files\Temp
 
+$users = $args[0]
+
+[array]$UUIDs = @()
+foreach ($user in $users) {
+	$UUID = $user.Split("\")[-1]
+	$UUIDs += $UUID
+}
+
 $AddOptions = @(
 	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add RoboCopy Directory'; exception = "RCopy"}
 	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add Move Directory (using robocopy)'; exception = "MvDir"}
@@ -50,15 +58,15 @@ $MiscOptions = @(
 function MultipleInvoke(){
 	while ($true) {
 		$mode1 = Read-Host "* Increase to 32[1], 64[2] or 128[3]"
-		if ($mode1 -eq "1") {enableReg -regFile "MultipleInvokeMinimum.reg"; break}
-		elseif ($mode1 -eq "2") {enableReg -regFile "MultipleInvokeMinimum64.reg"; break}
-		elseif ($mode1 -eq "3") {enableReg -regFile "MultipleInvokeMinimum128.reg"; break}
+		if ($mode1 -eq "1") {enableReg -regFile "MultipleInvokeMinimum.reg" -name "MultipleInvokeMinimum"; break}
+		elseif ($mode1 -eq "2") {enableReg -regFile "MultipleInvokeMinimum64.reg" -name "MultipleInvokeMinimum64"; break}
+		elseif ($mode1 -eq "3") {enableReg -regFile "MultipleInvokeMinimum128.reg"  -name "MultipleInvokeMinimum128"; break}
 		else {echo "Invalid input!"}
 	}
 }
 
 function GodMode(){
-	enableReg -regFile "GodMode.reg"
+	enableReg -regFile "GodMode.reg" -name GodMode
 	#cmd.exe /c md C:\windows\RCWM\GodMode.{ED7BA470-8E54-465E-825C-99712043E01C} 2>NUL
 	cmd.exe /c ..\..\InstallerFiles\GodMode.bat | out-null
 }
@@ -66,8 +74,8 @@ function GodMode(){
 function MvDir(){
 	while ($true) {
 		$mode1 = Read-Host "* Do you want to add 'Move Directory' for [S]ingle directories, or for [M]ultiple?"
-		if ($mode1 -eq "S") {enableReg -regFile "MvDirSingle.reg"; break}
-		elseif ($mode1 -eq "M") {enableReg -regFile "MvDirMultiple.reg"; break}
+		if ($mode1 -eq "S") {enableReg -regFile "MvDirSingle.reg" -name "MvDirSingle"; break}
+		elseif ($mode1 -eq "M") {enableReg -regFile "MvDirMultiple.reg" -name "MvDirMultiple"; break}
 		else {echo "Invalid input!"}
 	}
 }
@@ -75,8 +83,8 @@ function MvDir(){
 function RCopy() {
 	while ($true) {
 		$mode1 = Read-Host "* Do you want to add 'RoboCopy Directory' for [S]ingle directories, or for [M]ultiple?"
-		if ($mode1 -eq "S") {enableReg -regFile "RCopySingle.reg"; break}
-		elseif ($mode1 -eq "M") {enableReg -regFile "RCopyMultiple.reg"; break}
+		if ($mode1 -eq "S") {enableReg -regFile "RCopySingle.reg" -name "RCopySingle"; break}
+		elseif ($mode1 -eq "M") {enableReg -regFile "RCopyMultiple.reg" -name "RCopyMultiple"; break}
 		else {echo "Invalid input!"}
 	}
 }
@@ -85,8 +93,8 @@ function RmDirectory(){
 	while ($true) {
 		Write-Host "* The faster Remove Directory option also removes symlink contents, not symlinks themselves."
 		$mode1 = Read-Host "* Do you want to add the [F]ast Remove Directory option, or the [S]afer/slower one "
-		if ($mode1 -eq "S") {enableReg -regFile "RmDirS.reg"; break}
-		elseif ($mode1 -eq "F") {enableReg -regFile "RmDir.reg"; break}
+		if ($mode1 -eq "S") {enableReg -regFile "RmDirS.reg"; -name "RmDirS" break}
+		elseif ($mode1 -eq "F") {enableReg -regFile "RmDir.reg" -name "RmDir"; break}
 		else {echo "Invalid input!"}
 	}
 }
@@ -101,12 +109,12 @@ function powershellCheck(){
 	#https://superuser.com/questions/305901/possible-values-of-processor-architecture
 	if ($ps -lt 4){
 		if ($arch -eq "amd64"){
-			enableReg -regFile "pwrshell64.reg"
+			enableReg -regFile "pwrshell64.reg" -name "Pwrshell64"
 		} else {
-			enableReg -regFile "pwrshell32.reg"
+			enableReg -regFile "pwrshell32.reg" -name "Pwrshell32"
 		}
 	} else {
-		enableReg -regFile "pwrshell.reg"
+		enableReg -regFile "pwrshell.reg" -name "Pwrshell"
 	}
 
 }
@@ -119,7 +127,7 @@ function prompt() {
 			#echo $regFile
 			#invoke function with the same name as the $exception
 			if ($exception -ne $null) { &"$exception" }
-			else {enableReg -regFile $regFile}
+			else {enableReg -regFile $regFile -name $name}
 			#write-host "$name enabled"
 			break
 		}
@@ -128,8 +136,15 @@ function prompt() {
 	}
 }
 
+
+function getUsers(){
+	#get all subdirectories, see which users are you installing for
+	#this should be a parameter passed on from PrepareUsers
+	
+}
+
 function enableReg() {
-	param([string[]]$regFile)
+	param([string[]]$regFile, [string]$name)
 	#pwsh v2
 	$regs = get-childitem -path . -recurse -include $regFile
 	#$regs = get-childitem $regFile -depth 1
@@ -137,11 +152,21 @@ function enableReg() {
 	foreach ($reg in $regs) {
 		regedit /s $reg
 	}
-	#execute regedit for this file in all subdirectories of temp"
-	#regedit /s $regFile
+	
+	#add info in registry about which options are installed
+	#insert to all UUIDs passed from PrepareUsers ($args[0])
+	if ($UUIDs -ne $null) {
+		foreach ($uuid in $UUIDs) {
+			New-ItemProperty -Path "REGISTRY::HKEY_USERS\$uuid\RCWM\InstallInfo" -Name $name 2>&1>$null
+		}
+	} else { #current only
+		New-ItemProperty -Path "REGISTRY::HKEY_CURRENT_USER\RCWM\InstallInfo" -Name $name 2>&1>$null
+	}
+
 }
 
 while ($true) {
+	Write-Host ""
 	$r = Read-Host "Do you want to Add options to context menu (Y/N)"
 	if ($r -eq "Y") {
 		foreach ($option in $AddOptions) {
@@ -155,6 +180,7 @@ while ($true) {
 }
 
 while ($true) {
+	Write-Host ""
 	$r = Read-Host "Do you want to Remove options from context menu (Y/N)"
 	if ($r -eq "Y") {
 		foreach ($option in $RemoveOptions) {
@@ -167,6 +193,7 @@ while ($true) {
 }
 
 while ($true) {
+	Write-Host ""
 	$r = Read-Host "Do you want to see other, Miscellaneous options (Y/N)"
 	if ($r -eq "Y") {
 		foreach ($option in $MiscOptions) {
