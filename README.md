@@ -120,6 +120,9 @@ Results may vary based on your computer and disk - but wherever there are lots o
 
 # Credits
 
+I used my own bastardized version of Ingo Karstein's [ps2exe](https://github.com/ikarstein/ps2exe
+) tool for making .exe files out of powershell scripts.
+
 The files for Booting into Safe mode and Running with Priority were heavily influenced by Shawn Brink at [tenforums.com](https://www.tenforums.com/tutorials/1977-windows-10-tutorial-index.html)
 
 The TakeOwn.reg files for Taking Ownership were heavily influenced by Vishal Gupta at [AskVG.com](https://www.askvg.com/) & Shawn Brink.
