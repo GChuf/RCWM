@@ -1,9 +1,0 @@
-Windows Registry Editor Version 5.00
-
-;;Remove Move Dir from context menu
-
-[-HKEY_CLASSES_ROOT\Directory\shell\mvdir]
-
-[-HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir]
-
-; end

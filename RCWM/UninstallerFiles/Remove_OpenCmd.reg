@@ -1,0 +1,11 @@
+Windows Registry Editor Version 5.00
+
+;Delete CMD from context menu
+
+[-HKEY_CLASSES_ROOT\Directory\shell\cmd2]
+
+[-HKEY_CLASSES_ROOT\Directory\Background\shell\cmd2]
+
+[-HKEY_CLASSES_ROOT\Drive\shell\cmd2]
+
+;done

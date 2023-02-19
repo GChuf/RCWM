@@ -1,0 +1,8 @@
+Windows Registry Editor Version 5.00
+
+;Add "share" back to context menu
+
+[HKEY_CLASSES_ROOT\*\shellex\ContextMenuHandlers\ModernSharing]
+@="{e2bf9676-5f8f-435c-97eb-11607a5bedf7}"
+
+;done

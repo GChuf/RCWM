@@ -1,9 +1,0 @@
-Windows Registry Editor Version 5.00
-
-;Remove RmDir from context menu
-
-[-HKEY_CLASSES_ROOT\Directory\shell\rmdir]
-
-[-HKEY_CLASSES_ROOT\Directory\shell\rmdir\command]
-
-;done

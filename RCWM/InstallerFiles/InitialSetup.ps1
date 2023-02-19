@@ -127,9 +127,9 @@ $existingFolder = Test-Path -Path "$sysroot\RCWM"
 $RCWMv1Folder = Test-Path -Path "$sysroot\System32\RCWM"
 
 if ($RCWMv1Folder -eq $true) {
-	write-host "Old RCWM v1.x folder already detected."
+	write-host "Old RCWM v1.x folder detected."
 	while ($true) {
-		$mode1 = Read-Host "Delete old files (recommended) (Y/N)"
+		$mode1 = Read-Host "Delete old files and uninstall now (recommended) (Y/N)"
 		if ($mode1 -eq "y") {break}
 		elseif ($mode1 -eq "n") {break}
 		else {echo "Invalid input!"}
@@ -139,14 +139,20 @@ if ($RCWMv1Folder -eq $true) {
 		cmd.exe /c del /f /q %SystemRoot%\System32\RCWM | Out-Null
 		cmd.exe /c rd /s /q %SystemRoot%\System32\RCWM | Out-Null
 		write-host "Old files deleted."
-		#todo old registry??
+
+		$uninstallers = get-childitem ..\UninstallerFiles\*.reg
+		foreach ($reg in $uninstallers) { regedit /s $reg }
+		write-host "Registry cleaned."
 	}
-	Write-Host "It is recommended you also uninstall any previous context menu additions with the provided uninstaller .reg files."
+	
 }
 
 
 if ($existingFolder -eq $true) {
 	write-host "RCWM folder already exists."
+	#version from reg
+	#Get-ItemProperty -Path "HKCU:\RCWM" -name "version"
+	
 	while ($true) {
 		$mode1 = Read-Host "[R]ecreate existing files (recommended) or [K]eep old files and copy new files only"
 		if ($mode1 -eq "R") {break}
