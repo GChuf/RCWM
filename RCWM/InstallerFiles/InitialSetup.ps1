@@ -140,7 +140,7 @@ if ($RCWMv1Folder -eq $true) {
 		cmd.exe /c rd /s /q %SystemRoot%\System32\RCWM | Out-Null
 		write-host "Old files deleted."
 
-		$uninstallers = get-childitem ..\UninstallerFiles\*.reg
+		$uninstallers = get-childitem ..\UninstallerFiles\RegistryFiles\*.reg
 		foreach ($reg in $uninstallers) { regedit /s $reg }
 		write-host "Registry cleaned."
 	}

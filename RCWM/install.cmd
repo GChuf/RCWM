@@ -64,10 +64,6 @@ rem if %errorlevel% == 2 ( reg delete HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windo
 rem )
 
 
-
-echo(
-
-color d
 echo(
 echo(
 echo Finished!
