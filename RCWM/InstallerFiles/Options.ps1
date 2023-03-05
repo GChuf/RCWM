@@ -33,7 +33,7 @@ $AddOptions = @(
 	New-Object PSObject -Property @{Name = 'RunWithPriority'; RegFile = 'RunWithPriority.reg'; Desc = 'Do you want to add Run with Priority'}
 	New-Object PSObject -Property @{Name = 'SafeMode'; RegFile = 'SafeMode.reg'; Desc = 'Do you want to add Safe Mode to "This PC"'}
 	New-Object PSObject -Property @{Name = 'SafeModeDesktop'; RegFile = 'SafeModeDesktop.reg'; Desc = 'Do you want to add Safe Mode to Desktop'}
-	New-Object PSObject -Property @{Name = 'TakeOwn'; RegFile = 'TakeOwn.reg'; Desc = 'Do you want to add Take Ownership to files and directorie'}
+	New-Object PSObject -Property @{Name = 'TakeOwn'; RegFile = 'TakeOwn.reg'; Desc = 'Do you want to add Take Ownership to files and directories'}
 	New-Object PSObject -Property @{Name = 'TakeOwnDrive'; RegFile = 'TakeOwnDrive.reg'; Desc = 'Do you want to add Take Ownership to drives (All but C:\ drive)'}
 )
 

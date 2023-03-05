@@ -152,7 +152,8 @@ function RegReplacements() {
 	$files = Get-ChildItem ".\Temp\*.reg"
 	
 	#HKLM:
-	$exceptions = Get-ChildItem ".\Temp\Multiple*.reg"
+	$exceptions = @()
+	$exceptions += Get-ChildItem ".\Temp\Multiple*.reg"
 	$exceptions += Get-ChildItem ".\Temp\Win11*.reg"
 	$exceptions += Get-ChildItem ".\Temp\ThisPC.reg"
 	$exceptions += Get-ChildItem ".\Temp\CMDAdmin.reg"
