@@ -93,7 +93,7 @@ function RmDirectory(){
 	while ($true) {
 		Write-Host "* The faster Remove Directory option also removes symlink contents, not symlinks themselves."
 		$mode1 = Read-Host "* Do you want to add the [F]ast Remove Directory option, or the [S]afer/slower one "
-		if ($mode1 -eq "S") {enableReg -regFile "RmDirS.reg"; -name "RmDirS" break}
+		if ($mode1 -eq "S") {enableReg -regFile "RmDirS.reg" -name "RmDirS"; break}
 		elseif ($mode1 -eq "F") {enableReg -regFile "RmDir.reg" -name "RmDir"; break}
 		else {echo "Invalid input!"}
 	}
