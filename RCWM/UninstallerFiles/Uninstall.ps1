@@ -114,8 +114,8 @@ function RegReplacements() {
 	$files = Get-ChildItem ".\Temp\*.reg"
 	
 	#HKLM:
-	#$exceptions = Get-ChildItem ".\Temp\Multiple*.reg"
-	$exceptions += Get-ChildItem ".\Temp\Win11RevertToDefaultContextMenu"
+	$exceptions = Get-ChildItem ".\Temp\Remove_MultipleInvokeMinimum.reg"
+	$exceptions += Get-ChildItem ".\Temp\Win11RevertToDefaultContextMenu.reg"
 	$exceptions += Get-ChildItem ".\Temp\Remove_ThisPC.reg"
 	$exceptions += Get-ChildItem ".\Temp\Remove_CMDAdmin.reg"
 

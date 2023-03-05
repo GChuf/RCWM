@@ -29,6 +29,12 @@ IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" (
 >nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
 )
 
+if '%errorlevel%' NEQ '0' (
+    echo You need to run this script with administrator privileges!!!
+    pause
+    exit
+)
+
 
 
 pushd "%CD%"
@@ -48,28 +54,12 @@ echo(
 
 cd files
 
-echo You need administrator privileges to run this script
-echo You will be asked to enter your admin credentials in case
-echo you are not logged in as an admin user.
-echo(
 
-
-rem powershell Start-Process powershell -ArgumentList '-file X:\git\rcwm\rcwm\InstallerFiles\InitialSetup.ps1' -Verb RunAs
-
-powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\InitialSetup.ps1
+powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\InitialSetup.ps1 -verb runas
 
 rem this needs admin in order to delete all old rcwm reg entries
-rem powershell start-process powershell -verb runas
 
-rem powershell Start-Process powershell -verb runas -ArgumentList '-file X:\git\rcwm\rcwm\InstallerFiles\InitialSetup.ps1'
-
-powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\PrepareUsers.ps1
-
-
-
-rem choice /C yn /M "Do you want to revert right-click menu item limit back to default (15) "
-rem if %errorlevel% == 2 ( reg delete HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer /v MultipleInvokePromptMinimum /f >NUL)
-rem )
+powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\PrepareUsers.ps1 -verb runas
 
 
 echo(
