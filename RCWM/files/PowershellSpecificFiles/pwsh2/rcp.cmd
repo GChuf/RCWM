@@ -1,2 +1,3 @@
 @echo off
-powershell.exe C:\Windows\RCWM\Win7.lnk %1 %2 %3
+cd %1
+powershell.exe C:\Windows\RCWM\Win7.lnk %2 %3
