@@ -10,10 +10,9 @@ function deleteRegKeys(){
 		cd REGISTRY::HKEY_USERS\$user
 	}
 
-	Remove-Item -Path RCWM -Recurse | Out-Null
+	Remove-Item -Path RCWM -Recurse 2>&1>$null
 
-
-	Write-Host "RCWM Removed."
+	#Write-Host "RCWM Removed."
 
 }
 
@@ -98,9 +97,9 @@ function RegReplacements() {
 	param($mode, [string[]]$UUIDs)
 
 	Write-Host "Generating all necessary registry files ..."
-	cd $initialLocation
-	cd ../files
 
+	cd $initialLocation
+	
 	#make dir "temp" and copy all files there
 
 	#Make sure Temp is clean.
@@ -115,10 +114,10 @@ function RegReplacements() {
 	$files = Get-ChildItem ".\Temp\*.reg"
 	
 	#HKLM:
-	$exceptions = Get-ChildItem ".\Temp\Multiple*.reg"
-	$exceptions += Get-ChildItem ".\Temp\Win11*.reg"
-	$exceptions += Get-ChildItem ".\Temp\ThisPC.reg"
-	$exceptions += Get-ChildItem ".\Temp\CMDAdmin.reg"
+	#$exceptions = Get-ChildItem ".\Temp\Multiple*.reg"
+	$exceptions += Get-ChildItem ".\Temp\Win11RevertToDefaultContextMenu"
+	$exceptions += Get-ChildItem ".\Temp\Remove_ThisPC.reg"
+	$exceptions += Get-ChildItem ".\Temp\Remove_CMDAdmin.reg"
 
 
 	if ($mode -eq "current") {

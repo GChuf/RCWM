@@ -16,7 +16,7 @@ function prepareRegKeys(){
 		cd REGISTRY::HKEY_USERS\$user
 	}
 
-	Remove-Item -Path RCWM -Recurse | Out-Null
+	Remove-Item -Path RCWM -Recurse 2>&1>$null
 	New-Item -Path RCWM  | Out-Null
 	
 	cd RCWM

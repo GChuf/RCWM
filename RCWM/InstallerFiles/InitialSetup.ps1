@@ -1,3 +1,12 @@
+#Requires -RunAsAdministrator
+
+if (-not (New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+# Prompt the user to elevate the script
+$arguments = "& '" + $myInvocation.MyCommand.Definition + "'"
+Start-Process powershell -Verb runAs -ArgumentList $arguments
+exit
+}
+
 Write-Host "Initialising setup ..."
 $ps = $psversiontable.psversion.major
 $arch = (Get-WmiObject win32_processor | Where-Object{$_.deviceID -eq "CPU0"}).AddressWidth
@@ -141,7 +150,7 @@ if ($RCWMv1Folder -eq $true) {
 		write-host "Old files deleted."
 
 		$uninstallers = get-childitem ..\UninstallerFiles\RegistryFiles\*.reg
-		foreach ($reg in $uninstallers) { regedit /s $reg }
+		foreach ($reg in $uninstallers) { cmd.exe /c regedit /s $reg }
 		write-host "Registry cleaned."
 	}
 	
