@@ -1,5 +1,3 @@
-#Requires -RunAsAdministrator
-
 if (-not (New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
 # Prompt the user to elevate the script
 $arguments = "& '" + $myInvocation.MyCommand.Definition + "'"
