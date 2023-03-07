@@ -4,7 +4,9 @@ rem 65000: UTF-7
 rem 65001: UTF-8 does not work on Win7
 chcp 65001 > nul
 
+set curdir=%cd%
 FOR /F "tokens=*" %%g IN ('powershell "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\RCWM\dl).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\RCWM\dl).property }"') do (SET folder=%%g)
+cd %curdir%
 
 IF "%folder%" == 0 (
 echo Source folder not specified!
@@ -15,8 +17,6 @@ exit
 goto start )
 
 :start
-
-set curdir=%cd%
 
 IF NOT EXIST "%folder%" (echo Link Source does not exist: %folder% && timeout /t 1 >nul && echo Exiting . . . && timeout /t 1 > nul && exit )
 
