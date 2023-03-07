@@ -9,6 +9,10 @@ Write-Host "Initialising setup ..."
 $ps = $psversiontable.psversion.major
 $arch = (Get-WmiObject win32_processor | Where-Object{$_.deviceID -eq "CPU0"}).AddressWidth
 $os = [System.Environment]::OSVersion.Version.Major
+#if major==6, minor==1 => windows 2008
+#2008 needs different icons
+#minor 3 == 2012 R2
+
 #win7 and win8 virtual machines both return "6"
 #new win servers(!) return "10"
 
@@ -34,13 +38,9 @@ xcopy Icons\rcwmimg.dll C:\windows\system32 /y | Out-Null
 Copy-Item -Path "PowershellSpecificFiles\pwsh$ps\*" -Destination ".\Temp" -erroraction 'silentlycontinue'
 Copy-Item -Path "OSSpecificFiles\Win$os\*" -Destination ".\Temp" -erroraction 'silentlycontinue'
 
-#generate os-specific files - but look for powershell version, not OS version
+#generate os-specific files
 #this is only needed so that OS doesn't prompt the user to run the shortcut
-if ($ps -eq 4) { #Generate shortcuts for win8
-	Write-Host "Generating shortcuts ..."
-	..\InstallerFiles\shortcuts8.ps1 
-}
-elseif ($ps -eq 2) { #Generate shortcuts for win7
+if ($os -eq 6) { #Generate shortcuts for win8
 	Write-Host "Generating shortcuts ..."
 	..\InstallerFiles\shortcuts7.ps1 
 }
