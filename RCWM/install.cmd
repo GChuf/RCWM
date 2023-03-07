@@ -68,6 +68,9 @@ echo Finished!
 echo(
 echo You can delete all downloaded files now.
 echo(
-timeout /t 1 > nul
+
+rem this is needed for older windows versions to apply icons to right click menu
+taskkill /im explorer.exe /f
+start explorer.exe
 
 pause
