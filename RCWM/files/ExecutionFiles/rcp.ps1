@@ -68,6 +68,10 @@ if ($args[2] -eq $null)
 		$pasteIntoDirectory = [string](Get-itemproperty -Path 'HKCU:\RCWM').dir
 	}
 	
+	#fix issues with trailing backslash
+	if (($pasteIntoDirectory[-2] -eq '"' ) -and ($pasteIntoDirectory[-3] -eq ':' )){
+		$pasteIntoDirectory = $pasteIntoDirectory.substring(0,2)
+	}
 	
 }
 
