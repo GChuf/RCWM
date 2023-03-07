@@ -1,3 +1,5 @@
+#if folder name begins with "0", registry doesn't work ..... (\0) == "newline"
+
 #flags used when robocopying (overwrites files):
 
 #/E :: copy subdirectories, including Empty ones
@@ -48,7 +50,25 @@ $mode = $args[1]
 #for older powershell, look into registry
 if ($args[2] -eq $null) 
 {
-	$pasteIntoDirectory = [string](Get-itemproperty -Path 'HKCU:\RCWM').dir
+	$regInsert = (Get-itemproperty -Path 'HKCU:\RCWM').dir
+	
+	#fix inserts like "\0" into registry, which translates into new line ... (every folder that starts with "0" has this problem)
+	
+	if ($regInsert.count -ge 2) {
+		
+		foreach ($part in $regInsert) {
+			[string]$tempString += [string]$part + "\0"
+		}
+		
+		#subtract last 2 symbols
+		[string]$pasteIntoDirectory = [string]$tempString.substring(0,$tempString.length-2)
+		
+	}
+	else {
+		$pasteIntoDirectory = [string](Get-itemproperty -Path 'HKCU:\RCWM').dir
+	}
+	
+	
 }
 
 else
