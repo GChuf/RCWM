@@ -45,10 +45,10 @@ $command = $args[0]
 $mode = $args[1]
 
 
-#for older powershell, there is no args[2], get current dir instead
+#for older powershell, look into registry
 if ($args[2] -eq $null) 
 {
-	$pasteIntoDirectory = (get-location).path
+	$pasteIntoDirectory = (Get-itemproperty -Path 'HKCU:\RCWM').dir
 }
 
 else
