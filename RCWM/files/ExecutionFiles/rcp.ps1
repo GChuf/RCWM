@@ -48,7 +48,7 @@ $mode = $args[1]
 #for older powershell, look into registry
 if ($args[2] -eq $null) 
 {
-	$pasteIntoDirectory = (Get-itemproperty -Path 'HKCU:\RCWM').dir
+	$pasteIntoDirectory = [string](Get-itemproperty -Path 'HKCU:\RCWM').dir
 }
 
 else
@@ -186,7 +186,7 @@ If ( $copy -eq $True ) {
 
 
 		#concatenation has to be done like this
-		$destination = $pasteIntoDirectory + "\" + $folder
+		[string]$destination = [string]$pasteIntoDirectory + "\" + [string]$folder
 
 		#does source folder exist?
 		if (-not ( Test-Path -literalpath "$path" )) {
