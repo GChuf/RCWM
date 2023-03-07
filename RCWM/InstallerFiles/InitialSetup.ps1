@@ -28,7 +28,7 @@ Copy-Item -Path "RegistryFiles\*.reg" -Destination ".\Temp" | Out-Null
 #copy execution files and icons
 Copy-Item -Path "ExecutionFiles\*" -Destination ".\Temp" | Out-Null
 Copy-Item -Path "Icons\*" -Destination ".\Temp" | Out-Null
-
+xcopy Icons\rcwmimg.dll C:\windows\system32 /y | Out-Null
 
 #Overwrite default files with specific files - if they exist/if applicable
 Copy-Item -Path "PowershellSpecificFiles\pwsh$ps\*" -Destination ".\Temp" -erroraction 'silentlycontinue'
