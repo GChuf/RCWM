@@ -45,14 +45,22 @@ $command = $args[0]
 $mode = $args[1]
 
 
-#fix issues with trailing backslash when copying directly into drives - like C:\
+#for older powershell, look into registry
+if ($args[2] -eq $null) 
+{
+	$pasteIntoDirectory = (Get-itemproperty -Path 'HKCU:\RCWM').dir
+}
 
-If (($args[2][-1] -eq "'" ) -and ($args[2][-2] -eq "\" )){ #pwsh v5
-	$pasteIntoDirectory = $args[2].substring(1,2)
-} elseif (($args[2][-1] -eq '"' ) -and ($args[2][-2] -eq ':' )){ #pwsh v7
-	$pasteIntoDirectory = $args[2].substring(0,2)
-} else {
-	$pasteIntoDirectory = $args[2]
+else
+{
+	#fix issues with trailing backslash when copying directly into drives - like C:\
+	If (($args[2][-1] -eq "'" ) -and ($args[2][-2] -eq "\" )){ #pwsh v5
+		$pasteIntoDirectory = $args[2].substring(1,2)
+	} elseif (($args[2][-1] -eq '"' ) -and ($args[2][-2] -eq ':' )){ #pwsh v7
+		$pasteIntoDirectory = $args[2].substring(0,2)
+	} else {
+		$pasteIntoDirectory = $args[2]
+	}
 }
 
 $pasteDirectoryDisplay = "'" + $pasteIntoDirectory + "'"

@@ -11,7 +11,6 @@ Windows Registry Editor Version 5.00
 @="C:\\windows\\rcwm\\rcopyS.exe \"%V\""
 "IsolatedCommand"="C:\\windows\\rcwm\\rcopyS.exe \"%V\""
 
-
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste]
 @="RoboPaste Directory"
 "Icon"="rcwmimg.dll,-6"
@@ -19,4 +18,5 @@ Windows Registry Editor Version 5.00
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste\command]
 @="cmd /c powershell Set-ExecutionPolicy Bypass -Scope Process; C:\\windows\\rcwm\\rcp.ps1 rc s '%V'"
 "IsolatedCommand"="cmd /c powershell Set-ExecutionPolicy Bypass -Scope Process; C:\\windows\\rcwm\\rcp.ps1 rc s '%V'"
+
 ; end
