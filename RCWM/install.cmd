@@ -70,7 +70,7 @@ echo You can delete all downloaded files now.
 echo(
 
 rem this is needed for older windows versions to apply icons to right click menu
-taskkill /im explorer.exe /f
-start explorer.exe
+rem taskkill /im explorer.exe /f
+rem start explorer.exe
 
 pause
