@@ -11,13 +11,12 @@ Windows Registry Editor Version 5.00
 @="C:\\windows\\rcwm\\rcopyM.exe \"%V\""
 "IsolatedCommand"="C:\\windows\\rcwm\\rcopyM.exe \"%V\""
 
-
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste]
 @="RoboPaste Directories"
 "Icon"="rcwmimg.dll,-6"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste\command]
-@="cmd.exe /c C:\\windows\\rcwm\\rcp.cmd \"%V\" rc m"
-"IsolatedCommand"="cmd.exe /c C:\\windows\\rcwm\\rcp.cmd \"%V\" rc m"
+@="cmd.exe /c C:\\windows\\rcwm\\rcp.lnk rc m \"%V\""
+"IsolatedCommand"="cmd.exe /c C:\\windows\\rcwm\\rcp.lnk rc m \"%V\""
 
 ; end

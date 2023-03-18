@@ -1,6 +1,6 @@
 Windows Registry Editor Version 5.00
 
-;robocopy
+;move dir
 
 [HKEY_CLASSES_ROOT\Directory\shell\mvdir]
 @="Move These Directories"
@@ -11,13 +11,12 @@ Windows Registry Editor Version 5.00
 @="C:\\windows\\rcwm\\mvdirM.exe \"%V\""
 "IsolatedCommand"="C:\\windows\\rcwm\\mvdirM.exe \"%V\""
 
-
 [HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir]
 @="Move Directories Here"
 "Icon"="rcwmimg.dll,-4"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir\command]
-@="cmd.exe /c C:\\windows\\rcwm\\rcp.cmd \"%V\" mv m"
-"IsolatedCommand"="cmd.exe /c C:\\windows\\rcwm\\rcp.cmd \"%V\" mv m"
+@="cmd.exe /c C:\\windows\\rcwm\\rcp.lnk mv m \"%V\""
+"IsolatedCommand"="cmd.exe /c C:\\windows\\rcwm\\rcp.lnk mv m \"%V\""
 
 ; end
