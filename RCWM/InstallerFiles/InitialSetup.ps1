@@ -40,9 +40,9 @@ Copy-Item -Path "OSSpecificFiles\Win$os\*" -Destination ".\Temp" -erroraction 's
 
 #generate os-specific files
 #this is only needed so that OS doesn't prompt the user to run the shortcut
-if ($os -eq 6) { #Generate shortcuts for win8
+if ($os -eq 6) {
 	Write-Host "Generating shortcuts ..."
-	..\InstallerFiles\shortcuts7.ps1 
+	..\InstallerFiles\shortcuts6.ps1 
 }
 
 #Generate .exe files
@@ -59,7 +59,7 @@ powershell .\Temp\ps2exe_bastardized.ps1 -inputfile .\Temp\DirectoryLinks.ps1 -o
 powershell .\Temp\ps2exe_bastardized.ps1 -inputfile .\Temp\FileLinks.ps1 -outputfile .\Temp\flink.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\link.ico 2>&1>$null
 
 #rcp script
-powershell .\Temp\ps2exe_original.ps1 -inputfile .\Temp\rcp.ps1 -outputfile .\Temp\rcp.exe -novisualstyles -x86 -iconfile .\Temp\rcopy.ico 2>&1>$null
+powershell .\Temp\ps2exe_original.ps1 -inputfile .\Temp\rcp.ps1 -outputfile .\Temp\rcp.exe -novisualstyles -x86 2>&1>$null
 
 #Files generated.
 
