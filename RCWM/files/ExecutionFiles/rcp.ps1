@@ -52,7 +52,7 @@ if ($args[2] -eq $null) #old windows stores info into registry
 	$regInsert = [string](Get-itemproperty -Path 'HKCU:\RCWM').dir
 	
 	#concat spaces
-	foreach ($part in $regInsert) {[string]$pasteIntoDirectory = [string]$pasteIntoDirectory + [string]$part + " "}
+	foreach ($part in $regInsert) {[string]$pasteIntoDirectory = [string]$pasteIntoDirectory + [string]$part + "\"}
 	
 	#get rid of last space
 	$pasteIntoDirectory = $pasteIntoDirectory.substring(0,$pasteIntoDirectory.length-1)
