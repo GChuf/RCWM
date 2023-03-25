@@ -107,7 +107,7 @@ function powershellCheck(){
 
 	#todo: check 32bit!
 	#https://superuser.com/questions/305901/possible-values-of-processor-architecture
-	if ($ps -lt 4){
+	if ($os -eq 6){
 		if ($arch -eq "amd64"){
 			enableReg -regFile "pwrshell64.reg" -name "Pwrshell64"
 		} else {
