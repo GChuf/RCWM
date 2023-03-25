@@ -170,6 +170,7 @@ if ($existingFolder -eq $true) {
 	
 	if ($mode1 -eq "K") {mergeFiles}
 	else {recreateFiles}
+
 	
 } else {
 	#install
@@ -179,7 +180,14 @@ if ($existingFolder -eq $true) {
 	installRCWM
 }
 
-
+#start all exe files once, to avoid long startup on first execution
+#C:\Windows\RCWM\rcp.exe 
+#C:\Windows\RCWM\rcopyS.exe
+#C:\Windows\RCWM\rcopyM.exe
+#C:\Windows\RCWM\mvdirS.exe
+#C:\Windows\RCWM\mvdirM.exe
+#C:\Windows\RCWM\dlink.exe 
+#C:\Windows\RCWM\flink.exe 
 
 #check for v7 and overwrite if it exists
 # adapted from https://devblogs.microsoft.com/scripting/use-a-powershell-function-to-see-if-a-command-exists/

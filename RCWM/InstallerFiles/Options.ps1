@@ -8,9 +8,12 @@ cd ..\files\Temp
 $users = $args[0]
 
 [array]$UUIDs = @()
-foreach ($user in $users) {
-	$UUID = $user.Split("\")[-1]
-	$UUIDs += $UUID
+
+if ($users -ne $null) {
+	foreach ($user in $users) {
+		$UUID = $user.Split("\")[-1]
+		$UUIDs += $UUID
+	}
 }
 
 $AddOptions = @(
