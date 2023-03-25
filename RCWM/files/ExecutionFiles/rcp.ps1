@@ -47,17 +47,26 @@ $command = $args[0]
 $mode = $args[1]
 
 
-if ($args[2] -eq $null) #old windows stores info into registry
+if ($args[2] -eq $null) 
 {
-	$regInsert = [string](Get-itemproperty -Path 'HKCU:\RCWM').dir
-	
-	#concat spaces
-	foreach ($part in $regInsert) {[string]$pasteIntoDirectory = [string]$pasteIntoDirectory + [string]$part + "\"}
-	
-	#get rid of last space
-	$pasteIntoDirectory = $pasteIntoDirectory.substring(0,$pasteIntoDirectory.length-1)
-	
-	
+	$regInsert = (Get-itemproperty -Path 'HKCU:\RCWM').dir #must not be string, but string array
+
+	#fix inserts like "\0" into registry, which translates into new line ... (every folder that starts with "0" has this problem)
+
+	if ($regInsert.count -ge 2) {
+
+		foreach ($part in $regInsert) {
+			[string]$tempString += [string]$part + "\0"
+		}
+
+		#subtract last 2 symbols
+		[string]$pasteIntoDirectory = [string]$tempString.substring(0,$tempString.length-2)
+
+	}
+	else {
+		$pasteIntoDirectory = [string](Get-itemproperty -Path 'HKCU:\RCWM').dir
+	}
+
 } else {
 
 	#fix issues with trailing backslash when copying directly into drives - like C:\
