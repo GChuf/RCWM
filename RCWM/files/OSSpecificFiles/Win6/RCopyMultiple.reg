@@ -16,7 +16,7 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-6"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste\command]
-@="cmd.exe /c C:\\windows\\rcwm\\rcp.lnk rc m \"%V\""
-"IsolatedCommand"="cmd.exe /c C:\\windows\\rcwm\\rcp.lnk rc m \"%V\""
+@="cmd.exe /c C:\\windows\\rcwm\\rcp.cmd \"%V\" rc m"
+"IsolatedCommand"="cmd.exe /c C:\\windows\\rcwm\\rcp.cmd \"%V\" rc m"
 
 ; end
