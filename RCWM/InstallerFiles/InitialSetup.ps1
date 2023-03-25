@@ -40,9 +40,9 @@ Copy-Item -Path "OSSpecificFiles\Win$os\*" -Destination ".\Temp" -erroraction 's
 
 #generate os-specific files
 #this is only needed so that OS doesn't prompt the user to run the shortcut
-if ($os -eq 6) { #Generate shortcuts for win8
+if ($os -eq 6) {
 	Write-Host "Generating shortcuts ..."
-	..\InstallerFiles\shortcuts7.ps1 
+	..\InstallerFiles\shortcuts6.ps1 
 }
 
 #Generate .exe files
@@ -51,14 +51,15 @@ Write-Host "Generating binary files ..."
 
 Copy-Item -Path "..\InstallerFiles\ps2exe\*" -Destination ".\Temp"
 
-#powershell .\Temp\ps2exe.ps1 -inputfile .\Temp\RCopySingle.ps1 -outputfile .\Temp\rcopyS.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\rcopy.ico -verbose 2>&1>$null
-powershell .\Temp\ps2exe.ps1 -inputfile .\Temp\RCopySingle.ps1 -outputfile .\Temp\rcopyS.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\rcopy.ico 2>&1>$null
-powershell .\Temp\ps2exe.ps1 -inputfile .\Temp\RCopyMultiple.ps1 -outputfile .\Temp\rcopyM.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\rcopy.ico 2>&1>$null
-powershell .\Temp\ps2exe.ps1 -inputfile .\Temp\MvDirSingle.ps1 -outputfile .\Temp\mvdirS.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\move.ico 2>&1>$null
-powershell .\Temp\ps2exe.ps1 -inputfile .\Temp\MvDirMultiple.ps1 -outputfile .\Temp\mvdirM.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\move.ico 2>&1>$null
-powershell .\Temp\ps2exe.ps1 -inputfile .\Temp\DirectoryLinks.ps1 -outputfile .\Temp\dlink.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\link.ico 2>&1>$null
-powershell .\Temp\ps2exe.ps1 -inputfile .\Temp\FileLinks.ps1 -outputfile .\Temp\flink.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\link.ico 2>&1>$null
+powershell .\Temp\ps2exe_bastardized.ps1 -inputfile .\Temp\RCopySingle.ps1 -outputfile .\Temp\rcopyS.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\rcopy.ico 2>&1>$null
+powershell .\Temp\ps2exe_bastardized.ps1 -inputfile .\Temp\RCopyMultiple.ps1 -outputfile .\Temp\rcopyM.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\rcopy.ico 2>&1>$null
+powershell .\Temp\ps2exe_bastardized.ps1 -inputfile .\Temp\MvDirSingle.ps1 -outputfile .\Temp\mvdirS.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\move.ico 2>&1>$null
+powershell .\Temp\ps2exe_bastardized.ps1 -inputfile .\Temp\MvDirMultiple.ps1 -outputfile .\Temp\mvdirM.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\move.ico 2>&1>$null
+powershell .\Temp\ps2exe_bastardized.ps1 -inputfile .\Temp\DirectoryLinks.ps1 -outputfile .\Temp\dlink.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\link.ico 2>&1>$null
+powershell .\Temp\ps2exe_bastardized.ps1 -inputfile .\Temp\FileLinks.ps1 -outputfile .\Temp\flink.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\link.ico 2>&1>$null
 
+#rcp script
+powershell .\Temp\ps2exe_original.ps1 -inputfile .\Temp\rcp.ps1 -outputfile .\Temp\rcp.exe -novisualstyles -x86 2>&1>$null
 
 #Files generated.
 
@@ -169,6 +170,7 @@ if ($existingFolder -eq $true) {
 	
 	if ($mode1 -eq "K") {mergeFiles}
 	else {recreateFiles}
+
 	
 } else {
 	#install
@@ -178,7 +180,14 @@ if ($existingFolder -eq $true) {
 	installRCWM
 }
 
-
+#start all exe files once, to avoid long startup on first execution
+#C:\Windows\RCWM\rcp.exe 
+#C:\Windows\RCWM\rcopyS.exe
+#C:\Windows\RCWM\rcopyM.exe
+#C:\Windows\RCWM\mvdirS.exe
+#C:\Windows\RCWM\mvdirM.exe
+#C:\Windows\RCWM\dlink.exe 
+#C:\Windows\RCWM\flink.exe 
 
 #check for v7 and overwrite if it exists
 # adapted from https://devblogs.microsoft.com/scripting/use-a-powershell-function-to-see-if-a-command-exists/

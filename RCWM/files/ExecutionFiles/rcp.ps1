@@ -47,36 +47,28 @@ $command = $args[0]
 $mode = $args[1]
 
 
-#for older powershell, look into registry
 if ($args[2] -eq $null) 
 {
-	$regInsert = (Get-itemproperty -Path 'HKCU:\RCWM').dir
-	
+	$regInsert = (Get-itemproperty -Path 'HKCU:\RCWM').dir #must not be string, but string array
+
 	#fix inserts like "\0" into registry, which translates into new line ... (every folder that starts with "0" has this problem)
-	
+
 	if ($regInsert.count -ge 2) {
-		
+
 		foreach ($part in $regInsert) {
 			[string]$tempString += [string]$part + "\0"
 		}
-		
+
 		#subtract last 2 symbols
 		[string]$pasteIntoDirectory = [string]$tempString.substring(0,$tempString.length-2)
-		
+
 	}
 	else {
 		$pasteIntoDirectory = [string](Get-itemproperty -Path 'HKCU:\RCWM').dir
 	}
-	
-	#fix issues with trailing backslash
-	if (($pasteIntoDirectory[-2] -eq '"' ) -and ($pasteIntoDirectory[-3] -eq ':' )){
-		$pasteIntoDirectory = $pasteIntoDirectory.substring(0,2)
-	}
-	
-}
 
-else
-{
+} else {
+
 	#fix issues with trailing backslash when copying directly into drives - like C:\
 	If (($args[2][-1] -eq "'" ) -and ($args[2][-2] -eq "\" )){ #pwsh v5
 		$pasteIntoDirectory = $args[2].substring(1,2)
@@ -85,6 +77,7 @@ else
 	} else {
 		$pasteIntoDirectory = $args[2]
 	}
+
 }
 
 $pasteDirectoryDisplay = "'" + $pasteIntoDirectory + "'"

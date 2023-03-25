@@ -8,9 +8,12 @@ cd ..\files\Temp
 $users = $args[0]
 
 [array]$UUIDs = @()
-foreach ($user in $users) {
-	$UUID = $user.Split("\")[-1]
-	$UUIDs += $UUID
+
+if ($users -ne $null) {
+	foreach ($user in $users) {
+		$UUID = $user.Split("\")[-1]
+		$UUIDs += $UUID
+	}
 }
 
 $AddOptions = @(
@@ -107,7 +110,7 @@ function powershellCheck(){
 
 	#todo: check 32bit!
 	#https://superuser.com/questions/305901/possible-values-of-processor-architecture
-	if ($ps -lt 4){
+	if ($os -eq 6){
 		if ($arch -eq "amd64"){
 			enableReg -regFile "pwrshell64.reg" -name "Pwrshell64"
 		} else {

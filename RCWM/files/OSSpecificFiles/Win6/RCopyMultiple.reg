@@ -11,7 +11,6 @@ Windows Registry Editor Version 5.00
 @="C:\\windows\\rcwm\\rcopyM.exe \"%V\""
 "IsolatedCommand"="C:\\windows\\rcwm\\rcopyM.exe \"%V\""
 
-
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste]
 @="RoboPaste Directories"
 "Icon"="rcwmimg.dll,-6"

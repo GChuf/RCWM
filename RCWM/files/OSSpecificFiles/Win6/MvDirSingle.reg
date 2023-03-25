@@ -1,6 +1,6 @@
 Windows Registry Editor Version 5.00
 
-;robocopy
+;move dir
 
 [HKEY_CLASSES_ROOT\Directory\shell\mvdir]
 @="Move Directory"
@@ -10,7 +10,6 @@ Windows Registry Editor Version 5.00
 [HKEY_CLASSES_ROOT\Directory\shell\mvdir\command]
 @="C:\\windows\\rcwm\\mvdirS.exe \"%V\""
 "IsolatedCommand"="C:\\windows\\rcwm\\mvdirS.exe \"%V\""
-
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir]
 @="Move Directory Here"
