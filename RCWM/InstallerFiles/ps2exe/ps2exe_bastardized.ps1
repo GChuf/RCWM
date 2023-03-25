@@ -495,51 +495,45 @@ $forms
 	            PS2EXEHostUI ui = new PS2EXEHostUI();
 	            PS2EXEHost host = new PS2EXEHost(me);
 	            System.Threading.ManualResetEvent mre = new System.Threading.ManualResetEvent(false);
-	            try
-	            {
-	                using (Runspace myRunSpace = RunspaceFactory.CreateRunspace(host))
-	                {
-	                    $(if($true){"myRunSpace.ApartmentState = System.Threading.ApartmentState."})$(if($true){"STA"});
-	                    myRunSpace.Open();
 
-	                    using (System.Management.Automation.PowerShell powershell = System.Management.Automation.PowerShell.Create())
-	                    {
+				using (Runspace myRunSpace = RunspaceFactory.CreateRunspace(host))
+				{
+					$(if($true){"myRunSpace.ApartmentState = System.Threading.ApartmentState."})$(if($true){"STA"});
+					myRunSpace.Open();
 
-	                        powershell.Runspace = myRunSpace;
+					using (System.Management.Automation.PowerShell powershell = System.Management.Automation.PowerShell.Create())
+					{
 
-	                        PSDataCollection<PSObject> inp = new PSDataCollection<PSObject>();
+						powershell.Runspace = myRunSpace;
 
-	                        PSDataCollection<PSObject> outp = new PSDataCollection<PSObject>();
+						PSDataCollection<PSObject> inp = new PSDataCollection<PSObject>();
 
-	                        int separator = 0;
+						PSDataCollection<PSObject> outp = new PSDataCollection<PSObject>();
 
-	                        string script = System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(@"$($script)"));
+						int separator = 0;
 
-							List<string> paramList = new List<string>(args);
+						string script = System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(@"$($script)"));
 
-	                        powershell.AddScript(script);
-                        	powershell.AddParameters(paramList.GetRange(0, paramList.Count));
+						List<string> paramList = new List<string>(args);
 
-	                        powershell.BeginInvoke<PSObject, PSObject>(inp, outp, null, new AsyncCallback(delegate(IAsyncResult ar)
-	                        {
-	                            if (ar.IsCompleted)
-	                                mre.Set();
-	                        }), null);
+						powershell.AddScript(script);
+						powershell.AddParameters(paramList.GetRange(0, paramList.Count));
 
-	                        while (!me.ShouldExit && !mre.WaitOne(10))
-	                        {
-	                        };
+						powershell.BeginInvoke<PSObject, PSObject>(inp, outp, null, new AsyncCallback(delegate(IAsyncResult ar)
+						{
+							if (ar.IsCompleted)
+								mre.Set();
+						}), null);
 
-	                        powershell.Stop();
-	                    }
+						while (!me.ShouldExit && !mre.WaitOne(10))
+						{
+						};
 
-	                    myRunSpace.Close();
-	                }
-	            }
-	            catch (Exception ex)
-	            {
+						powershell.Stop();
+					}
 
-	            }
+					myRunSpace.Close();
+				}
 
 	            return me.ExitCode;
 	        }
