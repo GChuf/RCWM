@@ -254,190 +254,12 @@ $script = [System.Convert]::ToBase64String(([System.Text.Encoding]::UTF8.GetByte
 				public void ShowDialog() {}
 			}
 			
-			internal class CredentialForm
-		    {
-				public class UserPwd
-		        {
-		            public string User = string.Empty;
-		            public string Password = string.Empty;
-		            public string Domain = string.Empty;
-		        }
 
-				public static UserPwd PromptForPassword(string caption, string message, string target, string user, PSCredentialTypes credTypes, PSCredentialUIOptions options) { return null;}
-			}
 "@	
 	if( $noConsole ) {
 	
 		$forms = @"
-			internal class CredentialForm
-		    {
-		        // http://www.pinvoke.net/default.aspx/credui/CredUnPackAuthenticationBuffer.html
 
-		        /* >= VISTA 
-		        [DllImport("ole32.dll")]
-		        public static extern void CoTaskMemFree(IntPtr ptr);
-
-		        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-		        private struct CREDUI_INFO
-		        {
-		            public int cbSize;
-		            public IntPtr hwndParent;
-		            public string pszMessageText;
-		            public string pszCaptionText;
-		            public IntPtr hbmBanner;
-		        }
-
-		        [DllImport("credui.dll", CharSet = CharSet.Auto)]
-		        private static extern bool CredUnPackAuthenticationBuffer(int dwFlags, IntPtr pAuthBuffer, uint cbAuthBuffer, StringBuilder pszUserName, ref int pcchMaxUserName, StringBuilder pszDomainName, ref int pcchMaxDomainame, StringBuilder pszPassword, ref int pcchMaxPassword);
-
-		        [DllImport("credui.dll", CharSet = CharSet.Auto)]
-		        private static extern int CredUIPromptForWindowsCredentials(ref CREDUI_INFO notUsedHere, int authError, ref uint authPackage, IntPtr InAuthBuffer, uint InAuthBufferSize, out IntPtr refOutAuthBuffer, out uint refOutAuthBufferSize, ref bool fSave, int flags);
-
-		        public class UserPwd
-		        {
-		            public string User = string.Empty;
-		            public string Password = string.Empty;
-		            public string Domain = string.Empty;
-		        }
-
-		        public static UserPwd GetCredentialsVistaAndUp(string caption, string message)
-		        {
-		            CREDUI_INFO credui = new CREDUI_INFO();
-		            credui.pszCaptionText = caption;
-		            credui.pszMessageText = message;
-		            credui.cbSize = Marshal.SizeOf(credui);
-		            uint authPackage = 0;
-		            IntPtr outCredBuffer = new IntPtr();
-		            uint outCredSize;
-		            bool save = false;
-		            int result = CredUIPromptForWindowsCredentials(ref credui, 0, ref authPackage, IntPtr.Zero, 0, out outCredBuffer, out outCredSize, ref save, 1 / * Generic * /);
-
-		            var usernameBuf = new StringBuilder(100);
-		            var passwordBuf = new StringBuilder(100);
-		            var domainBuf = new StringBuilder(100);
-
-		            int maxUserName = 100;
-		            int maxDomain = 100;
-		            int maxPassword = 100;
-		            if (result == 0)
-		            {
-		                if (CredUnPackAuthenticationBuffer(0, outCredBuffer, outCredSize, usernameBuf, ref maxUserName, domainBuf, ref maxDomain, passwordBuf, ref maxPassword))
-		                {
-		                    //clear the memory allocated by CredUIPromptForWindowsCredentials 
-		                    CoTaskMemFree(outCredBuffer);
-		                    UserPwd ret = new UserPwd();
-		                    ret.User = usernameBuf.ToString();
-		                    ret.Password = passwordBuf.ToString();
-		                    ret.Domain = domainBuf.ToString();
-		                    return ret;
-		                }
-		            }
-
-		            return null;
-		        }
-		        */
-				
-				
-				// http://www.pinvoke.net/default.aspx/credui/CredUIPromptForWindowsCredentials.html
-				// http://www.pinvoke.net/default.aspx/credui.creduipromptforcredentials#
-				
-		        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-		        private struct CREDUI_INFO
-		        {
-		            public int cbSize;
-		            public IntPtr hwndParent;
-		            public string pszMessageText;
-		            public string pszCaptionText;
-		            public IntPtr hbmBanner;
-		        }
-
-		        [Flags]
-		        enum CREDUI_FLAGS
-		        {
-		            INCORRECT_PASSWORD = 0x1,
-		            DO_NOT_PERSIST = 0x2,
-		            REQUEST_ADMINISTRATOR = 0x4,
-		            EXCLUDE_CERTIFICATES = 0x8,
-		            REQUIRE_CERTIFICATE = 0x10,
-		            SHOW_SAVE_CHECK_BOX = 0x40,
-		            ALWAYS_SHOW_UI = 0x80,
-		            REQUIRE_SMARTCARD = 0x100,
-		            PASSWORD_ONLY_OK = 0x200,
-		            VALIDATE_USERNAME = 0x400,
-		            COMPLETE_USERNAME = 0x800,
-		            PERSIST = 0x1000,
-		            SERVER_CREDENTIAL = 0x4000,
-		            EXPECT_CONFIRMATION = 0x20000,
-		            GENERIC_CREDENTIALS = 0x40000,
-		            USERNAME_TARGET_CREDENTIALS = 0x80000,
-		            KEEP_USERNAME = 0x100000,
-		        }
-
-		        public enum CredUIReturnCodes
-		        {
-		            NO_ERROR = 0,
-		            ERROR_CANCELLED = 1223,
-		            ERROR_NO_SUCH_LOGON_SESSION = 1312,
-		            ERROR_NOT_FOUND = 1168,
-		            ERROR_INVALID_ACCOUNT_NAME = 1315,
-		            ERROR_INSUFFICIENT_BUFFER = 122,
-		            ERROR_INVALID_PARAMETER = 87,
-		            ERROR_INVALID_FLAGS = 1004,
-		        }
-
-		        [DllImport("credui")]
-		        private static extern CredUIReturnCodes CredUIPromptForCredentials(ref CREDUI_INFO creditUR,
-		          string targetName,
-		          IntPtr reserved1,
-		          int iError,
-		          StringBuilder userName,
-		          int maxUserName,
-		          StringBuilder password,
-		          int maxPassword,
-		          [MarshalAs(UnmanagedType.Bool)] ref bool pfSave,
-		          CREDUI_FLAGS flags);
-
-		        public class UserPwd
-		        {
-		            public string User = string.Empty;
-		            public string Password = string.Empty;
-		            public string Domain = string.Empty;
-		        }
-
-		        internal static UserPwd PromptForPassword(string caption, string message, string target, string user, PSCredentialTypes credTypes, PSCredentialUIOptions options)
-		        {
-		            // Setup the flags and variables
-		            StringBuilder userPassword = new StringBuilder(), userID = new StringBuilder(user);
-		            CREDUI_INFO credUI = new CREDUI_INFO();
-		            credUI.cbSize = Marshal.SizeOf(credUI);
-		            bool save = false;
-		            
-		            CREDUI_FLAGS flags = CREDUI_FLAGS.DO_NOT_PERSIST;
-		            if ((credTypes & PSCredentialTypes.Domain) != PSCredentialTypes.Domain)
-		            {
-		                flags |= CREDUI_FLAGS.GENERIC_CREDENTIALS;
-		                if ((options & PSCredentialUIOptions.AlwaysPrompt) == PSCredentialUIOptions.AlwaysPrompt)
-		                {
-		                    flags |= CREDUI_FLAGS.ALWAYS_SHOW_UI;
-		                }
-		            }
-
-		            // Prompt the user
-		            CredUIReturnCodes returnCode = CredUIPromptForCredentials(ref credUI, target, IntPtr.Zero, 0, userID, 100, userPassword, 100, ref save, flags);
-
-		            if (returnCode == CredUIReturnCodes.NO_ERROR)
-		            {
-		                UserPwd ret = new UserPwd();
-		                ret.User = userID.ToString();
-		                ret.Password = userPassword.ToString();
-		                ret.Domain = "";
-		                return ret;
-		            }
-
-		            return null;
-		        }
-
-		    }
 "@
 
 		$forms += @"
@@ -449,111 +271,7 @@ $script = [System.Convert]::ToBase64String(([System.Text.Encoding]::UTF8.GetByte
 			}
 "@	
 	
-	<# NOT FINISHED !!!
-		$forms += @"
-		    internal class ReadKeyForm : System.Windows.Forms.Form
-		    {
-		        public KeyInfo key;
-		        private System.Windows.Forms.TextBox textBox1;
-		        private System.Windows.Forms.Button button1;
 
-		        private void InitializeComponent()
-		        {
-		            this.textBox1 = new System.Windows.Forms.TextBox();
-		            this.button1 = new System.Windows.Forms.Button();
-		            this.SuspendLayout();
-		            // 
-		            // textBox1
-		            // 
-		            this.textBox1.AcceptsReturn = true;
-		            this.textBox1.AcceptsTab = true;
-		            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-		            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 28F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-		            this.textBox1.Location = new System.Drawing.Point(0, 0);
-		            this.textBox1.Multiline = true;
-		            this.textBox1.Name = "textBox1";
-		            this.textBox1.Size = new System.Drawing.Size(226, 61);
-		            this.textBox1.TabIndex = 0;
-		            this.textBox1.ShortcutsEnabled = false;
-		            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-		            this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
-		            this.textBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyUp);
-		            // 
-		            // button1
-		            // 
-		            this.button1.Dock = System.Windows.Forms.DockStyle.Right;
-		            this.button1.Location = new System.Drawing.Point(226, 0);
-		            this.button1.Name = "button1";
-		            this.button1.Size = new System.Drawing.Size(75, 61);
-		            this.button1.TabIndex = 1;
-		            this.button1.Text = "Cancel";
-		            this.button1.UseVisualStyleBackColor = true;
-		            // 
-		            // Form1
-		            // 
-		            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-		            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-		            this.ClientSize = new System.Drawing.Size(301, 61);
-		            this.Controls.Add(this.textBox1);
-		            this.Controls.Add(this.button1);
-		            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-		            this.Name = "Form1";
-		            this.Text = "Press a key...";
-		            this.ResumeLayout(false);
-		            this.PerformLayout();
-
-		        }
-
-
-		        private bool alt = false;
-		        private bool ctrl = false;
-		        private bool shift = false;
-		        private System.Windows.Forms.Keys keycode = System.Windows.Forms.Keys.None;
-		        private System.Windows.Forms.Keys keydata = System.Windows.Forms.Keys.None;
-		        private int keyvalue = 0;
-
-		        private void textBox1_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
-		        {
-		           // key = new KeyInfo(e.
-		        }
-
-		        private void textBox1_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
-		        {
-		            alt = e.Alt;
-		            ctrl = e.Control;
-		            shift = e.Shift;
-		            keycode = e.KeyCode;
-		            keydata = e.KeyData;
-		            keyvalue = e.KeyValue;
-
-		            e.SuppressKeyPress = true;
-		            e.Handled = true;
-
-		            if (keyvalue >= 32)
-		            {
-		                ControlKeyStates k = 0;
-		                if(e.Alt )
-		                    k |= ControlKeyStates.LeftAltPressed | ControlKeyStates.RightAltPressed;
-		                if(e.Control )
-		                    k |= ControlKeyStates.LeftCtrlPressed | ControlKeyStates.RightCtrlPressed;
-		                if(e.Shift) 
-		                    k |= ControlKeyStates.ShiftPressed;
-		                if((e.Modifiers & System.Windows.Forms.Keys.CapsLock) > 0)
-		                    k |= ControlKeyStates.CapsLockOn;
-
-		                key = new KeyInfo(0, (char)keyvalue, k, false);
-		                this.Close();
-		            }
-		        }
-
-		        public ReadKeyForm()
-		        {
-		            InitializeComponent();
-		            textBox1.Focus();
-		        }
-		    }
-"@
-	#>
 		}
 		
 
@@ -570,7 +288,7 @@ $script = [System.Convert]::ToBase64String(([System.Text.Encoding]::UTF8.GetByte
 	using PowerShell = System.Management.Automation.PowerShell;
 	using System.Globalization;
 	using System.Management.Automation.Host;
-	using System.Security;
+
 	using System.Reflection;
 	using System.Runtime.InteropServices;
 
@@ -676,40 +394,26 @@ $forms
 
 	        public override KeyInfo ReadKey(ReadKeyOptions options)
 	        {
-	            if( CONSOLE ) {
-		            ConsoleKeyInfo cki = Console.ReadKey();
 
-		            ControlKeyStates cks = 0;
-		            if ((cki.Modifiers & ConsoleModifiers.Alt) != 0)
-		                cks |= ControlKeyStates.LeftAltPressed | ControlKeyStates.RightAltPressed;
-		            if ((cki.Modifiers & ConsoleModifiers.Control) != 0)
-		                cks |= ControlKeyStates.LeftCtrlPressed | ControlKeyStates.RightCtrlPressed;
-		            if ((cki.Modifiers & ConsoleModifiers.Shift) != 0)
-		                cks |= ControlKeyStates.ShiftPressed;
-		            if (Console.CapsLock)
-		                cks |= ControlKeyStates.CapsLockOn;
-
-		            return new KeyInfo((int)cki.Key, cki.KeyChar, cks, false);
-				} else {
 					ReadKeyForm f = new ReadKeyForm();
 	                f.ShowDialog();
 	                return f.key; 
-				}
+
 	        }
 
 	        public override void ScrollBufferContents(Rectangle source, Coordinates destination, Rectangle clip, BufferCell fill)
 	        {
-	            throw new Exception("Not implemented: ik.PowerShell.PS2EXEHostRawUI.ScrollBufferContents");
+	            throw new Exception("");
 	        }
 
 	        public override void SetBufferContents(Rectangle rectangle, BufferCell fill)
 	        {
-	            throw new Exception("Not implemented: ik.PowerShell.PS2EXEHostRawUI.SetBufferContents(1)");
+	            throw new Exception("");
 	        }
 
 	        public override void SetBufferContents(Coordinates origin, BufferCell[,] contents)
 	        {
-	            throw new Exception("Not implemented: ik.PowerShell.PS2EXEHostRawUI.SetBufferContents(2)");
+	            throw new Exception("");
 	        }
 
 	        public override Coordinates WindowPosition
@@ -748,7 +452,7 @@ $forms
 	        {
 	            get
 	            {
-	                return Console.Title;
+	                return "";
 	            }
 	            set
 	            {
@@ -770,9 +474,7 @@ $forms
 
 	        public override Dictionary<string, PSObject> Prompt(string caption, string message, System.Collections.ObjectModel.Collection<FieldDescription> descriptions)
 	        {
-				if( !CONSOLE )
-					return new Dictionary<string, PSObject>();
-					
+
 	            if (!string.IsNullOrEmpty(caption))
 	                WriteLine(caption);
 	            if (!string.IsNullOrEmpty(message))
@@ -798,23 +500,18 @@ $forms
 	                    string data = "";
 	                    do
 	                    {
-	                        try
-	                        {
-	                            if (!string.IsNullOrEmpty(cd.Name))
-	                                Write(string.Format("{0}[{1}]: ", cd.Name, index));
-	                            data = ReadLine();
 
-	                            if (string.IsNullOrEmpty(data))
-	                                break;
-	                            
-	                            object o = System.Convert.ChangeType(data, elementType);
+							if (!string.IsNullOrEmpty(cd.Name))
+								Write(string.Format("{0}[{1}]: ", cd.Name, index));
+							data = ReadLine();
 
-	                            genericListType.InvokeMember("Add", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Instance, null, resultList, new object[] { o });
-	                        }
-	                        catch (Exception ex)
-	                        {
-	                            throw new Exception("Exception in ik.PowerShell.PS2EXEHostUI.Prompt*1");
-	                        }
+							if (string.IsNullOrEmpty(data))
+								break;
+							
+							object o = System.Convert.ChangeType(data, elementType);
+
+							genericListType.InvokeMember("Add", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Instance, null, resultList, new object[] { o });
+						
 	                        index++;
 	                    } while (true);
 
@@ -853,49 +550,21 @@ $forms
 
 	        public override int PromptForChoice(string caption, string message, System.Collections.ObjectModel.Collection<ChoiceDescription> choices, int defaultChoice)
 	        {
-				if( !CONSOLE )
-					return -1;
 					
 	            if (!string.IsNullOrEmpty(caption))
 	                WriteLine(caption);
 	            WriteLine(message);
 	            int idx = 0;
 	            SortedList<string, int> res = new SortedList<string, int>();
-	            foreach (ChoiceDescription cd in choices)
-	            {
 
-	                string l = cd.Label;
-	                int pos = cd.Label.IndexOf('&');
-	                if (pos > -1)
-	                {
-	                    l = cd.Label.Substring(pos + 1, 1);
-	                }
-	                res.Add(l.ToLower(), idx);
 
-	                if (idx == defaultChoice)
-	                {
-	                    Console.ForegroundColor = ConsoleColor.Yellow;
-	                    Write(ConsoleColor.Yellow, Console.BackgroundColor, string.Format("[{0}]: ", l, cd.HelpMessage));
-	                    WriteLine(ConsoleColor.Gray, Console.BackgroundColor, string.Format("{1}", l, cd.HelpMessage));
-	                }
-	                else
-	                {
-	                    Console.ForegroundColor = ConsoleColor.White;
-	                    Write(ConsoleColor.White, Console.BackgroundColor, string.Format("[{0}]: ", l, cd.HelpMessage));
-	                    WriteLine(ConsoleColor.Gray, Console.BackgroundColor, string.Format("{1}", l, cd.HelpMessage));
-	                }
-	                idx++;
-	            }
 
-	            try
-	            {
 	                string s = Console.ReadLine().ToLower();
 	                if (res.ContainsKey(s))
 	                {
 	                    return res[s];
 	                }
-	            }
-	            catch { }
+
 
 
 	            return -1;
@@ -903,60 +572,15 @@ $forms
 
 	        public override PSCredential PromptForCredential(string caption, string message, string userName, string targetName, PSCredentialTypes allowedCredentialTypes, PSCredentialUIOptions options)
 	        {
-	            if (!CONSOLE)
-	            {
-	                ik.PowerShell.CredentialForm.UserPwd cred = CredentialForm.PromptForPassword(caption, message, targetName, userName, allowedCredentialTypes, options);
-	                if (cred != null )
-	                {
-	                    System.Security.SecureString x = new System.Security.SecureString();
-	                    foreach (char c in cred.Password.ToCharArray())
-	                        x.AppendChar(c);
 
-	                    return new PSCredential(cred.User, x);
-	                }
-	                return null;
-	            }
-					
-	            if (!string.IsNullOrEmpty(caption))
-	                WriteLine(caption);
-	            WriteLine(message);
-	            Write("User name: ");
-	            string un = ReadLine();
-	            SecureString pwd = null;
-	            if ((options & PSCredentialUIOptions.ReadOnlyUserName) == 0)
-	            {
-	                Write("Password: ");
-	                pwd = ReadLineAsSecureString();
-	            }
-	            PSCredential c2 = new PSCredential(un, pwd);
-	            return c2;
+
+	            return null;
 	        }
 
 	        public override PSCredential PromptForCredential(string caption, string message, string userName, string targetName)
 	        {
-	            if (!CONSOLE)
-	            {
-                	ik.PowerShell.CredentialForm.UserPwd cred = CredentialForm.PromptForPassword(caption, message, targetName, userName, PSCredentialTypes.Default, PSCredentialUIOptions.Default);
-	                if (cred != null )
-	                {
-	                    System.Security.SecureString x = new System.Security.SecureString();
-	                    foreach (char c in cred.Password.ToCharArray())
-	                        x.AppendChar(c);
 
-	                    return new PSCredential(cred.User, x);
-	                }
-	                return null;
-	            }
-
-				if (!string.IsNullOrEmpty(caption))
-	                WriteLine(caption);
-	            WriteLine(message);
-	            Write("User name: ");
-	            string un = ReadLine();
-	            Write("Password: ");
-	            SecureString pwd = ReadLineAsSecureString();
-	            PSCredential c2 = new PSCredential(un, pwd);
-	            return c2;
+	            return null;
 	        }
 
 	        public override PSHostRawUserInterface RawUI
@@ -974,11 +598,8 @@ $forms
 
 	        public override System.Security.SecureString ReadLineAsSecureString()
 	        {
-	            System.Security.SecureString x = new System.Security.SecureString();
-	            string l = Console.ReadLine();
-	            foreach (char c in l.ToCharArray())
-	                x.AppendChar(c);
-	            return x;
+
+	            return null;
 	        }
 
 	        public override void Write(ConsoleColor foregroundColor, ConsoleColor backgroundColor, string value)
@@ -1143,7 +764,7 @@ $forms
 
 	    internal class PS2EXE : PS2EXEApp
 	    {
-			private const bool CONSOLE = $(if($noConsole){"false"}else{"true"});
+			private const bool CONSOLE = true;
 			
 	        private bool shouldExit;
 
@@ -1177,8 +798,6 @@ $forms
 
 	            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
-	            try
-	            {
 	                using (Runspace myRunSpace = RunspaceFactory.CreateRunspace(host))
 	                {
 	                    $(if($sta -or $mta) {"myRunSpace.ApartmentState = System.Threading.ApartmentState."})$(if($sta){"STA"})$(if($mta){"MTA"});
@@ -1188,17 +807,13 @@ $forms
 	                    {
 	                        Console.CancelKeyPress += new ConsoleCancelEventHandler(delegate(object sender, ConsoleCancelEventArgs e)
 	                        {
-	                            try
-	                            {
+
 	                                powershell.BeginStop(new AsyncCallback(delegate(IAsyncResult r)
 	                                {
 	                                    mre.Set();
 	                                    e.Cancel = true;
 	                                }), null);
-	                            }
-	                            catch
-	                            {
-	                            };
+
 	                        });
 
 	                        powershell.Runspace = myRunSpace;
@@ -1242,21 +857,11 @@ $forms
 	                                string[] s1 = s.Split(new string[] { ":" }, 2, StringSplitOptions.RemoveEmptyEntries);
 	                                if (s1.Length != 2)
 	                                {
-	                                    Console.WriteLine("If you specify the -extract option you need to add a file for extraction in this way\r\n   -extract:\"<filename>\"");
 	                                    return 1;
 	                                }
 	                                extractFN = s1[1].Trim(new char[] { '\"' });
 	                            }
-	                            else if (string.Compare(s, "-end", true) == 0)
-	                            {
-	                                separator = idx + 1;
-	                                break;
-	                            }
-	                            else if (string.Compare(s, "-debug", true) == 0)
-	                            {
-	                                System.Diagnostics.Debugger.Launch();
-	                                break;
-	                            }
+
 	                            idx++;
 	                        }
 
@@ -1291,18 +896,7 @@ $forms
 
 	                    myRunSpace.Close();
 	                }
-	            }
-	            catch (Exception ex)
-	            {
-	                Console.Write("An exception occured: ");
-	                Console.WriteLine(ex.Message);
-	            }
 
-	            if (paramWait)
-	            {
-	                Console.WriteLine("Hit any key to exit...");
-	                Console.ReadKey();
-	            }
 	            return me.ExitCode;
 	        }
 
