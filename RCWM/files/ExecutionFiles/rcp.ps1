@@ -47,15 +47,29 @@ $command = $args[0]
 $mode = $args[1]
 
 
-#fix issues with trailing backslash when copying directly into drives - like C:\
-If (($args[2][-1] -eq "'" ) -and ($args[2][-2] -eq "\" )){ #pwsh v5
-	$pasteIntoDirectory = $args[2].substring(1,2)
-} elseif (($args[2][-1] -eq '"' ) -and ($args[2][-2] -eq ':' )){ #pwsh v7
-	$pasteIntoDirectory = $args[2].substring(0,2)
+if ($args[2] -eq $null) #old windows stores info into registry
+{
+	$regInsert = [string](Get-itemproperty -Path 'HKCU:\RCWM').dir
+	
+	#concat spaces
+	foreach ($part in $regInsert) {[string]$pasteIntoDirectory = [string]$pasteIntoDirectory + [string]$part + " "}
+	
+	#get rid of last space
+	$pasteIntoDirectory = $pasteIntoDirectory.substring(0,$pasteIntoDirectory.length-1)
+	
+	
 } else {
-	$pasteIntoDirectory = $args[2]
-}
 
+	#fix issues with trailing backslash when copying directly into drives - like C:\
+	If (($args[2][-1] -eq "'" ) -and ($args[2][-2] -eq "\" )){ #pwsh v5
+		$pasteIntoDirectory = $args[2].substring(1,2)
+	} elseif (($args[2][-1] -eq '"' ) -and ($args[2][-2] -eq ':' )){ #pwsh v7
+		$pasteIntoDirectory = $args[2].substring(0,2)
+	} else {
+		$pasteIntoDirectory = $args[2]
+	}
+
+}
 
 $pasteDirectoryDisplay = "'" + $pasteIntoDirectory + "'"
 
