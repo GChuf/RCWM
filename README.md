@@ -45,12 +45,11 @@ TODO (magic takes time):
 
 # What's new in v2:
 - install for individual users now possible
-- speed up reading and writing directory paths to be copied/moved (now done in registry, no writing/reading from files anymore)
 - added .exe file to write directory paths into registry through ps2exe script (no more console flicker)
 - fixed UNC paths when copying/moving
-- fixed encoding issues in windows 7 (powershell v2) - the culprit was the default cmd.exe font
+- fixed encoding issues in windows XP/7/8 - the culprit was the default cmd.exe font
 - moved some batch scripts to powershell
-- included support for powershell v7
+- speed up reading and writing directory paths to be copied/moved (now done in registry, no writing/reading from files anymore)
 - other minor speed-ups
 
 ![Magic examples](img/RCWM.gif)
@@ -83,7 +82,7 @@ The list of the folder paths to be copied is __appended__ to registry under *C:\
 
 By default, you can only select up to 15 folders to be copied (the default windows limit for right-click options is 15, you can increase it to 31 or more in the install script - see the *MultipleInvokeMinimum.reg* file for more info). Recursive copying/moving is also never a problem (you can have as many subfolders as you like).
 
-Use this option if you intend to use RoboCopy a lot. I'd recommend reading the rcp.ps1 powershell file to understand how the script works.
+Use this option if you intend to use RoboCopy a lot. YOu can read the rcp.ps1 powershell file to understand how the script works.
 
 
 RoboCopy (multiple) versus Move Directory (single):
@@ -95,16 +94,8 @@ RoboCopy (multiple) versus Move Directory (single):
 - TakeOwn won't work properly when right-clicking on very large amounts of folders (some folders' permissions won't be changed - so you need to do it twice)?
 Changing ownership of large amounts of recursive folders works fine though.
 - Run with Priority won't show the menu to choose with which priority to run a program - please report if this happens to you
-- <del>When selecting multiple folders to be copied/moved, not all of them are saved into the list for copying/moving (~10% loss?)
-Fixed with powershell using mutex</del>
-Fixed by saving folder paths into files generated with random names
-- <del>RoboCopy and MoveDir stopped working when using powershell mutex scripts - work in progress to move existing batch script into powershell to solve the problem. Apparently CMD doesn't like powershell outputs ... </del>?
-Fixed by using utf-8 encoding in powershell
-Also fixed some other issues by applying UTF-8 in batch (UTF-7 for Windows7)
-- <del>powershell scripts (robocopy, mvdir, open powershell) don't work with directories with \[square brackets\] in their names.</del>
-Fixed by using -literalPath option
 - rmdir and robocopy sometimes need admin privileges (robocopy throws error 5) - if you experience this, takeown or always running cmd as admin will help
-  
+
 # Tests
 RoboCopy is much faster for copying a large amount of small files.
 RmDir is also faster than "standard" delete.
