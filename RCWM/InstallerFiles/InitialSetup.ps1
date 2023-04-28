@@ -16,6 +16,18 @@ $os = [System.Environment]::OSVersion.Version.Major
 #win7 and win8 virtual machines both return "6"
 #new win servers(!) return "10"
 
+$pwsh7Version = (get-command pwsh).Version.Major 2>$null
+
+if ($pwsh7Version -eq 7) {
+	Write-Host "Powershell 7 detected along with Powershell $ps."
+	while ($true) {
+		$pwsh7 = Read-Host "Would you like to use Powershell 7 where applicable? (Y/N)"
+		if ($pwsh7 -eq "Y") {$ps = $pwsh7Version; Write-Host "Using Powershell 7."; break}
+		elseif ($pwsh7 -eq "N") {break}
+		else {echo "Invalid input!"}
+	}
+
+}
 
 #Make sure Temp is clean.
 cmd.exe /c del .\Temp\* /s /q 2>&1>$null
