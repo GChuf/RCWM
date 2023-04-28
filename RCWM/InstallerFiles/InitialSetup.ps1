@@ -23,11 +23,13 @@ if ($pwsh7Version -eq 7 -or $pwsh7CommandType -eq "Application") {
 	Write-Host "Powershell 7 detected along with Powershell $ps."
 	while ($true) {
 		$pwsh7 = Read-Host "Would you like to use Powershell 7 where applicable? (Y/N)"
-		if ($pwsh7 -eq "Y") {$ps = 7; Write-Host "Using Powershell 7."; break}
-		elseif ($pwsh7 -eq "N") Write-Host "Using Powershell $ps."; break}
+		if ($pwsh7 -eq "Y") {$ps = 7; break}
+		elseif ($pwsh7 -eq "N") {break}
 		else {echo "Invalid input!"}
 	}
 }
+
+Write-Host "Using Powershell version $ps on $arch bit CPU."
 
 #Make sure Temp is clean.
 cmd.exe /c del .\Temp\* /s /q 2>&1>$null
@@ -213,8 +215,6 @@ if ($existingFolder -eq $true) {
 #try {if(Get-Command pwsh){$global:ps = (Get-Command pwsh).version.major}}
 #Catch {}
 #$ErrorActionPreference=$oldPreference
-
-Write-Host "Using powershell version $ps on $arch bit CPU."
 
 # Unblock ps1 files (not entirely necessary)
 # Won't work on older powershell versions, so output error message to NUL
