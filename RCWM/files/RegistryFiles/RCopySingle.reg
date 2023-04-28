@@ -16,7 +16,7 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-6"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste\command]
-@="ccmd.exe /c C:\\windows\\rcwm\\rcp.exe rc s \"%V\""
-"IsolatedCommand"="cmd.exe /c C:\\windows\\rcwm\\rcp.exe rc s \"%V\""
+@="cmd /c powershell Set-ExecutionPolicy Bypass -Force -Scope Process; C:\\windows\\rcwm\\rcp.ps1 rc s \"%V\""
+"IsolatedCommand"="cmd /c powershell Set-ExecutionPolicy Bypass -Force -Scope Process; C:\\windows\\rcwm\\rcp.ps1 rc s \"%V\""
 
 ; end

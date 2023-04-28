@@ -35,8 +35,10 @@ Copy-Item -Path "Icons\*" -Destination ".\Temp" | Out-Null
 xcopy Icons\rcwmimg.dll C:\windows\system32 /y | Out-Null
 
 #Overwrite default files with specific files - if they exist/if applicable
-Copy-Item -Path "PowershellSpecificFiles\pwsh$ps\*" -Destination ".\Temp" -erroraction 'silentlycontinue'
+
 Copy-Item -Path "OSSpecificFiles\Win$os\*" -Destination ".\Temp" -erroraction 'silentlycontinue'
+#if powershell 7 on old windows, overwrite old windows files
+Copy-Item -Path "PowershellSpecificFiles\pwsh$ps\*" -Destination ".\Temp" -erroraction 'silentlycontinue'
 
 #generate os-specific files
 #this is only needed so that OS doesn't prompt the user to run the shortcut
@@ -59,6 +61,8 @@ powershell .\Temp\ps2exe_bastardized.ps1 -inputfile .\Temp\DirectoryLinks.ps1 -o
 powershell .\Temp\ps2exe_bastardized.ps1 -inputfile .\Temp\FileLinks.ps1 -outputfile .\Temp\flink.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\link.ico 2>&1>$null
 
 #rcp script
+#"minify" - take out tabs
+(Get-Content .\Temp\rcp.ps1) -replace "`t", "" | Set-Content .\Temp\rcp.ps1
 powershell .\Temp\ps2exe_original.ps1 -inputfile .\Temp\rcp.ps1 -outputfile .\Temp\rcp.exe -novisualstyles -x86 2>&1>$null
 
 #Files generated.
