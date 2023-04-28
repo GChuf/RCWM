@@ -17,16 +17,16 @@ $os = [System.Environment]::OSVersion.Version.Major
 #new win servers(!) return "10"
 
 $pwsh7Version = (get-command pwsh).Version.Major 2>$null
+$pwsh7CommandType = (get-command pwsh).CommandType 2>$null #fix for bugged pwsh7 version outputs in old windows
 
-if ($pwsh7Version -eq 7) {
+if ($pwsh7Version -eq 7 -or $pwsh7CommandType -eq "Application") {
 	Write-Host "Powershell 7 detected along with Powershell $ps."
 	while ($true) {
 		$pwsh7 = Read-Host "Would you like to use Powershell 7 where applicable? (Y/N)"
-		if ($pwsh7 -eq "Y") {$ps = $pwsh7Version; Write-Host "Using Powershell 7."; break}
-		elseif ($pwsh7 -eq "N") {break}
+		if ($pwsh7 -eq "Y") {$ps = 7; Write-Host "Using Powershell 7."; break}
+		elseif ($pwsh7 -eq "N") Write-Host "Using Powershell $ps."; break}
 		else {echo "Invalid input!"}
 	}
-
 }
 
 #Make sure Temp is clean.
