@@ -206,12 +206,13 @@ if ($existingFolder -eq $true) {
 #C:\Windows\RCWM\flink.exe 
 
 #check for v7 and overwrite if it exists
+#does not work on older windows sometimes.
 # adapted from https://devblogs.microsoft.com/scripting/use-a-powershell-function-to-see-if-a-command-exists/
-$oldPreference = $ErrorActionPreference
-$ErrorActionPreference = 'stop'
-try {if(Get-Command pwsh){$global:ps = (Get-Command pwsh).version.major}}
-Catch {}
-$ErrorActionPreference=$oldPreference
+#$oldPreference = $ErrorActionPreference
+#$ErrorActionPreference = 'stop'
+#try {if(Get-Command pwsh){$global:ps = (Get-Command pwsh).version.major}}
+#Catch {}
+#$ErrorActionPreference=$oldPreference
 
 Write-Host "Using powershell version $ps on $arch bit CPU."
 
