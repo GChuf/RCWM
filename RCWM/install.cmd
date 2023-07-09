@@ -6,7 +6,7 @@ SETLOCAL EnableDelayedExpansion
 
 rem Set window size for pwsh 4 and older
 FOR /F "tokens=* USEBACKQ" %%F IN (`powershell $psversiontable.psversion.major`) DO ( SET pwsh=%%F )
-IF !pwsh! LEQ 4 ( mode con: cols=110 )
+IF !pwsh! EQU 4 ( mode con: cols=110 )
 
 color 0b
 
