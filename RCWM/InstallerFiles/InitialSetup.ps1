@@ -16,6 +16,20 @@ $os = [System.Environment]::OSVersion.Version.Major
 #win7 and win8 virtual machines both return "6"
 #new win servers(!) return "10"
 
+$pwsh7Version = (get-command pwsh).Version.Major 2>$null
+$pwsh7CommandType = (get-command pwsh).CommandType 2>$null #fix for bugged pwsh7 version outputs in old windows
+
+if ($pwsh7Version -eq 7 -or $pwsh7CommandType -eq "Application") {
+	Write-Host "Powershell 7 detected along with Powershell $ps."
+	while ($true) {
+		$pwsh7 = Read-Host "Would you like to use Powershell 7 where applicable? (Y/N)"
+		if ($pwsh7 -eq "Y") {$ps = 7; break}
+		elseif ($pwsh7 -eq "N") {break}
+		else {echo "Invalid input!"}
+	}
+}
+
+Write-Host "Using Powershell version $ps on $arch bit CPU."
 
 #Make sure Temp is clean.
 cmd.exe /c del .\Temp\* /s /q 2>&1>$null
@@ -194,14 +208,13 @@ if ($existingFolder -eq $true) {
 #C:\Windows\RCWM\flink.exe 
 
 #check for v7 and overwrite if it exists
+#does not work on older windows sometimes.
 # adapted from https://devblogs.microsoft.com/scripting/use-a-powershell-function-to-see-if-a-command-exists/
-$oldPreference = $ErrorActionPreference
-$ErrorActionPreference = 'stop'
-try {if(Get-Command pwsh){$global:ps = (Get-Command pwsh).version.major}}
-Catch {}
-$ErrorActionPreference=$oldPreference
-
-Write-Host "Using powershell version $ps on $arch bit CPU."
+#$oldPreference = $ErrorActionPreference
+#$ErrorActionPreference = 'stop'
+#try {if(Get-Command pwsh){$global:ps = (Get-Command pwsh).version.major}}
+#Catch {}
+#$ErrorActionPreference=$oldPreference
 
 # Unblock ps1 files (not entirely necessary)
 # Won't work on older powershell versions, so output error message to NUL
