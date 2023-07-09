@@ -108,9 +108,10 @@ if ($command -eq "mv") {
 #get array of contents of paths inside HKCU\RCWM\command
 $array = (Get-Item -Path Registry::HKCU\RCWM\$command).property 2> $null
 
-#delete '(default)' in first place
+
 $arrayLength = ($array|measure).count
 
+#delete '(default)' in first place
 try {
 	if ( $array[0] -eq "(default)" ) {
 		if ($arrayLength -eq 1) {
@@ -240,9 +241,13 @@ If ( $copy -eq $True ) {
 		#if merge array exists
 		if ($merge) {
 
-		Write-host "Successfully copied" $($array.length - $merge.length) "out of" $array.length "folders."
+		Write-host "Successfully copied" $($arrayLength - $merge.length) "out of" $arrayLength "folders."
 
-		Write-host "The following" $merge.length "folders already exist inside" $pasteDirectoryDisplay":"
+		if ($merge.length -eq 1) {
+			Write-host "The following folder already exists inside" $pasteDirectoryDisplay":"
+		} else {
+			Write-host "The following" $merge.length "folders already exist inside" $pasteDirectoryDisplay":"
+		}
 		$merge
 
 			Do {
