@@ -1,0 +1,20 @@
+Windows Registry Editor Version 5.00
+
+;Add "Kill All" command to backgrounds
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\killall]
+@="Kill All"
+"Icon"="rcwmimg.dll,-27"
+
+[HKEY_CLASSES_ROOT\DesktopBackground\Shell\killall\command]
+@="pwsh -NoProfile C:\\windows\\rcwm\\killall.ps1"
+
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\killall]
+@="Kill All"
+"Icon"="rcwmimg.dll,-27"
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\killall\command]
+@="pwsh -NoProfile C:\\windows\\rcwm\\killall.ps1"
+
+;done

@@ -28,6 +28,7 @@ $AddOptions = @(
 	New-Object PSObject -Property @{Name = 'GodMode'; RegFile = 'GodMode.reg'; Desc = 'Do you want to add God Mode'; exception = "GodMode"}
 	New-Object PSObject -Property @{Name = 'Links'; RegFile = 'Links.reg'; Desc = 'Do you want to add symbolic/hard links'}
 	New-Object PSObject -Property @{Name = 'Logoff'; RegFile = 'Logoff.reg'; Desc = 'Do you want to add Sign Off to desktop background'}
+	New-Object PSObject -Property @{Name = 'Killall'; RegFile = 'Killall.reg'; Desc = 'Do you want to add Kill All to backgrounds'}
 	New-Object PSObject -Property @{Name = 'Mirror'; RegFile = 'Mirror.reg'; Desc = 'Do you want add RoboCopy Mirror option'}
 	New-Object PSObject -Property @{Name = 'MoveToFolder'; RegFile = 'MoveToFolder.reg'; Desc = 'Do you want to add Move To Folder'}
 	New-Object PSObject -Property @{Name = 'RCopyStructure'; RegFile = 'RCopyStructure.reg'; Desc = 'Do you want to add RoboCopy to copy Folder Structure only (exclude files)'}
