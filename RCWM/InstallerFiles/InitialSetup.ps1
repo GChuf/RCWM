@@ -52,7 +52,7 @@ xcopy Icons\rcwmimg.dll C:\windows\system32 /y | Out-Null
 
 Copy-Item -Path "OSSpecificFiles\Win$os\*" -Destination ".\Temp" -erroraction 'silentlycontinue'
 #if powershell 7 on old windows, overwrite old windows files
-Copy-Item -Path "PowershellSpecificFiles\pwsh$ps\*" -Destination ".\Temp"
+Copy-Item -Path "PowershellSpecificFiles\pwsh$ps\*" -Destination ".\Temp" 2> $null
 
 #generate os-specific files
 #this is only needed so that OS doesn't prompt the user to run the shortcut
