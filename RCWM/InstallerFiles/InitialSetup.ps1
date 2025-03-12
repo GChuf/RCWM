@@ -67,13 +67,13 @@ Write-Host "Generating binary files ..."
 
 Copy-Item -Path "..\InstallerFiles\ps2exe\*" -Destination ".\Temp"
 
-powershell .\Temp\ps2exe_bastardized.ps1 -inputfile .\Temp\RCopySingle.ps1 -outputfile .\Temp\rcopyS.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\rcopy.ico 2>&1>$null
-powershell .\Temp\ps2exe_bastardized.ps1 -inputfile .\Temp\RCopyMultiple.ps1 -outputfile .\Temp\rcopyM.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\rcopy.ico 2>&1>$null
-powershell .\Temp\ps2exe_bastardized.ps1 -inputfile .\Temp\MvDirSingle.ps1 -outputfile .\Temp\mvdirS.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\move.ico 2>&1>$null
-powershell .\Temp\ps2exe_bastardized.ps1 -inputfile .\Temp\MvDirMultiple.ps1 -outputfile .\Temp\mvdirM.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\move.ico 2>&1>$null
-powershell .\Temp\ps2exe_bastardized.ps1 -inputfile .\Temp\DirectoryLinks.ps1 -outputfile .\Temp\dlink.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\link.ico 2>&1>$null
-powershell .\Temp\ps2exe_bastardized.ps1 -inputfile .\Temp\FileLinks.ps1 -outputfile .\Temp\flink.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\link.ico 2>&1>$null
-powershell .\Temp\ps2exe_bastardized.ps1 -inputfile .\Temp\KillAll.ps1 -outputfile .\Temp\killall.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\killall.ico 2>&1>$null
+powershell .\Temp\ps2exe_original.ps1 -inputfile .\Temp\RCopySingle.ps1 -outputfile .\Temp\rcopyS.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\rcopy.ico 2>&1>$null
+powershell .\Temp\ps2exe_original.ps1 -inputfile .\Temp\RCopyMultiple.ps1 -outputfile .\Temp\rcopyM.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\rcopy.ico 2>&1>$null
+powershell .\Temp\ps2exe_original.ps1 -inputfile .\Temp\MvDirSingle.ps1 -outputfile .\Temp\mvdirS.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\move.ico 2>&1>$null
+powershell .\Temp\ps2exe_original.ps1 -inputfile .\Temp\MvDirMultiple.ps1 -outputfile .\Temp\mvdirM.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\move.ico 2>&1>$null
+powershell .\Temp\ps2exe_original.ps1 -inputfile .\Temp\DirectoryLinks.ps1 -outputfile .\Temp\dlink.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\link.ico 2>&1>$null
+powershell .\Temp\ps2exe_original.ps1 -inputfile .\Temp\FileLinks.ps1 -outputfile .\Temp\flink.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\link.ico 2>&1>$null
+powershell .\Temp\ps2exe_original.ps1 -inputfile .\Temp\KillAll.ps1 -outputfile .\Temp\killall.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\killall.ico 2>&1>$null
 
 #rcp script
 #"minify" - take out tabs
