@@ -175,7 +175,6 @@ while ($true) {
 	if ($r -eq "Y") {
 		foreach ($option in $AddOptions) {
 			prompt -desc $option.Desc -regFile $option.RegFile -name $option.Name -exception $option.exception
-			
 		}
 		break
 	}

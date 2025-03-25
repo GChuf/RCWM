@@ -1,0 +1,10 @@
+reg add "HKEY_CURRENT_USER\SOFTWARE\RCWM" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\RCWM\dl" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\RCWM\fl" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\RCWM\mir" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\RCWM\mv" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\RCWM\rc" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\RCWM\rcs" /f
+
+rem delete the script itself
+del "%~f0"

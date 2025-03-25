@@ -31,6 +31,7 @@ if ($pwsh7Version -eq 7 -or $pwsh7CommandType -eq "Application") {
 
 Write-Host "Using Powershell version $ps on $arch bit CPU."
 
+
 #Make sure Temp is clean.
 cmd.exe /c del .\Temp\* /s /q 2>&1>$null
 cmd.exe /c rd /s /q .\Temp /s /q 2>&1>$null
@@ -38,6 +39,9 @@ New-Item Temp -ItemType "directory" 2>&1>$null
 
 #Copy reg files into temp,
 Copy-Item -Path "RegistryFiles\*.reg" -Destination ".\Temp" | Out-Null
+
+
+
 
 #todo new folder for reg files
 #New-Item Temp\TempRegFiles -ItemType "directory" 2>&1>$null

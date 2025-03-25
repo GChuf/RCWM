@@ -2,7 +2,7 @@
 
 
 ##TODO
-#scrap allFuture? u ant make registry keys for every user in advance
+#scrap allFuture? u cant make registry keys for every user in advance
 #unless they all use hkcr/hklm at the same time - not a good idea.
 #solution is to actually implement an exe that saves this all into memory
 
@@ -81,7 +81,7 @@ function LoopThroughUsers() {
 			} #do reg files work
 		}	
 			
-	} elseif ($mode -eq "allcurrent") { #no decide, all users
+	} elseif ($mode -eq "all") { #no decide, all users
 		
 		#generate UUIDs array from users array
 		[array]$UUIDs = @()
@@ -92,7 +92,7 @@ function LoopThroughUsers() {
 			#echo $user.split('\')[-1]
 			prepareRegKeys -user $UUID
 		}
-		RegReplacements -mode "allCurrent" -UUIDs $UUIDs
+		RegReplacements -mode "all" -UUIDs $UUIDs
 	} elseif ($mode -eq "current") {
 	
 		#get current user-name
@@ -129,8 +129,6 @@ function LoopThroughUsers() {
 
 		RegReplacements -mode "current" -UUIDs $null
 
-	} else { #allFuture
-		#RegReplacements -mode "allFuture"
 	}
 	
 	del .\Temp\*.reg
@@ -179,7 +177,7 @@ function RegReplacements() {
 			}
 		}
 		
-	} elseif ($mode -eq "allCurrent" -OR $mode -eq "decide" ) { #decide / allCurrent
+	} elseif ($mode -eq "decide" ) {
 
 
 		foreach ($uuid in $UUIDs) {
@@ -204,12 +202,12 @@ function RegReplacements() {
 		}
 	}
 
-#	else { #allFuture - reg files stay the same.
+	elseif ($mode -eq "all" ) { #reg files stay the same.
 		#only move files to new directory in temp
-#		New-Item .\Temp\ALL -ItemType "directory" 2>&1>$null
-#		Move-Item -Path .\Temp\*.reg -Destination .\Temp\ALL
-#		del .\Temp\*.reg
-#	}
+		New-Item .\Temp\ALL -ItemType "directory" 2>&1>$null
+		Move-Item -Path .\Temp\*.reg -Destination .\Temp\ALL
+		del .\Temp\*.reg
+	}
 
 }
 
@@ -258,7 +256,7 @@ foreach ($user in $allUsers) {
 
 while ($true) {
 
-	$mode1 = Read-Host "Do you want to install RCWM for [C]urrent user only, [D]ecide for each, or for [A]ll current users?"
+	$mode1 = Read-Host "Do you want to install RCWM for [C]urrent user only, [D]ecide for each, or for [A]ll current and future users?"
 	if ($mode1 -eq "C") {break}
 	elseif ($mode1 -eq "D") {break}
 	elseif ($mode1 -eq "A") {break}
@@ -290,7 +288,13 @@ while ($true) {
 
 
 if ($mode1 -eq "A") {
-	LoopThroughUsers -mode "allcurrent" -users $users
+	#Copy RCWM_CreateRegistryKeys.bat file to %userprofile%/Start Menu\Programs\Startup so it executes on startup for users
+	#file deletes itself from user profile afterwards so that it doesn't keep executing every login.
+	cd $initialLocation
+	New-Item -Path "$env:SystemDrive\Users\Default\Start Menu\Programs\Startup" -ItemType Directory -ErrorAction SilentlyContinue
+	Copy-Item -Path "..\InstallerFiles\RCWM_CreateRegistryKeys.bat" -Destination "$env:SystemDrive\Users\Default\Start Menu\Programs\Startup" | Out-Null
+
+	LoopThroughUsers -mode "all" -users $users
 } elseif ($mode1 -eq "D" ) { 
 	LoopThroughUsers -mode "decide" -users $users
 } elseif ($mode1 -eq "C" ) {
@@ -308,6 +312,8 @@ Write-Host ""
 
 if ($mode1 -eq "C") { 
 	powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $null
-} else {
+} elseif ($mode1 -eq "A" ) { 
+	powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $null
+} elseif ($mode1 -eq "D" ) {
 	powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $users
 }
