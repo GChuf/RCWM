@@ -98,7 +98,7 @@ Changing ownership of large amounts of recursive folders works fine though.
 
 # Tests
 RoboCopy is much faster for copying a large amount of small files.
-RmDir is also faster than "standard" delete.
+RmDir (del and rd) is also faster than "standard" delete, and than robocopy's /MIR option when using an empty directory.
 
 
 Test results on my machine on an SSD disk:
