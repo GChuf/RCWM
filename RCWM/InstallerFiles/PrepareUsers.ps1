@@ -1,11 +1,5 @@
 #https://www.lifewire.com/how-to-find-a-users-security-identifier-sid-in-windows-2625149
 
-
-##TODO
-#scrap allFuture? u cant make registry keys for every user in advance
-#unless they all use hkcr/hklm at the same time - not a good idea.
-#solution is to actually implement an exe that saves this all into memory
-
 function prepareRegKeys(){
 	param([string[]]$mode, [string[]]$user)
 	
@@ -288,8 +282,8 @@ while ($true) {
 
 
 if ($mode1 -eq "A") {
-	#Copy RCWM_CreateRegistryKeys.bat file to %userprofile%/Start Menu\Programs\Startup so it executes on startup for users
-	#file deletes itself from user profile afterwards so that it doesn't keep executing every login.
+	#Copy RCWM_CreateRegistryKeys.bat file to %userprofile%\Start Menu\Programs\Startup so it executes on startup for users
+	#file deletes itself from user profile afterwards so that it doesn't keep executing at every login.
 	cd $initialLocation
 	New-Item -Path "$env:SystemDrive\Users\Default\Start Menu\Programs\Startup" -ItemType Directory -ErrorAction SilentlyContinue
 	Copy-Item -Path "..\InstallerFiles\RCWM_CreateRegistryKeys.bat" -Destination "$env:SystemDrive\Users\Default\Start Menu\Programs\Startup" | Out-Null
