@@ -2,7 +2,7 @@
 #pragma comment(lib, "Advapi32.lib")
 #include <string>
 
-// cl /O2 /Os /nologo /Fe:rcwm-reg.exe RcwmExecutable.cpp /link  /OPT:REF /OPT:ICF Advapi32.lib  /SUBSYSTEM:WINDOWS
+// cl /O2 /Os /nologo /Fe:rcwm-reg-single.exe RcwmExecutable-single.cpp /link  /OPT:REF /OPT:ICF Advapi32.lib  /SUBSYSTEM:WINDOWS
 // rcwm-reg.exe rgkey test
 // -> HKEY_CURRENT_USER\SOFTWARE\RCWM\rgkey
 
