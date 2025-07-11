@@ -8,15 +8,15 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-5"
 
 [HKEY_CLASSES_ROOT\Directory\shell\rcopy\command]
-@="C:\\windows\\rcwm\\rcopyS.exe \"%V\""
-"IsolatedCommand"="C:\\windows\\rcwm\\rcopyS.exe \"%V\""
+@="C:\\Program Files (x86)\\RCWM\\rcwm-single.exe rcopy %V"
+"IsolatedCommand"="C:\\Program Files (x86)\\RCWM\\rcwm-single.exe rcopy %V"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste]
 @="RoboPaste Directory"
 "Icon"="rcwmimg.dll,-6"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste\command]
-@="cmd.exe /c C:\\windows\\rcwm\\rcp.cmd \"%V\" rc s"
-"IsolatedCommand"="cmd.exe /c C:\\windows\\rcwm\\rcp.cmd \"%V\" rc s"
+@="cmd.exe /c C:\\Program Files (x86)\\RCWM\\rcp.cmd \"%V\" rc s"
+"IsolatedCommand"="cmd.exe /c C:\\Program Files (x86)\\RCWM\\rcp.cmd \"%V\" rc s"
 
 ; end

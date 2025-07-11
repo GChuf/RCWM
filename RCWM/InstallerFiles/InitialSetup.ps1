@@ -65,26 +65,9 @@ if ($os -eq 6) {
 	..\InstallerFiles\shortcuts6.ps1 
 }
 
-#Generate .exe files
-#don't touch this very fragile part ...
-Write-Host "Generating binary files ..."
-
-Copy-Item -Path "..\InstallerFiles\ps2exe\*" -Destination ".\Temp"
-
-powershell .\Temp\ps2exe_original.ps1 -inputfile .\Temp\RCopySingle.ps1 -outputfile .\Temp\rcopyS.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\rcopy.ico 2>&1>$null
-powershell .\Temp\ps2exe_original.ps1 -inputfile .\Temp\RCopyMultiple.ps1 -outputfile .\Temp\rcopyM.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\rcopy.ico 2>&1>$null
-powershell .\Temp\ps2exe_original.ps1 -inputfile .\Temp\MvDirSingle.ps1 -outputfile .\Temp\mvdirS.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\move.ico 2>&1>$null
-powershell .\Temp\ps2exe_original.ps1 -inputfile .\Temp\MvDirMultiple.ps1 -outputfile .\Temp\mvdirM.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\move.ico 2>&1>$null
-powershell .\Temp\ps2exe_original.ps1 -inputfile .\Temp\DirectoryLinks.ps1 -outputfile .\Temp\dlink.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\link.ico 2>&1>$null
-powershell .\Temp\ps2exe_original.ps1 -inputfile .\Temp\FileLinks.ps1 -outputfile .\Temp\flink.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\link.ico 2>&1>$null
-powershell .\Temp\ps2exe_original.ps1 -inputfile .\Temp\KillAll.ps1 -outputfile .\Temp\killall.exe -noconsole -novisualstyles -x86 -nooutput -iconfile .\Temp\killall.ico 2>&1>$null
-
 #rcp script
 #"minify" - take out tabs
 (Get-Content .\Temp\rcp.ps1) -replace "`t", "" | Set-Content .\Temp\rcp.ps1
-powershell .\Temp\ps2exe_original.ps1 -inputfile .\Temp\rcp.ps1 -outputfile .\Temp\rcp.exe -novisualstyles -x86 2>&1>$null
-
-#Files generated.
 
 
 #win11 - enable old context menu
@@ -108,19 +91,19 @@ if ($winver -eq 11) {
 #copy only: executionFIles and Icons for now
 
 function recreateFiles() {
-	#$sysroot = cmd.exe /c echo %systemroot% 
-	cmd.exe /c del /f /q %SystemRoot%\RCWM | Out-Null
-	cmd.exe /c rd /s /q %SystemRoot%\RCWM | Out-Null
-	cmd.exe /c md %SystemRoot%\RCWM | Out-Null
+	$sysdrive = ($env:SystemRoot).Substring(0, 3)
+	$rcwmroot = Join-Path $sysdrive 'Program Files (x86)\RCWM'
+	cmd.exe /c del /f /q $rcwmroot | Out-Null
+	cmd.exe /c rd /s /q $rcwmroot | Out-Null
+	cmd.exe /c md $rcwmroot | Out-Null
 
 	#copy binaries, shortcuts, icons, .bat and .ps1 files into RCWM folder
-	$sysroot = cmd.exe /c echo %SystemRoot%
-	Copy-Item -Path "Temp\*" -Destination "$sysroot\RCWM"
+	Copy-Item -Path "Temp\*" -Destination $rcwmroot
 
 	#take ownership of that folder for administrators & users
-	cmd.exe /c takeown /F %SystemRoot%\RCWM /R /D Y | Out-Null
-	cmd.exe /c icacls %SystemRoot%\RCWM /grant administrators:F /T /C | Out-Null
-	cmd.exe /c icacls %SystemRoot%\RCWM /grant users:F /T /C | Out-Null
+	cmd.exe /c takeown /F $rcwmroot /R /D Y | Out-Null
+	cmd.exe /c icacls $rcwmroot /grant administrators:F /T /C | Out-Null
+	cmd.exe /c icacls $rcwmroot /grant users:F /T /C | Out-Null
 
 	#Files copied.
 	
@@ -128,34 +111,38 @@ function recreateFiles() {
 }
 
 function mergeFiles() {
-	robocopy .\Temp\* "%SystemRoot%\RCWM" /XC /XN /XO | Out-Null
+	$sysdrive = ($env:SystemRoot).Substring(0, 3)
+	$rcwmroot = Join-Path $sysdrive 'Program Files (x86)\RCWM'
+	robocopy .\Temp\* $rcwmroot /XC /XN /XO | Out-Null
 
 	echo "New files copied"
 }
 
 
 function installRCWM() {
-	
-	cmd.exe /c md %SystemRoot%\RCWM
-	#attrib +h +s %SystemRoot%\RCWM
+	$sysdrive = ($env:SystemRoot).Substring(0, 3)
+	$rcwmroot = Join-Path $sysdrive 'Program Files (x86)\RCWM'
+	cmd.exe /c md $rcwmroot
+	#attrib +h +s $rcwmroot
 
 	#copy binaries, shortcuts, icons, .bat and .ps1 files into RCWM folder
-	$sysroot = cmd.exe /c echo %SystemRoot%
-	Copy-Item -Path "Temp\*" -Destination "$sysroot\RCWM"
+	Copy-Item -Path "Temp\*" -Destination $rcwmroot
 
 	#take ownership of that folder for administrators & users
-	cmd.exe /c takeown /F %SystemRoot%\RCWM /R /D Y | Out-Null
-	cmd.exe /c icacls %SystemRoot%\RCWM /grant administrators:F /T /C | Out-Null
-	cmd.exe /c icacls %SystemRoot%\RCWM /grant users:F /T /C | Out-Null
+	cmd.exe /c takeown /F $rcwmroot /R /D Y | Out-Null
+	cmd.exe /c icacls $rcwmroot /grant administrators:F /T /C | Out-Null
+	cmd.exe /c icacls $rcwmroot /grant users:F /T /C | Out-Null
 
 	#add exclusion - just in case
 	powershell -Command Add-MpPreference -ExclusionPath "C:\Windows\RCWM" | Out-Null
 	echo "Created directory at C:\Windows\RCWM and copied all files."
 }
 
-$sysroot = cmd.exe /c echo %SystemRoot%
-$existingFolder = Test-Path -Path "$sysroot\RCWM"
+$sysdrive = ($env:SystemRoot).Substring(0, 3)
+$rcwmroot = Join-Path $sysdrive 'Program Files (x86)\RCWM'
+$existingFolder = Test-Path -Path $rcwmroot
 $RCWMv1Folder = Test-Path -Path "$sysroot\System32\RCWM"
+$RCWMv2Folder = Test-Path -Path "$sysroot\RCWM"
 
 if ($RCWMv1Folder -eq $true) {
 	write-host "Old RCWM v1.x folder detected."
@@ -178,6 +165,26 @@ if ($RCWMv1Folder -eq $true) {
 	
 }
 
+if ($RCWMv2Folder -eq $true) {
+	write-host "Old RCWM v2.x folder detected."
+	while ($true) {
+		$mode1 = Read-Host "Delete old files and uninstall now (recommended) (Y/N)"
+		if ($mode1 -eq "y") {break}
+		elseif ($mode1 -eq "n") {break}
+		else {echo "Invalid input!"}
+	}
+	
+	if ($mode1 -eq "Y") {
+		cmd.exe /c del /f /q %SystemRoot%\RCWM | Out-Null
+		cmd.exe /c rd /s /q %SystemRoot%\RCWM | Out-Null
+		write-host "Old files deleted."
+
+		$uninstallers = get-childitem ..\UninstallerFiles\RegistryFiles\*.reg
+		foreach ($reg in $uninstallers) { cmd.exe /c regedit /s $reg }
+		write-host "Registry cleaned."
+	}
+	
+}
 
 if ($existingFolder -eq $true) {
 	write-host "RCWM folder already exists."
@@ -197,20 +204,12 @@ if ($existingFolder -eq $true) {
 	
 } else {
 	#install
-	$sysroot = cmd.exe /c echo %SystemRoot%
+	$sysdrive = ($env:SystemRoot).Substring(0, 3)
+	$rcwmroot = Join-Path $sysdrive 'Program Files (x86)\RCWM'
 
-	Write-Host "Preparing directory at $sysroot\RCWM"
+	Write-Host "Preparing directory at $rcwmroot"
 	installRCWM
 }
-
-#start all exe files once, to avoid long startup on first execution
-#C:\Windows\RCWM\rcp.exe 
-#C:\Windows\RCWM\rcopyS.exe
-#C:\Windows\RCWM\rcopyM.exe
-#C:\Windows\RCWM\mvdirS.exe
-#C:\Windows\RCWM\mvdirM.exe
-#C:\Windows\RCWM\dlink.exe 
-#C:\Windows\RCWM\flink.exe 
 
 #check for v7 and overwrite if it exists
 #does not work on older windows sometimes.

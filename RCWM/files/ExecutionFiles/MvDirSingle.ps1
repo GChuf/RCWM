@@ -1,2 +1,2 @@
-Remove-ItemProperty -Path "HKCU:\RCWM\mv" -Name *
-New-ItemProperty -Path "HKCU:\RCWM\mv" -Name "$args"
+Remove-ItemProperty -Path "HKCU:\RCWM\rmove" -Name *
+New-ItemProperty -Path "HKCU:\RCWM\rmove" -Name "$args"

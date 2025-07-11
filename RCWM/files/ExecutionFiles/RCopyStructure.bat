@@ -4,7 +4,7 @@ rem 65000: UTF-7
 rem 65001: UTF-8 does not work on Win7
 chcp 65001 > nul
 
-FOR /F "tokens=*" %%g IN ('powershell "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\RCWM\rcs).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\RCWM\rcs).property }"') do (SET folder=%%g)
+FOR /F "tokens=*" %%g IN ('powershell "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\RCWM\rstrc).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\RCWM\rstrc).property }"') do (SET folder=%%g)
 
 IF "%folder%" == 0 (
 echo Source folder not specified!
@@ -49,8 +49,8 @@ echo Copying . . .
 echo.
 md "%fname%"
 robocopy "%folder%" "%fname%" /XF * /E /NP /NJH /NJS /NC /NS /MT:16
-reg delete "HKCU\RCWM\rcs" /f >NUL
-reg add "HKCU\RCWM\rcs" /f >NUL
+reg delete "HKCU\RCWM\rstrc" /f >NUL
+reg add "HKCU\RCWM\rstrc" /f >NUL
 echo Finished!
 timeout /t 1 1>NUL
 exit
@@ -64,8 +64,8 @@ echo.
 echo Merging . . .
 echo.
 robocopy "%folder%" "%fname%" /XF * /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:16
-reg delete "HKCU\RCWM\rcs" /f >NUL
-reg add "HKCU\RCWM\rcs" /f >NUL
+reg delete "HKCU\RCWM\rstrc" /f >NUL
+reg add "HKCU\RCWM\rstrc" /f >NUL
 echo Finished!
 timeout /t 1 1>NUL
 exit
@@ -75,8 +75,8 @@ echo.
 echo Overwriting . . .
 echo.
 robocopy "%folder%" "%fname%" /XF * /E /NP /NJH /NJS /NC /NS /MT:16
-reg delete "HKCU\RCWM\rcs" /f >NUL
-reg add "HKCU\RCWM\rcs" /f >NUL
+reg delete "HKCU\RCWM\rstrc" /f >NUL
+reg add "HKCU\RCWM\rstrc" /f >NUL
 echo Finished!
 timeout /t 1 1>NUL
 exit

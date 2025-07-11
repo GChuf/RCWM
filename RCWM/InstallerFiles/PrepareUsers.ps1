@@ -14,13 +14,13 @@ function prepareRegKeys(){
 	New-Item -Path RCWM  | Out-Null
 	
 	cd RCWM
-	New-ItemProperty -Path . -Name "Version" -Value "2.0.0" -PropertyType String -Force | Out-Null
-	New-Item -Path dl | Out-Null
-	New-Item -Path fl | Out-Null
-	New-Item -Path mir | Out-Null
-	New-Item -Path mv | Out-Null
-	New-Item -Path rc | Out-Null
-	New-Item -Path rcs | Out-Null
+	New-ItemProperty -Path . -Name "Version" -Value "3.0.0" -PropertyType String -Force | Out-Null
+	New-Item -Path dlink | Out-Null
+	New-Item -Path flink | Out-Null
+	New-Item -Path miror | Out-Null
+	New-Item -Path rmove | Out-Null
+	New-Item -Path rcopy | Out-Null
+	New-Item -Path rstrc | Out-Null
 	New-Item -Path InstallInfo | Out-Null
 	
 	#Write-Host "Prepared registry for user " -NoNewLine; Write-Host $user -ForegroundColor red;

@@ -1,1 +1,1 @@
-New-ItemProperty -Path "HKCU:\RCWM\mv" -Name "$args"
+New-ItemProperty -Path "HKCU:\RCWM\rmove" -Name "$args"

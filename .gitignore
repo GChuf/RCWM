@@ -1,3 +1,5 @@
 {\rtf1}
 *.config
 Temp/
+*.obj
+*.exe

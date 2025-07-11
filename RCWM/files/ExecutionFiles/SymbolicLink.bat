@@ -5,7 +5,7 @@ rem 65001: UTF-8 does not work on Win7
 chcp 65001 > nul
 
 set curdir=%cd%
-FOR /F "tokens=*" %%g IN ('powershell "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\RCWM\dl).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\RCWM\dl).property }"') do (SET folder=%%g)
+FOR /F "tokens=*" %%g IN ('powershell "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\RCWM\dlink).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\RCWM\dlink).property }"') do (SET folder=%%g)
 cd %curdir%
 
 IF "%folder%" == 1 (
@@ -50,8 +50,8 @@ echo.
 
 mklink /D "%curdir%\%fname%" "%folder%"
 
-reg delete "HKCU\RCWM\dl" /f >NUL
-reg add "HKCU\RCWM\dl" /f >NUL
+reg delete "HKCU\RCWM\dlink" /f >NUL
+reg add "HKCU\RCWM\dlink" /f >NUL
 echo Finished!
 timeout /t 1 1>NUL
 exit

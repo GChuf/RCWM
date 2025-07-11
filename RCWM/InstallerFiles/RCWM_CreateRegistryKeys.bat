@@ -1,10 +1,10 @@
 reg add "HKEY_CURRENT_USER\SOFTWARE\RCWM" /f
-reg add "HKEY_CURRENT_USER\SOFTWARE\RCWM\dl" /f
-reg add "HKEY_CURRENT_USER\SOFTWARE\RCWM\fl" /f
-reg add "HKEY_CURRENT_USER\SOFTWARE\RCWM\mir" /f
-reg add "HKEY_CURRENT_USER\SOFTWARE\RCWM\mv" /f
-reg add "HKEY_CURRENT_USER\SOFTWARE\RCWM\rc" /f
-reg add "HKEY_CURRENT_USER\SOFTWARE\RCWM\rcs" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\RCWM\dlink" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\RCWM\flink" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\RCWM\miror" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\RCWM\rmove" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\RCWM\rcopy" /f
+reg add "HKEY_CURRENT_USER\SOFTWARE\RCWM\rstrc" /f
 
 rem delete the script itself
 del "%~f0"
