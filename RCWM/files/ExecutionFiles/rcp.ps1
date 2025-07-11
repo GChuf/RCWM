@@ -46,8 +46,6 @@ function NoListAvailable {
 $command = $args[0]
 $mode = $args[1]
 
-Write-host $mode
-Write-host $command
 if ($args[2] -eq $null) #pwsh 4 and less
 {
 	$regInsert = (Get-itemproperty -Path 'HKCU:\SOFTWARE\RCWM').dir #must not be string, but string array
@@ -89,14 +87,12 @@ if ($args[2] -eq $null) #pwsh 4 and less
 $pasteDirectoryDisplay = "'" + $pasteIntoDirectory + "'"
 
 if ($command -eq "rcmov") {
-	Write-host "rcmove"
 	$flag = "/MOV"
 	$string1 = "moved"
 	$string2 = "'Move Directory'"
 	$string3 = "moving"
     $string4 = "move"
 } elseif  ($command -eq "rcopy") { #rc
-	Write-host "rcopy"
 	$flag=""
 	$string1 = "copied"
 	$string2 = "'RoboCopy'"
