@@ -213,7 +213,8 @@ If ( $copy -eq $True ) {
 
 		#does source folder exist?
 		if (-not ( Test-Path -literalpath "$path" )) {
-			echo "Source folder" $path "does not exist."
+			echo "Source folder" $path "does not exist!"
+			Start-Sleep 1
 			continue
 		}
 
