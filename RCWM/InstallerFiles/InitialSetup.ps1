@@ -139,6 +139,7 @@ function installRCWM() {
 }
 
 $sysdrive = ($env:SystemRoot).Substring(0, 3)
+$sysroot = cmd.exe /c echo %SystemRoot%
 $rcwmroot = Join-Path $sysdrive 'Program Files (x86)\RCWM'
 $existingFolder = Test-Path -Path $rcwmroot
 $RCWMv1Folder = Test-Path -Path "$sysroot\System32\RCWM"
