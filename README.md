@@ -6,6 +6,7 @@ Right Click Windows Magic is a set of right-click (context) menu tools for admin
 This little magic pack includes:
 - option to add the old context menu back in Windows 11
 - robocopy for copying and moving directories (much faster than regular copy)
+- robocopy also works for copying/moving across network shares
 - opening CMD or powershell windows into folders or drives
 - taking ownership of files, or directories with recursion (takeown && icacls)
 - options to boot into Safe Mode
@@ -15,10 +16,10 @@ This little magic pack includes:
 - option to always open cmd as admin
 - making symbolic/hard links
 - opening "God Mode"
-- options to uninstall the changes you've made
 - options to MoveTo / SendTo folder (from Windows 7)
 - signing out from desktop background
 - opening GodMode
+- options to uninstall the changes you've made
 
 You can also remove some right-click menu options, so that your menu doesn't become too cluttered:
 - Pin to Quick access
@@ -40,17 +41,8 @@ TODO (magic takes time):
 - pwsh opened with admin priv
 - adding other admin tools to right click in background
 - remove "cast to device", check "add to win media player list"
-- locking folders with passwords?
 - your suggestions
 
-# What's new in v2:
-- install for individual users now possible
-- added .exe file to write directory paths into registry through ps2exe script (no more console flicker)
-- fixed UNC paths when copying/moving
-- fixed encoding issues in windows XP/7/8 - the culprit was the default cmd.exe font
-- moved some batch scripts to powershell
-- speed up reading and writing directory paths to be copied/moved (now done in registry, no writing/reading from files anymore)
-- other minor speed-ups
 
 ![Magic examples](img/RCWM.gif)
 
@@ -64,7 +56,9 @@ If you don't have the administrator privileges on your Windows OS, some magic mi
 
 # How does it work?
 
-Magic, basically. Right now, the magic happens inside the Windows registry with some help of batch and powershell scripting. Some day, this batch magic might evolve into powershell wizardry (it's already happening), but up until now, there was no need for that to happen everywhere.
+Magic, basically. Some spaghetti code as well.
+
+Right now, the magic happens inside the Windows registry with some help of batch and powershell scripting.
 
 The goal was to automate command line tools like robocopy, so that 1) everybody could use it, and 2) it would save some time to those who already know how to use it. While automating the tasks, I've accidentally discovered that I could automate much more than what I thought - and so now, you can select multiple folders to copy/move and paste them all into one folder, just like you can with the regular, slow, lazy windows GUI copy.
 
@@ -75,14 +69,14 @@ RoboCopy/RoboPaste & Move Directory both use robocopy to do the work.
 You have two options: you can copy multiple or single directories at a time.
 
 __Single__:
-The folder (directory path) to be copied (when you right-click "RoboCopy") is written into registry and __overwrites__ any previous folder paths stored there. If you specify a new folder to be copied, the old one (if existing) will be overwritten. It is simpler and faster.
+The folder (directory path) to be copied (when you right-click "RoboCopy") is written into registry and __overwrites__ any previous folder paths stored there. If you specify a new folder to be copied, the old one (if existing) will be overwritten.
 
 __Multiple__:
-The list of the folder paths to be copied is __appended__ to registry under *C:\Windows\System32\RCWM\{rc || mv}* keys. Then the script goes through a powershell loop to copy all of them.
+The list of the folder paths to be copied is __appended__ to registry under *HKCU:\SOFTWARE\RCWM\{rcopy || rcmov}* keys. Then the script goes through a powershell loop to copy all of them.
 
 By default, you can only select up to 15 folders to be copied (the default windows limit for right-click options is 15, you can increase it to 31 or more in the install script - see the *MultipleInvokeMinimum.reg* file for more info). Recursive copying/moving is also never a problem (you can have as many subfolders as you like).
 
-Use this option if you intend to use RoboCopy a lot. YOu can read the rcp.ps1 powershell file to understand how the script works.
+Use this option if you intend to use RoboCopy a lot. You can read the rcp.ps1 powershell file to understand how the script works.
 
 
 RoboCopy (multiple) versus Move Directory (single):
@@ -110,9 +104,6 @@ Results may vary based on your computer and disk - but wherever there are lots o
 
 
 # Credits
-
-I used my own bastardized version of Ingo Karstein's [ps2exe](https://github.com/ikarstein/ps2exe
-) tool for making .exe files out of powershell scripts.
 
 The files for Booting into Safe mode and Running with Priority were heavily influenced by Shawn Brink at [tenforums.com](https://www.tenforums.com/tutorials/1977-windows-10-tutorial-index.html)
 
