@@ -8,7 +8,7 @@ set end=%time% && echo %start% && echo %end%
 
 
 1.
-measure-command {for ($i=1;$i -le 1000; $i++){(Get-Item -Path Registry::HKCU\RCWM\mv).property -eq $a; (Get-Item -Path Registry::HKCU\RCWM\rc).property -eq $a; (Get-Item -Path Registry::HKCU\RCWM\dl).property -eq $a}}
+measure-command {for ($i=1;$i -le 1000; $i++){(Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\mv).property -eq $a; (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\rc).property -eq $a; (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\dl).property -eq $a}}
 
 powershell v5.1:
 TotalMilliseconds : 277.7056

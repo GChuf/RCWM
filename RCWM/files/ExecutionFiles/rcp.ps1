@@ -105,8 +105,8 @@ if ($command -eq "mv") {
 #add mirror command
 
 
-#get array of contents of paths inside HKCU\RCWM\command
-$array = (Get-Item -Path Registry::HKCU\RCWM\$command).property 2> $null
+#get array of contents of paths inside HKCU\SOFTWARE\RCWM\command
+$array = (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\$command).property 2> $null
 
 
 $arrayLength = ($array|measure).count

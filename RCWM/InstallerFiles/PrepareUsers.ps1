@@ -13,6 +13,7 @@ function prepareRegKeys(){
 	Remove-Item -Path RCWM -Recurse 2>&1>$null
 	New-Item -Path RCWM  | Out-Null
 	
+	cd SOFTWARE
 	cd RCWM
 	New-ItemProperty -Path . -Name "Version" -Value "3.0.0" -PropertyType String -Force | Out-Null
 	New-Item -Path dlink | Out-Null

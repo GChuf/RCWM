@@ -5,7 +5,7 @@ rem 65001: UTF-8 does not work on Win7
 chcp 65001 > nul
 
 set curdir=%cd%
-FOR /F "tokens=*" %%g IN ('powershell "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\RCWM\flink).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\RCWM\flink).property }"') do (SET file=%%g)
+FOR /F "tokens=*" %%g IN ('powershell "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\flink).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\flink).property }"') do (SET file=%%g)
 cd %curdir%
 
 IF "%file%" == 0 (
@@ -49,8 +49,8 @@ echo.
 echo Creating hard link . . .
 echo.
 mklink /H "%curdir%\%f%" "%file%"
-reg delete "HKCU\RCWM\flink" /f >NUL
-reg add "HKCU\RCWM\flink" /f >NUL
+reg delete "HKCU\SOFTWARE\RCWM\flink" /f >NUL
+reg add "HKCU\SOFTWARE\RCWM\flink" /f >NUL
 echo Finished!
 timeout /t 1 1>NUL
 exit
