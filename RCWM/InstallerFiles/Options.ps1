@@ -71,7 +71,7 @@ function MultipleInvoke(){
 
 function GodMode(){
 	enableReg -regFile "GodMode.reg" -name GodMode
-	#cmd.exe /c md C:\windows\RCWM\GodMode.{ED7BA470-8E54-465E-825C-99712043E01C} 2>NUL
+	#cmd.exe /c md C:\Program Files (x86)\RCWM\GodMode.{ED7BA470-8E54-465E-825C-99712043E01C} 2>NUL
 	cmd.exe /c ..\..\InstallerFiles\GodMode.bat | out-null
 }
 
