@@ -229,7 +229,7 @@ If ( $copy -eq $True ) {
 
 			C:\Windows\System32\robocopy.exe "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
 			
-			if ($command -eq "mv") { 
+			if ($command -eq "rcmov") { 
 				cmd.exe /c rd /s /q "$path"
 			}
 
@@ -263,7 +263,7 @@ If ( $copy -eq $True ) {
 
 							C:\Windows\System32\robocopy.exe "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
 
-							if ($command -eq "mv") { 
+							if ($command -eq "rcmov") { 
 								cmd.exe /c cmd.exe /c rd /s /q "$path"
 							}
 
@@ -281,7 +281,7 @@ If ( $copy -eq $True ) {
 
 							C:\Windows\System32\robocopy.exe "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
 									
-							if ($command -eq "mv") { 
+							if ($command -eq "rcmov") { 
 								cmd.exe /c rd /s /q "$path"
 							}
 							echo "Finished merging $folder"
