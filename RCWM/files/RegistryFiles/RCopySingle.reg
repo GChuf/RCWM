@@ -8,7 +8,8 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-6"
 
 [HKEY_CLASSES_ROOT\Directory\shell\rcopy\command]
-@="reg add \"HKCU\\RCWM\\rcopy\" /v gggggggggg"
+@="C:\\Program Files (x86)\\RCWM\\rcwm-single.exe rcopy %V"
+"IsolatedCommand"="C:\\Program Files (x86)\\RCWM\\rcwm-single.exe rcopy %V"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste]
 @="RoboPaste Directory"

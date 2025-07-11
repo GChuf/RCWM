@@ -169,7 +169,7 @@ if ($mode -eq "m") {
 						}	
 
 						{"y", "yes" -contains $_} {
-							Remove-ItemProperty -Path "HKCU:\RCWM\$command" -Name * | Out-Null
+							Remove-ItemProperty -Path "HKCU:\SOFTWARE\RCWM\$command" -Name * | Out-Null
 							Write-Host "List deleted."
 							Start-Sleep 2
 							exit
@@ -303,7 +303,7 @@ If ( $copy -eq $True ) {
 								}	
 
 								{"y", "yes" -contains $_} {
-									Remove-ItemProperty -Path "HKCU:\RCWM\$command" -Name * | Out-Null
+									Remove-ItemProperty -Path "HKCU:\SOFTWARE\RCWM\$command" -Name * | Out-Null
 									Write-Host "List deleted."
 									Start-Sleep 2
 									exit
@@ -325,7 +325,7 @@ If ( $copy -eq $True ) {
 			} Until ($Valid)
 		}
 
-	Remove-ItemProperty -Path "HKCU:\RCWM\$command" -Name * | Out-Null
+	Remove-ItemProperty -Path "HKCU:\SOFTWARE\RCWM\$command" -Name * | Out-Null
 	echo ""
 	Write-Host "Finished!" -ForegroundColor blue
 	Start-Sleep 1
