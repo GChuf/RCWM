@@ -9,7 +9,7 @@
 //dlink
 //flink
 //miror
-//rmove
+//rcmov
 //rcopy
 //rstrc
 

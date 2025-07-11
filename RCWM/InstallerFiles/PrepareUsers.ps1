@@ -22,7 +22,7 @@ function prepareRegKeys(){
 	New-Item -Path dlink | Out-Null
 	New-Item -Path flink | Out-Null
 	New-Item -Path miror | Out-Null
-	New-Item -Path rmove | Out-Null
+	New-Item -Path rcmov | Out-Null
 	New-Item -Path rcopy | Out-Null
 	New-Item -Path rstrc | Out-Null
 	New-Item -Path InstallInfo | Out-Null

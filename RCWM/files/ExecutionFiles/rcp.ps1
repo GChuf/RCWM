@@ -87,13 +87,13 @@ if ($args[2] -eq $null) #pwsh 4 and less
 
 $pasteDirectoryDisplay = "'" + $pasteIntoDirectory + "'"
 
-if ($command -eq "mv") {
+if ($command -eq "rcmov") {
 	$flag = "/MOV"
 	$string1 = "moved"
 	$string2 = "'Move Directory'"
 	$string3 = "moving"
     $string4 = "move"
-} elseif  ($command -eq "rc") { #rc
+} elseif  ($command -eq "rcopy") { #rc
 	$flag=""
 	$string1 = "copied"
 	$string2 = "'RoboCopy'"
