@@ -6,6 +6,15 @@ exit
 }
 
 Write-Host "Initialising setup ..."
+
+$sysdrive = ($env:SystemRoot).Substring(0, 3)
+$sysroot = (cmd.exe /c echo %SystemRoot%).Trim()
+$sys32 = Join-Path $sysroot "System32"
+$rcwmroot = Join-Path $sysdrive 'Program Files (x86)\RCWM'
+$existingFolder = Test-Path -Path $rcwmroot
+$RCWMv1Folder = Test-Path -Path "$sysroot\System32\RCWM"
+$RCWMv2Folder = Test-Path -Path "$sysroot\RCWM"
+
 $ps = $psversiontable.psversion.major
 $arch = (Get-WmiObject win32_processor | Where-Object{$_.deviceID -eq "CPU0"}).AddressWidth
 $os = [System.Environment]::OSVersion.Version.Major
@@ -50,7 +59,8 @@ Copy-Item -Path "RegistryFiles\*.reg" -Destination ".\Temp" | Out-Null
 #copy execution files and icons
 Copy-Item -Path "ExecutionFiles\*" -Destination ".\Temp" | Out-Null
 Copy-Item -Path "Icons\*" -Destination ".\Temp" | Out-Null
-xcopy Icons\rcwmimg.dll C:\windows\system32 /y | Out-Null
+
+xcopy Icons\rcwmimg.dll $sys32 /y | Out-Null
 
 #Overwrite default files with specific files - if they exist/if applicable
 
@@ -134,16 +144,11 @@ function installRCWM() {
 	cmd.exe /c icacls $rcwmroot /grant users:F /T /C | Out-Null
 
 	#add exclusion - just in case
-	powershell -Command Add-MpPreference -ExclusionPath "C:\Windows\RCWM" | Out-Null
-	echo "Created directory at C:\Windows\RCWM and copied all files."
+	Add-MpPreference -ExclusionPath "$rcwmroot" | Out-Null
+	echo "Created directory at $rcwmroot and copied all files."
 }
 
-$sysdrive = ($env:SystemRoot).Substring(0, 3)
-$sysroot = cmd.exe /c echo %SystemRoot%
-$rcwmroot = Join-Path $sysdrive 'Program Files (x86)\RCWM'
-$existingFolder = Test-Path -Path $rcwmroot
-$RCWMv1Folder = Test-Path -Path "$sysroot\System32\RCWM"
-$RCWMv2Folder = Test-Path -Path "$sysroot\RCWM"
+
 
 if ($RCWMv1Folder -eq $true) {
 	write-host "Old RCWM v1.x folder detected."

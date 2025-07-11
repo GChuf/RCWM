@@ -24,7 +24,8 @@
 #set high process priority
 $process = Get-Process -Id $pid
 $process.PriorityClass = 'High'
-
+$sysroot = (cmd.exe /c echo %SystemRoot%).Trim()
+$robocopy = Join-Path $sysroot "System32\robocopy.exe"
 
 function NoListAvailable {
 	if ($mode -eq "m") {
@@ -227,7 +228,7 @@ If ( $copy -eq $True ) {
 
 			New-Item -Path "$destination" -ItemType Directory > $null
 
-			C:\Windows\System32\robocopy.exe "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
+			& $robocopy "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
 			
 			if ($command -eq "rcmov") { 
 				cmd.exe /c rd /s /q "$path"
@@ -261,7 +262,7 @@ If ( $copy -eq $True ) {
 							$folder = $path.split("\")[-1]
 							$destination = $pasteIntoDirectory + "\" + $folder
 
-							C:\Windows\System32\robocopy.exe "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
+							& $robocopy "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
 
 							if ($command -eq "rcmov") { 
 								cmd.exe /c cmd.exe /c rd /s /q "$path"
@@ -279,7 +280,7 @@ If ( $copy -eq $True ) {
 							$folder = $path.split("\")[-1]
 							$destination = $pasteIntoDirectory + "\" + $folder
 
-							C:\Windows\System32\robocopy.exe "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
+							& $robocopy "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
 									
 							if ($command -eq "rcmov") { 
 								cmd.exe /c rd /s /q "$path"
