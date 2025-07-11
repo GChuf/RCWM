@@ -49,7 +49,7 @@ $mode = $args[1]
 
 if ($args[2] -eq $null) #pwsh 4 and less
 {
-	$regInsert = (Get-itemproperty -Path 'HKCU:\RCWM').dir #must not be string, but string array
+	$regInsert = (Get-itemproperty -Path 'HKCU:\SOFTWARE\RCWM').dir #must not be string, but string array
 
 	#fix inserts like "\0" into registry, which translates into new line ... (every folder that starts with "0" has this problem)
 
@@ -68,7 +68,7 @@ if ($args[2] -eq $null) #pwsh 4 and less
 		if ($regInsert[0][2] -eq '"') { #copying directly into a drive
 			$pasteIntoDirectory = $reginsert[0].substring(0,2)
 		} else {
-			$pasteIntoDirectory = [string](Get-itemproperty -Path 'HKCU:\RCWM').dir
+			$pasteIntoDirectory = [string](Get-itemproperty -Path 'HKCU:\SOFTWARE\RCWM').dir
 		}
 	}
 
