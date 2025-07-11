@@ -18,5 +18,4 @@ Windows Registry Editor Version 5.00
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste\command]
 @="pwsh -NoProfile \"C:\\Program Files (x86)\\RCWM\\rcp.ps1\" rcopy m \"%V\""
 "IsolatedCommand"="pwsh -NoProfile \"C:\\Program Files (x86)\\RCWM\\rcp.ps1\" rcopy m \"%V\""
-
 ; end

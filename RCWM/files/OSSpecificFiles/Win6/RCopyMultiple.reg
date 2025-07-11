@@ -18,5 +18,4 @@ Windows Registry Editor Version 5.00
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste\command]
 @="\"C:\\Program Files (x86)\\RCWM\\rcp.cmd\" \"%V\" rcopy m"
 "IsolatedCommand"="\"C:\\Program Files (x86)\\RCWM\\rcp.cmd\" \"%V\" rcopy m"
-
 ; end

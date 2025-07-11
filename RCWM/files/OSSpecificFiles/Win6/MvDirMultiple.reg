@@ -18,5 +18,4 @@ Windows Registry Editor Version 5.00
 [HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir\command]
 @="\"C:\\Program Files (x86)\\RCWM\\rcp.cmd\" \"%V\" rcmov m"
 "IsolatedCommand"="\"C:\\Program Files (x86)\\RCWM\\rcp.cmd\" \"%V\" rcmov m"
-
 ; end

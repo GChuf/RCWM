@@ -18,6 +18,4 @@ Windows Registry Editor Version 5.00
 [HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir\command]
 @="pwsh -NoProfile \"C:\\Program Files (x86)\\RCWM\\rcp.ps1\" rcmov s \"%V\""
 "IsolatedCommand"="pwsh -NoProfile \"C:\\Program Files (x86)\\RCWM\\rcp.ps1\" rcmov s \"%V\""
-
-
 ; end
