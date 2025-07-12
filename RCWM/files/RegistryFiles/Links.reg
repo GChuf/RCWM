@@ -21,7 +21,6 @@ Windows Registry Editor Version 5.00
 ;file link
 
 
-
 [HKEY_CLASSES_ROOT\Directory\Background\Shell\mklink]
 "MUIVerb"="Link Destination"
 "SubCommands"="SymbolicLinkF;SymbolicLinkD;DirectoryJunction;HardLink"
@@ -29,13 +28,12 @@ Windows Registry Editor Version 5.00
 "Position"=-
 
 
-
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\SymbolicLinkF]
 @="Symbolic Link (file)"
 "Icon"="rcwmimg.dll,-8"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\SymbolicLinkF\command]
-@="cmd /c C:\\Program Files (x86)\\RCWM\\SymbolicLinkFile.bat"
+@="\"C:\\Program Files (x86)\\RCWM\\SymbolicLinkFile.bat\""
 
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\SymbolicLinkD]
@@ -43,7 +41,7 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-8"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\SymbolicLinkD\command]
-@="cmd /c C:\\Program Files (x86)\\RCWM\\SymbolicLink.bat"
+@="\"C:\\Program Files (x86)\\RCWM\\SymbolicLink.bat\""
 
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\DirectoryJunction]
@@ -51,8 +49,7 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-8"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\DirectoryJunction\command]
-@="cmd /c C:\\Program Files (x86)\\RCWM\\DirectoryJuntion.bat"
-
+@="\"C:\\Program Files (x86)\\RCWM\\DirectoryJuntion.bat\""
 
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\HardLink]
@@ -60,8 +57,5 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-8"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\HardLink\command]
-@="cmd /c C:\\Program Files (x86)\\RCWM\\HardLink.bat"
-
-
-
+@="\"C:\\Program Files (x86)\\RCWM\\HardLink.bat\""
 ;
