@@ -7,8 +7,8 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-8"
 
 [HKEY_CLASSES_ROOT\Directory\Shell\mklink\command]
-@="cmd.exe /c chcp 65000 > nul && reg delete HKCU\\RCWM\\dlink /f && reg add HKCU\\RCWM\\dlink /v \"%V\" /t REG_SZ"
-"IsolatedCommand"="cmd.exe /c chcp 65000 > nul && reg delete HKCU\\RCWM\\dlink /f && reg add HKCU\\RCWM\\dlink /v \"%V\" /t REG_SZ"
+@="C:\\Program Files (x86)\\RCWM\\rcwm-single.exe dlink %V"
+"IsolatedCommand"="C:\\Program Files (x86)\\RCWM\\rcwm-single.exe dlink %V"
 ;dir link
 
 [HKEY_CLASSES_ROOT\*\shell\mklink]
@@ -16,10 +16,9 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-8"
 
 [HKEY_CLASSES_ROOT\*\shell\mklink\command]
-@="cmd.exe /c chcp 65000 > nul && reg delete HKCU\\RCWM\\flink /f && reg add HKCU\\RCWM\\flink /v \"%V\" /t REG_SZ"
-"IsolatedCommand"="cmd.exe /c chcp 65000 > nul && reg delete HKCU\\RCWM\\flink /f && reg add HKCU\\RCWM\\flink /v \"%V\" /t REG_SZ"
+@="C:\\Program Files (x86)\\RCWM\\rcwm-single.exe flink %V"
+"IsolatedCommand"="C:\\Program Files (x86)\\RCWM\\rcwm-single.exe flink %V"
 ;file link
-
 
 
 [HKEY_CLASSES_ROOT\Directory\Background\Shell\mklink]
@@ -29,13 +28,12 @@ Windows Registry Editor Version 5.00
 "Position"=-
 
 
-
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\SymbolicLinkF]
 @="Symbolic Link (file)"
 "Icon"="rcwmimg.dll,-8"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\SymbolicLinkF\command]
-@="cmd /c C:\\Program Files (x86)\\RCWM\\SymbolicLinkFile.bat"
+@="\"C:\\Program Files (x86)\\RCWM\\SymbolicLinkFile.bat\""
 
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\SymbolicLinkD]
@@ -43,7 +41,7 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-8"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\SymbolicLinkD\command]
-@="cmd /c C:\\Program Files (x86)\\RCWM\\SymbolicLink.bat"
+@="\"C:\\Program Files (x86)\\RCWM\\SymbolicLink.bat\""
 
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\DirectoryJunction]
@@ -51,7 +49,7 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-8"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\DirectoryJunction\command]
-@="cmd /c C:\\Program Files (x86)\\RCWM\\DirectoryJuntion.bat"
+@="\"C:\\Program Files (x86)\\RCWM\\DirectoryJuntion.bat\""
 
 
 
@@ -60,8 +58,5 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-8"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\HardLink\command]
-@="cmd /c C:\\Program Files (x86)\\RCWM\\HardLink.bat"
-
-
-
+@="\"C:\\Program Files (x86)\\RCWM\\HardLink.bat\""
 ;
