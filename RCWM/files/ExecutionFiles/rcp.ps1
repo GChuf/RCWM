@@ -229,7 +229,7 @@ If ( $copy -eq $True ) {
 
 			New-Item -Path "$destination" -ItemType Directory > $null
 
-			& $robocopy "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
+			& $robocopy "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /COPYALL /MT:32
 			
 			if ($command -eq "rcmov") { 
 				cmd.exe /c rd /s /q "$path"
@@ -254,8 +254,8 @@ If ( $copy -eq $True ) {
 			Do {
 				$Valid = $True
 				Write-host "Would you like to overwrite files, merge, or abort?"
-				Write-host "Overwrite flags: /E /NP /NJH /NJS /NC /NS"
-				Write-host "Merge flags:     /E /NP /NJH /NJS /NC /NS /XC /XN /XO"
+				Write-host "Overwrite flags: /E /COPYALL"
+				Write-host "Merge flags:     /E /COPYALL /XC /XN /XO"
 				[string]$prompt = Read-Host -Prompt "(O/M/A)"
 				Switch ($prompt) {
 					{"o", "overwrite" -contains $_} {
@@ -266,7 +266,7 @@ If ( $copy -eq $True ) {
 							$folder = $path.split("\")[-1]
 							$destination = $pasteIntoDirectory + "\" + $folder
 
-							& $robocopy "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
+							& $robocopy "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /COPYALL /MT:32
 
 							if ($command -eq "rcmov") { 
 								cmd.exe /c cmd.exe /c rd /s /q "$path"
@@ -284,7 +284,7 @@ If ( $copy -eq $True ) {
 							$folder = $path.split("\")[-1]
 							$destination = $pasteIntoDirectory + "\" + $folder
 
-							& $robocopy "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
+							& $robocopy "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /COPYALL /MT:32
 									
 							if ($command -eq "rcmov") { 
 								cmd.exe /c rd /s /q "$path"
