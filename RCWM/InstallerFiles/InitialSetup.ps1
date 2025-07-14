@@ -94,6 +94,10 @@ if ($winver -eq 11) {
 
 	if ($mode1 -eq "Y") { #todo check location
 	    cmd.exe /c start /w regedit /s Win11AddOldContextMenu.reg
+		Write-Host "Restarting explorer.exe ..."
+		Stop-Process -Name explorer -Force
+		Start-Process explorer.exe
+		Write-Host "Restarted."
 	}
 } else if ($winver -eq 10) {
 	#edge case - some win11 still return major version 10
@@ -111,13 +115,17 @@ if ($winver -eq 11) {
 
 		if ($mode1 -eq "Y") { #todo check location
 			cmd.exe /c start /w regedit /s Win11AddOldContextMenu.reg
+			Write-Host "Restarting explorer.exe ..."
+			Stop-Process -Name explorer -Force
+			Start-Process explorer.exe
+			Write-Host "Restarted."
 		}
 	}
 
 }
 
 
-#copy only: executionFIles and Icons for now
+#copy only: executionFiles and Icons for now
 
 function recreateFiles() {
 	$sysdrive = ($env:SystemRoot).Substring(0, 3)
