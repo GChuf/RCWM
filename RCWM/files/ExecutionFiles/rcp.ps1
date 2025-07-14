@@ -253,7 +253,10 @@ If ( $copy -eq $True ) {
 
 			Do {
 				$Valid = $True
-				[string]$prompt = Read-Host -Prompt "Would you like to overwrite files, merge, or abort? (O/M/A)"
+				Write-host "Would you like to overwrite files, merge, or abort?"
+				Write-host "Overwrite flags: /E /NP /NJH /NJS /NC /NS"
+				Write-host "Merge flags:     /E /NP /NJH /NJS /NC /NS /XC /XN /XO"
+				[string]$prompt = Read-Host -Prompt "(O/M/A)"
 				Switch ($prompt) {
 					{"o", "overwrite" -contains $_} {
 						echo "Overwriting ..."
