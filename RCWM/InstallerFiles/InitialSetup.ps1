@@ -95,6 +95,25 @@ if ($winver -eq 11) {
 	if ($mode1 -eq "Y") { #todo check location
 	    cmd.exe /c start /w regedit /s Win11AddOldContextMenu.reg
 	}
+} else if ($winver -eq 10) {
+	#edge case - some win11 still return major version 10
+	#check build number instead
+	$version = (Get-CimInstance Win32_OperatingSystem).Version
+	$build = [int]($version.Split('.')[2])
+	if ($build -ge 22000) {
+		#it's windows 11
+		while ($true) {
+			$mode1 = Read-Host "Enable old context menu in Windows 11 (Y/N)"
+			if ($mode1 -eq "Y") {break}
+			elseif ($mode1 -eq "N") {break}
+			else {echo "Invalid input!"}
+		}
+
+		if ($mode1 -eq "Y") { #todo check location
+			cmd.exe /c start /w regedit /s Win11AddOldContextMenu.reg
+		}
+	}
+
 }
 
 
