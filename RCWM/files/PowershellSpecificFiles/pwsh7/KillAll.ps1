@@ -1,4 +1,4 @@
-title RCWM: RoboCopy
+$host.UI.RawUI.WindowTitle = "RCWM: Kill All"
 Write-host "RCWM v3.0.0"
 #get our own process' ID to filter it out
 $id = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID

@@ -21,7 +21,7 @@
 [console]::InputEncoding = [text.utf8encoding]::UTF8
 [system.console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
-title RCWM: RoboCopy
+$host.UI.RawUI.WindowTitle = "RCWM: RoboCopy"
 Write-host "RCWM v3.0.0"
 
 #set high process priority
