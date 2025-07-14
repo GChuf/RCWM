@@ -1,5 +1,6 @@
-echo off
-title Boot Into Safe Mode with Command Prompt
+@echo off
+title RCWM: Boot Into Safe Mode with Command Prompt
+echo RCWM v3.0.0
 bcdedit /set {current} safeboot minimal
 bcdedit /set {current} safebootalternateshell yes
 shutdown /r /t 0 /f

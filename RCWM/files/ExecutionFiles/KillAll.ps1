@@ -1,3 +1,5 @@
+title RCWM: RoboCopy
+Write-host "RCWM v3.0.0"
 #get our own process' ID to filter it out
 $id = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
 #killall

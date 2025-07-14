@@ -3,6 +3,8 @@
 rem 65000: UTF-7
 rem 65001: UTF-8 does not work on Win7
 chcp 65001 > nul
+title RCWM: RoboCopy Structure
+echo RCWM v3.0.0
 
 FOR /F "tokens=*" %%g IN ('powershell "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\rstrc).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\rstrc).property }"') do (SET folder=%%g)
 
