@@ -287,7 +287,7 @@ if ($mode1 -eq "A") {
 	#Copy RCWM_CreateRegistryKeys.bat file to %userprofile%\Start Menu\Programs\Startup so it executes on startup for users
 	#file deletes itself from user profile afterwards so that it doesn't keep executing at every login.
 	cd $initialLocation
-	New-Item -Path "$env:SystemDrive\Users\Default\Start Menu\Programs\Startup" -ItemType Directory -ErrorAction SilentlyContinue
+	New-Item -Path "$env:SystemDrive\Users\Default\Start Menu\Programs\Startup" -ItemType Directory | Out-Null
 	Copy-Item -Path "..\InstallerFiles\RCWM_CreateRegistryKeys.bat" -Destination "$env:SystemDrive\Users\Default\Start Menu\Programs\Startup" | Out-Null
 
 	LoopThroughUsers -mode "all" -users $users
