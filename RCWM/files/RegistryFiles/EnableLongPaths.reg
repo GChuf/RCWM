@@ -1,0 +1,8 @@
+Windows Registry Editor Version 5.00
+
+;Enable Long Paths
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem]
+"LongPathsEnabled"=dword:1
+
+;done

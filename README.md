@@ -21,6 +21,7 @@ This little magic pack includes:
 - opening GodMode
 - options to uninstall the changes you've made
 - disabling UAC
+- enabling Long Paths (paths over 260 characters)
 
 You can also remove some right-click menu options, so that your menu doesn't become too cluttered:
 - Pin to Quick access

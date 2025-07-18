@@ -57,6 +57,7 @@ $MiscOptions = @(
 	New-Object PSObject -Property @{Name = 'CMDadmin'; RegFile = 'CMDadmin.reg'; Desc = 'Do you want to always open cmd.exe as admin'}
 	New-Object PSObject -Property @{Name = 'ThisPC'; RegFile = 'ThisPC.reg'; Desc = 'Do you want to add "This PC" shortcut to Desktop'}
 	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to increase right-click menu item limit (default is 15)'; exception = "MultipleInvoke"}
+	New-Object PSObject -Property @{Name = 'EnableLongPaths'; RegFile = 'EnableLongPaths.reg'; Desc = 'Do you want to enable long paths (over 260 characters)'}
 )
 
 #exceptions:
