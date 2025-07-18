@@ -104,6 +104,21 @@ Folder info: 1.73GB / 12 089 files
 
 Results may vary based on your computer and disk - but wherever there are lots of small files, you should benefit.
 
+# Contributing
+
+You can always create a PR or open a new issue, regarding bugs or suggestions.
+
+# Support
+
+You can buy me a ~~coffee~~ beer:
+
+- paypal.me: paypal.me/gchuf
+
+- btc: 16BRUTbKu3tSuS9SudCoP7qHreNs6sAp8d
+
+- eth: 0x75240bb1d3fac69954e980ec53d1c93a2d140389
+
+- ltc: LWtm2gXdr29HhaiaXytnaz799RwYbxhz2d
 
 # Credits
 
