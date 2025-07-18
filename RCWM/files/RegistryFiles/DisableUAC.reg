@@ -1,0 +1,8 @@
+Windows Registry Editor Version 5.00
+
+;Disable User Account Control (UAC)
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
+"EnableLUA"=dword:0
+
+;done

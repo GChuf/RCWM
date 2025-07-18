@@ -20,6 +20,7 @@ This little magic pack includes:
 - signing out from desktop background
 - opening GodMode
 - options to uninstall the changes you've made
+- disabling UAC
 
 You can also remove some right-click menu options, so that your menu doesn't become too cluttered:
 - Pin to Quick access
