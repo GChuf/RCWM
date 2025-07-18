@@ -99,7 +99,7 @@ if ($winver -eq 11) {
 		Start-Process explorer.exe
 		Write-Host "Restarted."
 	}
-} else if ($winver -eq 10) {
+} elseif ($winver -eq 10) {
 	#edge case - some win11 still return major version 10
 	#check build number instead
 	$version = (Get-CimInstance Win32_OperatingSystem).Version
