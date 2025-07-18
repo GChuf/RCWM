@@ -50,12 +50,6 @@ New-Item Temp -ItemType "directory" 2>&1>$null
 Copy-Item -Path "RegistryFiles\*.reg" -Destination ".\Temp" | Out-Null
 
 
-
-
-#todo new folder for reg files
-#New-Item Temp\TempRegFiles -ItemType "directory" 2>&1>$null
-#Copy-Item -Path "RegistryFiles\*.reg" -Destination ".\Temp\TempRegFiles" | Out-Null
-
 #copy execution files and icons
 Copy-Item -Path "ExecutionFiles\*" -Destination ".\Temp" | Out-Null
 Copy-Item -Path "Icons\*" -Destination ".\Temp" | Out-Null
@@ -160,7 +154,6 @@ function installRCWM() {
 	$sysdrive = ($env:SystemRoot).Substring(0, 3)
 	$rcwmroot = Join-Path $sysdrive 'Program Files (x86)\RCWM'
 	cmd.exe /c md $rcwmroot
-	#attrib +h +s $rcwmroot
 
 	#copy binaries, shortcuts, icons, .bat and .ps1 files into RCWM folder
 	Copy-Item -Path "Temp\*" -Destination $rcwmroot

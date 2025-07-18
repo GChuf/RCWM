@@ -6,10 +6,7 @@ if ($users.Length -ge 2) {echo "install for current/all users/decide for each?"}
 
 #current, all, decide
 
-
-
-
-if ($mode -eq "all" or "decide") { 
+if ($mode -eq "all" or "decide") {
 
 	foreach ($user in $users)
 	{
@@ -21,22 +18,14 @@ if ($mode -eq "all" or "decide") {
 		#C:\Users\root
 
 		#$userPath = (get-itemproperty -path Registry::"HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-117113989-4160453655-1229134872-1001").ProfileImagePath
-
 		$userPath = (get-itemproperty -path Registry::$userRegPath).ProfileImagePath
-		
-		
+
 		$userGUID = $userRegPath.Split("\")[-1]
-		
-		)
-		
 		
 		if ($mode -eq "decide") {
 			echo ("Install for user at " + $userPath + " with user ID " + $userGUID + "?"
 			$install = "god knows what" #set to false here if not installing. else, no need to do anything
-			
 		}
-
-
 		
 		if ($install -eq True) {
 			#make reg directories
@@ -46,24 +35,21 @@ if ($mode -eq "all" or "decide") {
 			cd $userGUID
 			New-Item -Path RCWM
 			cd RCWM
-			New-Item -Path dl
-			New-Item -Path fl
-			New-Item -Path mir
-			New-Item -Path mv
-			New-Item -Path rc
-			New-Item -Path rcs
+			New-Item -Path dlink
+			New-Item -Path flink
+			New-Item -Path miror
+			New-Item -Path rcmov
+			New-Item -Path rcopy
+			New-Item -Path rstrc
 			
 			#copy all .reg files to temp directory for each user and change 'HKEY_CURRENT_USER' string into 'HKEY_USERS\GUID'
 			mkdir $userGUID > $null
-			
 			
 			Write-Host "Prepared RCWM for user at " -NoNewLine; Write-Host $userPath -ForegroundColor red -NoNewLine; Write-Host " with user ID " -NoNewLine; Write-Host $userGUID -ForegroundColor red
 			
 		} else {
 			Write-Host "Not installing RCWM for user at " -ForegroundColor red -NoNewLine; Write-Host $userPath
-
 		}
-
 	}
 } else {
 	#current user only
@@ -81,8 +67,7 @@ if ($mode -eq "all" or "decide") {
 	New-Item -Path mv
 	New-Item -Path rc
 	New-Item -Path rcs
-	
+
 	Write-Host "Prepared RCWM for user at " -NoNewLine; Write-Host $userPath -ForegroundColor red -NoNewLine; Write-Host " with user ID " -NoNewLine; Write-Host $userGUID -ForegroundColor red
-	
 	
 }

@@ -10,8 +10,6 @@ function prepareRegKeys(){
 		cd REGISTRY::HKEY_USERS\$user
 	}
 
-
-	
 	cd SOFTWARE
 
 	Remove-Item -Path RCWM -Recurse 2>&1>$null
@@ -42,9 +40,6 @@ function LoopThroughUsers() {
 	} elseif ($mode -ne "current") {
 			Write-Host "Found l user in registry."
 	}
-
-	#write-host "Warning: Future users will see RCWM menu options, but will be unable to use them without reinstalling."
-	#rather install for every user on its own.
 
 	if ($mode -eq "decide") {
 	
@@ -93,24 +88,6 @@ function LoopThroughUsers() {
 		#todo exit script here
 		if ($mode -eq "N") {write-host "Exiting ..."; start-sleep 2; break}
 	
-		#make reg directories
-		
-		#get guid
-		
-		#cd $userGUID
-		#$Error[0].Exception.GetType().FullName
-		
-		#try {
-		#	cd $UUID
-			#$Error[0].Exception.GetType().FullName
-		#} catch [System.Security.SecurityException] { #catch user not having the rights to do this
-		#	Write-Host "You don't have the rights to install RCWM for this user!"
-		#	continue
-		#}
-
-		#todo: exception: cd : Requested registry access is not allowed.
-
-
 		prepareRegKeys -mode "current" -user $UUID
 
 		RegReplacements -mode "current" -UUIDs $null
@@ -168,8 +145,6 @@ function RegReplacements() {
 
 		foreach ($uuid in $UUIDs) {
 
-			#echo "foreach2"
-			#echo $uuid
 			New-Item .\Temp\$uuid -ItemType "directory" 2>&1>$null
 			
 			foreach ($file in $files){
@@ -192,7 +167,6 @@ function RegReplacements() {
 		#only move files to new directory in temp
 		New-Item .\Temp\ALL -ItemType "directory" 2>&1>$null
 		Move-Item -Path .\Temp\*.reg -Destination .\Temp\ALL
-		del .\Temp\*.reg
 	}
 
 }
@@ -215,18 +189,14 @@ $allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft
 foreach ($user in $allUsers) {
 
 	cd REGISTRY::HKEY_USERS
-	#echo $user.Name.split('\')[-1]
-	#if no exception, add to users array
 
+	#if no exception, add to users array
 	try {
 		#echo $user.Name.split('\')[-1]
 		#errorAction is absolutely necessary here for try-catch to work properly
 		cd $user.Name.split('\')[-1] -ErrorAction Stop
-		#echo "adding user"
-		#echo $user.Name
 		#$users.Add($user.Name) | Out-Null
 		$users += $user.Name
-		#echo "added user"
 		#$users2 += $user.Name
 		#$Error[0].Exception.GetType().FullName
 	} catch [System.Management.Automation.ItemNotFoundException] {
