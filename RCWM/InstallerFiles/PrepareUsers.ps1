@@ -77,18 +77,8 @@ function LoopThroughUsers() {
 			} #do reg files work
 		}	
 			
-	} elseif ($mode -eq "all") { #no decide, all users
-		
-		#generate UUIDs array from users array
-		[array]$UUIDs = @()
-		foreach ($user in $users) {
-			$UUID = $user.Split("\")[-1]
-			$UUIDs += $UUID
-			#echo "added uuid"
-			#echo $user.split('\')[-1]
-			prepareRegKeys -user $UUID
-		}
-		RegReplacements -mode "all" -UUIDs $UUIDs
+	} elseif ($mode -eq "all") {
+		RegReplacements -mode "all" -UUIDs $null
 	} elseif ($mode -eq "current") {
 	
 		#get current user-name
@@ -227,10 +217,7 @@ foreach ($user in $allUsers) {
 	cd REGISTRY::HKEY_USERS
 	#echo $user.Name.split('\')[-1]
 	#if no exception, add to users array
-	
-	
-	
-	
+
 	try {
 		#echo $user.Name.split('\')[-1]
 		#errorAction is absolutely necessary here for try-catch to work properly
@@ -252,40 +239,15 @@ foreach ($user in $allUsers) {
 
 while ($true) {
 
-	$mode1 = Read-Host "Do you want to install RCWM for [C]urrent user only, [D]ecide for each, or for [A]ll current and future users?"
+	$mode1 = Read-Host "Do you want to install RCWM for [C]urrent user only, [D]ecide for each, or for [A]ll users?"
 	if ($mode1 -eq "C") {break}
 	elseif ($mode1 -eq "D") {break}
 	elseif ($mode1 -eq "A") {break}
 	else {echo "Invalid input!"}
 }
 
-
-#if ($mode1 -eq "A") {
-	
-#	while ($true) {
-#		$mode1 = Read-Host "Do you want to install RCWM for All [C]urrent users only, or for all [F]uture users as well?"
-#		if ($mode1 -eq "C") {break}
-#		elseif ($mode1 -eq "F") {break}
-#		else {echo "Invalid input!"}
-#	}
-	
-#	if ($mode1 -eq "F") { 
-#		#echo "all future, default regedit files"
-#		#create new allfuture dir? move all files there?
-#		LoopThroughUsers -mode "allFuture"		
-#	}
-
-	#elseif ($mode1 -eq "C") {
-		#echo "all current"
-		#LoopThroughUsers -mode "allcurrent" -users $users
-	#}
-#}
-
-
-
 if ($mode1 -eq "A") {
-	#Copy RCWM_CreateRegistryKeys.bat file to %userprofile%\Start Menu\Programs\Startup so it executes on startup for users
-	#file deletes itself from user profile afterwards so that it doesn't keep executing at every login.
+	#Copy RCWM_CreateRegistryKeys.bat file to ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp so it executes on login for all users.
 	cd $initialLocation
 	Copy-Item -Path "..\InstallerFiles\RCWM_CreateRegistryKeys.bat" -Destination "$env:SystemDrive\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp" | Out-Null
 
