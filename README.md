@@ -104,6 +104,15 @@ Folder info: 1.73GB / 12 089 files
 
 Results may vary based on your computer and disk - but wherever there are lots of small files, you should benefit.
 
+# Safety
+
+RCWM v2 had some issues due to ps2exe script, and its output being flagged by antivirus softwares.
+I've moved away from ps2exe now.
+
+All .exe files are checked and marked safe by virus total (files are used to save folder paths into registry udner HKCU):
+[rcwm-single.exe](https://www.virustotal.com/gui/url/3f1d93268323b721b956ac7a015e80a68768fedf34adbbb022b660c06b7f2efb?nocache=1)
+[rcwm-multiple.exe](https://www.virustotal.com/gui/url/bcf252d68d68198eb304682dc070f0bed0b14fa159add7e6766c3c41b1feff86?nocache=1)
+
 # Contributing
 
 You can always create a PR or open a new issue, regarding bugs or suggestions.
