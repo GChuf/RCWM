@@ -39,10 +39,8 @@ function LoopThroughUsers() {
 	if ($users.count -ge 2) {
 		Write-Host "Found " -NoNewLine; Write-Host $allUsers.Name.Count -NoNewLine; " total users in registry." 
 		Write-Host "Can prepare RCWM for " -NoNewLine; Write-Host $users.count -NoNewLine; " active users."
-	} else {
-		if ($mode -ne "current") {
+	} elseif ($mode -ne "current") {
 			Write-Host "Found l user in registry."
-		}
 	}
 
 	#write-host "Warning: Future users will see RCWM menu options, but will be unable to use them without reinstalling."
