@@ -1,0 +1,14 @@
+Windows Registry Editor Version 5.00
+
+;Reboot in x seconds
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\reboot]
+@="Reboot in x seconds"
+"NoWorkingDirectory"=""
+"Icon"="rcwmimg.dll,-29"
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\reboot\command]
+@="\"C:\\Program Files (x86)\\RCWM\\Reboot.bat\""
+"IsolatedCommand"="\"C:\\Program Files (x86)\\RCWM\\Reboot.bat\""
+
+; end

@@ -1,0 +1,14 @@
+Windows Registry Editor Version 5.00
+
+;Shutdown in x seconds
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\shutdown]
+@="Shutdown in x seconds"
+"NoWorkingDirectory"=""
+"Icon"="rcwmimg.dll,-29"
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\shutdown\command]
+@="\"C:\\Program Files (x86)\\RCWM\\Shutdown.bat\""
+"IsolatedCommand"="\"C:\\Program Files (x86)\\RCWM\\Shutdown.bat\""
+
+; end

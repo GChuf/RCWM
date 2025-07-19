@@ -1,0 +1,9 @@
+Windows Registry Editor Version 5.00
+
+;Shutdown in x seconds
+
+[-HKEY_CLASSES_ROOT\Directory\Background\shell\shutdown]
+
+[-HKEY_CLASSES_ROOT\Directory\Background\shell\shutdown\command]
+
+; end
