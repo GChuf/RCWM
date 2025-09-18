@@ -61,6 +61,10 @@ rem this needs admin in order to delete all old rcwm reg entries
 
 powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\PrepareUsers.ps1 -verb runas
 
+echo Restarting explorer.exe ...
+
+taskkill /im explorer.exe /f
+start explorer.exe
 
 echo(
 echo(
@@ -68,9 +72,5 @@ echo Finished!
 echo(
 echo You can delete all downloaded files now.
 echo(
-
-rem this is needed for older windows versions to apply icons to right click menu
-rem taskkill /im explorer.exe /f
-rem start explorer.exe
 
 pause
