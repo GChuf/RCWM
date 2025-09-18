@@ -1,5 +1,4 @@
 $arch = cmd.exe /c echo "%PROCESSOR_ARCHITECTURE%"
-#$arch = (Get-WmiObject win32_processor | Where-Object{$_.deviceID -eq "CPU0"}).AddressWidth
 $ps = $psversiontable.psversion.major
 $os = [System.Environment]::OSVersion.Version.Major
 

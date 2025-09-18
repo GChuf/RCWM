@@ -16,7 +16,7 @@ $RCWMv1Folder = Test-Path -Path "$sysroot\System32\RCWM"
 $RCWMv2Folder = Test-Path -Path "$sysroot\RCWM"
 
 $ps = $psversiontable.psversion.major
-$arch = (Get-WmiObject win32_processor | Where-Object{$_.deviceID -eq "CPU0"}).AddressWidth
+$arch = cmd.exe /c echo "%PROCESSOR_ARCHITECTURE%"
 $os = [System.Environment]::OSVersion.Version.Major
 #if major==6, minor==1 => windows 2008
 #2008 needs different icons
@@ -38,7 +38,7 @@ if ($pwsh7Version -eq 7 -or $pwsh7CommandType -eq "Application") {
 	}
 }
 
-Write-Host "Using Powershell version $ps on $arch bit CPU."
+Write-Host "Using Powershell version $ps on $arch architecture."
 
 
 #Make sure Temp is clean.
