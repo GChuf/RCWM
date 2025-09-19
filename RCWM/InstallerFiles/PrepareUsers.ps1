@@ -2,7 +2,7 @@
 
 function prepareRegKeys(){
 	param([string[]]$mode, [string[]]$user)
-	
+
 	#cd REGISTRY::$user
 	if ($mode -eq "current") {
 		cd REGISTRY::HKEY_CURRENT_USER
@@ -77,7 +77,8 @@ function LoopThroughUsers() {
 			prepareRegKeys -user $UUID
 		}
 
-		RegReplacements -mode "all" -UUIDs $null
+		regReplacements -mode "all" -UUIDs $null
+		writeVersion
 
 	} elseif ($mode -eq "current") {
 	
@@ -94,8 +95,8 @@ function LoopThroughUsers() {
 		if ($mode -eq "N") {write-host "Exiting ..."; start-sleep 2; break}
 	
 		prepareRegKeys -mode "current" -user $UUID
-
-		RegReplacements -mode "current" -UUIDs $null
+		regReplacements -mode "current" -UUIDs $null
+		writeVersion
 
 	}
 	
@@ -103,8 +104,15 @@ function LoopThroughUsers() {
 	
 }
 
+function writeVersion(){
+	cd REGISTRY::HKEY_LOCAL_MACHINE
+	cd SOFTWARE
+	New-Item -Path RCWM  | Out-Null
+	cd RCWM
+	New-ItemProperty -Path . -Name "Version" -Value "3.0.0" -PropertyType String -Force | Out-Null
+}
 
-function RegReplacements() {
+function regReplacements() {
 
 	param($mode, [string[]]$UUIDs)
 
