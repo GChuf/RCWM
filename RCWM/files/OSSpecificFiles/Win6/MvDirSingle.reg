@@ -8,14 +8,14 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-3"
 
 [HKEY_CLASSES_ROOT\Directory\shell\mvdir\command]
-@="C:\\Program Files (x86)\\RCWM\\rcwm-single.exe rcmov %V"
-"IsolatedCommand"="C:\\Program Files (x86)\\RCWM\\rcwm-single.exe rcmov %V"
+@="C:\\Program Files\\RCWM\\rcwm-single.exe rcmov %V"
+"IsolatedCommand"="C:\\Program Files\\RCWM\\rcwm-single.exe rcmov %V"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir]
 @="Move Directory Here"
 "Icon"="rcwmimg.dll,-4"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir\command]
-@="\"C:\\Program Files (x86)\\RCWM\\rcp.cmd\" \"%V\" rcmov s"
-"IsolatedCommand"="\"C:\\Program Files (x86)\\RCWM\\rcp.cmd\" \"%V\" rcmov s"
+@="\"C:\\Program Files\\RCWM\\rcp.cmd\" \"%V\" rcmov s"
+"IsolatedCommand"="\"C:\\Program Files\\RCWM\\rcp.cmd\" \"%V\" rcmov s"
 ; end

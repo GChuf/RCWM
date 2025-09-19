@@ -7,7 +7,7 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-27"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\killall\command]
-@="pwsh -NoProfile C:\\Program Files (x86)\\RCWM\\killall.ps1"
+@="pwsh -NoProfile C:\\Program Files\\RCWM\\killall.ps1"
 
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\killall]
@@ -15,6 +15,6 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-27"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\killall\command]
-@="pwsh -NoProfile C:\\Program Files (x86)\\RCWM\\killall.ps1"
+@="pwsh -NoProfile C:\\Program Files\\RCWM\\killall.ps1"
 
 ;done

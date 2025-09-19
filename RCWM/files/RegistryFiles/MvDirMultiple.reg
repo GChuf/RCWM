@@ -8,14 +8,14 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-3"
 
 [HKEY_CLASSES_ROOT\Directory\shell\mvdir\command]
-@="C:\\Program Files (x86)\\RCWM\\rcwm-multiple.exe rcmov %V"
-"IsolatedCommand"="C:\\Program Files (x86)\\RCWM\\rcwm-multiple.exe rcmov %V"
+@="C:\\Program Files\\RCWM\\rcwm-multiple.exe rcmov %V"
+"IsolatedCommand"="C:\\Program Files\\RCWM\\rcwm-multiple.exe rcmov %V"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir]
 @="Move Directories Here"
 "Icon"="rcwmimg.dll,-4"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir\command]
-@="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files (x86)\\RCWM\\rcp.ps1\" rcmov m \"%V\""
-"IsolatedCommand"="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files (x86)\\RCWM\\rcp.ps1\" rcmov m \"%V\""
+@="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\rcp.ps1\" rcmov m \"%V\""
+"IsolatedCommand"="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\rcp.ps1\" rcmov m \"%V\""
 ; end

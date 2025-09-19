@@ -10,7 +10,7 @@ Write-Host "Initialising setup ..."
 $sysdrive = ($env:SystemRoot).Substring(0, 3)
 $sysroot = (cmd.exe /c echo %SystemRoot%).Trim()
 $sys32 = Join-Path $sysroot "System32"
-$rcwmroot = Join-Path $sysdrive 'Program Files (x86)\RCWM'
+$rcwmroot = Join-Path $sysdrive 'Program Files\RCWM'
 $existingFolder = Test-Path -Path $rcwmroot
 $RCWMv1Folder = Test-Path -Path "$sysroot\System32\RCWM"
 $RCWMv2Folder = Test-Path -Path "$sysroot\RCWM"
@@ -123,7 +123,7 @@ if ($winver -eq 11) {
 
 function recreateFiles() {
 	$sysdrive = ($env:SystemRoot).Substring(0, 3)
-	$rcwmroot = Join-Path $sysdrive 'Program Files (x86)\RCWM'
+	$rcwmroot = Join-Path $sysdrive 'Program Files\RCWM'
 	cmd.exe /c del /f /q $rcwmroot | Out-Null
 	cmd.exe /c rd /s /q $rcwmroot | Out-Null
 	cmd.exe /c md $rcwmroot | Out-Null
@@ -143,7 +143,7 @@ function recreateFiles() {
 
 function mergeFiles() {
 	$sysdrive = ($env:SystemRoot).Substring(0, 3)
-	$rcwmroot = Join-Path $sysdrive 'Program Files (x86)\RCWM'
+	$rcwmroot = Join-Path $sysdrive 'Program Files\RCWM'
 	robocopy .\Temp\* $rcwmroot /XC /XN /XO | Out-Null
 
 	echo "New files copied"
@@ -152,7 +152,7 @@ function mergeFiles() {
 
 function installRCWM() {
 	$sysdrive = ($env:SystemRoot).Substring(0, 3)
-	$rcwmroot = Join-Path $sysdrive 'Program Files (x86)\RCWM'
+	$rcwmroot = Join-Path $sysdrive 'Program Files\RCWM'
 	cmd.exe /c md $rcwmroot
 
 	#copy binaries, shortcuts, icons, .bat and .ps1 files into RCWM folder
@@ -233,7 +233,7 @@ if ($existingFolder -eq $true) {
 } else {
 	#install
 	$sysdrive = ($env:SystemRoot).Substring(0, 3)
-	$rcwmroot = Join-Path $sysdrive 'Program Files (x86)\RCWM'
+	$rcwmroot = Join-Path $sysdrive 'Program Files\RCWM'
 
 	Write-Host "Preparing directory at $rcwmroot"
 	installRCWM

@@ -7,8 +7,8 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-8"
 
 [HKEY_CLASSES_ROOT\Directory\Shell\mklink\command]
-@="C:\\Program Files (x86)\\RCWM\\rcwm-single.exe dlink %V"
-"IsolatedCommand"="C:\\Program Files (x86)\\RCWM\\rcwm-single.exe dlink %V"
+@="C:\\Program Files\\RCWM\\rcwm-single.exe dlink %V"
+"IsolatedCommand"="C:\\Program Files\\RCWM\\rcwm-single.exe dlink %V"
 ;dir link
 
 [HKEY_CLASSES_ROOT\*\shell\mklink]
@@ -16,8 +16,8 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-8"
 
 [HKEY_CLASSES_ROOT\*\shell\mklink\command]
-@="C:\\Program Files (x86)\\RCWM\\rcwm-single.exe flink %V"
-"IsolatedCommand"="C:\\Program Files (x86)\\RCWM\\rcwm-single.exe flink %V"
+@="C:\\Program Files\\RCWM\\rcwm-single.exe flink %V"
+"IsolatedCommand"="C:\\Program Files\\RCWM\\rcwm-single.exe flink %V"
 ;file link
 
 
@@ -33,7 +33,7 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-8"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\SymbolicLinkF\command]
-@="\"C:\\Program Files (x86)\\RCWM\\SymbolicLinkFile.bat\""
+@="\"C:\\Program Files\\RCWM\\SymbolicLinkFile.bat\""
 
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\SymbolicLinkD]
@@ -41,7 +41,7 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-8"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\SymbolicLinkD\command]
-@="\"C:\\Program Files (x86)\\RCWM\\SymbolicLink.bat\""
+@="\"C:\\Program Files\\RCWM\\SymbolicLink.bat\""
 
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\DirectoryJunction]
@@ -49,7 +49,7 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-8"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\DirectoryJunction\command]
-@="\"C:\\Program Files (x86)\\RCWM\\DirectoryJuntion.bat\""
+@="\"C:\\Program Files\\RCWM\\DirectoryJuntion.bat\""
 
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\HardLink]
@@ -57,5 +57,5 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-8"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\HardLink\command]
-@="\"C:\\Program Files (x86)\\RCWM\\HardLink.bat\""
+@="\"C:\\Program Files\\RCWM\\HardLink.bat\""
 ;

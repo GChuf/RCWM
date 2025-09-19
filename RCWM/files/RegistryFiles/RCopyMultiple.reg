@@ -8,14 +8,14 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-5"
 
 [HKEY_CLASSES_ROOT\Directory\shell\rcopy\command]
-@="C:\\Program Files (x86)\\RCWM\\rcwm-multiple.exe rcopy %V"
-"IsolatedCommand"="C:\\Program Files (x86)\\RCWM\\rcwm-multiple.exe rcopy %V"
+@="C:\\Program Files\\RCWM\\rcwm-multiple.exe rcopy %V"
+"IsolatedCommand"="C:\\Program Files\\RCWM\\rcwm-multiple.exe rcopy %V"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste]
 @="RoboPaste Directories"
 "Icon"="rcwmimg.dll,-6"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste\command]
-@="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files (x86)\\RCWM\\rcp.ps1\" rcopy m \"%V\""
-"IsolatedCommand"="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files (x86)\\RCWM\\rcp.ps1\" rcopy m \"%V\""
+@="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\rcp.ps1\" rcopy m \"%V\""
+"IsolatedCommand"="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\rcp.ps1\" rcopy m \"%V\""
 ; end
