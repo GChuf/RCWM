@@ -223,8 +223,15 @@ while ($true) {
 
 if ($mode1 -eq "A") {
 	#Copy RCWM_CreateRegistryKeys.bat file to ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp so it executes on login for all users.
-	cd $initialLocation
-	Copy-Item -Path "..\InstallerFiles\RCWM_CreateRegistryKeys.bat" -Destination "$env:SystemDrive\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp" | Out-Null
+	#cd $initialLocation
+	#Copy-Item -Path "..\InstallerFiles\RCWM_CreateRegistryKeys.bat" -Destination "$env:SystemDrive\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp" | Out-Null
+
+	#add rcwm_createregkeys to HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
+	#runs at startup for all users
+	$registryPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+	$valueName = "RCWM"
+	$valueData = '"C:\Program Files\RCWM\InitRegKeys.exe"'
+	New-ItemProperty -Path $registryPath -Name $valueName -Value $valueData -PropertyType String -Force | out-null
 
 	LoopThroughUsers -mode "all" -users $users
 } elseif ($mode1 -eq "D" ) { 
