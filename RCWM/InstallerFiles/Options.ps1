@@ -33,8 +33,8 @@ $AddOptions = @(
 	New-Object PSObject -Property @{Name = 'RCopyStructure'; RegFile = 'RCopyStructure.reg'; Desc = 'Do you want to add RoboCopy to copy Folder Structure only (exclude files)'}
 	New-Object PSObject -Property @{Name = 'RebootToRecovery'; RegFile = 'RebootToRecovery.reg'; Desc = 'Do you want to add Reboot to Recovery to "This PC"'}
 	New-Object PSObject -Property @{Name = 'RebootToRecoveryDesktop'; RegFile = 'RebootToRecoveryDesktop.reg'; Desc = 'Do you want to add Reboot to Recovery to Desktop'}
-	New-Object PSObject -Property @{Name = 'Shutdown'; RegFile = 'Shutdown.reg'; Desc = 'Do you want to add option to Reboot in x seconds'}
-	New-Object PSObject -Property @{Name = 'Reboot'; RegFile = 'Reboot.reg'; Desc = 'Do you want to add option to Shutdown in x seconds'}
+	New-Object PSObject -Property @{Name = 'Shutdown'; RegFile = 'Shutdown.reg'; Desc = 'Do you want to add option to Shutdown in x seconds'}
+	New-Object PSObject -Property @{Name = 'Reboot'; RegFile = 'Reboot.reg'; Desc = 'Do you want to add option to Reboot in x seconds'}
 	New-Object PSObject -Property @{Name = 'RunWithPriority'; RegFile = 'RunWithPriority.reg'; Desc = 'Do you want to add Run with Priority'}
 	New-Object PSObject -Property @{Name = 'SafeMode'; RegFile = 'SafeMode.reg'; Desc = 'Do you want to add Safe Mode to "This PC"'}
 	New-Object PSObject -Property @{Name = 'SafeModeDesktop'; RegFile = 'SafeModeDesktop.reg'; Desc = 'Do you want to add Safe Mode to Desktop'}
