@@ -46,14 +46,11 @@ function LoopThroughUsers() {
 		foreach ($user in $users)
 		{
 
-			#get reg path for every user
-			$userRegPath = $user
-
 			#ProfileImagePath
 			#C:\Users\root
-			$userPath = (get-itemproperty -path Registry::$userRegPath).ProfileImagePath
+			$userPath = (get-itemproperty -path Registry::$user).ProfileImagePath
 			
-			$UUID = $userRegPath.Split("\")[-1]
+			$UUID = $user.Split("\")[-1]
 			
 			$currentUserName = $userPath.split('\')[-1]
 			Write-Host ""
@@ -73,7 +70,15 @@ function LoopThroughUsers() {
 		}	
 			
 	} elseif ($mode -eq "all") {
+
+		foreach ($user in $users)
+		{
+			$UUID = $user.Split("\")[-1]
+			prepareRegKeys -user $UUID
+		}
+
 		RegReplacements -mode "all" -UUIDs $null
+
 	} elseif ($mode -eq "current") {
 	
 		#get current user-name
