@@ -18,7 +18,7 @@ if ($users -ne $null) {
 $AddOptions = @(
 	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add RoboCopy Directory'; exception = "RCopy"}
 	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add Move Directory (using robocopy)'; exception = "MvDir"}
-	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add Remove Directory'; exception = "RmDirectory"}
+	New-Object PSObject -Property @{Name = 'RmDir'; RegFile = 'RmDir.reg'; Desc = 'Do you want to add Remove Directory'}
 	New-Object PSObject -Property @{Name = 'CMD'; RegFile = 'CMD.reg'; Desc = 'Do you want to add open CMD to background/folders/drives'}
 	New-Object PSObject -Property @{Name = 'CMDshift'; RegFile = 'CMDshift.reg'; Desc = 'Do you want to add open CMD to (shift! + right click)'}
 	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add open PowerShell to background/folders/drives'; exception = "powershellCheck"}
@@ -92,16 +92,6 @@ function RCopy() {
 		$mode1 = Read-Host "* Do you want to add 'RoboCopy Directory' for [S]ingle directories, or for [M]ultiple?"
 		if ($mode1 -eq "S") {enableReg -regFile "RCopySingle.reg" -name "RCopySingle"; break}
 		elseif ($mode1 -eq "M") {enableReg -regFile "RCopyMultiple.reg" -name "RCopyMultiple"; break}
-		else {echo "Invalid input!"}
-	}
-}
-
-function RmDirectory(){
-	while ($true) {
-		Write-Host "* The faster Remove Directory option also removes symlink contents, not symlinks themselves."
-		$mode1 = Read-Host "* Do you want to add the [F]ast Remove Directory option, or the [S]afer/slower one "
-		if ($mode1 -eq "S") {enableReg -regFile "RmDirS.reg" -name "RmDirS"; break}
-		elseif ($mode1 -eq "F") {enableReg -regFile "RmDir.reg" -name "RmDir"; break}
 		else {echo "Invalid input!"}
 	}
 }
