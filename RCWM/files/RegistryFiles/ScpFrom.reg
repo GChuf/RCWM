@@ -1,0 +1,14 @@
+Windows Registry Editor Version 5.00
+
+;scp from
+
+[HKEY_CLASSES_ROOT\Directory\shell\scpfrom]
+@="SCP from ..."
+"NoWorkingDirectory"=""
+"Icon"="rcwmimg.dll,-2"
+
+[HKEY_CLASSES_ROOT\Directory\shell\scpfrom\command]
+@="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\scpFrom.ps1\" \"%V\""
+"IsolatedCommand"="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\scpFrom.ps1\" \"%V\""
+
+;done
