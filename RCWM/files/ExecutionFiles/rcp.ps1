@@ -43,12 +43,18 @@ function NoListAvailable {
 		echo "Create one by right-clicking on a folder and selecting $string2."
 		Start-Sleep 3
 		exit
+	} elseif ($mode -eq "p") {
+		echo "Items to be $string1 do not exist!"
+		Start-Sleep 1
+		echo "Try selecting and pressing Ctrl+C again."
+		Start-Sleep 3
+		exit
 	}
 }
 
-#copy / move
-$command = $args[0]
-$mode = $args[1]
+$command = $args[0] #copy / move / mirror
+$mode = $args[1] #single, multiple, paste (from clipboard)
+
 
 if ($args[2] -eq $null) #pwsh 4 and less
 {
@@ -66,8 +72,6 @@ if ($args[2] -eq $null) #pwsh 4 and less
 		[string]$pasteIntoDirectory = [string]$tempString.substring(0,$tempString.length-2)
 
 	}
-	else { 
-		
 		if ($regInsert[0][2] -eq '"') { #copying directly into a drive
 			$pasteIntoDirectory = $reginsert[0].substring(0,2)
 		} else {
@@ -96,43 +100,58 @@ if ($command -eq "rcmov") {
 	$string2 = "'Move Directory'"
 	$string3 = "moving"
     $string4 = "move"
-} elseif  ($command -eq "rcopy") { #rc
+} elseif  ($command -eq "rcopy") {
 	$flag=""
 	$string1 = "copied"
 	$string2 = "'RoboCopy'"
 	$string3 = "copying"
     $string4 = "copy"
+} elseif  ($command -eq "miror") {
+	$flag="/MIR"
+	$string1 = "mirrored"
+	$string2 = "'RoboCopy Mirror'"
+	$string3 = "mirroring"
+    $string4 = "mirror"
 }
 
 
-#add mirror command
+if ($mode -eq "p") {
+
+	#get list form clipboard
+	#check if folders and files exist
 
 
-#get array of contents of paths inside HKCU\SOFTWARE\RCWM\command
-$array = (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\$command).property 2> $null
+} else {
+
+	#get array of contents of paths inside HKCU\SOFTWARE\RCWM\command
+	$array = (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\$command).property 2> $null
 
 
-$arrayLength = ($array|measure).count
+	$arrayLength = ($array|measure).count
 
-#delete '(default)' in first place
-try {
-	if ( $array[0] -eq "(default)" ) {
-		if ($arrayLength -eq 1) {
-			$array = $null
-		} else {
-			$array = $array[1..($array.Length-1)]
+	#delete '(default)' in first place
+	try {
+		if ( $array[0] -eq "(default)" ) {
+			if ($arrayLength -eq 1) {
+				$array = $null
+			} else {
+				$array = $array[1..($array.Length-1)]
+			}
+		} elseif ( $array -eq "(default)" ) { #empty registry and powershell v2
+			NoListAvailable
 		}
-	} elseif ( $array -eq "(default)" ) { #empty registry and powershell v2
+	} catch {
 		NoListAvailable
 	}
-} catch {
-	NoListAvailable
+
+	#check if list of folders to be copied exist
+	if ( $arrayLength -eq 0 ) {
+		NoListAvailable
+	}
+	
 }
 
-#check if list of folders to be copied exist
-if ( $arrayLength -eq 0 ) {
-	NoListAvailable
-}
+
 
 #skip prompt on single mode
 if ($mode -eq "m") {

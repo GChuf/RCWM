@@ -199,6 +199,8 @@ foreach ($user in $allUsers) {
 
 while ($true) {
 
+
+	#check if rcwm is installed for all or for "current" user only
 	$mode1 = Read-Host "Do you want to uninstall RCWM for [C]urrent user only, [D]ecide for each, or for [A]ll current users?"
 	if ($mode1 -eq "C") {break}
 	elseif ($mode1 -eq "D") {break}
