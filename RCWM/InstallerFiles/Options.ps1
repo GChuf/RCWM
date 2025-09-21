@@ -16,8 +16,9 @@ if ($users -ne $null) {
 }
 
 $AddOptions = @(
-	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add RoboCopy Directory'; exception = "RCopy"}
-	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add Move Directory (using robocopy)'; exception = "MvDir"}
+	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add RoboCopy files'; exception = "RCopy"}
+	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add Move files (using robocopy)'; exception = "MvDir"}
+	New-Object PSObject -Property @{Name = 'PasteFromClipboard'; RegFile = 'PasteFromClipboard.reg'; Desc = 'Do you want to add Paste from Clipboard (using robocopy)'}
 	New-Object PSObject -Property @{Name = 'RmDir'; RegFile = 'RmDir.reg'; Desc = 'Do you want to add Remove Directory'}
 	New-Object PSObject -Property @{Name = 'ScpFrom'; RegFile = 'ScpFrom.reg'; Desc = 'Do you want to add SCP from ...'}
 	New-Object PSObject -Property @{Name = 'ScpTo'; RegFile = 'ScpTo.reg'; Desc = 'Do you want to add SCP to ...'}
