@@ -52,48 +52,6 @@ function NoListAvailable {
 	}
 }
 
-$command = $args[0] #copy / move / mirror
-$mode = $args[1] #single, multiple, paste (from clipboard)
-
-
-if ($args[2] -eq $null) #pwsh 4 and less
-{
-	$regInsert = (Get-itemproperty -Path 'HKCU:\SOFTWARE\RCWM').dir #must not be string, but string array
-
-	#fix inserts like "\0" into registry, which translates into new line ... (every folder that starts with "0" has this problem)
-
-	if ($regInsert.count -ge 2) { #if more than 1 line
-
-		foreach ($part in $regInsert) {
-			[string]$tempString += [string]$part + "\0"
-		}
-
-		#subtract last 2 symbols
-		[string]$pasteIntoDirectory = [string]$tempString.substring(0,$tempString.length-2)
-
-	}
-		if ($regInsert[0][2] -eq '"') { #copying directly into a drive
-			$pasteIntoDirectory = $reginsert[0].substring(0,2)
-		} else {
-			$pasteIntoDirectory = [string](Get-itemproperty -Path 'HKCU:\SOFTWARE\RCWM').dir
-		}
-	}
-
-} else {
-
-	#fix issues with trailing backslash when copying directly into drives - like C:\
-	If (($args[2][-1] -eq "'" ) -and ($args[2][-2] -eq "\" )){ #pwsh v5
-		$pasteIntoDirectory = $args[2].substring(1,2)
-	} elseif (($args[2][-1] -eq '"' ) -and ($args[2][-2] -eq ':' )){ #pwsh v7
-		$pasteIntoDirectory = $args[2].substring(0,2)
-	} else {
-		$pasteIntoDirectory = $args[2]
-	}
-
-}
-
-$pasteDirectoryDisplay = "'" + $pasteIntoDirectory + "'"
-
 if ($command -eq "rcmov") {
 	$flag = "/MOV"
 	$string1 = "moved"
@@ -114,18 +72,65 @@ if ($command -eq "rcmov") {
     $string4 = "mirror"
 }
 
+$command = $args[0] #copy / move / mirror
+$mode = $args[1] #single, multiple, paste (from clipboard)
+
+
+#get directory into which we paste
+if ($args[2] -eq $null) #pwsh 4 and less, uses rcp.cmd: reg add HKCU\SOFTWARE\RCWM /v dir /t REG_MULTI_SZ /f /d %1 1>NUL
+{
+	$regInsert = (Get-itemproperty -Path 'HKCU:\SOFTWARE\RCWM').dir #must not be string, but string array
+
+	#fix inserts like "\0" into registry, which translates into new line ... (every folder that starts with "0" has this problem)
+
+	if ($regInsert.count -ge 2) { #if more than 1 line
+
+		foreach ($part in $regInsert) {
+			[string]$tempString += [string]$part + "\0"
+		}
+
+		#subtract last 2 symbols
+		[string]$pasteIntoDirectory = [string]$tempString.substring(0,$tempString.length-2)
+
+	}
+	if ($regInsert[0][2] -eq '"') { #copying directly into a drive
+		$pasteIntoDirectory = $reginsert[0].substring(0,2)
+	} else {
+		$pasteIntoDirectory = [string](Get-itemproperty -Path 'HKCU:\SOFTWARE\RCWM').dir
+	}
+
+} else {
+
+	#fix issues with trailing backslash when copying directly into drives - like C:\
+	If (($args[2][-1] -eq "'" ) -and ($args[2][-2] -eq "\" )){ #pwsh v5
+		$pasteIntoDirectory = $args[2].substring(1,2)
+	} elseif (($args[2][-1] -eq '"' ) -and ($args[2][-2] -eq ':' )){ #pwsh v7
+		$pasteIntoDirectory = $args[2].substring(0,2)
+	} else {
+		$pasteIntoDirectory = $args[2]
+	}
+
+}
+
+$pasteDirectoryDisplay = "'" + $pasteIntoDirectory + "'"
+
 
 if ($mode -eq "p") {
 
 	#get list form clipboard
 	#check if folders and files exist
+	Add-Type -AssemblyName System.Windows.Forms
 
+	$array = [System.Windows.Forms.Clipboard]::GetFileDropList()
+	$arrayLength = ($array|measure).count
+	if ($arrayLength -eq 0) {
+		NoListAvailable
+	}
 
 } else {
 
 	#get array of contents of paths inside HKCU\SOFTWARE\RCWM\command
 	$array = (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\$command).property 2> $null
-
 
 	$arrayLength = ($array|measure).count
 
@@ -220,38 +225,45 @@ If ( $copy -eq $True ) {
 
 	foreach ($path in $array) {
 
-		#get folder name
-
-		if ($psversiontable.PSVersion.Major -eq 2) {
-			$folder = ($path -split "\\")[-1]
-		} else {
-			$folder = $path.split("\")[-1]
+		if (Test-Path -LiteralPath "$path" -PathType Container) { #if source is a folder
+			if ($psversiontable.PSVersion.Major -eq 2) {
+				$folder = ($path -split "\\")[-1]
+			} else {
+				$folder = $path.split("\")[-1]
+			}
+			$filename = ""
+		} else { #if source is a file
+			if ($psversiontable.PSVersion.Major -eq 2) {
+				$folder = ($path -split "\\")[-2]
+				$filename =  ($path -split "\\")[-1]
+			} else {
+				$folder = $path.split("\")[-2]
+				$filename =  ($path -split "\")[-1]
+			}
 		}
 
-
-
-		#concatenation has to be done like this
 		[string]$destination = [string]$pasteIntoDirectory + "\" + [string]$folder
 
-		#does source folder exist?
+		#does source folder or file exist?
 		if (-not ( Test-Path -literalpath "$path" )) {
-			echo "Source folder" $path "does not exist!"
+			echo "Source file or folder" $path "does not exist!"
 			Start-Sleep 1
 			continue
 		}
 
-		#if exist folder (or file)
+		#if folder (or file) exists in the destination
 
-		If (Test-Path -literalPath "$destination") {
+		if (Test-Path -literalPath "$destination") {
 			#store folders for merge prompt
 			#overwrite - or just copy
 			[string[]]$merge += $path
 		} else {
-			#make new directory with the same name as the folder being copied
+			#if the source! is a folder, make new directory with the same name as the folder being copied
+			if (Test-Path -LiteralPath "$path" -PathType Container) {
+				New-Item -Path "$destination" -ItemType Directory > $null
+			}
 
-			New-Item -Path "$destination" -ItemType Directory > $null
-
-			& $robocopy "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
+			& $robocopy "$path" "$destination" "$filename" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
 			
 			if ($command -eq "rcmov") { 
 				cmd.exe /c rd /s /q "$path"
@@ -261,8 +273,8 @@ If ( $copy -eq $True ) {
 		}
 	}
 
-		#if merge array exists
-		if ($merge) {
+	#if merge array exists
+	if ($merge) {
 
 		Write-host "Successfully copied" $($arrayLength - $merge.length) "out of" $arrayLength "folders."
 
@@ -273,83 +285,83 @@ If ( $copy -eq $True ) {
 		}
 		$merge
 
-			Do {
-				$Valid = $True
-				Write-host "Would you like to overwrite files, merge, or abort?"
-				Write-host "Overwrite flags: /E"
-				Write-host "Merge flags:     /E /XC /XN /XO"
-				[string]$prompt = Read-Host -Prompt "(O/M/A)"
-				Switch ($prompt) {
-					{"o", "overwrite" -contains $_} {
-						echo "Overwriting ..."
+		Do {
+			$Valid = $True
+			Write-host "Would you like to overwrite files, merge, or abort?"
+			Write-host "Overwrite flags: /E"
+			Write-host "Merge flags:     /E /XC /XN /XO"
+			[string]$prompt = Read-Host -Prompt "(O/M/A)"
+			Switch ($prompt) {
+				{"o", "overwrite" -contains $_} {
+					echo "Overwriting ..."
 
-						for ($i=0; $i -lt $merge.length; $i++) {
-							$path = $merge[$i]
-							$folder = $path.split("\")[-1]
-							$destination = $pasteIntoDirectory + "\" + $folder
+					for ($i=0; $i -lt $merge.length; $i++) {
+						$path = $merge[$i]
+						$folder = $path.split("\")[-1]
+						$destination = $pasteIntoDirectory + "\" + $folder
 
-							& $robocopy "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
+						& $robocopy "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
 
-							if ($command -eq "rcmov") { 
-								cmd.exe /c cmd.exe /c rd /s /q "$path"
-							}
-
-							echo "Finished overwriting $folder"
+						if ($command -eq "rcmov") { 
+							cmd.exe /c cmd.exe /c rd /s /q "$path"
 						}
 
+						echo "Finished overwriting $folder"
 					}
-					{"m", "merge" -contains $_} {
-						Write-Host "Merging ..."
 
-						for ($i=0; $i -lt $merge.length; $i++) {
-							$path = $merge[$i]
-							$folder = $path.split("\")[-1]
-							$destination = $pasteIntoDirectory + "\" + $folder
-
-							& $robocopy "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
-									
-							if ($command -eq "rcmov") { 
-								cmd.exe /c rd /s /q "$path"
-							}
-							echo "Finished merging $folder"
-						}
-
-
-					}
-					{"A", "abort" -contains $_} {
-						Write-Host "Aborted $string3 the remaining folders."
-
-						Do {
-							[string]$prompt = Read-Host -Prompt "Delete list of remaining folders? (Y/N)"
-							Switch ($prompt) {
-							
-								default {
-									Write-Host "Not a valid entry."
-									$Valid = $False
-								}	
-
-								{"y", "yes" -contains $_} {
-									Remove-ItemProperty -Path "HKCU:\SOFTWARE\RCWM\$command" -Name * | Out-Null
-									Write-Host "List deleted."
-									Start-Sleep 2
-									exit
-								}
-
-								{"n", "no" -contains $_} {
-									Write-Host "Aborting."
-									Start-Sleep 3
-									exit
-								}
-							}
-						} Until ($Valid)
-					}
-					default {
-						Write-Host "Not a valid entry."
-						$Valid = $False
-					}
 				}
-			} Until ($Valid)
-		}
+				{"m", "merge" -contains $_} {
+					Write-Host "Merging ..."
+
+					for ($i=0; $i -lt $merge.length; $i++) {
+						$path = $merge[$i]
+						$folder = $path.split("\")[-1]
+						$destination = $pasteIntoDirectory + "\" + $folder
+
+						& $robocopy "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
+								
+						if ($command -eq "rcmov") { 
+							cmd.exe /c rd /s /q "$path"
+						}
+						echo "Finished merging $folder"
+					}
+
+
+				}
+				{"A", "abort" -contains $_} {
+					Write-Host "Aborted $string3 the remaining folders."
+
+					Do {
+						[string]$prompt = Read-Host -Prompt "Delete list of remaining folders? (Y/N)"
+						Switch ($prompt) {
+						
+							default {
+								Write-Host "Not a valid entry."
+								$Valid = $False
+							}	
+
+							{"y", "yes" -contains $_} {
+								Remove-ItemProperty -Path "HKCU:\SOFTWARE\RCWM\$command" -Name * | Out-Null
+								Write-Host "List deleted."
+								Start-Sleep 2
+								exit
+							}
+
+							{"n", "no" -contains $_} {
+								Write-Host "Aborting."
+								Start-Sleep 3
+								exit
+							}
+						}
+					} Until ($Valid)
+				}
+				default {
+					Write-Host "Not a valid entry."
+					$Valid = $False
+				}
+			}
+		} Until ($Valid)
+	}
 
 	Remove-ItemProperty -Path "HKCU:\SOFTWARE\RCWM\$command" -Name * | Out-Null
 	echo ""
