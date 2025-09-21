@@ -154,7 +154,7 @@ if ($mode -eq "p") {
 
 
 #skip prompt on single mode
-if ($mode -eq "m") {
+if ($mode -ne "s") {
 
 	if ( $arrayLength -eq 1 ) {
 		Write-host "You're about to $string4 the following folder into" $pasteDirectoryDisplay":"
