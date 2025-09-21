@@ -101,6 +101,7 @@ function LoopThroughUsers() {
 }
 
 function writeVersion(){
+	#writ eversion to HKLM only when rcwm is installed for all users
 	cd REGISTRY::HKEY_LOCAL_MACHINE
 	cd SOFTWARE
 	cd RCWM
@@ -256,8 +257,7 @@ if ($mode1 -eq "C") {
 	powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $null
 } elseif ($mode1 -eq "A" ) { 
 	powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $null
+	writeVersion
 } elseif ($mode1 -eq "D" ) {
 	powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $users
 }
-
-writeVersion
