@@ -61,7 +61,6 @@ if ($command -eq "rcmov") {
 	$string3 = "moving"
     $string4 = "move"
 } elseif  ($command -eq "rcopy") {
-	echo "rcopy"
 	$flag=""
 	$string1 = "copied"
 	$string2 = "'RoboCopy'"
