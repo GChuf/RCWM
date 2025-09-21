@@ -63,8 +63,8 @@ powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\PrepareU
 
 echo Restarting explorer.exe ...
 
-taskkill /im explorer.exe /f
-start explorer.exe
+rem #taskkill /im explorer.exe /f
+rem start explorer.exe
 
 echo(
 echo(

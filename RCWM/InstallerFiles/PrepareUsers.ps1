@@ -23,7 +23,6 @@ function prepareRegKeys(){
 	New-Item -Path rcmov | Out-Null
 	New-Item -Path rcopy | Out-Null
 	New-Item -Path rstrc | Out-Null
-	New-Item -Path InstallInfo | Out-Null
 	
 	#Write-Host "Prepared registry for user " -NoNewLine; Write-Host $user -ForegroundColor red;
 }
@@ -32,13 +31,14 @@ function LoopThroughUsers() {
 	
 	param([string[]]$mode, [string[]]$users)
 	
+	#logged-in users
 	$allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
 	
 	if ($users.count -ge 2) {
 		Write-Host "Found " -NoNewLine; Write-Host $allUsers.Name.Count -NoNewLine; " total users in registry." 
 		Write-Host "Can prepare RCWM for " -NoNewLine; Write-Host $users.count -NoNewLine; " active users."
 	} elseif ($mode -ne "current") {
-			Write-Host "Found l user in registry."
+		Write-Host "Found l user in registry."
 	}
 
 	if ($mode -eq "decide") {
@@ -78,7 +78,6 @@ function LoopThroughUsers() {
 		}
 
 		regReplacements -mode "all" -UUIDs $null
-		writeVersion
 
 	} elseif ($mode -eq "current") {
 	
@@ -96,18 +95,14 @@ function LoopThroughUsers() {
 	
 		prepareRegKeys -mode "current" -user $UUID
 		regReplacements -mode "current" -UUIDs $null
-		writeVersion
 
 	}
-	
-	del .\Temp\*.reg
 	
 }
 
 function writeVersion(){
 	cd REGISTRY::HKEY_LOCAL_MACHINE
 	cd SOFTWARE
-	New-Item -Path RCWM  | Out-Null
 	cd RCWM
 	New-ItemProperty -Path . -Name "Version" -Value "3.0.0" -PropertyType String -Force | Out-Null
 }
@@ -264,3 +259,5 @@ if ($mode1 -eq "C") {
 } elseif ($mode1 -eq "D" ) {
 	powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $users
 }
+
+writeVersion

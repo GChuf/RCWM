@@ -51,6 +51,8 @@ function NoListAvailable {
 		exit
 	}
 }
+$command = $args[0] #copy / move / mirror
+$mode = $args[1] #single, multiple, paste (from clipboard)
 
 if ($command -eq "rcmov") {
 	$flag = "/MOV"
@@ -59,6 +61,7 @@ if ($command -eq "rcmov") {
 	$string3 = "moving"
     $string4 = "move"
 } elseif  ($command -eq "rcopy") {
+	echo "rcopy"
 	$flag=""
 	$string1 = "copied"
 	$string2 = "'RoboCopy'"
@@ -71,9 +74,6 @@ if ($command -eq "rcmov") {
 	$string3 = "mirroring"
     $string4 = "mirror"
 }
-
-$command = $args[0] #copy / move / mirror
-$mode = $args[1] #single, multiple, paste (from clipboard)
 
 
 #get directory into which we paste
@@ -162,9 +162,9 @@ if ($mode -eq "p") {
 if ($mode -ne "s") {
 
 	if ( $arrayLength -eq 1 ) {
-		Write-host "You're about to $string4 the following folder into" $pasteDirectoryDisplay":"
+		Write-host "You're about to $string4 the following file/folder into" $pasteDirectoryDisplay":"
 	} else {
-		Write-host "You're about to $string4 the following" $array.length "folders into" $pasteDirectoryDisplay":"
+		Write-host "You're about to $string4 the following" $arrayLength "files/folders into" $pasteDirectoryDisplay":"
 	}
 
 	$array
@@ -226,23 +226,43 @@ If ( $copy -eq $True ) {
 	foreach ($path in $array) {
 
 		if (Test-Path -LiteralPath "$path" -PathType Container) { #if source is a folder
+			$isFolder = $true
 			if ($psversiontable.PSVersion.Major -eq 2) {
 				$folder = ($path -split "\\")[-1]
 			} else {
 				$folder = $path.split("\")[-1]
 			}
 			$filename = ""
+
+			#dest: target dir + folder
+			[string]$destination = [string]$pasteIntoDirectory + "\" + [string]$folder
+
+			#destination check for merge
+			[string]$destinationToCheck = [string]$pasteIntoDirectory + "\" + [string]$folder
+			echo "checking destination: folder:"
+			echo $destinationToCheck
+
 		} else { #if source is a file
+			$isFolder = $false
 			if ($psversiontable.PSVersion.Major -eq 2) {
 				$folder = ($path -split "\\")[-2]
-				$filename =  ($path -split "\\")[-1]
+				$filename = ($path -split "\\")[-1]
 			} else {
 				$folder = $path.split("\")[-2]
-				$filename =  ($path -split "\")[-1]
+				$filename = $path.split("\")[-1]
 			}
+
+			#trim filename from the path
+			$path = ($path -replace "\\$filename$", "")
+
+			#dest: target dir
+			[string]$destination = [string]$pasteIntoDirectory
+
+			#destination check for merge
+			[string]$destinationToCheck = [string]$pasteIntoDirectory + "\" + [string]$filename
 		}
 
-		[string]$destination = [string]$pasteIntoDirectory + "\" + [string]$folder
+		
 
 		#does source folder or file exist?
 		if (-not ( Test-Path -literalpath "$path" )) {
@@ -253,23 +273,23 @@ If ( $copy -eq $True ) {
 
 		#if folder (or file) exists in the destination
 
-		if (Test-Path -literalPath "$destination") {
+		if (Test-Path -literalPath "$destinationToCheck") {
 			#store folders for merge prompt
 			#overwrite - or just copy
-			[string[]]$merge += $path
+			[string[]]$merge += $destinationToCheck
 		} else {
 			#if the source! is a folder, make new directory with the same name as the folder being copied
-			if (Test-Path -LiteralPath "$path" -PathType Container) {
+			if ($isFolder) {
 				New-Item -Path "$destination" -ItemType Directory > $null
 			}
 
 			& $robocopy "$path" "$destination" "$filename" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
-			
+
 			if ($command -eq "rcmov") { 
 				cmd.exe /c rd /s /q "$path"
 			}
 
-			echo "Finished $string3 $folder"
+			echo "Finished $string3 $path\$filename"
 		}
 	}
 
@@ -279,15 +299,15 @@ If ( $copy -eq $True ) {
 		Write-host "Successfully copied" $($arrayLength - $merge.length) "out of" $arrayLength "folders."
 
 		if ($merge.length -eq 1) {
-			Write-host "The following folder already exists inside" $pasteDirectoryDisplay":"
+			Write-host "The following folder or file already exists inside" $pasteDirectoryDisplay":"
 		} else {
-			Write-host "The following" $merge.length "folders already exist inside" $pasteDirectoryDisplay":"
+			Write-host "The following" $merge.length "folders or files already exist inside" $pasteDirectoryDisplay":"
 		}
 		$merge
 
 		Do {
 			$Valid = $True
-			Write-host "Would you like to overwrite files, merge, or abort?"
+			Write-host "Would you like to [O]verwrite files, [M]]erge, or [A]bort?"
 			Write-host "Overwrite flags: /E"
 			Write-host "Merge flags:     /E /XC /XN /XO"
 			[string]$prompt = Read-Host -Prompt "(O/M/A)"
@@ -341,7 +361,12 @@ If ( $copy -eq $True ) {
 							}	
 
 							{"y", "yes" -contains $_} {
-								Remove-ItemProperty -Path "HKCU:\SOFTWARE\RCWM\$command" -Name * | Out-Null
+
+								if ($mode -eq "p") {
+									[System.Windows.Forms.Clipboard]::Clear()
+								} else {
+									Remove-ItemProperty -Path "HKCU:\SOFTWARE\RCWM\$command" -Name * | Out-Null
+								}
 								Write-Host "List deleted."
 								Start-Sleep 2
 								exit
@@ -363,7 +388,11 @@ If ( $copy -eq $True ) {
 		} Until ($Valid)
 	}
 
-	Remove-ItemProperty -Path "HKCU:\SOFTWARE\RCWM\$command" -Name * | Out-Null
+	if ($mode -eq "p") {
+		[System.Windows.Forms.Clipboard]::Clear()
+	} else {
+		Remove-ItemProperty -Path "HKCU:\SOFTWARE\RCWM\$command" -Name * | Out-Null
+	}
 	echo ""
 	Write-Host "Finished!" -ForegroundColor blue
 	Start-Sleep 1
