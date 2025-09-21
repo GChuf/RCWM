@@ -223,9 +223,9 @@ If ( $copy -eq $True ) {
 		#get folder name
 
 		if ($psversiontable.PSVersion.Major -eq 2) {
-		$folder = ($path -split "\\")[-1]
+			$folder = ($path -split "\\")[-1]
 		} else {
-		$folder = $path.split("\")[-1]
+			$folder = $path.split("\")[-1]
 		}
 
 
