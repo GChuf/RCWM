@@ -261,6 +261,27 @@ function regReplacements() {
 		Move-Item -Path .\Temp\*.reg -Destination .\Temp\ALL
 	}
 
+	#in case sysroot is not C:\, replace
+
+	if ($sysdrive -ne "C:") {
+		Write-Host "System drive not on C:, you silly goose ..."
+		Write-Host "Replacing."
+
+		#reg files
+		$regFiles = Get-ChildItem ".\Temp\*.reg" -Recurse
+		foreach ($file in $regFiles){
+			(Get-Content $file) -Replace "C:\\", "$sysdrive\\" | Set-Content $file
+		}
+
+		#execution files under program files\rcwm, .bat and .ps1 only
+		$exeFiles = Get-ChildItem "$sysdrive\\Program Files\RCWM" -Recurse -File -Include *.bat, *.ps1
+		foreach ($file in $exeFiles){
+			(Get-Content $file) -Replace "C:\\", "$sysdrive\\" | Set-Content $file
+		}
+
+	}
+
+
 }
 
 $initialLocation = (get-location).path

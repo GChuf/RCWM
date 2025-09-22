@@ -133,7 +133,7 @@ function recreateFiles() {
 	cmd.exe /c md $rcwmroot | Out-Null
 
 	#copy binaries, shortcuts, icons, .bat and .ps1 files into RCWM folder
-	Copy-Item -Path "Temp\*" -Destination $rcwmroot
+	Copy-Item -Path "Temp\*" -Destination $rcwmroot -Exclude *.reg, *.cpp
 
 	#take ownership of that folder for administrators & users
 	cmd.exe /c takeown /F $rcwmroot /R /D Y | Out-Null

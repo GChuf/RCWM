@@ -100,7 +100,7 @@ if ($args[2] -eq $null) #pwsh 4 and less, uses rcp.cmd: reg add HKCU\SOFTWARE\RC
 
 } else {
 
-	#fix issues with trailing backslash when copying directly into drives - like C:\
+	#fix issues with trailing backslash when copying directly into drives
 	If (($args[2][-1] -eq "'" ) -and ($args[2][-2] -eq "\" )){ #pwsh v5
 		$pasteIntoDirectory = $args[2].substring(1,2)
 	} elseif (($args[2][-1] -eq '"' ) -and ($args[2][-2] -eq ':' )){ #pwsh v7
