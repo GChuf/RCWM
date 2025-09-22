@@ -265,7 +265,7 @@ function regReplacements() {
 
 	if ($sysdrive -ne "C:") {
 		Write-Host "System drive not on C:, you silly goose ..."
-		Write-Host "Replacing."
+		Write-Host "Replacing strings from C: to $sysdrive"
 
 		#reg files
 		$regFiles = Get-ChildItem ".\Temp\*.reg" -Recurse
