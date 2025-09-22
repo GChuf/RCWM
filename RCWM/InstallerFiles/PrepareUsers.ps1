@@ -71,7 +71,8 @@ function LoopThroughUsers() {
 
 	if ($mode -eq "decide") {
 
-	
+		[array]$UUIDsloadedManually = @()
+
 		foreach ($user in $allUsers)
 		{
 			$user = $user.Name
@@ -111,6 +112,7 @@ function LoopThroughUsers() {
 				try {
 					reg load HKU\$UUID "$sysdrive\Users\$currentUserName\NTUSER.DAT" | out-null
 					cd $UUID -ErrorAction Stop
+					$UUIDsloadedManually += $UUID
 					#$hiveLoaded = $true
 				} catch {
 					Write-Host "Error loading $currentUserName!"
@@ -140,6 +142,10 @@ function LoopThroughUsers() {
 			#} until ($success)
 
 
+		}
+
+		foreach ($UUID in $loadedManually) {
+			reg unload HKU\$UUID
 		}
 
 
