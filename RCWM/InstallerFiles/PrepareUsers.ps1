@@ -20,7 +20,7 @@ function prepareRegKeys(){
 	try {
 		cd SOFTWARE -ErrorAction Stop
 	} catch {
-		Write-Host "Error loading registry for $user"
+		Write-Host "Error loading registry for UUID $user"
 	}
 
 
@@ -38,6 +38,11 @@ function prepareRegKeys(){
 		New-Item -Path rcopy | Out-Null
 		New-Item -Path rstrc | Out-Null
 
+	} else {
+		#Make sure Temp is clean.
+		cmd.exe /c del .\Temp\* /s /q 2>&1>$null
+		cmd.exe /c rd /s /q .\Temp /s /q 2>&1>$null
+		New-Item Temp -ItemType "directory" 2>&1>$null
 	}
 }
 
@@ -111,9 +116,9 @@ function LoopThroughUsers() {
 
 			prepareRegKeys -user $UUID -install $install
 
-			if ($install) {
-				RegReplacements -mode "decide" -UUIDs $UUID
-			}
+
+			RegReplacements -mode "decide" -UUIDs $UUID -install $install
+
 
 		}
 
@@ -129,21 +134,24 @@ function LoopThroughUsers() {
 			$user = $user.Name
 			#todo pwsh v2
 			$UUID = $user.Split("\")[-1]
-			write-host Uninstalling for $uuid
+			if (-not $install) {
+				write-host Uninstalling for $uuid
 
-			#load reg hives in case of uninstalling
-			try {
-				cd REGISTRY::HKEY_USERS
-				cd $UUID -ErrorAction Stop
-			} catch {
+				#load reg hives in case of uninstalling
 				try {
-					reg load HKU\$UUID "$sysdrive\Users\$currentUserName\NTUSER.DAT" | out-null
-					$UUIDsloadedManually += $UUID
+					cd REGISTRY::HKEY_USERS
 					cd $UUID -ErrorAction Stop
 				} catch {
-					Write-Host "Error loading $currentUserName!"
-					continue
+					try {
+						reg load HKU\$UUID "$sysdrive\Users\$currentUserName\NTUSER.DAT" | out-null
+						$UUIDsloadedManually += $UUID
+						cd $UUID -ErrorAction Stop
+					} catch {
+						Write-Host "Error loading $currentUserName!"
+						continue
+					}
 				}
+
 			}
 			
 			prepareRegKeys -user $UUID -install $install
@@ -151,11 +159,20 @@ function LoopThroughUsers() {
 		}
 
 		#only move all files to "ALL" folder, no reg replacements needed
+		cd $initialLocation
+		cd ../files
+
 		if ($install) {
-			cd $initialLocation
-			cd ../files
 			New-Item .\Temp\ALL -ItemType "directory" 2>&1>$null
 			Move-Item -Path .\Temp\*.reg -Destination .\Temp\ALL
+		} else {
+			#Make sure Temp is clean.
+			cmd.exe /c del .\Temp\* /s /q 2>&1>$null
+			cmd.exe /c rd /s /q .\Temp /s /q 2>&1>$null
+			New-Item Temp -ItemType "directory" 2>&1>$null
+
+			New-Item .\Temp\ALL -ItemType "directory" 2>&1>$null
+			Copy-Item -Path ..\UninstallerFiles\*.reg -Destination .\Temp\ALL
 		}
 
 	} elseif ($mode -eq "current") {
@@ -163,7 +180,12 @@ function LoopThroughUsers() {
 		#get current user-name
 		$currUserName = cmd.exe /c whoami
 
-		Write-Host "About to prepare RCWM for user " -NoNewLine; Write-Host $currUserName.split('\')[-1] -ForegroundColor red
+		if ($install) {
+
+			Write-Host "About to prepare RCWM for user " -NoNewLine; Write-Host $currUserName.split('\')[-1] -ForegroundColor red
+		} else {
+			Write-Host "About to uninstall RCWM for user " -NoNewLine; Write-Host $currUserName.split('\')[-1] -ForegroundColor red
+		}
 		while ($true) {
 			$mode = Read-Host "Continue (Y/N)?"
 			if ($mode -ne "Y" -AND $mode -ne "N") {echo "Invalid input!"}
@@ -174,9 +196,9 @@ function LoopThroughUsers() {
 		if ($mode -eq "N") {write-host "Exiting ..."; start-sleep 2; break}
 
 		prepareRegKeys -mode "current" -user $UUID -install $install
-		if ($install) {
-			RegReplacements -mode "decide" -UUIDs $UUID
-		}
+
+		RegReplacements -mode "decide" -UUIDs $UUID -install $install
+
 
 	}
 
@@ -186,6 +208,7 @@ function writeVersion(){
 	param([string[]]$mode)
 	cd REGISTRY::HKEY_LOCAL_MACHINE
 	cd SOFTWARE
+	New-Item -Path RCWM  | Out-Null
 	cd RCWM
 	New-ItemProperty -Path . -Name "Version" -Value "3.0.0" -PropertyType String -Force | Out-Null
 	New-ItemProperty -Path . -Name "Mode" -Value "$mode" -PropertyType String -Force | Out-Null
@@ -193,21 +216,32 @@ function writeVersion(){
 
 function regReplacements() {
 
-	param($mode, [string[]]$UUIDs)
+	param($mode, [string[]]$UUIDs, [bool]$install)
 
 	Write-Host "Generating all necessary registry files ..."
 	cd $initialLocation
 	cd ../files
 
-	#HKCR:
-	$files = Get-ChildItem ".\Temp\*.reg"
 
-	#HKLM:
-	$exceptions = @()
-	$exceptions += Get-ChildItem ".\Temp\Multiple*.reg"
-	$exceptions += Get-ChildItem ".\Temp\Win11*.reg"
-	$exceptions += Get-ChildItem ".\Temp\ThisPC.reg"
-	$exceptions += Get-ChildItem ".\Temp\CMDAdmin.reg"
+	if ($install) {
+		#HKCR:
+		$files = Get-ChildItem ".\Temp\*.reg"
+		#HKLM:
+		$exceptions = @()
+		$exceptions += Get-ChildItem ".\Temp\Multiple*.reg"
+		$exceptions += Get-ChildItem ".\Temp\Win11*.reg"
+		$exceptions += Get-ChildItem ".\Temp\ThisPC.reg"
+		$exceptions += Get-ChildItem ".\Temp\CMDAdmin.reg"
+	} else {
+		#HKCR:
+		$files = Get-ChildItem "..\UninstallerFiles\*.reg"
+		#HKLM:
+		$exceptions = @()
+		$exceptions += Get-ChildItem "..\UninstallerFiles\Multiple*.reg"
+		$exceptions += Get-ChildItem "..\UninstallerFiles\Win11*.reg"
+		$exceptions += Get-ChildItem "..\UninstallerFiles\ThisPC.reg"
+		$exceptions += Get-ChildItem "..\UninstallerFiles\CMDAdmin.reg"
+	}
 
 	if ($mode -eq "current") {
 
@@ -303,8 +337,8 @@ if ($mode1 -eq "A") {
 	if ($install) {
 		New-ItemProperty -Path $registryPath -Name $valueName -Value $initregkeysPath -PropertyType String -Force | out-null
 	} else {
-		Remove-Item -Path $registryPath -Recurse -Force -ErrorAction SilentlyContinue
-		Remove-Item -Path $registryVersionPath -Recurse -Force -ErrorAction SilentlyContinue
+		Remove-ItemProperty -Path $registryPath -Name $valueName -ErrorAction SilentlyContinue | out-null
+		Remove-Item -Path $registryVersionPath -Recurse -Force -ErrorAction SilentlyContinue | out-null
 		Remove-Item -Path $initregkeysPath -ErrorAction SilentlyContinue| out-null
 		Remove-Item -Path $rcwmroot -Recurse -Force -ErrorAction SilentlyContinue | out-null
 	}
