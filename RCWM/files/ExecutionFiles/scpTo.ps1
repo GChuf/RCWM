@@ -11,5 +11,5 @@ $h0st = Read-Host "Enter destination IP or hostname"
 $dest = Read-Host "Enter destination directory"
 
 $command = $user + "@" + $h0st + ":" + $dest
-scp $item $command
+scp -r $item $command
 start-sleep 1
