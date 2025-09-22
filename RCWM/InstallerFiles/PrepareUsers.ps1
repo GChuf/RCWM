@@ -1,4 +1,3 @@
-#https://www.lifewire.com/how-to-find-a-users-security-identifier-sid-in-windows-2625149
 
 function prepareRegKeys(){
 	param([string[]]$mode, [string[]]$user)
@@ -30,38 +29,11 @@ function prepareRegKeys(){
 function LoopThroughUsers() {
 	
 	param([string[]]$mode, [string[]]$users)
-	
 
 	$sysdrive = $env:SystemDrive
 
-
 	#get all users from hklm
 	$allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
-	#only able to change registry for logged in users - those who have reg loaded into HKEY_USERS
-	#inactive? user: 
-	#System.Management.Automation.ItemNotFoundException
-
-
-	foreach ($user in $allUsers) {
-
-		cd REGISTRY::HKEY_USERS
-
-		#if no exception, add to users array
-		try {
-			#echo $user.Name.split('\')[-1]
-			#errorAction is absolutely necessary here for try-catch to work properly
-			cd $user.Name.split('\')[-1] -ErrorAction Stop
-			#$users.Add($user.Name) | Out-Null
-			$users += $user.Name
-			#$users2 += $user.Name
-			#$Error[0].Exception.GetType().FullName
-		} catch [System.Management.Automation.ItemNotFoundException] {
-			#Write-Host "Found inactive user"
-		} catch {
-			#Write-Host "maybe access denied"
-			#$users.Add($user.Name) | Out-Null
-		}
-	}
 
 	if ($allUsers.count -ge 2) {
 		Write-Host "Found " -NoNewLine; Write-Host $allUsers.Name.Count -NoNewLine; " total users in registry." 
@@ -84,7 +56,6 @@ function LoopThroughUsers() {
 			
 			$currentUserName = $userPath.split('\')[-1]
 
-
 			Write-Host ""
 			Write-Host "About to prepare RCWM for user " -NoNewLine; Write-Host $currentUserName -ForegroundColor red
 			
@@ -93,12 +64,11 @@ function LoopThroughUsers() {
 				if ($mode -ne "Y" -AND $mode -ne "N") {echo "Invalid input!"}
 				else {break}
 			}
-			
+
 			if ($mode -eq "N") {continue} #go to next user
 
 			#$hiveLoaded = $false
 			cd REGISTRY::HKEY_USERS
-
 
 			#if user is already logged in, no reg hive load is needed.
 			#else, load it manually.
@@ -123,35 +93,15 @@ function LoopThroughUsers() {
 			prepareRegKeys -user $UUID
 			RegReplacements -mode "decide" -UUIDs $UUID
 
-			#if ($hiveLoaded) {reg unload HKU\$UUID | out-null}
-
-
-			#load with runas example:
-			#$success = $false
-			#do {
-			#	cmd.exe /C runas /user:$currentUserName /profile cmd
-			#	$exitcode = $LASTEXITCODE
-			#	if ($exitcode -ne 0) {
-			#		while ($true) {
-			#			$mode = Read-Host "Retry (Y/N)?"
-			#			if ($mode -ne "Y" -AND $mode -ne "N") {echo "Invalid input!"}
-			#			else {break}
-			#		}
-			#		if ($mode -eq "N") {$success = $true} else {continue}
-			#	} else {$success = $true}
-			#} until ($success)
-
-
 		}
 
 		foreach ($UUID in $loadedManually) {
 			reg unload HKU\$UUID
 		}
 
-
 	} elseif ($mode -eq "all") {
 
-		#prepare reg keys for logged in users only
+		#prepare reg keys - works for logged in users only
 		foreach ($user in $allUsers)
 		{
 			$user = $user.Name
@@ -160,28 +110,32 @@ function LoopThroughUsers() {
 			prepareRegKeys -user $UUID
 		}
 
-		#only move all files to "ALL" folder, no replacements needed
-		regReplacements -mode "all" -UUIDs $null
+		#only move all files to "ALL" folder, no reg replacements needed
+		cd $initialLocation
+		cd ../files
+		New-Item .\Temp\ALL -ItemType "directory" 2>&1>$null
+		Move-Item -Path .\Temp\*.reg -Destination .\Temp\ALL
 
 	} elseif ($mode -eq "current") {
-	
+
 		#get current user-name
 		$currUserName = cmd.exe /c whoami
-		
+
 		Write-Host "About to prepare RCWM for user " -NoNewLine; Write-Host $currUserName.split('\')[-1] -ForegroundColor red
 		while ($true) {
 			$mode = Read-Host "Continue (Y/N)?"
 			if ($mode -ne "Y" -AND $mode -ne "N") {echo "Invalid input!"}
 			else {break}
 		}
+
 		#todo exit script here
 		if ($mode -eq "N") {write-host "Exiting ..."; start-sleep 2; break}
-	
+
 		prepareRegKeys -mode "current" -user $UUID
 		regReplacements -mode "current" -UUIDs $null
 
 	}
-	
+
 }
 
 function writeVersion(){
@@ -200,14 +154,10 @@ function regReplacements() {
 	Write-Host "Generating all necessary registry files ..."
 	cd $initialLocation
 	cd ../files
-	
-	
-	#echo "uuids received:"
-	#echo $UUIDs
 
 	#HKCR:
 	$files = Get-ChildItem ".\Temp\*.reg"
-	
+
 	#HKLM:
 	$exceptions = @()
 	$exceptions += Get-ChildItem ".\Temp\Multiple*.reg"
@@ -215,36 +165,33 @@ function regReplacements() {
 	$exceptions += Get-ChildItem ".\Temp\ThisPC.reg"
 	$exceptions += Get-ChildItem ".\Temp\CMDAdmin.reg"
 
-
 	if ($mode -eq "current") {
-		
+
 		New-Item .\Temp\CurrentUser -ItemType "directory" 2>&1>$null
-		
+
 		foreach ($file in $files){
 			$fileName = $file.Name
 			(Get-Content $file) -Replace "HKEY_CLASSES_ROOT\\", "HKEY_CURRENT_USER\Software\Classes\" | Set-Content .\Temp\CurrentUser\$fileName
-			#KEY_USERS\S-1-5-21-117113989-4160453655-1229134872-1001
 		}
-		
+
 		foreach ($file in $exceptions){
 			$fileName = $file.Name
 			if ($file.Name -ne $null) {
 				(Get-Content $file) -Replace "HKEY_LOCAL_MACHINE\\", "HKEY_CURRENT_USER\Software\Classes\" | Set-Content .\Temp\CurrentUser\$fileName
 			}
 		}
-		
+
 	} elseif ($mode -eq "decide" ) {
 
 		foreach ($uuid in $UUIDs) {
 
 			New-Item .\Temp\$uuid -ItemType "directory" 2>&1>$null
-			
+
 			foreach ($file in $files){
 				$fileName = $file.Name
 				(Get-Content $file) -Replace "HKEY_CLASSES_ROOT\\", "HKEY_USERS\$uuid\Software\Classes\" | Set-Content .\Temp\$uuid\$fileName
-				#KEY_USERS\S-1-5-21-117113989-4160453655-1229134872-1001
 			}
-			
+
 			foreach ($file in $exceptions){  #in powershell2, there can be empty "files" (there is no Win11.reg)
 				$fileName = $file.Name
 				if ($file.Name -ne $null) {
@@ -255,14 +202,7 @@ function regReplacements() {
 		}
 	}
 
-	elseif ($mode -eq "all" ) { #reg files stay the same.
-		#only move files to new directory in temp
-		New-Item .\Temp\ALL -ItemType "directory" 2>&1>$null
-		Move-Item -Path .\Temp\*.reg -Destination .\Temp\ALL
-	}
-
 	#in case sysroot is not C:\, replace
-
 	if ($sysdrive -ne "C:") {
 		Write-Host "System drive not on C:, you silly goose ..."
 		Write-Host "Replacing strings from C: to $sysdrive"
@@ -281,11 +221,9 @@ function regReplacements() {
 
 	}
 
-
 }
 
 $initialLocation = (get-location).path
-
 
 while ($true) {
 
@@ -322,7 +260,6 @@ Remove-Item -Path .\Temp\*.reg | out-null
 
 Write-Host "Preparation finished."
 
-
 Write-Host ""
 Write-Host " Choose the options that you want to apply to your right-click menu."
 Write-Host " There are 3 sections: Add options, Remove options, and Miscellaneous."
@@ -338,5 +275,3 @@ if ($mode1 -eq "C") {
 	powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $users
 	writeVersion("decide")
 }
-
-
