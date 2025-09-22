@@ -50,7 +50,7 @@ cd files
 
 powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\InitialSetup.ps1 -verb runas
 
-powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\PrepareUsers.ps1 -verb runas
+powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\PrepareUsers.ps1 -install $true -verb runas
 
 IF !pwsh! LEQ 4 (
     echo explorer.exe restart might be needed.

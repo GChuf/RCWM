@@ -1,34 +1,49 @@
+#install true = installing
+#install false = uninstalling
+param(
+    [bool]$install
+)
+
 
 function prepareRegKeys(){
-	param([string[]]$mode, [string[]]$user)
+	param([string[]]$mode, [string[]]$user, [bool]$install)
+
 
 	#cd REGISTRY::$user
 	if ($mode -eq "current") {
 		cd REGISTRY::HKEY_CURRENT_USER
 	} else {
+		#possible error here
 		cd REGISTRY::HKEY_USERS\$user
 	}
 
-	cd SOFTWARE
+	try {
+		cd SOFTWARE -ErrorAction Stop
+	} catch {
+		Write-Host "Error loading registry for $user"
+	}
+
 
 	Remove-Item -Path RCWM -Recurse 2>&1>$null
-	New-Item -Path RCWM  | Out-Null
-
-	cd RCWM
-	New-ItemProperty -Path . -Name "Version" -Value "3.0.0" -PropertyType String -Force | Out-Null
-	New-Item -Path dlink | Out-Null
-	New-Item -Path flink | Out-Null
-	New-Item -Path miror | Out-Null
-	New-Item -Path rcmov | Out-Null
-	New-Item -Path rcopy | Out-Null
-	New-Item -Path rstrc | Out-Null
 	
-	#Write-Host "Prepared registry for user " -NoNewLine; Write-Host $user -ForegroundColor red;
+	if ($install) {
+
+		New-Item -Path RCWM  | Out-Null
+		cd RCWM
+		New-ItemProperty -Path . -Name "Version" -Value "3.0.0" -PropertyType String -Force | Out-Null
+		New-Item -Path dlink | Out-Null
+		New-Item -Path flink | Out-Null
+		New-Item -Path miror | Out-Null
+		New-Item -Path rcmov | Out-Null
+		New-Item -Path rcopy | Out-Null
+		New-Item -Path rstrc | Out-Null
+
+	}
 }
 
 function LoopThroughUsers() {
 	
-	param([string[]]$mode, [string[]]$users)
+	param([string[]]$mode, [string[]]$users, [bool]$install)
 
 	$sysdrive = $env:SystemDrive
 
@@ -47,18 +62,22 @@ function LoopThroughUsers() {
 
 		foreach ($user in $allUsers)
 		{
+			cd REGISTRY::HKEY_USERS
 			$user = $user.Name
 			#ProfileImagePath
 			#C:\Users\root
 			$userPath = (get-itemproperty -path Registry::$user).ProfileImagePath
-			
+
 			$UUID = $user.Split("\")[-1]
 			
 			$currentUserName = $userPath.split('\')[-1]
 
 			Write-Host ""
-			Write-Host "About to prepare RCWM for user " -NoNewLine; Write-Host $currentUserName -ForegroundColor red
-			
+			if ($install) {
+				Write-Host "About to prepare RCWM for user " -NoNewLine; Write-Host $currentUserName -ForegroundColor red
+			} else {
+				Write-Host "About to remove RCWM for user " -NoNewLine; Write-Host $currentUserName -ForegroundColor red
+			}
 			while ($true) {
 				$mode = Read-Host "Continue (Y/N)?"
 				if ($mode -ne "Y" -AND $mode -ne "N") {echo "Invalid input!"}
@@ -68,8 +87,7 @@ function LoopThroughUsers() {
 			if ($mode -eq "N") {continue} #go to next user
 
 			#$hiveLoaded = $false
-			cd REGISTRY::HKEY_USERS
-
+			
 			#if user is already logged in, no reg hive load is needed.
 			#else, load it manually.
 			try {
@@ -81,8 +99,9 @@ function LoopThroughUsers() {
 				#load hive manually
 				try {
 					reg load HKU\$UUID "$sysdrive\Users\$currentUserName\NTUSER.DAT" | out-null
-					cd $UUID -ErrorAction Stop
 					$UUIDsloadedManually += $UUID
+					cd $UUID -ErrorAction Stop
+
 					#$hiveLoaded = $true
 				} catch {
 					Write-Host "Error loading $currentUserName!"
@@ -90,8 +109,11 @@ function LoopThroughUsers() {
 				}
 			} 
 
-			prepareRegKeys -user $UUID
-			RegReplacements -mode "decide" -UUIDs $UUID
+			prepareRegKeys -user $UUID -install $install
+
+			if ($install) {
+				RegReplacements -mode "decide" -UUIDs $UUID
+			}
 
 		}
 
@@ -107,14 +129,34 @@ function LoopThroughUsers() {
 			$user = $user.Name
 			#todo pwsh v2
 			$UUID = $user.Split("\")[-1]
-			prepareRegKeys -user $UUID
+			write-host Uninstalling for $uuid
+
+			#load reg hives in case of uninstalling
+			try {
+				cd REGISTRY::HKEY_USERS
+				cd $UUID -ErrorAction Stop
+			} catch {
+				try {
+					reg load HKU\$UUID "$sysdrive\Users\$currentUserName\NTUSER.DAT" | out-null
+					$UUIDsloadedManually += $UUID
+					cd $UUID -ErrorAction Stop
+				} catch {
+					Write-Host "Error loading $currentUserName!"
+					continue
+				}
+			}
+			
+			prepareRegKeys -user $UUID -install $install
+			
 		}
 
 		#only move all files to "ALL" folder, no reg replacements needed
-		cd $initialLocation
-		cd ../files
-		New-Item .\Temp\ALL -ItemType "directory" 2>&1>$null
-		Move-Item -Path .\Temp\*.reg -Destination .\Temp\ALL
+		if ($install) {
+			cd $initialLocation
+			cd ../files
+			New-Item .\Temp\ALL -ItemType "directory" 2>&1>$null
+			Move-Item -Path .\Temp\*.reg -Destination .\Temp\ALL
+		}
 
 	} elseif ($mode -eq "current") {
 
@@ -131,8 +173,10 @@ function LoopThroughUsers() {
 		#todo exit script here
 		if ($mode -eq "N") {write-host "Exiting ..."; start-sleep 2; break}
 
-		prepareRegKeys -mode "current" -user $UUID
-		regReplacements -mode "current" -UUIDs $null
+		prepareRegKeys -mode "current" -user $UUID -install $install
+		if ($install) {
+			RegReplacements -mode "decide" -UUIDs $UUID
+		}
 
 	}
 
@@ -227,30 +271,49 @@ $initialLocation = (get-location).path
 
 while ($true) {
 
-	$mode1 = Read-Host "Do you want to install RCWM for [C]urrent user only, [D]ecide for each, or for [A]ll users?"
-	if ($mode1 -eq "C") {break}
-	elseif ($mode1 -eq "D") {break}
-	elseif ($mode1 -eq "A") {break}
-	else {echo "Invalid input!"}
+	if ($install) {
+		$mode1 = Read-Host "Do you want to install RCWM for [C]urrent user only, [D]ecide for each, or for [A]ll users?"
+		if ($mode1 -eq "C") {break}
+		elseif ($mode1 -eq "D") {break}
+		elseif ($mode1 -eq "A") {break}
+		else {echo "Invalid input!"}
+	} else {
+		$mode1 = Read-Host "Do you want to uninstall RCWM for [C]urrent user only, [D]ecide for each, or for [A]ll users?"
+		if ($mode1 -eq "C") {break}
+		elseif ($mode1 -eq "D") {break}
+		elseif ($mode1 -eq "A") {break}
+		else {echo "Invalid input!"}
+	}
+
 }
 
 if ($mode1 -eq "A") {
-	#Copy RCWM_CreateRegistryKeys.bat file to ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp so it executes on login for all users.
-	#cd $initialLocation
-	#Copy-Item -Path "..\InstallerFiles\RCWM_CreateRegistryKeys.bat" -Destination "$env:SystemDrive\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp" | Out-Null
+
+	$sysdrive = $env:SystemDrive
+	$rcwmroot = Join-Path $sysdrive 'Program Files\RCWM'
 
 	#add rcwm_createregkeys to HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
 	#runs at startup for all users
 	$registryPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+	$registryVersionPath = "HKLM:\SOFTWARE\RCWM"
 	$valueName = "RCWM"
-	$valueData = '"C:\Program Files\RCWM\InitRegKeys.exe"'
-	New-ItemProperty -Path $registryPath -Name $valueName -Value $valueData -PropertyType String -Force | out-null
+	$initregkeysPath = $sysdrive + '\Program Files\RCWM\InitRegKeys.exe'
+	
+	
+	if ($install) {
+		New-ItemProperty -Path $registryPath -Name $valueName -Value $initregkeysPath -PropertyType String -Force | out-null
+	} else {
+		Remove-Item -Path $registryPath -Recurse -Force -ErrorAction SilentlyContinue
+		Remove-Item -Path $registryVersionPath -Recurse -Force -ErrorAction SilentlyContinue
+		Remove-Item -Path $initregkeysPath -ErrorAction SilentlyContinue| out-null
+		Remove-Item -Path $rcwmroot -Recurse -Force -ErrorAction SilentlyContinue | out-null
+	}
 
-	LoopThroughUsers -mode "all"
+	LoopThroughUsers -mode "all" -install $install
 } elseif ($mode1 -eq "D" ) { 
-	LoopThroughUsers -mode "decide"
+	LoopThroughUsers -mode "decide" -install $install
 } elseif ($mode1 -eq "C" ) {
-	LoopThroughUsers -mode "current"
+	LoopThroughUsers -mode "current" -install $install
 }
 
 cd $initialLocation
@@ -258,20 +321,27 @@ cd $initialLocation
 #remove all .regs not in folders
 Remove-Item -Path .\Temp\*.reg | out-null
 
-Write-Host "Preparation finished."
 
-Write-Host ""
-Write-Host " Choose the options that you want to apply to your right-click menu."
-Write-Host " There are 3 sections: Add options, Remove options, and Miscellaneous."
-Write-Host ""
+if ($install) {
+	Write-Host "Preparation finished."
+	
+	Write-Host ""
+	Write-Host " Choose the options that you want to apply to your right-click menu."
+	Write-Host " There are 3 sections: Add options, Remove options, and Miscellaneous."
+	Write-Host ""
 
-if ($mode1 -eq "C") { 
-	powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $null
-	writeVersion("current")
-} elseif ($mode1 -eq "A" ) { 
-	powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $null
-	writeVersion("all")
-} elseif ($mode1 -eq "D" ) {
-	powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $users
-	writeVersion("decide")
+	if ($mode1 -eq "C") { 
+		powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $null
+		writeVersion("current")
+	} elseif ($mode1 -eq "A" ) { 
+		powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $null
+		writeVersion("all")
+	} elseif ($mode1 -eq "D" ) {
+		powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $users
+		writeVersion("decide")
+	}
+
+
+} else {
+	Write-Host "Uninstall finished."
 }

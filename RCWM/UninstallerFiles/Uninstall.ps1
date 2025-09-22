@@ -1,8 +1,6 @@
-
-
 function deleteRegKeys(){
 	param([string[]]$mode, [string[]]$user)
-	
+
 	#cd REGISTRY::$user
 	if ($mode -eq "current") {
 		cd REGISTRY::HKEY_CURRENT_USER
@@ -10,9 +8,9 @@ function deleteRegKeys(){
 		cd REGISTRY::HKEY_USERS\$user
 	}
 
-	Remove-Item -Path RCWM -Recurse 2>&1>$null
+	cd SOFTWARE
 
-	#Write-Host "RCWM Removed."
+	Remove-Item -Path RCWM -Recurse 2>&1>$null
 
 }
 

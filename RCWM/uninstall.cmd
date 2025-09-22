@@ -3,15 +3,11 @@ title RCWM Uninstall Script
 
 SETLOCAL EnableDelayedExpansion
 
-rem Set window size for pwsh 2 and 4
 FOR /F "tokens=* USEBACKQ" %%F IN (`powershell $psversiontable.psversion.major`) DO ( SET pwsh=%%F )
-IF !pwsh! LEQ 4 ( mode con: cols=110 )
+IF !pwsh! EQU 4 ( mode con: cols=110 )
 
 color 0b
 
-
-REM Get Admin Privileges
-REM Taken from: https://stackoverflow.com/questions/11525056/how-to-create-a-batch-file-to-run-cmd-as-administrator
 IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" (
 >nul 2>&1 "%SYSTEMROOT%\SysWOW64\cacls.exe" "%SYSTEMROOT%\SysWOW64\config\system"
 ) ELSE (
@@ -19,18 +15,32 @@ IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" (
 )
 
 if '%errorlevel%' NEQ '0' (
-    echo You need to run this script with administrator privileges
+    echo You need to run this script with administrator privileges!
     pause
     exit
 )
 
-
 pushd "%CD%"
 cd /d "%~dp0"
 
-cd UninstallerFiles
+echo(
+echo ***********************************
+echo ****** RCWM Uninstall Script ******
+echo ***********************************
+echo *************************v3.0******
+echo ** https://github.com/GChuf/RCWM **
+echo ***********************************
+echo(
+echo(
 
-powershell Set-ExecutionPolicy Bypass -Scope Process; .\Uninstall.ps1 -verb runas
+cd files
 
+powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\PrepareUsers.ps1 -install $false -verb runas
+
+echo(
+echo(
+echo Finished!
+echo(
+echo(
 
 pause
