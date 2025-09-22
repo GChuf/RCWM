@@ -31,21 +31,50 @@ function LoopThroughUsers() {
 	
 	param([string[]]$mode, [string[]]$users)
 	
-	#logged-in users
+
+	$sysdrive = $env:SystemDrive
+
+
+	#get all users from hklm
 	$allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
-	
-	if ($users.count -ge 2) {
+	#only able to change registry for logged in users - those who have reg loaded into HKEY_USERS
+	#inactive? user: 
+	#System.Management.Automation.ItemNotFoundException
+
+
+	foreach ($user in $allUsers) {
+
+		cd REGISTRY::HKEY_USERS
+
+		#if no exception, add to users array
+		try {
+			#echo $user.Name.split('\')[-1]
+			#errorAction is absolutely necessary here for try-catch to work properly
+			cd $user.Name.split('\')[-1] -ErrorAction Stop
+			#$users.Add($user.Name) | Out-Null
+			$users += $user.Name
+			#$users2 += $user.Name
+			#$Error[0].Exception.GetType().FullName
+		} catch [System.Management.Automation.ItemNotFoundException] {
+			#Write-Host "Found inactive user"
+		} catch {
+			#Write-Host "maybe access denied"
+			#$users.Add($user.Name) | Out-Null
+		}
+	}
+
+	if ($allUsers.count -ge 2) {
 		Write-Host "Found " -NoNewLine; Write-Host $allUsers.Name.Count -NoNewLine; " total users in registry." 
-		Write-Host "Can prepare RCWM for " -NoNewLine; Write-Host $users.count -NoNewLine; " active users."
 	} elseif ($mode -ne "current") {
 		Write-Host "Found l user in registry."
 	}
 
 	if ($mode -eq "decide") {
-	
-		foreach ($user in $users)
-		{
 
+	
+		foreach ($user in $allUsers)
+		{
+			$user = $user.Name
 			#ProfileImagePath
 			#C:\Users\root
 			$userPath = (get-itemproperty -path Registry::$user).ProfileImagePath
@@ -53,6 +82,8 @@ function LoopThroughUsers() {
 			$UUID = $user.Split("\")[-1]
 			
 			$currentUserName = $userPath.split('\')[-1]
+
+
 			Write-Host ""
 			Write-Host "About to prepare RCWM for user " -NoNewLine; Write-Host $currentUserName -ForegroundColor red
 			
@@ -63,20 +94,67 @@ function LoopThroughUsers() {
 			}
 			
 			if ($mode -eq "N") {continue} #go to next user
-			else { 
-				prepareRegKeys -user $UUID
-				RegReplacements -mode "decide" -UUIDs $UUID 
-			} #do reg files work
-		}	
-			
+
+			#$hiveLoaded = $false
+			cd REGISTRY::HKEY_USERS
+
+
+			#if user is already logged in, no reg hive load is needed.
+			#else, load it manually.
+			try {
+				#errorAction is absolutely necessary here for try-catch to work properly
+				#todo powershell v2
+				cd $UUID -ErrorAction Stop
+			} catch {
+				#user not logged in
+				#load hive manually
+				try {
+					reg load HKU\$UUID "$sysdrive\Users\$currentUserName\NTUSER.DAT" | out-null
+					cd $UUID -ErrorAction Stop
+					#$hiveLoaded = $true
+				} catch {
+					Write-Host "Error loading $currentUserName!"
+					continue
+				}
+			} 
+
+			prepareRegKeys -user $UUID
+			RegReplacements -mode "decide" -UUIDs $UUID
+
+			#if ($hiveLoaded) {reg unload HKU\$UUID | out-null}
+
+
+			#load with runas example:
+			#$success = $false
+			#do {
+			#	cmd.exe /C runas /user:$currentUserName /profile cmd
+			#	$exitcode = $LASTEXITCODE
+			#	if ($exitcode -ne 0) {
+			#		while ($true) {
+			#			$mode = Read-Host "Retry (Y/N)?"
+			#			if ($mode -ne "Y" -AND $mode -ne "N") {echo "Invalid input!"}
+			#			else {break}
+			#		}
+			#		if ($mode -eq "N") {$success = $true} else {continue}
+			#	} else {$success = $true}
+			#} until ($success)
+
+
+		}
+
+
 	} elseif ($mode -eq "all") {
 
-		foreach ($user in $users)
+		#prepare reg keys for logged in users only
+		foreach ($user in $allUsers)
 		{
+			$user = $user.Name
+			#todo pwsh v2
 			$UUID = $user.Split("\")[-1]
 			prepareRegKeys -user $UUID
 		}
 
+		#only move all files to "ALL" folder, no replacements needed
 		regReplacements -mode "all" -UUIDs $null
 
 	} elseif ($mode -eq "current") {
@@ -101,11 +179,12 @@ function LoopThroughUsers() {
 }
 
 function writeVersion(){
-	#writ eversion to HKLM only when rcwm is installed for all users
+	param([string[]]$mode)
 	cd REGISTRY::HKEY_LOCAL_MACHINE
 	cd SOFTWARE
 	cd RCWM
 	New-ItemProperty -Path . -Name "Version" -Value "3.0.0" -PropertyType String -Force | Out-Null
+	New-ItemProperty -Path . -Name "Mode" -Value "$mode" -PropertyType String -Force | Out-Null
 }
 
 function regReplacements() {
@@ -133,7 +212,6 @@ function regReplacements() {
 
 	if ($mode -eq "current") {
 		
-		
 		New-Item .\Temp\CurrentUser -ItemType "directory" 2>&1>$null
 		
 		foreach ($file in $files){
@@ -150,7 +228,6 @@ function regReplacements() {
 		}
 		
 	} elseif ($mode -eq "decide" ) {
-
 
 		foreach ($uuid in $UUIDs) {
 
@@ -183,39 +260,6 @@ function regReplacements() {
 $initialLocation = (get-location).path
 
 
-#hkey_users might not be available for the user
-#however hklm... returns unavailable users as well. got to check which ones are inactive
-$allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
-#active ones have subkeys? - need to 100% confirm that
-#the other option is this: if I can't enter HKCU\$user, it's either inactive or I don't have permissions.
-#inactive: 
-#System.Management.Automation.ItemNotFoundException
-
-#$users = New-Object -TypeName 'System.Collections.ArrayList';
-[array]$users = @()
-
-
-foreach ($user in $allUsers) {
-
-	cd REGISTRY::HKEY_USERS
-
-	#if no exception, add to users array
-	try {
-		#echo $user.Name.split('\')[-1]
-		#errorAction is absolutely necessary here for try-catch to work properly
-		cd $user.Name.split('\')[-1] -ErrorAction Stop
-		#$users.Add($user.Name) | Out-Null
-		$users += $user.Name
-		#$users2 += $user.Name
-		#$Error[0].Exception.GetType().FullName
-	} catch [System.Management.Automation.ItemNotFoundException] {
-		#Write-Host "Found inactive user"
-	} catch {
-		#Write-Host "maybe access denied"
-		#$users.Add($user.Name) | Out-Null
-	}
-}
-
 while ($true) {
 
 	$mode1 = Read-Host "Do you want to install RCWM for [C]urrent user only, [D]ecide for each, or for [A]ll users?"
@@ -237,13 +281,17 @@ if ($mode1 -eq "A") {
 	$valueData = '"C:\Program Files\RCWM\InitRegKeys.exe"'
 	New-ItemProperty -Path $registryPath -Name $valueName -Value $valueData -PropertyType String -Force | out-null
 
-	LoopThroughUsers -mode "all" -users $users
+	LoopThroughUsers -mode "all"
 } elseif ($mode1 -eq "D" ) { 
-	LoopThroughUsers -mode "decide" -users $users
+	LoopThroughUsers -mode "decide"
 } elseif ($mode1 -eq "C" ) {
-	LoopThroughUsers -mode "current" -users $null
+	LoopThroughUsers -mode "current"
 }
 
+cd $initialLocation
+
+#remove all .regs not in folders
+Remove-Item -Path .\Temp\*.reg | out-null
 
 Write-Host "Preparation finished."
 
@@ -255,9 +303,13 @@ Write-Host ""
 
 if ($mode1 -eq "C") { 
 	powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $null
+	writeVersion("current")
 } elseif ($mode1 -eq "A" ) { 
 	powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $null
-	writeVersion
+	writeVersion("all")
 } elseif ($mode1 -eq "D" ) {
 	powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $users
+	writeVersion("decide")
 }
+
+

@@ -14,6 +14,8 @@ $rcwmroot = Join-Path $sysdrive 'Program Files\RCWM'
 $existingFolder = Test-Path -Path $rcwmroot
 $RCWMv1Folder = Test-Path -Path "$sysroot\System32\RCWM"
 $RCWMv2Folder = Test-Path -Path "$sysroot\RCWM"
+$currentUserWithoutDomain = [Environment]::UserName
+$currentUSer = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
 
 $ps = $psversiontable.psversion.major
 $arch = cmd.exe /c echo "%PROCESSOR_ARCHITECTURE%"
@@ -24,6 +26,8 @@ $os = [System.Environment]::OSVersion.Version.Major
 
 #win7 and win8 virtual machines both return "6"
 #new win servers(!) return "10"
+
+Write-Host "Running script as " -NoNewLine; Write-Host $currentUser -ForegroundColor red
 
 $pwsh7Version = (get-command pwsh).Version.Major 2>$null
 $pwsh7CommandType = (get-command pwsh).CommandType 2>$null #fix for bugged pwsh7 version outputs in old windows
