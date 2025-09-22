@@ -1,0 +1,16 @@
+Windows Registry Editor Version 5.00
+
+;run pwsh as admin
+;https://ss64.com/ps/syntax-elevate.html
+
+
+[HKEY_CLASSES_ROOT\Microsoft.PowershellScript.1\Shell\runas]
+@="Run script as Administrator"
+"NoWorkingDirectory"=""
+"Icon"="rcwmimg.dll,-9"
+
+[HKEY_CLASSES_ROOT\Microsoft.PowershellScript.1\Shell\runas\command]
+@="pwsh -noexit -file \"%1\""
+"IsolatedCommand"="pwsh -noexit -file \"%1\""
+
+;done

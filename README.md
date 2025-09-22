@@ -141,6 +141,8 @@ The TakeOwn.reg files for Taking Ownership were heavily influenced by Vishal Gup
 
 The Reboot to Recovery option was found somewhere on the internet a while ago. Unfortunately, I cannot remember who the original author is.
 
+The Run script as Administrator idea was found here: https://ss64.com/ps/syntax-elevate.html
+
 I changed and adapted all those files, but their ideas and the initial implementations deserve the credit.
 
 Everything else is my own work, with the help of the Internet.
