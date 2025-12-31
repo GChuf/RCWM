@@ -6,9 +6,13 @@ Write-host "RCWM v3.0.0"
 
 $item = '"' + $args[0] + '"'
 
+#read previous from reg
+
 $user = Read-Host "Enter username"
 $h0st = Read-Host "Enter destination IP or hostname"
-$dest = Read-Host "Enter destination directory"
+$dest = Read-Host "Enter destination directory (default is /tmp)"
+
+if ($dest -eq "") {$dest = "/tmp"}
 
 $command = $user + "@" + $h0st + ":" + $dest
 scp -r $item $command

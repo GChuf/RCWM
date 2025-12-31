@@ -14,6 +14,10 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\Directory\shell\rmdir\command]
 @="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\rmdir.ps1\" \"%V\""
-"IsolatedCommand"="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\rmdir.ps1\" \"%V\""
+"IsolatedCommand"="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\rmitem.ps1\" \"%V\""
+
+[HKEY_CLASSES_ROOT\*\shell\rmdir\command]
+@="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\rmdir.ps1\" \"%V\""
+"IsolatedCommand"="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\rmitem.ps1\" \"%V\""
 
 ;done
