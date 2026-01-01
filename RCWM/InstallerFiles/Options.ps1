@@ -5,7 +5,7 @@ $os = [System.Environment]::OSVersion.Version.Major
 cd ..\files\Temp
 
 $AddOptions = @(
-	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add RoboCopy files'; exception = "RCopy"}
+	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add Copy files'; exception = "RCopy"}
 	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add Move files (using robocopy)'; exception = "MvDir"}
 	New-Object PSObject -Property @{Name = 'PasteFromClipboard'; RegFile = 'PasteFromClipboard.reg'; Desc = 'Do you want to add Paste from Clipboard (using robocopy)'}
 	New-Object PSObject -Property @{Name = 'RmItem'; RegFile = 'RmItem.reg'; Desc = 'Do you want to add Remove files'}

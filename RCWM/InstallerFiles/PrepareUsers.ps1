@@ -132,8 +132,7 @@ function LoopThroughUsers() {
 
 		prepareRegKeys -mode "current" -user $UUID -install $install
 
-		RegReplacements -mode "decide" -UUIDs $UUID -install $install
-
+		RegReplacements -mode "current" -install $install
 
 	}
 
@@ -151,7 +150,7 @@ function writeVersion(){
 
 function regReplacements() {
 
-	param($mode, [string[]]$UUIDs, [bool]$install)
+	param($mode, [bool]$install)
 
 	Write-Host "Generating all necessary registry files ..."
 	cd $initialLocation
