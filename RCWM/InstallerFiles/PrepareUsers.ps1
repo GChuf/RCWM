@@ -13,14 +13,15 @@ function prepareRegKeys(){
 	if ($mode -eq "current") {
 		cd REGISTRY::HKEY_CURRENT_USER
 	} else {
-		#possible error here
-		cd REGISTRY::HKEY_USERS\$user
+		#errors if user is not logged in - caught at "cd software" below
+		cd REGISTRY::HKEY_USERS\$user -erroraction SilentlyContinue
 	}
 
 	try {
 		cd SOFTWARE -ErrorAction Stop
 	} catch {
-		Write-Host "Error loading registry for UUID $user"
+		#Write-Host "Error loading registry for UUID $user"
+		return
 	}
 
 	Remove-Item -Path RCWM -Recurse 2>&1>$null
@@ -55,9 +56,9 @@ function LoopThroughUsers() {
 	$allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
 
 	if ($allUsers.count -ge 2) {
-		Write-Host "Found " -NoNewLine; Write-Host $allUsers.Name.Count -NoNewLine; " logged in users in registry."
+		Write-Host "Found " -NoNewLine; Write-Host $allUsers.Name.Count -NoNewLine; " users in registry."
 	} elseif ($mode -ne "current") {
-		Write-Host "Found l logged in user in registry."
+		Write-Host "Found l user in registry."
 	}
 
 	if ($mode -eq "all") {
