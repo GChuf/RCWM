@@ -194,25 +194,6 @@ function regReplacements() {
 			}
 		}
 
-	} elseif ($mode -eq "decide" ) {
-
-		foreach ($uuid in $UUIDs) {
-
-			New-Item .\Temp\$uuid -ItemType "directory" 2>&1>$null
-
-			foreach ($file in $files){
-				$fileName = $file.Name
-				(Get-Content $file) -Replace "HKEY_CLASSES_ROOT\\", "HKEY_USERS\$uuid\Software\Classes\" | Set-Content .\Temp\$uuid\$fileName
-			}
-
-			foreach ($file in $exceptions){  #in powershell2, there can be empty "files" (there is no Win11.reg)
-				$fileName = $file.Name
-				if ($file.Name -ne $null) {
-					(Get-Content $file) -Replace "HKEY_LOCAL_MACHINE\\", "HKEY_USERS\$uuid\Software\Classes\" | Set-Content .\Temp\$uuid\$fileName
-				}
-			}
-
-		}
 	}
 
 	#in case sysroot is not C:\, replace
