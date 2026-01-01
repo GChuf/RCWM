@@ -7,10 +7,8 @@ param(
 function uninstall() {
 	#pwsh v2
 	$regs = get-childitem -path ..\UninstallerFiles
-	#$regs = get-childitem $regFile -depth 1
 	#Write-Host $regs
 	foreach ($reg in $regs) {
-		write-host "uninstalling $reg"
 		regedit /s ..\UninstallerFiles\$reg
 	}
 }
