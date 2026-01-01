@@ -3,7 +3,7 @@
 
 #pragma comment(lib, "Advapi32.lib")
 
-//cl /O2 /Os /nologo /Fe:InitRegKeys.exe initregkeys.cpp /link /OPT:REF /OPT:ICF Advapi32.lib /SUBSYSTEM:WINDOWS /ENTRY:wWinMainCRTStartup
+//cl /O2 /Os /nologo /Fe:RCWMInit.exe RCWMInit.cpp /link /OPT:REF /OPT:ICF Advapi32.lib /SUBSYSTEM:WINDOWS /ENTRY:wWinMainCRTStartup
 
 int WINAPI wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int) {
     HKEY hBaseKey = nullptr;
