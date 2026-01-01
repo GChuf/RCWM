@@ -4,15 +4,6 @@ param(
     [bool]$install
 )
 
-function uninstall() {
-	#pwsh v2
-	$regs = get-childitem -path ..\UninstallerFiles
-	#Write-Host $regs
-	foreach ($reg in $regs) {
-		regedit /s ..\UninstallerFiles\$reg
-	}
-}
-
 function prepareRegKeys(){
 	param([string[]]$mode, [string[]]$user, [bool]$install)
 
@@ -72,7 +63,11 @@ function loopThroughUsers() {
 	if ($mode -eq "all") {
 
 		if (-not $install) {
-			uninstall
+			$regs = get-childitem -path ..\UninstallerFiles
+			Write-Host $regs
+			foreach ($reg in $regs) {
+				regedit /s ..\UninstallerFiles\$reg
+			}
 		}
 
 		#prepare reg keys - works for logged in users only
@@ -95,7 +90,7 @@ function loopThroughUsers() {
 						$UUIDsloadedManually += $UUID
 						cd $UUID -ErrorAction Stop
 						prepareRegKeys -user $UUID -install $install
-						reg unload "$sysDrive\Users\$currentUserName\NTUSER.DAT" | out-null
+						reg unload "$sysDrive\Users\$profilePath\NTUSER.DAT" | out-null
 					} catch {
 						#user might have been deleted, C:\users\$user does not exist
 						continue
@@ -154,6 +149,7 @@ function loopThroughUsers() {
 
 		regReplacements -mode "current" -install $install
 
+
 	}
 
 }
@@ -210,6 +206,14 @@ function regReplacements() {
 			$fileName = $file.Name
 			if ($file.Name -ne $null) {
 				(Get-Content $file) -Replace "HKEY_LOCAL_MACHINE\\", "HKEY_CURRENT_USER\Software\Classes\" | Set-Content .\Temp\CurrentUser\$fileName
+			}
+		}
+
+		if (-not $install) {
+			$regs = get-childitem -path .\Temp\CurrentUser
+			Write-Host $regs
+			foreach ($reg in $regs) {
+				regedit /s .\Temp\CurrentUser\$reg
 			}
 		}
 
