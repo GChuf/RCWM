@@ -4,6 +4,16 @@ param(
     [bool]$install
 )
 
+function uninstall() {
+	#pwsh v2
+	$regs = get-childitem -path ..\UninstallerFiles
+	#$regs = get-childitem $regFile -depth 1
+	#Write-Host $regs
+	foreach ($reg in $regs) {
+		write-host "uninstalling $reg"
+		regedit /s ..\UninstallerFiles\$reg
+	}
+}
 
 function prepareRegKeys(){
 	param([string[]]$mode, [string[]]$user, [bool]$install)
@@ -63,14 +73,19 @@ function loopThroughUsers() {
 
 	if ($mode -eq "all") {
 
+		if (-not $install) {
+			uninstall
+		}
+
 		#prepare reg keys - works for logged in users only
 		foreach ($user in $allUsers)
 		{
 			$user = $user.Name
 			#todo pwsh v2
 			$UUID = $user.Split("\")[-1]
+			$profilePath = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID" -Name ProfileImagePath
 			if (-not $install) {
-				write-host Uninstalling for $uuid
+				Write-Host "Removing reg keys for $uuid"
 
 				#load reg hives in case of uninstalling
 				try {
@@ -78,14 +93,13 @@ function loopThroughUsers() {
 					cd $UUID -ErrorAction Stop
 				} catch {
 					try {
-						reg load HKU\$UUID "$sysDrive\Users\$currentUserName\NTUSER.DAT" | out-null
+						reg load HKU\$UUID "$profilePath\NTUSER.DAT" | out-null
 						$UUIDsloadedManually += $UUID
 						cd $UUID -ErrorAction Stop
 						prepareRegKeys -user $UUID -install $install
-						#regReplacements -mode "current" -install $install
 						reg unload "$sysDrive\Users\$currentUserName\NTUSER.DAT" | out-null
 					} catch {
-						Write-Host "Error loading $currentUserName!"
+						#user might have been deleted, C:\users\$user does not exist
 						continue
 					}
 				}
@@ -93,8 +107,8 @@ function loopThroughUsers() {
 				#reg unload HKU\$UUID "$sysDrive\Users\$currentUserName\NTUSER.DAT" | out-null
 
 			} else {
-				prepareRegKeys -user $UUID -install $install
-				#regReplacements -mode "current" -install $install
+				prepareRegKeys -mode "all" -user $UUID -install $install
+				regReplacements -mode "all" -install $install
 			}
 
 		}
@@ -135,7 +149,7 @@ function loopThroughUsers() {
 
 		#todo exit script here
 		if ($mode -eq "N") {
-			write-host "Exiting ..."; start-sleep 2; break
+			Write-Host "Exiting ..."; start-sleep 2; break
 		}
 
 		prepareRegKeys -mode "current" -user $UUID -install $install

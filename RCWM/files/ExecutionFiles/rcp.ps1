@@ -219,8 +219,8 @@ if ($mode -ne "s") {
 
 If ( $copy -eq $True ) {
 
-	write-host "Begin $string3 ..."
-	write-host ""
+	Write-Host "Begin $string3 ..."
+	Write-Host ""
 
 	foreach ($path in $array) {
 

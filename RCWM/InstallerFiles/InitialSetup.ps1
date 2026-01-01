@@ -178,7 +178,7 @@ function installRCWM() {
 
 
 if ($RCWMv1Folder -eq $true) {
-	write-host "Old RCWM v1.x folder detected."
+	Write-Host "Old RCWM v1.x folder detected."
 	while ($true) {
 		$mode1 = Read-Host "Delete old files and uninstall now (recommended) (Y/N)"
 		if ($mode1 -eq "y") {break}
@@ -190,17 +190,17 @@ if ($RCWMv1Folder -eq $true) {
 		cmd.exe /c del /f /q %SystemRoot%\System32\RCWM | Out-Null
 		cmd.exe /c rd /s /q %SystemRoot%\System32\RCWM | Out-Null
 		reg delete HKCU\RCWM /F | Out-Null
-		write-host "Old files deleted."
+		Write-Host "Old files deleted."
 
 		$uninstallers = get-childitem ..\UninstallerFiles\RegistryFiles\*.reg
 		foreach ($reg in $uninstallers) { cmd.exe /c regedit /s $reg }
-		write-host "Registry cleaned."
+		Write-Host "Registry cleaned."
 	}
 	
 }
 
 if ($RCWMv2Folder -eq $true) {
-	write-host "Old RCWM v2.x folder detected."
+	Write-Host "Old RCWM v2.x folder detected."
 	while ($true) {
 		$mode1 = Read-Host "Delete old files and uninstall now (recommended) (Y/N)"
 		if ($mode1 -eq "y") {break}
@@ -212,17 +212,17 @@ if ($RCWMv2Folder -eq $true) {
 		cmd.exe /c del /f /q %SystemRoot%\RCWM | Out-Null
 		cmd.exe /c rd /s /q %SystemRoot%\RCWM | Out-Null
 		reg delete HKCU\RCWM /F | Out-Null
-		write-host "Old files deleted."
+		Write-Host "Old files deleted."
 
 		$uninstallers = get-childitem ..\UninstallerFiles\RegistryFiles\*.reg
 		foreach ($reg in $uninstallers) { cmd.exe /c regedit /s $reg }
-		write-host "Registry cleaned."
+		Write-Host "Registry cleaned."
 	}
 	
 }
 
 if ($existingFolder -eq $true) {
-	write-host "RCWM folder already exists."
+	Write-Host "RCWM folder already exists."
 	#version from reg
 	#Get-ItemProperty -Path "HKCU:\SOFTWARE\RCWM" -name "version"
 	

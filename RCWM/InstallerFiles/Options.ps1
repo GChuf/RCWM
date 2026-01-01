@@ -119,7 +119,7 @@ function prompt() {
 			#invoke function with the same name as the $exception
 			if ($exception -ne $null) { &"$exception" }
 			else {enableReg -regFile $regFile -name $name}
-			#write-host "$name enabled"
+			#Write-Host "$name enabled"
 			break
 		}
 		elseif ($r -eq "N") {break}
@@ -132,7 +132,7 @@ function enableReg() {
 	#pwsh v2
 	$regs = get-childitem -path . -recurse -include $regFile
 	#$regs = get-childitem $regFile -depth 1
-	#write-host $regs
+	#Write-Host $regs
 	foreach ($reg in $regs) {
 		regedit /s $reg
 	}
