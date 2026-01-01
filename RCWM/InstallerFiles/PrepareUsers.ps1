@@ -274,7 +274,7 @@ if ($mode1 -eq "A") {
 	$registryPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
 	$registryVersionPath = "HKLM:\SOFTWARE\RCWM"
 	$valueName = "RCWM"
-	$initregkeysPath = $sysDrive + '\Program Files\RCWM\RCWMInit.exe'
+	$initregkeysPath = '"' + $sysDrive + '\Program Files\RCWM\RCWMInit.exe' + '"'
 	
 	
 	if ($install) {
