@@ -23,9 +23,8 @@ function prepareRegKeys(){
 		Write-Host "Error loading registry for UUID $user"
 	}
 
-
 	Remove-Item -Path RCWM -Recurse 2>&1>$null
-	
+
 	if ($install) {
 
 		New-Item -Path RCWM  | Out-Null
@@ -56,77 +55,12 @@ function LoopThroughUsers() {
 	$allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
 
 	if ($allUsers.count -ge 2) {
-		Write-Host "Found " -NoNewLine; Write-Host $allUsers.Name.Count -NoNewLine; " total users in registry." 
+		Write-Host "Found " -NoNewLine; Write-Host $allUsers.Name.Count -NoNewLine; " logged in users in registry."
 	} elseif ($mode -ne "current") {
-		Write-Host "Found l user in registry."
+		Write-Host "Found l logged in user in registry."
 	}
 
-	if ($mode -eq "decide") {
-
-		[array]$UUIDsloadedManually = @()
-
-		foreach ($user in $allUsers)
-		{
-			cd REGISTRY::HKEY_USERS
-			$user = $user.Name
-			#ProfileImagePath
-			#C:\Users\root
-			$userPath = (get-itemproperty -path Registry::$user).ProfileImagePath
-
-			$UUID = $user.Split("\")[-1]
-			
-			$currentUserName = $userPath.split('\')[-1]
-
-			Write-Host ""
-			if ($install) {
-				Write-Host "About to prepare RCWM for user " -NoNewLine; Write-Host $currentUserName -ForegroundColor red
-			} else {
-				Write-Host "About to remove RCWM for user " -NoNewLine; Write-Host $currentUserName -ForegroundColor red
-			}
-			while ($true) {
-				$mode = Read-Host "Continue (Y/N)?"
-				if ($mode -ne "Y" -AND $mode -ne "N") {echo "Invalid input!"}
-				else {break}
-			}
-
-			if ($mode -eq "N") {continue} #go to next user
-
-			#$hiveLoaded = $false
-			
-			#if user is already logged in, no reg hive load is needed.
-			#else, load it manually.
-			try {
-				#errorAction is absolutely necessary here for try-catch to work properly
-				#todo powershell v2
-				cd $UUID -ErrorAction Stop
-			} catch {
-				#user not logged in
-				#load hive manually
-				try {
-					reg load HKU\$UUID "$sysdrive\Users\$currentUserName\NTUSER.DAT" | out-null
-					$UUIDsloadedManually += $UUID
-					cd $UUID -ErrorAction Stop
-
-					#$hiveLoaded = $true
-				} catch {
-					Write-Host "Error loading $currentUserName!"
-					continue
-				}
-			} 
-
-			prepareRegKeys -user $UUID -install $install
-
-
-			RegReplacements -mode "decide" -UUIDs $UUID -install $install
-
-
-		}
-
-		foreach ($UUID in $loadedManually) {
-			reg unload HKU\$UUID
-		}
-
-	} elseif ($mode -eq "all") {
+	if ($mode -eq "all") {
 
 		#prepare reg keys - works for logged in users only
 		foreach ($user in $allUsers)
@@ -306,15 +240,13 @@ $initialLocation = (get-location).path
 while ($true) {
 
 	if ($install) {
-		$mode1 = Read-Host "Do you want to install RCWM for [C]urrent user only, [D]ecide for each, or for [A]ll users?"
+		$mode1 = Read-Host "Do you want to install RCWM for [C]urrent user only, or for [A]ll users?"
 		if ($mode1 -eq "C") {break}
-		elseif ($mode1 -eq "D") {break}
 		elseif ($mode1 -eq "A") {break}
 		else {echo "Invalid input!"}
 	} else {
-		$mode1 = Read-Host "Do you want to uninstall RCWM for [C]urrent user only, [D]ecide for each, or for [A]ll users?"
+		$mode1 = Read-Host "Do you want to uninstall RCWM for [C]urrent user only, or for [A]ll users?"
 		if ($mode1 -eq "C") {break}
-		elseif ($mode1 -eq "D") {break}
 		elseif ($mode1 -eq "A") {break}
 		else {echo "Invalid input!"}
 	}
@@ -344,11 +276,10 @@ if ($mode1 -eq "A") {
 	}
 
 	LoopThroughUsers -mode "all" -install $install
-} elseif ($mode1 -eq "D" ) { 
-	LoopThroughUsers -mode "decide" -install $install
-} elseif ($mode1 -eq "C" ) {
-	LoopThroughUsers -mode "current" -install $install
-}
+
+	} elseif ($mode1 -eq "C" ) {
+		LoopThroughUsers -mode "current" -install $install
+	}
 
 cd $initialLocation
 
@@ -370,9 +301,6 @@ if ($install) {
 	} elseif ($mode1 -eq "A" ) { 
 		powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $null
 		writeVersion("all")
-	} elseif ($mode1 -eq "D" ) {
-		powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $users
-		writeVersion("decide")
 	}
 
 

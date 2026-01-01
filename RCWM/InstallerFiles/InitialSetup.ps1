@@ -221,7 +221,7 @@ if ($RCWMv2Folder -eq $true) {
 if ($existingFolder -eq $true) {
 	write-host "RCWM folder already exists."
 	#version from reg
-	#Get-ItemProperty -Path "HKCU:\RCWM" -name "version"
+	#Get-ItemProperty -Path "HKCU:\SOFTWARE\RCWM" -name "version"
 	
 	while ($true) {
 		$mode1 = Read-Host "[R]ecreate existing files (recommended) or [K]eep old files and copy new files only"
