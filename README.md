@@ -115,7 +115,7 @@ All .exe files are checked and marked safe by virus total (files are used to sav
 
 [rcwm-multiple.exe](https://www.virustotal.com/gui/url/bcf252d68d68198eb304682dc070f0bed0b14fa159add7e6766c3c41b1feff86?nocache=1)
 
-[InitRegKeys.exe](https://www.virustotal.com/gui/url-analysis/u-76d53a15703e44ae10ab8d506c053eb534f133a7bb61596066fec77dc6c2469d-1758532396)
+[RCWMInit.exe](https://www.virustotal.com/gui/url-analysis/u-13bb952212b2d23dce18713803085437b31180b593acb4f4f2d13753269e2db3-21bd70f1?nocache=1)
 
 # Contributing
 
