@@ -2,19 +2,19 @@ Windows Registry Editor Version 5.00
 
 ;robocopy
 
-[HKEY_CLASSES_ROOT\Directory\shell\rcopys]
+[HKEY_CLASSES_ROOT\Directory\shell\rstrc]
 @="RoboCopy Structure"
 "NoWorkingDirectory"=""
 "Icon"="rcwmimg.dll,-19"
 
-[HKEY_CLASSES_ROOT\Directory\shell\rcopys\command]
+[HKEY_CLASSES_ROOT\Directory\shell\rstrc\command]
 @="C:\\Program Files\\RCWM\\rcwm-single.exe rstrc %V"
 "IsolatedCommand"="C:\\Program Files\\RCWM\\rcwm-single.exe rstrc %V"
 
-[HKEY_CLASSES_ROOT\Directory\Background\shell\rpastes]
-@="RoboPaste Structure"
+[HKEY_CLASSES_ROOT\Directory\Background\shell\rstrc]
+@="Paste Structure here"
 "Icon"="rcwmimg.dll,-19"
-[HKEY_CLASSES_ROOT\Directory\Background\shell\rpastes\command]
+[HKEY_CLASSES_ROOT\Directory\Background\shell\rstrc\command]
 @="\"C:\\Program Files\\RCWM\\RcopyStructure.bat\""
 "IsolatedCommand"="\"C:\\Program Files\\RCWM\\RcopyStructure.bat\""
 

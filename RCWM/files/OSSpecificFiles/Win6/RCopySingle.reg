@@ -12,7 +12,7 @@ Windows Registry Editor Version 5.00
 "IsolatedCommand"="C:\\Program Files\\RCWM\\rcwm-single.exe rcopy %V"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste]
-@="RoboPaste Directory"
+@="Paste here"
 "Icon"="rcwmimg.dll,-6"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste\command]

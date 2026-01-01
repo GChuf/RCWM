@@ -81,16 +81,22 @@ function LoopThroughUsers() {
 						reg load HKU\$UUID "$sysdrive\Users\$currentUserName\NTUSER.DAT" | out-null
 						$UUIDsloadedManually += $UUID
 						cd $UUID -ErrorAction Stop
+						prepareRegKeys -user $UUID -install $install
+						#RegReplacements -mode "current" -install $install
+						reg unload "$sysdrive\Users\$currentUserName\NTUSER.DAT" | out-null
 					} catch {
 						Write-Host "Error loading $currentUserName!"
 						continue
 					}
 				}
 
+				#reg unload HKU\$UUID "$sysdrive\Users\$currentUserName\NTUSER.DAT" | out-null
+
+			} else {
+				prepareRegKeys -user $UUID -install $install
+				#RegReplacements -mode "current" -install $install
 			}
-			
-			prepareRegKeys -user $UUID -install $install
-			
+
 		}
 
 		#only move all files to "ALL" folder, no reg replacements needed
@@ -128,7 +134,9 @@ function LoopThroughUsers() {
 		}
 
 		#todo exit script here
-		if ($mode -eq "N") {write-host "Exiting ..."; start-sleep 2; break}
+		if ($mode -eq "N") {
+			write-host "Exiting ..."; start-sleep 2; break
+		}
 
 		prepareRegKeys -mode "current" -user $UUID -install $install
 
@@ -226,6 +234,12 @@ while ($true) {
 		elseif ($mode1 -eq "A") {break}
 		else {echo "Invalid input!"}
 	} else {
+
+		#TODO duplicated code
+		$currentUserWithoutDomain = [Environment]::UserName
+		$currentUSer = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+		Write-Host "Running script as " -NoNewLine; Write-Host $currentUser -ForegroundColor red
+
 		$mode1 = Read-Host "Do you want to uninstall RCWM for [C]urrent user only, or for [A]ll users?"
 		if ($mode1 -eq "C") {break}
 		elseif ($mode1 -eq "A") {break}
