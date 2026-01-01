@@ -1,0 +1,9 @@
+Windows Registry Editor Version 5.00
+
+;remove robocopy structure
+
+[-HKEY_CLASSES_ROOT\Directory\shell\rstrc]
+
+[-HKEY_CLASSES_ROOT\Directory\Background\shell\rstrc]
+
+; end
