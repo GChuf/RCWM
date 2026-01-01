@@ -27,8 +27,8 @@ Write-host "RCWM v3.0.0"
 #set high process priority
 $process = Get-Process -Id $pid
 $process.PriorityClass = 'High'
-$sysroot = (cmd.exe /c echo %SystemRoot%).Trim()
-$robocopy = Join-Path $sysroot "System32\robocopy.exe"
+$sysRoot = (cmd.exe /c echo %SystemRoot%).Trim()
+$robocopy = Join-Path $sysRoot "System32\robocopy.exe"
 
 function NoListAvailable {
 	if ($mode -eq "m") {

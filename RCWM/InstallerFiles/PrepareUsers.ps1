@@ -46,11 +46,11 @@ function prepareRegKeys(){
 	}
 }
 
-function LoopThroughUsers() {
+function loopThroughUsers() {
 	
 	param([string[]]$mode, [string[]]$users, [bool]$install)
 
-	$sysdrive = $env:SystemDrive
+	$sysDrive = $env:SystemDrive
 
 	#get all users from hklm
 	$allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
@@ -78,23 +78,23 @@ function LoopThroughUsers() {
 					cd $UUID -ErrorAction Stop
 				} catch {
 					try {
-						reg load HKU\$UUID "$sysdrive\Users\$currentUserName\NTUSER.DAT" | out-null
+						reg load HKU\$UUID "$sysDrive\Users\$currentUserName\NTUSER.DAT" | out-null
 						$UUIDsloadedManually += $UUID
 						cd $UUID -ErrorAction Stop
 						prepareRegKeys -user $UUID -install $install
-						#RegReplacements -mode "current" -install $install
-						reg unload "$sysdrive\Users\$currentUserName\NTUSER.DAT" | out-null
+						#regReplacements -mode "current" -install $install
+						reg unload "$sysDrive\Users\$currentUserName\NTUSER.DAT" | out-null
 					} catch {
 						Write-Host "Error loading $currentUserName!"
 						continue
 					}
 				}
 
-				#reg unload HKU\$UUID "$sysdrive\Users\$currentUserName\NTUSER.DAT" | out-null
+				#reg unload HKU\$UUID "$sysDrive\Users\$currentUserName\NTUSER.DAT" | out-null
 
 			} else {
 				prepareRegKeys -user $UUID -install $install
-				#RegReplacements -mode "current" -install $install
+				#regReplacements -mode "current" -install $install
 			}
 
 		}
@@ -140,7 +140,7 @@ function LoopThroughUsers() {
 
 		prepareRegKeys -mode "current" -user $UUID -install $install
 
-		RegReplacements -mode "current" -install $install
+		regReplacements -mode "current" -install $install
 
 	}
 
@@ -203,21 +203,21 @@ function regReplacements() {
 
 	}
 
-	#in case sysroot is not C:\, replace
-	if ($sysdrive -ne "C:") {
+	#in case sysRoot is not C:\, replace
+	if ($sysDrive -ne "C:") {
 		Write-Host "System drive not on C:, you silly goose ..."
-		Write-Host "Replacing strings from C: to $sysdrive"
+		Write-Host "Replacing strings from C: to $sysDrive"
 
 		#reg files
 		$regFiles = Get-ChildItem ".\Temp\*.reg" -Recurse
 		foreach ($file in $regFiles){
-			(Get-Content $file) -Replace "C:\\", "$sysdrive\\" | Set-Content $file
+			(Get-Content $file) -Replace "C:\\", "$sysDrive\\" | Set-Content $file
 		}
 
 		#execution files under program files\rcwm, .bat and .ps1 only
-		$exeFiles = Get-ChildItem "$sysdrive\\Program Files\RCWM" -Recurse -File -Include *.bat, *.ps1
+		$exeFiles = Get-ChildItem "$sysDrive\\Program Files\RCWM" -Recurse -File -Include *.bat, *.ps1
 		foreach ($file in $exeFiles){
-			(Get-Content $file) -Replace "C:\\", "$sysdrive\\" | Set-Content $file
+			(Get-Content $file) -Replace "C:\\", "$sysDrive\\" | Set-Content $file
 		}
 
 	}
@@ -250,15 +250,15 @@ while ($true) {
 
 if ($mode1 -eq "A") {
 
-	$sysdrive = $env:SystemDrive
-	$rcwmroot = Join-Path $sysdrive 'Program Files\RCWM'
+	$sysDrive = $env:SystemDrive
+	$rcwmRoot = Join-Path $sysDrive 'Program Files\RCWM'
 
 	#add rcwm_createregkeys to HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
 	#runs at startup for all users
 	$registryPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
 	$registryVersionPath = "HKLM:\SOFTWARE\RCWM"
 	$valueName = "RCWM"
-	$initregkeysPath = $sysdrive + '\Program Files\RCWM\RCWMInit.exe'
+	$initregkeysPath = $sysDrive + '\Program Files\RCWM\RCWMInit.exe'
 	
 	
 	if ($install) {
@@ -267,13 +267,13 @@ if ($mode1 -eq "A") {
 		Remove-ItemProperty -Path $registryPath -Name $valueName -ErrorAction SilentlyContinue | out-null
 		Remove-Item -Path $registryVersionPath -Recurse -Force -ErrorAction SilentlyContinue | out-null
 		Remove-Item -Path $initregkeysPath -ErrorAction SilentlyContinue| out-null
-		Remove-Item -Path $rcwmroot -Recurse -Force -ErrorAction SilentlyContinue | out-null
+		Remove-Item -Path $rcwmRoot -Recurse -Force -ErrorAction SilentlyContinue | out-null
 	}
 
-	LoopThroughUsers -mode "all" -install $install
+	loopThroughUsers -mode "all" -install $install
 
 	} elseif ($mode1 -eq "C" ) {
-		LoopThroughUsers -mode "current" -install $install
+		loopThroughUsers -mode "current" -install $install
 	}
 
 cd $initialLocation

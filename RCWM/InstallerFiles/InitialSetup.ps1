@@ -11,13 +11,13 @@ $currentUSer = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
 Write-Host "Running script as " -NoNewLine; Write-Host $currentUser -ForegroundColor red
 Write-Host "Initialising setup ..."
 
-$sysdrive = ($env:SystemRoot).Substring(0, 3)
-$sysroot = (cmd.exe /c echo %SystemRoot%).Trim()
-$sys32 = Join-Path $sysroot "System32"
-$rcwmroot = Join-Path $sysdrive 'Program Files\RCWM'
-$existingFolder = Test-Path -Path $rcwmroot
-$RCWMv1Folder = Test-Path -Path "$sysroot\System32\RCWM"
-$RCWMv2Folder = Test-Path -Path "$sysroot\RCWM"
+$sysDrive = ($env:SystemRoot).Substring(0, 3)
+$sysRoot = (cmd.exe /c echo %SystemRoot%).Trim()
+$sys32 = Join-Path $sysRoot "System32"
+$rcwmRoot = Join-Path $sysDrive 'Program Files\RCWM'
+$existingFolder = Test-Path -Path $rcwmRoot
+$RCWMv1Folder = Test-Path -Path "$sysRoot\System32\RCWM"
+$RCWMv2Folder = Test-Path -Path "$sysRoot\RCWM"
 
 
 $ps = $psversiontable.psversion.major
@@ -129,19 +129,19 @@ if ($winver -eq 11) {
 #copy only: executionFiles and Icons for now
 
 function recreateFiles() {
-	$sysdrive = ($env:SystemRoot).Substring(0, 3)
-	$rcwmroot = Join-Path $sysdrive 'Program Files\RCWM'
-	cmd.exe /c del /f /q $rcwmroot | Out-Null
-	cmd.exe /c rd /s /q $rcwmroot | Out-Null
-	cmd.exe /c md $rcwmroot | Out-Null
+	$sysDrive = ($env:SystemRoot).Substring(0, 3)
+	$rcwmRoot = Join-Path $sysDrive 'Program Files\RCWM'
+	cmd.exe /c del /f /q $rcwmRoot | Out-Null
+	cmd.exe /c rd /s /q $rcwmRoot | Out-Null
+	cmd.exe /c md $rcwmRoot | Out-Null
 
 	#copy binaries, shortcuts, icons, .bat and .ps1 files into RCWM folder
-	Copy-Item -Path "Temp\*" -Destination $rcwmroot -Exclude *.reg, *.cpp
+	Copy-Item -Path "Temp\*" -Destination $rcwmRoot -Exclude *.reg, *.cpp
 
 	#take ownership of that folder for administrators & users
-	cmd.exe /c takeown /F $rcwmroot /R /D Y | Out-Null
-	cmd.exe /c icacls $rcwmroot /grant administrators:F /T /C | Out-Null
-	cmd.exe /c icacls $rcwmroot /grant users:F /T /C | Out-Null
+	cmd.exe /c takeown /F $rcwmRoot /R /D Y | Out-Null
+	cmd.exe /c icacls $rcwmRoot /grant administrators:F /T /C | Out-Null
+	cmd.exe /c icacls $rcwmRoot /grant users:F /T /C | Out-Null
 
 	#Files copied.
 	
@@ -149,30 +149,30 @@ function recreateFiles() {
 }
 
 function mergeFiles() {
-	$sysdrive = ($env:SystemRoot).Substring(0, 3)
-	$rcwmroot = Join-Path $sysdrive 'Program Files\RCWM'
-	robocopy .\Temp\* $rcwmroot /XC /XN /XO | Out-Null
+	$sysDrive = ($env:SystemRoot).Substring(0, 3)
+	$rcwmRoot = Join-Path $sysDrive 'Program Files\RCWM'
+	robocopy .\Temp\* $rcwmRoot /XC /XN /XO | Out-Null
 
 	echo "New files copied"
 }
 
 
 function installRCWM() {
-	$sysdrive = ($env:SystemRoot).Substring(0, 3)
-	$rcwmroot = Join-Path $sysdrive 'Program Files\RCWM'
-	cmd.exe /c md $rcwmroot
+	$sysDrive = ($env:SystemRoot).Substring(0, 3)
+	$rcwmRoot = Join-Path $sysDrive 'Program Files\RCWM'
+	cmd.exe /c md $rcwmRoot
 
 	#copy binaries, shortcuts, icons, .bat and .ps1 files into RCWM folder
-	Copy-Item -Path "Temp\*" -Destination $rcwmroot
+	Copy-Item -Path "Temp\*" -Destination $rcwmRoot
 
 	#take ownership of that folder for administrators & users
-	cmd.exe /c takeown /F $rcwmroot /R /D Y | Out-Null
-	cmd.exe /c icacls $rcwmroot /grant administrators:F /T /C | Out-Null
-	cmd.exe /c icacls $rcwmroot /grant users:F /T /C | Out-Null
+	cmd.exe /c takeown /F $rcwmRoot /R /D Y | Out-Null
+	cmd.exe /c icacls $rcwmRoot /grant administrators:F /T /C | Out-Null
+	cmd.exe /c icacls $rcwmRoot /grant users:F /T /C | Out-Null
 
 	#add exclusion - just in case
-	Add-MpPreference -ExclusionPath "$rcwmroot" | Out-Null
-	echo "Created directory at $rcwmroot and copied all files."
+	Add-MpPreference -ExclusionPath "$rcwmRoot" | Out-Null
+	echo "Created directory at $rcwmRoot and copied all files."
 }
 
 
@@ -239,10 +239,10 @@ if ($existingFolder -eq $true) {
 	
 } else {
 	#install
-	$sysdrive = ($env:SystemRoot).Substring(0, 3)
-	$rcwmroot = Join-Path $sysdrive 'Program Files\RCWM'
+	$sysDrive = ($env:SystemRoot).Substring(0, 3)
+	$rcwmRoot = Join-Path $sysDrive 'Program Files\RCWM'
 
-	Write-Host "Preparing directory at $rcwmroot"
+	Write-Host "Preparing directory at $rcwmRoot"
 	installRCWM
 }
 
