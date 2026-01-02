@@ -1,7 +1,7 @@
 [console]::InputEncoding = [text.utf8encoding]::UTF8
 [system.console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
-$host.UI.RawUI.WindowTitle = "RCWM: SCP"
+$host.UI.RawUI.WindowTitle = "RCWM: SCP from ..."
 Write-host "RCWM v3.0.0"
 
 $dest = '"' + $args[0] + '"'
@@ -11,5 +11,6 @@ $h0st = Read-Host "Enter source IP or hostname"
 $src = Read-Host "Enter source file/folder"
 
 $command = $user + "@" + $h0st + ":" + $src
+Write-Host "Executing scp -r $command $dest"
 scp -r $command $dest
 start-sleep 1

@@ -15,7 +15,6 @@ $AddOptions = @(
 	New-Object PSObject -Property @{Name = 'CMDshift'; RegFile = 'CMDshift.reg'; Desc = 'Do you want to add open CMD to (shift! + right click)'}
 	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add open PowerShell to background/folders/drives'; exception = "powershellCheck"}
 	New-Object PSObject -Property @{Name = 'RunPwshAsAdmin'; RegFile = 'RunPwshAsAdmin.reg'; Desc = 'Do you want to add Run (PowerShell) script as Administrator'}
-
 	New-Object PSObject -Property @{Name = 'ControlPanel'; RegFile = 'ControlPanel.reg'; Desc = 'Do you want to add Control Panel to Desktop'}
 	New-Object PSObject -Property @{Name = 'CopyToFolder'; RegFile = 'CopyToFolder.reg'; Desc = 'Do you want to add Copy To Folder'}
 	New-Object PSObject -Property @{Name = 'GodMode'; RegFile = 'GodMode.reg'; Desc = 'Do you want to add God Mode'; exception = "GodMode"}
