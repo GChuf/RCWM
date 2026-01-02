@@ -275,6 +275,8 @@ if ($mode1 -eq "A") {
 	$registryVersionPath = "HKLM:\SOFTWARE\RCWM"
 	$valueName = "RCWM"
 	$initregkeysPath = '"' + $sysDrive + '\Program Files\RCWM\RCWMInit.exe' + '"'
+	$startupEnabledPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run"
+
 	
 	
 	if ($install) {
@@ -284,6 +286,8 @@ if ($mode1 -eq "A") {
 		Remove-Item -Path $registryVersionPath -Recurse -Force -ErrorAction SilentlyContinue | out-null
 		Remove-Item -Path $initregkeysPath -ErrorAction SilentlyContinue| out-null
 		Remove-Item -Path $rcwmRoot -Recurse -Force -ErrorAction SilentlyContinue | out-null
+
+		Remove-ItemProperty -Path $startupEnabledPath -Name $valueName -ErrorAction SilentlyContinue | out-null
 	}
 
 	loopThroughUsers -mode "all" -install $install
