@@ -306,7 +306,7 @@ If ( $copy -eq $True ) {
 
 		Do {
 			$Valid = $True
-			Write-host "Would you like to [O]verwrite files, [M]]erge, or [A]bort?"
+			Write-host "Would you like to [O]verwrite files, [M]erge, or [A]bort?"
 			Write-host "Overwrite flags: /E"
 			Write-host "Merge flags:     /E /XC /XN /XO"
 			[string]$prompt = Read-Host -Prompt "(O/M/A)"
