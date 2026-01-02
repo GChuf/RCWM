@@ -89,29 +89,29 @@ if ($args[2] -eq $null) #pwsh 4 and less, uses rcp.cmd: reg add HKCU\SOFTWARE\RC
 		}
 
 		#subtract last 2 symbols
-		[string]$pasteIntoDirectory = [string]$tempString.substring(0,$tempString.length-2)
+		[string]$destDir = [string]$tempString.substring(0,$tempString.length-2)
 
 	}
 	if ($regInsert[0][2] -eq '"') { #copying directly into a drive
-		$pasteIntoDirectory = $reginsert[0].substring(0,2)
+		$destDir = $reginsert[0].substring(0,2)
 	} else {
-		$pasteIntoDirectory = [string](Get-itemproperty -Path 'HKCU:\SOFTWARE\RCWM').dir
+		$destDir = [string](Get-itemproperty -Path 'HKCU:\SOFTWARE\RCWM').dir
 	}
 
 } else {
 
 	#fix issues with trailing backslash when copying directly into drives
 	If (($args[2][-1] -eq "'" ) -and ($args[2][-2] -eq "\" )){ #pwsh v5
-		$pasteIntoDirectory = $args[2].substring(1,2)
+		$destDir = $args[2].substring(1,2)
 	} elseif (($args[2][-1] -eq '"' ) -and ($args[2][-2] -eq ':' )){ #pwsh v7
-		$pasteIntoDirectory = $args[2].substring(0,2)
+		$destDir = $args[2].substring(0,2)
 	} else {
-		$pasteIntoDirectory = $args[2]
+		$destDir = $args[2]
 	}
 
 }
 
-$pasteDirectoryDisplay = "'" + $pasteIntoDirectory + "'"
+$destDirectoryDisplay = "'" + $destDir + "'"
 
 
 if ($mode -eq "p") {
@@ -161,9 +161,9 @@ if ($mode -eq "p") {
 if ($mode -ne "s") {
 
 	if ( $arrayLength -eq 1 ) {
-		Write-host "You're about to $string4 the following file/folder into" $pasteDirectoryDisplay":"
+		Write-host "You're about to $string4 the following file/folder into" $destDirectoryDisplay":"
 	} else {
-		Write-host "You're about to $string4 the following" $arrayLength "files/folders into" $pasteDirectoryDisplay":"
+		Write-host "You're about to $string4 the following" $arrayLength "files/folders into" $destDirectoryDisplay":"
 	}
 
 	$array
@@ -222,73 +222,74 @@ If ( $copy -eq $True ) {
 	Write-Host "Begin $string3 ..."
 	Write-Host ""
 
-	foreach ($path in $array) {
+	foreach ($fullPath in $array) {
 
-		if (Test-Path -LiteralPath "$path" -PathType Container) { #if source is a folder
-			$isFolder = $true
+		if (Test-Path -LiteralPath "$fullPath" -PathType Container) { #if source is a folder
+			$isDirectory = $true
 			if ($psversiontable.PSVersion.Major -eq 2) {
-				$folder = ($path -split "\\")[-1]
+				$sourceDir = ($fullPath -split "\\")[-1]
 			} else {
-				$folder = $path.split("\")[-1]
+				$sourceDir = $fullPath.split("\")[-1]
 			}
+
 			$filename = ""
 
+			$sourceDirFullPath = $fullPath
 			#dest: target dir + folder
-			[string]$destination = [string]$pasteIntoDirectory + "\" + [string]$folder
+			[string]$destination = [string]$destDir + "\" + [string]$sourceDir
 
 			#destination check for merge
-			[string]$destinationToCheck = [string]$pasteIntoDirectory + "\" + [string]$folder
-			echo "checking destination: folder:"
-			echo $destinationToCheck
+			[string]$destinationToCheck = [string]$destination
+			#echo "checking destination: folder:"
+			#echo $destinationToCheck
 
-		} else { #if source is a file
-			$isFolder = $false
+		} elseif (Test-Path -LiteralPath "$fullPath" -PathType Leaf) { #if source is a file
+			$isDirectory = $false
+			write-host "source is a file"
 			if ($psversiontable.PSVersion.Major -eq 2) {
-				$folder = ($path -split "\\")[-2]
-				$filename = ($path -split "\\")[-1]
+				$sourceDir = ($fullPath -split "\\")[-2]
+				$filename = ($fullPath -split "\\")[-1]
 			} else {
-				$folder = $path.split("\")[-2]
-				$filename = $path.split("\")[-1]
+				$sourceDir = $fullPath.split("\")[-2]
+				$filename = $fullPath.split("\")[-1]
+				Write-Host "directory: $sourceDir, filename: $filename"
+				#start-sleep 5
 			}
 
-			#trim filename from the path
-			$path = ($path -replace "\\$filename$", "")
+			#trim filename from the path - filename is passed as another argument into robocopy
+			#and is empty in case source is a folder
+			$sourceDirFullPath = ($fullPath -replace "\\$filename$", "")
 
 			#dest: target dir
-			[string]$destination = [string]$pasteIntoDirectory
+			[string]$destination = [string]$destDir
 
 			#destination check for merge
-			[string]$destinationToCheck = [string]$pasteIntoDirectory + "\" + [string]$filename
-		}
-
-		
-
-		#does source folder or file exist?
-		if (-not ( Test-Path -literalpath "$path" )) {
-			echo "Source file or folder" $path "does not exist!"
+			[string]$destinationToCheck = [string]$destDir + "\" + [string]$filename
+		} else {
+			Write-Host "Source file or folder" $fullPath "does not exist!"
 			Start-Sleep 1
 			continue
 		}
 
 		#if folder (or file) exists in the destination
-
 		if (Test-Path -literalPath "$destinationToCheck") {
 			#store folders for merge prompt
 			#overwrite - or just copy
 			[string[]]$merge += $destinationToCheck
 		} else {
 			#if the source! is a folder, make new directory with the same name as the folder being copied
-			if ($isFolder) {
+			if ($isDirectory) {
 				New-Item -Path "$destination" -ItemType Directory > $null
 			}
+			Write-Host "Executing $robocopy $sourceDirFullPath $destination $filename $flag /E /NP /NJH /NJS /NC /NS /MT:32"
+			& $robocopy "$sourceDirFullPath" "$destination" "$filename" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
 
-			& $robocopy "$path" "$destination" "$filename" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
-
-			if ($command -eq "rcmov") { 
-				cmd.exe /c rd /s /q "$path"
+			if ($command -eq "rcmov" -and $isDirectory) {
+				#Write-Host "removing: $sourceDirFullPath"
+				cmd.exe /c rd /s /q "$sourceDirFullPath"
 			}
 
-			echo "Finished $string3 $path\$filename"
+			echo "Finished $string3 $sourceDirFullPath\$filename"
 		}
 	}
 
@@ -298,9 +299,9 @@ If ( $copy -eq $True ) {
 		Write-host "Successfully copied" $($arrayLength - $merge.length) "out of" $arrayLength "folders."
 
 		if ($merge.length -eq 1) {
-			Write-host "The following folder or file already exists inside" $pasteDirectoryDisplay":"
+			Write-host "The following folder or file already exists inside" $destDirectoryDisplay":"
 		} else {
-			Write-host "The following" $merge.length "folders or files already exist inside" $pasteDirectoryDisplay":"
+			Write-host "The following" $merge.length "folders or files already exist inside" $destDirectoryDisplay":"
 		}
 		$merge
 
@@ -315,17 +316,27 @@ If ( $copy -eq $True ) {
 					echo "Overwriting ..."
 
 					for ($i=0; $i -lt $merge.length; $i++) {
-						$path = $merge[$i]
-						$folder = $path.split("\")[-1]
-						$destination = $pasteIntoDirectory + "\" + $folder
+						$fullPath = $merge[$i]
+						$sourceDir = $fullPath.split("\")[-1]
+						$destination = $destDir + "\" + $sourceDir
 
-						& $robocopy "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
-
-						if ($command -eq "rcmov") { 
-							cmd.exe /c cmd.exe /c rd /s /q "$path"
+						#todo duplicated code
+						if (Test-Path -LiteralPath "$fullPath" -PathType Container) { #if source is a folder
+							$isDirectory = $true
 						}
 
-						echo "Finished overwriting $folder"
+						& $robocopy "$fullPath" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
+
+						if ($command -eq "rcmov" -and $isDirectory) {
+							Write-Host "directory."
+							start-sleep 5
+							#cmd.exe /c cmd.exe /c rd /s /q "$fullPath"
+						} else {
+							Write-Host "file."
+							start-sleep 5
+						}
+
+						echo "Finished overwriting $sourceDir"
 					}
 
 				}
@@ -333,16 +344,26 @@ If ( $copy -eq $True ) {
 					Write-Host "Merging ..."
 
 					for ($i=0; $i -lt $merge.length; $i++) {
-						$path = $merge[$i]
-						$folder = $path.split("\")[-1]
-						$destination = $pasteIntoDirectory + "\" + $folder
+						$fullPath = $merge[$i]
+						$sourceDir = $fullPath.split("\")[-1]
+						$destination = $destDir + "\" + $sourceDir
 
-						& $robocopy "$path" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
-								
-						if ($command -eq "rcmov") { 
-							cmd.exe /c rd /s /q "$path"
+						#todo duplicated code
+						if (Test-Path -LiteralPath "$fullPath" -PathType Container) { #if source is a folder
+							$isDirectory = $true
 						}
-						echo "Finished merging $folder"
+
+						& $robocopy "$fullPath" "$destination" "$flag" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
+								
+						if ($command -eq "rcmov" -and $isDirectory) {
+							Write-Host "directory."
+							start-sleep 5
+							#cmd.exe /c cmd.exe /c rd /s /q "$fullPath"
+						} else {
+							Write-Host "file."
+							start-sleep 5
+						}
+						echo "Finished merging $sourceDir"
 					}
 
 
@@ -394,5 +415,5 @@ If ( $copy -eq $True ) {
 	}
 	echo ""
 	Write-Host "Finished!" -ForegroundColor blue
-	Start-Sleep 1
+	Start-Sleep 1000
 }
