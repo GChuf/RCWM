@@ -79,7 +79,6 @@ function loopThroughUsers() {
 
 		if (-not $install) {
 			$regs = get-childitem -path ..\UninstallerFiles
-			Write-Host $regs
 			foreach ($reg in $regs) {
 				regedit /s ..\UninstallerFiles\$reg
 			}
@@ -208,14 +207,7 @@ function regReplacements() {
 		$exceptions += Get-ChildItem ".\Temp\ThisPC.reg"
 		$exceptions += Get-ChildItem ".\Temp\CMDAdmin.reg"
 	} else {
-		#HKCR:
 		$files = Get-ChildItem "..\UninstallerFiles\*.reg"
-		#HKLM:
-		$exceptions = @()
-		$exceptions += Get-ChildItem "..\UninstallerFiles\Multiple*.reg"
-		$exceptions += Get-ChildItem "..\UninstallerFiles\Win11*.reg"
-		$exceptions += Get-ChildItem "..\UninstallerFiles\ThisPC.reg"
-		$exceptions += Get-ChildItem "..\UninstallerFiles\CMDAdmin.reg"
 	}
 
 	if ($mode -eq "current") {
@@ -236,7 +228,6 @@ function regReplacements() {
 
 		if (-not $install) {
 			$regs = get-childitem -path .\Temp\CurrentUser
-			Write-Host $regs
 			foreach ($reg in $regs) {
 				regedit /s .\Temp\CurrentUser\$reg
 			}
@@ -345,5 +336,4 @@ if ($install) {
 } else {
 	cmd.exe /c del .\Temp\* /s /q 2>&1>$null
 	cmd.exe /c rd /s /q .\Temp /s /q 2>&1>$null
-	Write-Host "Uninstall finished."
 }
