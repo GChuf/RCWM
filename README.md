@@ -1,5 +1,7 @@
 # Right Click Windows Magic - v3.0.0 soon!
 
+![Downloads](https://img.shields.io/github/downloads/gchuf/rcwm/total)
+![Latest](https://img.shields.io/github/v/release/gchuf/rcwm)
 
 Right Click Windows Magic is a set of right-click (context) menu tools for admins, power users and other magic beings. If you consider yerself a wizard and would like to save yourself some time and headaches, this is the *right* set of context menu tools for you.
 
