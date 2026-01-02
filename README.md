@@ -1,10 +1,5 @@
 # Right Click Windows Magic - v3.0.0 soon!
 
-![Downloads](https://img.shields.io/github/downloads/GChuf/RCWM/total)
-
-![Downloads-Latest](https://img.shields.io/github/downloads/GChuf/RCWM/latest/total)
-![Latest](https://img.shields.io/github/v/release/GChuf/RCWM)
-
 Right Click Windows Magic is a set of right-click (context) menu tools for admins, power users and other magic beings. If you consider yerself a wizard and would like to save yourself some time and headaches, this is the *right* set of context menu tools for you.
 
 This little magic pack includes:
@@ -150,3 +145,9 @@ The Run script as Administrator idea was found here: https://ss64.com/ps/syntax-
 I changed and adapted all those files, but their ideas and the initial implementations deserve the credit.
 
 Everything else is my own work, with the help of the Internet.
+
+# Downloads
+
+![Downloads](https://img.shields.io/github/downloads/GChuf/RCWM/total?label=TotalDownloads)
+
+![Downloads-Latest](https://img.shields.io/github/downloads/GChuf/RCWM/latest/total?label=LatestReleaseDownloads)
