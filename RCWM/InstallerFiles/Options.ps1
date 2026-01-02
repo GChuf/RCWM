@@ -6,7 +6,7 @@ cd ..\files\Temp
 
 $AddOptions = @(
 	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add Copy files'; exception = "RCopy"}
-	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add Move files (using robocopy)'; exception = "MvDir"}
+	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add Move files (using robocopy)'; exception = "rcmov"}
 	New-Object PSObject -Property @{Name = 'PasteFromClipboard'; RegFile = 'PasteFromClipboard.reg'; Desc = 'Do you want to add Paste from Clipboard (using robocopy)'}
 	New-Object PSObject -Property @{Name = 'RmItem'; RegFile = 'RmItem.reg'; Desc = 'Do you want to add Remove files'}
 	New-Object PSObject -Property @{Name = 'ScpFrom'; RegFile = 'ScpFrom.reg'; Desc = 'Do you want to add SCP from ...'}
@@ -72,11 +72,11 @@ function GodMode(){
 	cmd.exe /c ..\..\InstallerFiles\GodMode.bat | out-null
 }
 
-function MvDir(){
+function rcmov(){
 	while ($true) {
 		$mode1 = Read-Host "* Do you want to add 'Move Directory' for [S]ingle directories, or for [M]ultiple?"
-		if ($mode1 -eq "S") {enableReg -regFile "MvDirSingle.reg" -name "MvDirSingle"; break}
-		elseif ($mode1 -eq "M") {enableReg -regFile "MvDirMultiple.reg" -name "MvDirMultiple"; break}
+		if ($mode1 -eq "S") {enableReg -regFile "rcmovSingle.reg" -name "rcmovSingle"; break}
+		elseif ($mode1 -eq "M") {enableReg -regFile "rcmovMultiple.reg" -name "rcmovMultiple"; break}
 		else {echo "Invalid input!"}
 	}
 }
