@@ -3,6 +3,7 @@
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\cmdshift]
 @="Open Command Window here"
+"Icon"="rcwmimg.dll,-1"
 "ShowBasedOnVelocityId"=dword:639bc8
 "Extended"=""
 "NoWorkingDirectory"=""
