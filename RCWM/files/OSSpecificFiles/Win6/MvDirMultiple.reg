@@ -5,6 +5,7 @@ Windows Registry Editor Version 5.00
 [HKEY_CLASSES_ROOT\*\shell\rcmov]
 @="Move items"
 "NoWorkingDirectory"=""
+"MultiSelectModel"="Document"
 "Icon"="rcwmimg.dll,-3"
 
 [HKEY_CLASSES_ROOT\*\shell\rcmov\command]
@@ -14,6 +15,7 @@ Windows Registry Editor Version 5.00
 [HKEY_CLASSES_ROOT\Directory\shell\rcmov]
 @="Move items"
 "NoWorkingDirectory"=""
+"MultiSelectModel"="Document"
 "Icon"="rcwmimg.dll,-3"
 
 [HKEY_CLASSES_ROOT\Directory\shell\rcmov\command]
