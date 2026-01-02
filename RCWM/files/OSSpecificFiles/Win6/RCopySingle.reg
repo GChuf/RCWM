@@ -5,6 +5,7 @@ Windows Registry Editor Version 5.00
 [HKEY_CLASSES_ROOT\Directory\shell\rcopy]
 @="Copy directory"
 "NoWorkingDirectory"=""
+"MultiSelectModel"="Single"
 "Icon"="rcwmimg.dll,-5"
 
 [HKEY_CLASSES_ROOT\Directory\shell\rcopy\command]
@@ -14,6 +15,7 @@ Windows Registry Editor Version 5.00
 [HKEY_CLASSES_ROOT\*\shell\rcopy]
 @="Copy file"
 "NoWorkingDirectory"=""
+"MultiSelectModel"="Single"
 "Icon"="rcwmimg.dll,-3"
 
 [HKEY_CLASSES_ROOT\*\shell\rcopy\command]

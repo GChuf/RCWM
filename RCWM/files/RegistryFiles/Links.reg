@@ -4,6 +4,7 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\Directory\Shell\mklink]
 "MUIVerb"="Link Source"
+"MultiSelectModel"="Single"
 "Icon"="rcwmimg.dll,-8"
 
 [HKEY_CLASSES_ROOT\Directory\Shell\mklink\command]
@@ -13,6 +14,7 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\*\shell\mklink]
 @="Link Source"
+"MultiSelectModel"="Single"
 "Icon"="rcwmimg.dll,-8"
 
 [HKEY_CLASSES_ROOT\*\shell\mklink\command]
