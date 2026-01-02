@@ -21,7 +21,7 @@
 [console]::InputEncoding = [text.utf8encoding]::UTF8
 [system.console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
-$host.UI.RawUI.WindowTitle = "RCWM: RoboCopy"
+$host.UI.RawUI.WindowTitle = "RCWM: robocopy"
 Write-host "RCWM v3.0.0"
 
 #set high process priority
@@ -57,19 +57,19 @@ $mode = $args[1] #single, multiple, paste (from clipboard)
 if ($command -eq "rcmov") {
 	$flag = "/MOV"
 	$string1 = "moved"
-	$string2 = "'Move Directory'"
+	$string2 = "'Move file/directory'"
 	$string3 = "moving"
     $string4 = "move"
 } elseif  ($command -eq "rcopy") {
 	$flag=""
 	$string1 = "copied"
-	$string2 = "'RoboCopy'"
+	$string2 = "'Copy file/directory'"
 	$string3 = "copying"
     $string4 = "copy"
 } elseif  ($command -eq "miror") {
 	$flag="/MIR"
 	$string1 = "mirrored"
-	$string2 = "'RoboCopy Mirror'"
+	$string2 = "'Mirror Source'"
 	$string3 = "mirroring"
     $string4 = "mirror"
 }

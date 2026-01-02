@@ -5,7 +5,7 @@ $os = [System.Environment]::OSVersion.Version.Major
 cd ..\files\Temp
 
 $AddOptions = @(
-	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add Copy files'; exception = "RCopy"}
+	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add Copy files (using robocopy)'; exception = "rcopy"}
 	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add Move files (using robocopy)'; exception = "rcmov"}
 	New-Object PSObject -Property @{Name = 'PasteFromClipboard'; RegFile = 'PasteFromClipboard.reg'; Desc = 'Do you want to add Paste from Clipboard (using robocopy)'}
 	New-Object PSObject -Property @{Name = 'RmItem'; RegFile = 'RmItem.reg'; Desc = 'Do you want to add Remove files'}
@@ -22,9 +22,9 @@ $AddOptions = @(
 	New-Object PSObject -Property @{Name = 'Links'; RegFile = 'Links.reg'; Desc = 'Do you want to add symbolic/hard links'}
 	New-Object PSObject -Property @{Name = 'Logoff'; RegFile = 'Logoff.reg'; Desc = 'Do you want to add Sign Off to desktop background'}
 	New-Object PSObject -Property @{Name = 'Killall'; RegFile = 'Killall.reg'; Desc = 'Do you want to add Kill All to backgrounds'}
-	New-Object PSObject -Property @{Name = 'Mirror'; RegFile = 'Mirror.reg'; Desc = 'Do you want to add RoboCopy Mirror option'}
+	New-Object PSObject -Property @{Name = 'Mirror'; RegFile = 'Mirror.reg'; Desc = 'Do you want to add Mirror option (using robocopy /MIR)'}
 	New-Object PSObject -Property @{Name = 'MoveToFolder'; RegFile = 'MoveToFolder.reg'; Desc = 'Do you want to add Move To Folder'}
-	New-Object PSObject -Property @{Name = 'RCopyStructure'; RegFile = 'RCopyStructure.reg'; Desc = 'Do you want to add RoboCopy to copy Folder Structure only (exclude files)'}
+	New-Object PSObject -Property @{Name = 'RCopyStructure'; RegFile = 'RCopyStructure.reg'; Desc = 'Do you want to add the option to copy Folder Structure only (exclude files)'}
 	New-Object PSObject -Property @{Name = 'RebootToRecovery'; RegFile = 'RebootToRecovery.reg'; Desc = 'Do you want to add Reboot to Recovery to "This PC"'}
 	New-Object PSObject -Property @{Name = 'RebootToRecoveryDesktop'; RegFile = 'RebootToRecoveryDesktop.reg'; Desc = 'Do you want to add Reboot to Recovery to Desktop'}
 	New-Object PSObject -Property @{Name = 'Shutdown'; RegFile = 'Shutdown.reg'; Desc = 'Do you want to add option to Shutdown in x seconds'}
@@ -81,7 +81,7 @@ function rcmov(){
 	}
 }
 
-function RCopy() {
+function rcopy() {
 	while ($true) {
 		$mode1 = Read-Host "* Do you want to add 'Copy files' for [S]ingle files/directories, or for [M]ultiple?"
 		if ($mode1 -eq "S") {enableReg -regFile "RCopySingle.reg" -name "RCopySingle"; break}

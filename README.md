@@ -65,13 +65,13 @@ Right now, the magic happens inside the Windows registry with some help of batch
 The goal was to automate command line tools like robocopy, so that 1) everybody could use it, and 2) it would save some time to those who already know how to use it. While automating the tasks, I've accidentally discovered that I could automate much more than what I thought - and so now, you can select multiple folders to copy/move and paste them all into one folder, just like you can with the regular, slow, lazy windows GUI copy.
 
 
-# RoboCopy and Move Directory options
+# RoboCopy: Copy and Move File/Directory options
 
-RoboCopy/RoboPaste & Move Directory both use robocopy to do the work. 
+Copy/Paste & Move FIle/Directory both use robocopy to do the work. 
 You have two options: you can copy multiple or single directories at a time.
 
 __Single__:
-The folder (directory path) to be copied (when you right-click "RoboCopy") is written into registry and __overwrites__ any previous folder paths stored there. If you specify a new folder to be copied, the old one (if existing) will be overwritten.
+The folder (directory path) to be copied (when you right-click "Copy") is written into registry and __overwrites__ any previous folder paths stored there. If you specify a new folder to be copied, the old one (if existing) will be overwritten.
 
 __Multiple__:
 The list of the folder paths to be copied is __appended__ to registry under *HKCU:\SOFTWARE\RCWM\{rcopy || rcmov}* keys. Then the script goes through a powershell loop to copy all of them.
@@ -81,7 +81,7 @@ By default, you can only select up to 15 folders to be copied (the default windo
 Use this option if you intend to use RoboCopy a lot. You can read the rcp.ps1 powershell file to understand how the script works.
 
 
-RoboCopy (multiple) versus Move Directory (single):
+Copy (multiple) versus Move (single):
 
 ![Single vs Multiple](img/sm.gif)
 
