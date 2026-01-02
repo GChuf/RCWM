@@ -246,8 +246,10 @@ function regReplacements() {
 			(Get-Content $file) -Replace "C:\\", "$sysDrive\\" | Set-Content $file
 		}
 
+
+
 		#execution files under program files\rcwm, .bat and .ps1 only
-		$exeFiles = Get-ChildItem "$sysDrive\\Program Files\RCWM" -Recurse -File -Include *.bat, *.ps1
+		$exeFiles = Get-ChildItem "$sysDrive\\Program Files\RCWM" -Recurse -File -Include *.cmd, *.bat, *.ps1
 		foreach ($file in $exeFiles){
 			(Get-Content $file) -Replace "C:\\", "$sysDrive\\" | Set-Content $file
 		}
