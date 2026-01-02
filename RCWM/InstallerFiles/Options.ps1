@@ -74,7 +74,7 @@ function GodMode(){
 
 function rcmov(){
 	while ($true) {
-		$mode1 = Read-Host "* Do you want to add 'Move Directory' for [S]ingle directories, or for [M]ultiple?"
+		$mode1 = Read-Host "* Do you want to add 'Move files' for [S]ingle files/directories, or for [M]ultiple?"
 		if ($mode1 -eq "S") {enableReg -regFile "rcmovSingle.reg" -name "rcmovSingle"; break}
 		elseif ($mode1 -eq "M") {enableReg -regFile "rcmovMultiple.reg" -name "rcmovMultiple"; break}
 		else {echo "Invalid input!"}
@@ -83,7 +83,7 @@ function rcmov(){
 
 function RCopy() {
 	while ($true) {
-		$mode1 = Read-Host "* Do you want to add 'RoboCopy Directory' for [S]ingle directories, or for [M]ultiple?"
+		$mode1 = Read-Host "* Do you want to add 'Copy files' for [S]ingle files/directories, or for [M]ultiple?"
 		if ($mode1 -eq "S") {enableReg -regFile "RCopySingle.reg" -name "RCopySingle"; break}
 		elseif ($mode1 -eq "M") {enableReg -regFile "RCopyMultiple.reg" -name "RCopyMultiple"; break}
 		else {echo "Invalid input!"}
