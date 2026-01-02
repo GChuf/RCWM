@@ -73,16 +73,16 @@ function GodMode(){
 
 function rcmov(){
 	while ($true) {
-		$mode1 = Read-Host "* Do you want to add 'Move files' for [S]ingle files/directories, or for [M]ultiple?"
-		if ($mode1 -eq "S") {enableReg -regFile "rcmovSingle.reg" -name "rcmovSingle"; break}
-		elseif ($mode1 -eq "M") {enableReg -regFile "rcmovMultiple.reg" -name "rcmovMultiple"; break}
+		$mode1 = Read-Host "* Do you want to add 'Move items' for [S]ingle files/directories, or for [M]ultiple?"
+		if ($mode1 -eq "S") {enableReg -regFile "MvDirSingle.reg" -name "MvDirSingle"; break}
+		elseif ($mode1 -eq "M") {enableReg -regFile "MvDirMultiple.reg" -name "MvDirMultiple"; break}
 		else {echo "Invalid input!"}
 	}
 }
 
 function rcopy() {
 	while ($true) {
-		$mode1 = Read-Host "* Do you want to add 'Copy files' for [S]ingle files/directories, or for [M]ultiple?"
+		$mode1 = Read-Host "* Do you want to add 'Copy items' for [S]ingle files/directories, or for [M]ultiple?"
 		if ($mode1 -eq "S") {enableReg -regFile "RCopySingle.reg" -name "RCopySingle"; break}
 		elseif ($mode1 -eq "M") {enableReg -regFile "RCopyMultiple.reg" -name "RCopyMultiple"; break}
 		else {echo "Invalid input!"}
@@ -110,7 +110,7 @@ function powershellCheck(){
 }
 
 function prompt() {
-	param([string[]]$desc, [string[]]$regFile, [string[]]$name, [string[]]$exception)
+	param([string]$desc, [string]$regFile, [string]$name, [string[]]$exception)
 	while ($true) {
 		$r = Read-Host $desc "(Y/N)"
 		if ($r -eq "Y") {
@@ -127,16 +127,24 @@ function prompt() {
 }
 
 function enableReg() {
-	param([string[]]$regFile, [string]$name)
+	param([string]$regFile, [string]$name, [string]$mode)
 	#pwsh v2
-	$regs = get-childitem -path . -recurse -include $regFile
-	#$regs = get-childitem $regFile -depth 1
-	#Write-Host $regs
-	foreach ($reg in $regs) {
+	$reg = get-childitem -path . -recurse -include $regFile -ErrorAction SilentlyContinue
+
+	if (-not $reg) {
+		throw "Registry file '$regFile' not found"
+	} else {
 		regedit /s $reg
 	}
 
-	New-ItemProperty -Path "REGISTRY::HKEY_CURRENT_USER\SOFTWARE\RCWM\InstallInfo" -Name $name 2>&1>$null
+
+	if ($mode -eq "all") {
+		New-ItemProperty -Path "REGISTRY::HKEY_LOCAL_MACHINE\SOFTWARE\RCWM\InstallInfo" -Name $name 2>&1>$null
+	} else {
+		New-ItemProperty -Path "REGISTRY::HKEY_CURRENT_USER\SOFTWARE\RCWM\InstallInfo" -Name $name 2>&1>$null
+	}
+
+
 
 }
 
