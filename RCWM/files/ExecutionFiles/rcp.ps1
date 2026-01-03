@@ -78,11 +78,11 @@ if ($command -eq "rcmov") {
 #get directory into which we paste
 if ($args[2] -eq $null) #pwsh 4 and less, uses rcp.cmd: reg add HKCU\SOFTWARE\RCWM /v dir /t REG_MULTI_SZ /f /d %1 1>NUL
 {
-	$regInsert = (Get-itemproperty -Path 'HKCU:\SOFTWARE\RCWM').dir #must not be string, but string array
+	$regInsert = (Get-ItemProperty -Path 'HKCU:\SOFTWARE\RCWM').dir #must not be string, but string array
 
 	#fix inserts like "\0" into registry, which translates into new line ... (every folder that starts with "0" has this problem)
 
-	if ($regInsert.count -ge 2) { #if more than 1 line
+	if ($regInsert.Count -ge 2) { #if more than 1 line
 
 		foreach ($part in $regInsert) {
 			[string]$tempString += [string]$part + "\0"
@@ -95,7 +95,7 @@ if ($args[2] -eq $null) #pwsh 4 and less, uses rcp.cmd: reg add HKCU\SOFTWARE\RC
 	if ($regInsert[0][2] -eq '"') { #copying directly into a drive
 		$destDir = $reginsert[0].substring(0,2)
 	} else {
-		$destDir = [string](Get-itemproperty -Path 'HKCU:\SOFTWARE\RCWM').dir
+		$destDir = [string](Get-ItemProperty -Path 'HKCU:\SOFTWARE\RCWM').dir
 	}
 
 } else {
@@ -120,28 +120,28 @@ if ($mode -eq "p") {
 	#check if folders and files exist
 	Add-Type -AssemblyName System.Windows.Forms
 
-	$array = [System.Windows.Forms.Clipboard]::GetFileDropList()
-	$arrayLength = ($array|measure).count
-	if ($arrayLength -eq 0) {
+	$sourcesArray = [System.Windows.Forms.Clipboard]::GetFileDropList()
+	$sourcesArrayLength = ($sourcesArray|measure).count
+	if ($sourcesArrayLength -eq 0) {
 		NoListAvailable
 	}
 
 } else {
 
 	#get array of contents of paths inside HKCU\SOFTWARE\RCWM\command
-	$array = (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\$command).property 2> $null
+	$sourcesArray = (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\$command).property 2> $null
 
-	$arrayLength = ($array|measure).count
+	$sourcesArrayLength = ($sourcesArray|measure).count
 
 	#delete '(default)' in first place
 	try {
-		if ( $array[0] -eq "(default)" ) {
-			if ($arrayLength -eq 1) {
-				$array = $null
+		if ( $sourcesArray[0] -eq "(default)" ) {
+			if ($sourcesArrayLength -eq 1) {
+				$sourcesArray = $null
 			} else {
-				$array = $array[1..($array.Length-1)]
+				$sourcesArray = $sourcesArray[1..($sourcesArray.Length-1)]
 			}
-		} elseif ( $array -eq "(default)" ) { #empty registry and powershell v2
+		} elseif ( $sourcesArray -eq "(default)" ) { #empty registry and powershell v2
 			NoListAvailable
 		}
 	} catch {
@@ -149,7 +149,7 @@ if ($mode -eq "p") {
 	}
 
 	#check if list of folders to be copied exist
-	if ( $arrayLength -eq 0 ) {
+	if ( $sourcesArrayLength -eq 0 ) {
 		NoListAvailable
 	}
 	
@@ -160,13 +160,13 @@ if ($mode -eq "p") {
 #skip prompt on single mode
 if ($mode -ne "s") {
 
-	if ( $arrayLength -eq 1 ) {
+	if ( $sourcesArrayLength -eq 1 ) {
 		Write-host "You're about to $string4 the following file/folder into" $destDirectoryDisplay":"
 	} else {
-		Write-host "You're about to $string4 the following" $arrayLength "files/folders into" $destDirectoryDisplay":"
+		Write-host "You're about to $string4 the following" $sourcesArrayLength "files/folders into" $destDirectoryDisplay":"
 	}
 
-	$array
+	$sourcesArray
 
 	#Prompt
 	Do {
@@ -222,7 +222,7 @@ If ( $copy -eq $True ) {
 	Write-Host "Begin $string3 ..."
 	Write-Host ""
 
-	foreach ($fullPath in $array) {
+	foreach ($fullPath in $sourcesArray) {
 
 		if (Test-Path -LiteralPath "$fullPath" -PathType Container) { #if source is a folder
 			$isDirectory = $true
@@ -296,7 +296,7 @@ If ( $copy -eq $True ) {
 	#if merge array exists
 	if ($merge) {
 
-		Write-host "Successfully copied" $($arrayLength - $merge.length) "out of" $arrayLength "folders."
+		Write-host "Successfully copied" $($sourcesArrayLength - $merge.length) "out of" $sourcesArrayLength "folders."
 
 		if ($merge.length -eq 1) {
 			Write-host "The following folder or file already exists inside" $destDirectoryDisplay":"
