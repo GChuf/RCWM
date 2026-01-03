@@ -5,6 +5,40 @@ Start-Process powershell -Verb runAs -ArgumentList $arguments
 exit
 }
 
+try {
+    $ps = $PSVersionTable.PSVersion.Major
+}
+catch {
+    # In PowerShell 1.0, $PSVersionTable doesn't exist, so this will fail
+    $ps = 1
+}
+
+$arch = cmd.exe /c echo "%PROCESSOR_ARCHITECTURE%"
+$os = [System.Environment]::OSVersion.Version.Major
+
+#if major==6, minor==1 => windows 2008
+#2008 needs different icons
+#minor 3 == 2012 R2
+
+#win7 and win8 virtual machines both return "6"
+#new win servers(!) return "10"
+
+#check compatibility
+if ($os -lt 6) {
+	Write-Host "Operating system not supported!"
+	Start-Sleep 1
+	Write-Host "Exiting ..."
+	Start-Sleep 5
+	exit
+} elseif ($ps -lt 2) {
+	Write-Host "Powershell version not supported!"
+	Start-Sleep 1
+	Write-Host "Upgrade to v2."
+	Write-Host "Exiting ..."
+	Start-Sleep 5
+	exit
+}
+
 $currentUserWithoutDomain = [Environment]::UserName
 $currentUSer = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
 
@@ -18,19 +52,6 @@ $rcwmRoot = Join-Path $sysDrive 'Program Files\RCWM'
 $existingFolder = Test-Path -Path $rcwmRoot
 $RCWMv1Folder = Test-Path -Path "$sysRoot\System32\RCWM"
 $RCWMv2Folder = Test-Path -Path "$sysRoot\RCWM"
-
-
-$ps = $psversiontable.psversion.major
-$arch = cmd.exe /c echo "%PROCESSOR_ARCHITECTURE%"
-$os = [System.Environment]::OSVersion.Version.Major
-#if major==6, minor==1 => windows 2008
-#2008 needs different icons
-#minor 3 == 2012 R2
-
-#win7 and win8 virtual machines both return "6"
-#new win servers(!) return "10"
-
-
 
 $pwsh7Version = (get-command pwsh).Version.Major 2>$null
 $pwsh7CommandType = (get-command pwsh).CommandType 2>$null #fix for bugged pwsh7 version outputs in old windows
