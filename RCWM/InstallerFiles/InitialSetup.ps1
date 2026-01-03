@@ -194,7 +194,7 @@ if ($RCWMv1Folder -eq $true) {
 		reg delete HKCU\RCWM /F | Out-Null
 		Write-Host "Old files deleted."
 
-		$uninstallers = get-childitem ..\UninstallerFiles\RegistryFiles\*.reg
+		$uninstallers = get-childitem ..\UninstallerFiles\*.reg
 		foreach ($reg in $uninstallers) { cmd.exe /c regedit /s $reg }
 		Write-Host "Registry cleaned."
 	}
@@ -216,7 +216,7 @@ if ($RCWMv2Folder -eq $true) {
 		reg delete HKCU\RCWM /F | Out-Null
 		Write-Host "Old files deleted."
 
-		$uninstallers = get-childitem ..\UninstallerFiles\RegistryFiles\*.reg
+		$uninstallers = get-childitem ..\UninstallerFiles\*.reg
 		foreach ($reg in $uninstallers) { cmd.exe /c regedit /s $reg }
 		Write-Host "Registry cleaned."
 	}
