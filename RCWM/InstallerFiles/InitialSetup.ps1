@@ -1,11 +1,3 @@
-if (-not (New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-# Prompt the user to elevate the script
-$arguments = "& '" + $myInvocation.MyCommand.Definition + "'"
-Start-Process powershell -Verb runAs -ArgumentList $arguments
-exit
-}
-
-
 $ps = $PSVersionTable.PSVersion.Major
 $arch = cmd.exe /c echo "%PROCESSOR_ARCHITECTURE%"
 $os = [System.Environment]::OSVersion.Version.Major
