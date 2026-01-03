@@ -180,9 +180,9 @@ if ($RCWMv1Folder -eq $true) {
 	}
 	
 	if ($mode1 -eq "Y") {
-		cmd.exe /c del /f /q %SystemRoot%\System32\RCWM | Out-Null
-		cmd.exe /c rd /s /q %SystemRoot%\System32\RCWM | Out-Null
-		reg delete HKCU\RCWM /F | Out-Null
+		cmd.exe /c del /f /q %SystemRoot%\System32\RCWM 2>&1>$null
+		cmd.exe /c rd /s /q %SystemRoot%\System32\RCWM 2>&1>$null
+		reg delete HKCU\RCWM /F 2>&1>$null
 		Write-Host "Old files deleted."
 
 		$uninstallers = get-childitem ..\UninstallerFiles\*.reg
@@ -202,9 +202,9 @@ if ($RCWMv2Folder -eq $true) {
 	}
 	
 	if ($mode1 -eq "Y") {
-		cmd.exe /c del /f /q %SystemRoot%\RCWM | Out-Null
-		cmd.exe /c rd /s /q %SystemRoot%\RCWM | Out-Null
-		reg delete HKCU\RCWM /F | Out-Null
+		cmd.exe /c del /f /q %SystemRoot%\RCWM 2>&1>$null
+		cmd.exe /c rd /s /q %SystemRoot%\RCWM 2>&1>$null
+		reg delete HKCU\RCWM /F 2>&1>$null
 		Write-Host "Old files deleted."
 
 		$uninstallers = get-childitem ..\UninstallerFiles\*.reg
