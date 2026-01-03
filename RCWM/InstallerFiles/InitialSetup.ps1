@@ -5,14 +5,8 @@ Start-Process powershell -Verb runAs -ArgumentList $arguments
 exit
 }
 
-try {
-    $ps = $PSVersionTable.PSVersion.Major
-}
-catch {
-    # In PowerShell 1.0, $PSVersionTable doesn't exist, so this will fail
-    $ps = 1
-}
 
+$ps = $PSVersionTable.PSVersion.Major
 $arch = cmd.exe /c echo "%PROCESSOR_ARCHITECTURE%"
 $os = [System.Environment]::OSVersion.Version.Major
 
@@ -22,22 +16,6 @@ $os = [System.Environment]::OSVersion.Version.Major
 
 #win7 and win8 virtual machines both return "6"
 #new win servers(!) return "10"
-
-#check compatibility
-if ($os -lt 6) {
-	Write-Host "Operating system not supported!"
-	Start-Sleep 1
-	Write-Host "Exiting ..."
-	Start-Sleep 5
-	exit
-} elseif ($ps -lt 2) {
-	Write-Host "Powershell version not supported!"
-	Start-Sleep 1
-	Write-Host "Upgrade to v2."
-	Write-Host "Exiting ..."
-	Start-Sleep 5
-	exit
-}
 
 $currentUserWithoutDomain = [Environment]::UserName
 $currentUSer = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name

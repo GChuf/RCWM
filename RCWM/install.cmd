@@ -4,8 +4,21 @@ title RCWM Install Script
 rem https://stackoverflow.com/questions/8610597/batch-file-choice-commands-errorlevel-returns-0
 SETLOCAL EnableDelayedExpansion
 
+set "powershellVersion=1"
+
+FOR /F "usebackq delims=" %%F IN (`powershell -NoProfile -Command "try { $PSVersionTable.PSVersion.Major } catch { 1 }" 2^>nul`) DO (
+    set "powershellVersion=%%F"
+)
+
+rem Compatibility check
+if "!powershellVersion!" EQU "1" (
+    echo.
+    echo ERROR: PowerShell not detected or too old.
+    echo Some features will not work.
+	pause
+)
+
 rem Set window size for pwsh 4 and older
-FOR /F "tokens=* USEBACKQ" %%F IN (`powershell $psversiontable.psversion.major`) DO ( SET pwsh=%%F )
 IF !pwsh! EQU 4 ( mode con: cols=110 )
 
 color 0b
