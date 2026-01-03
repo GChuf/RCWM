@@ -18,19 +18,16 @@
 #/XO :: eXclude Older files.
 
 #Set UTF-8 encoding
-
-
 [console]::InputEncoding = [text.utf8encoding]::UTF8
 [system.console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
-$host.UI.RawUI.WindowTitle = "RCWM: robocopy"
-Write-host "RCWM v3.0.0"
+$Host.UI.RawUI.WindowTitle = "RCWM: robocopy"
+Write-Host "RCWM v3.0.0"
 
 #set high process priority
-$process = Get-Process -Id $pid
-$process.PriorityClass = 'High'
-$sysRoot = (cmd.exe /c echo %SystemRoot%).Trim()
-$robocopy = Join-Path $sysRoot "System32\robocopy.exe"
+[System.Diagnostics.Process]::GetCurrentProcess().PriorityClass = 'High'
+
+$robocopy = "$env:SystemRoot\System32\robocopy.exe"
 
 function NoListAvailable {
 	if ($mode -eq "m") {
@@ -53,6 +50,7 @@ function NoListAvailable {
 		exit
 	}
 }
+
 $command = $args[0] #copy / move / mirror
 $mode = $args[1] #single, multiple, paste (from clipboard)
 
@@ -62,7 +60,7 @@ if ($command -eq "rcmov") {
 	$string2 = "'Move file/directory'"
 	$string3 = "moving"
     $string4 = "move"
-} elseif  ($command -eq "rcopy") {
+} elseif ($command -eq "rcopy") {
 	$flag=""
 	$string1 = "copied"
 	$string2 = "'Copy file/directory'"
@@ -76,12 +74,11 @@ if ($command -eq "rcmov") {
     $string4 = "mirror"
 }
 
-
 #get directory into which we paste
 if ($args[2] -eq $null) #pwsh 4 and less, uses rcp.cmd: reg add HKCU\SOFTWARE\RCWM /v dir /t REG_MULTI_SZ /f /d %1 1>NUL
 {
-	$regInsert = (Get-ItemProperty -Path 'HKCU:\SOFTWARE\RCWM').dir #must not be string, but string array
-
+	#$regInsert = (Get-ItemProperty -Path 'HKCU:\SOFTWARE\RCWM').dir #must not be string, but string array
+	$regInsert = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey("SOFTWARE\RCWM").GetValue("dir")
 	#fix inserts like "\0" into registry, which translates into new line ... (every folder that starts with "0" has this problem)
 
 	if ($regInsert.Count -ge 2) { #if more than 1 line
@@ -115,7 +112,6 @@ if ($args[2] -eq $null) #pwsh 4 and less, uses rcp.cmd: reg add HKCU\SOFTWARE\RC
 
 $destDirectoryDisplay = "'" + $destDir + "'"
 
-
 if ($mode -eq "p") {
 
 	#get list form clipboard
@@ -131,7 +127,9 @@ if ($mode -eq "p") {
 } else {
 
 	#get array of contents of paths inside HKCU\SOFTWARE\RCWM\command
-	$sourcesArray = (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\$command).property 2> $null
+
+	#$sourcesArray = (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\$command).property 2> $null
+	$sourcesArray = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey("SOFTWARE\RCWM\$command").GetValueNames()
 
 	$sourcesArrayLength = ($sourcesArray|measure).count
 
@@ -156,7 +154,6 @@ if ($mode -eq "p") {
 	}
 	
 }
-
 
 #skip prompt on single mode
 if ($mode -ne "s") {
