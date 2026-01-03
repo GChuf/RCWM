@@ -1,0 +1,21 @@
+Windows Registry Editor Version 5.00
+
+;rmdir
+
+[HKEY_CLASSES_ROOT\Directory\shell\rmdir]
+@="Remove files"
+"NoWorkingDirectory"=""
+"Icon"="rcwmimg.dll,-2"
+
+[HKEY_CLASSES_ROOT\*\shell\rmdir]
+@="Remove files"
+"NoWorkingDirectory"=""
+"Icon"="rcwmimg.dll,-2"
+
+[HKEY_CLASSES_ROOT\Directory\shell\rmdir\command]
+@="pwsh -NoProfile -ExecutionPolicy Bypass \"C:\\Program Files\\RCWM\\rmitem.ps1\""
+
+[HKEY_CLASSES_ROOT\*\shell\rmdir\command]
+@="pwsh -NoProfile -ExecutionPolicy Bypass \"C:\\Program Files\\RCWM\\rmitem.ps1\""
+
+;done
