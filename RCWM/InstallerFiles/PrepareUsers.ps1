@@ -67,10 +67,10 @@ function loopThroughUsers() {
 	$sysDrive = $env:SystemDrive
 
 	#get all users from hklm
-	$allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
+	
 
 	if ($allUsers.count -ge 2) {
-		Write-Host "Found " -NoNewLine; Write-Host $allUsers.Name.Count -NoNewLine; " users in registry."
+		Write-Host "Found " -NoNewLine; Write-Host $allUsers.Count -NoNewLine; " users in registry."
 	} elseif ($mode -ne "current") {
 		Write-Host "Found l user in registry."
 	}
