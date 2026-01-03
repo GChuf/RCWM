@@ -104,11 +104,11 @@ function loopThroughUsers() {
 					cd $UUID -ErrorAction Stop
 				} catch {
 					try {
-						reg load HKU\$UUID "$profilePath\NTUSER.DAT" | out-null
+						reg load HKU\$UUID "$profilePath\NTUSER.DAT" 2>&1>$null
 						$UUIDsloadedManually += $UUID
 						cd $UUID -ErrorAction Stop
 						prepareUserRegKeys -user $UUID -install $install
-						reg unload "$sysDrive\Users\$profilePath\NTUSER.DAT" | out-null
+						reg unload "$sysDrive\Users\$profilePath\NTUSER.DAT" 2>&1>$null
 					} catch {
 						#user might have been deleted, C:\users\$user does not exist
 						continue
@@ -287,6 +287,7 @@ if ($mode1 -eq "A") {
 
 	$sysDrive = $env:SystemDrive
 	$rcwmRoot = Join-Path $sysDrive 'Program Files\RCWM'
+
 
 	#add rcwm_createregkeys to HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
 	#runs at startup for all users
