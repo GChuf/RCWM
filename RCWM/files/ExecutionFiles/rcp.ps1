@@ -1,21 +1,22 @@
-#if folder name begins with "0", registry doesn't work ..... (\0) == "newline"
+## INFO
 
-#flags used when robocopying (overwrites files):
+# Flags used when robocopying:
+#/E      : Copy Subdirectories, including Empty ones
+#/NP     : No Progress - don't display percentage copied
+#/NJH    : No Job Header
+#/NJS    : No Job Summary
+#/NC     : No Class - don't log file classes
+#/NS     : No Size - don't log file sizes
+#/MT[:n] : Do multi-threaded copies with n threads (default 8)
 
-#/E :: copy subdirectories, including Empty ones
-#/NP :: No Progress - don't display percentage copied
-#/NJH :: No Job Header
-#/NJS :: No Job Summary
-#/NC :: No Class - don't log file classes
-#/NS :: No Size - don't log file sizes
-#/MT[:n] :: Do multi-threaded copies with n threads (default 8)
+# When overwriting, flags remain the same. Destination files with the same names will be overwritten with source files.
+
+# When merging, these flags are added to not overwrite any files:
+#/XC     : eXclude Changed files.
+#/XN     : eXclude Newer files.
+#/XO     : eXclude Older files.
 
 
-#when merging, these are added to not overwrite any files:
-
-#/XC :: eXclude Changed files.
-#/XN :: eXclude Newer files.
-#/XO :: eXclude Older files.
 
 #Set UTF-8 encoding
 [console]::InputEncoding = [text.utf8encoding]::UTF8
@@ -80,6 +81,7 @@ if ($args[2] -eq $null) #pwsh 4 and less, uses rcp.cmd: reg add HKCU\SOFTWARE\RC
 	#$regInsert = (Get-ItemProperty -Path 'HKCU:\SOFTWARE\RCWM').dir #must not be string, but string array
 	$regInsert = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey("SOFTWARE\RCWM").GetValue("dir")
 	#fix inserts like "\0" into registry, which translates into new line ... (every folder that starts with "0" has this problem)
+	#if folder name begins with "0", registry doesn't work ..... (\0) == "newline"
 
 	if ($regInsert.Count -ge 2) { #if more than 1 line
 
