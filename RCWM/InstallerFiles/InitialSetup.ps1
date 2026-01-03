@@ -170,8 +170,10 @@ function installRCWM() {
 	cmd.exe /c icacls $rcwmRoot /grant administrators:F /T /C | Out-Null
 	cmd.exe /c icacls $rcwmRoot /grant users:F /T /C | Out-Null
 
-	#add exclusion - just in case
-	Add-MpPreference -ExclusionPath "$rcwmRoot" | Out-Null
+	#add exclusion - just in case, except for old win versions
+	if ($winver -neq 6) {
+		Add-MpPreference -ExclusionPath "$rcwmRoot" | Out-Null
+	}
 	echo "Created directory at $rcwmRoot and copied all files."
 }
 
