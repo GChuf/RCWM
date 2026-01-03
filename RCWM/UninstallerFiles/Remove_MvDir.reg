@@ -6,4 +6,10 @@ Windows Registry Editor Version 5.00
 
 [-HKEY_CLASSES_ROOT\Directory\Background\shell\rcmov]
 
+;v2
+
+[-HKEY_CLASSES_ROOT\Directory\shell\mvdir]
+
+[-HKEY_CLASSES_ROOT\Directory\Background\shell\mvdir]
+
 ; end
