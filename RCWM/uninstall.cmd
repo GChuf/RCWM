@@ -35,7 +35,7 @@ echo(
 
 cd files
 
-powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\PrepareUsers.ps1 -install $false -verb runas
+powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\PrepareUsers.ps1 -install $false
 
 echo(
 echo(
