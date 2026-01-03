@@ -7,14 +7,13 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-27"
 
 [HKEY_CLASSES_ROOT\DesktopBackground\Shell\killall\command]
-@="C:\\Program Files\\RCWM\\killall.exe"
-
+@="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\KillAll.ps1\""
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\killall]
 @="Kill All"
 "Icon"="rcwmimg.dll,-27"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\killall\command]
-@="C:\\Program Files\\RCWM\\killall.exe"
+@="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\KillAll.ps1\""
 
 ;done
