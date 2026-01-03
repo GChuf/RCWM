@@ -75,7 +75,7 @@ if ($command -eq "rcmov") {
     $string4 = "mirror"
 }
 
-#get directory into which we paste
+#get directory into which we paste - only for powershell v2 and still relevant in rcwm v3
 if ($args[2] -eq $null) #pwsh 4 and less, uses rcp.cmd: reg add HKCU\SOFTWARE\RCWM /v dir /t REG_MULTI_SZ /f /d %1 1>NUL
 {
 	#$regInsert = (Get-ItemProperty -Path 'HKCU:\SOFTWARE\RCWM').dir #must not be string, but string array
