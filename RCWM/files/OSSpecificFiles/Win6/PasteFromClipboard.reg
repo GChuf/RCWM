@@ -1,0 +1,11 @@
+Windows Registry Editor Version 5.00
+
+;paste form clipboard
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\pasteFromClipboard]
+@="Paste from Clipboard"
+"Icon"="rcwmimg.dll,-35"
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\pasteFromClipboard\command]
+@="\"C:\\Program Files\\RCWM\\rcp.cmd\" \"%V\" rcopy p"
+; end
