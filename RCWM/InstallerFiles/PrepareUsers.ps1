@@ -93,7 +93,8 @@ function loopThroughUsers() {
 			$user = $user.Name
 			#todo pwsh v2
 			$UUID = $user.Split("\")[-1]
-			$profilePath = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID" -Name ProfileImagePath
+			#$profilePath = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID" -Name ProfileImagePath
+			$profilePath = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID").GetValue("ProfileImagePath")
 			if (-not $install) {
 				Write-Host "Removing reg keys for $uuid"
 
