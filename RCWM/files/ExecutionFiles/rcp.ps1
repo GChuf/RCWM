@@ -487,5 +487,5 @@ If ( $copy -eq $True ) {
 	}
 	echo ""
 	Write-Host "Finished!" -ForegroundColor blue
-	Start-Sleep 1000
+	Start-Sleep 1
 }
