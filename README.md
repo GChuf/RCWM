@@ -122,7 +122,11 @@ You can always create a PR or open a new issue, regarding bugs or suggestions.
 
 # Support
 
-You can buy me a ~~coffee~~ beer:
+The aim of the project is to make life easier for others.
+
+Starring the project helps them find out about it.
+
+If you want, you can buy me a ~~coffee~~ beer:
 
 - paypal.me: paypal.me/gchuf
 
