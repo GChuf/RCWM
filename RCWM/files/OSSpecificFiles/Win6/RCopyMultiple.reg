@@ -10,7 +10,6 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\*\shell\rcopy\command]
 @="C:\\Program Files\\RCWM\\rcwm-multiple.exe rcopy %V"
-"IsolatedCommand"="C:\\Program Files\\RCWM\\rcwm-multiple.exe rcopy %V"
 
 [HKEY_CLASSES_ROOT\Directory\shell\rcopy]
 @="Copy items"
@@ -20,7 +19,6 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\Directory\shell\rcopy\command]
 @="C:\\Program Files\\RCWM\\rcwm-multiple.exe rcopy %V"
-"IsolatedCommand"="C:\\Program Files\\RCWM\\rcwm-multiple.exe rcopy %V"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste]
 @="Paste here"
@@ -28,5 +26,4 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste\command]
 @="\"C:\\Program Files\\RCWM\\rcp.cmd\" \"%V\" rcopy m"
-"IsolatedCommand"="\"C:\\Program Files\\RCWM\\rcp.cmd\" \"%V\" rcopy m"
 ; end

@@ -10,7 +10,6 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\*\shell\rcmov\command]
 @="C:\\Program Files\\RCWM\\rcwm-multiple.exe rcmov %V"
-"IsolatedCommand"="C:\\Program Files\\RCWM\\rcwm-multiple.exe rcmov %V"
 
 [HKEY_CLASSES_ROOT\Directory\shell\rcmov]
 @="Move items"
@@ -20,7 +19,6 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\Directory\shell\rcmov\command]
 @="C:\\Program Files\\RCWM\\rcwm-multiple.exe rcmov %V"
-"IsolatedCommand"="C:\\Program Files\\RCWM\\rcwm-multiple.exe rcmov %V"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rcmov]
 @="Move here"
@@ -28,5 +26,4 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rcmov\command]
 @="\"C:\\Program Files\\RCWM\\rcp.cmd\" \"%V\" rcmov m"
-"IsolatedCommand"="\"C:\\Program Files\\RCWM\\rcp.cmd\" \"%V\" rcmov m"
 ; end

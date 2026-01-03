@@ -9,7 +9,6 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\Directory\shell\mirror\command]
 @="C:\\Program Files\\RCWM\\rcwm-single.exe miror %V"
-"IsolatedCommand"="C:\\Program Files\\RCWM\\rcwm-single.exe miror %V"
 
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\mirror]
@@ -18,5 +17,4 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\mirror\command]
 @="cmd /c pwsh C:\\Program Files\\RCWM\\rcp.ps1 miror s \"%V\""
-"IsolatedCommand"="cmd /c pwsh C:\\Program Files\\RCWM\\rcp.ps1 miror s \"%V\""
 ; end

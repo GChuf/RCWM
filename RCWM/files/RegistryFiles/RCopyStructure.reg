@@ -9,13 +9,11 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\Directory\shell\rstrc\command]
 @="C:\\Program Files\\RCWM\\rcwm-single.exe rstrc %V"
-"IsolatedCommand"="C:\\Program Files\\RCWM\\rcwm-single.exe rstrc %V"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rstrc]
 @="Paste Structure here"
 "Icon"="rcwmimg.dll,-19"
 [HKEY_CLASSES_ROOT\Directory\Background\shell\rstrc\command]
 @="\"C:\\Program Files\\RCWM\\RcopyStructure.bat\""
-"IsolatedCommand"="\"C:\\Program Files\\RCWM\\RcopyStructure.bat\""
 
 ; end

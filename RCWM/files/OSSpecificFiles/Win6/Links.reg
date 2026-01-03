@@ -9,7 +9,6 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\Directory\Shell\mklink\command]
 @="C:\\Program Files\\RCWM\\rcwm-single.exe dlink %V"
-"IsolatedCommand"="C:\\Program Files\\RCWM\\rcwm-single.exe dlink %V"
 ;dir link
 
 [HKEY_CLASSES_ROOT\*\shell\mklink]
@@ -19,7 +18,6 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\*\shell\mklink\command]
 @="C:\\Program Files\\RCWM\\rcwm-single.exe flink %V"
-"IsolatedCommand"="C:\\Program Files\\RCWM\\rcwm-single.exe flink %V"
 ;file link
 
 
