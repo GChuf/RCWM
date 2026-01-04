@@ -226,13 +226,15 @@ If ( $copy -eq $True ) {
 
 		if (Test-Path -LiteralPath "$fullPath" -PathType Container) { #if source is a folder
 			$isDirectory = $true
+
+			$filename = ""
+			$copyEmptyDirectoriesFlag = "/E"
+
 			if ($psversiontable.PSVersion.Major -eq 2) {
 				$sourceDir = ($fullPath -split "\\")[-1]
 			} else {
 				$sourceDir = $fullPath.split("\")[-1]
 			}
-
-			$filename = ""
 
 			$sourceDirFullPath = $fullPath
 			#dest: target dir + folder
@@ -245,7 +247,9 @@ If ( $copy -eq $True ) {
 
 		} elseif (Test-Path -LiteralPath "$fullPath" -PathType Leaf) { #if source is a file
 			$isDirectory = $false
-			write-host "source is a file"
+
+			$copyEmptyDirectoriesFlag = ""
+
 			if ($psversiontable.PSVersion.Major -eq 2) {
 				$sourceDir = ($fullPath -split "\\")[-2]
 				$filename = ($fullPath -split "\\")[-1]
@@ -253,7 +257,6 @@ If ( $copy -eq $True ) {
 				$sourceDir = $fullPath.split("\")[-2]
 				$filename = $fullPath.split("\")[-1]
 				Write-Host "directory: $sourceDir, filename: $filename"
-				#start-sleep 5
 			}
 
 			#trim filename from the path - filename is passed as another argument into robocopy
@@ -281,8 +284,8 @@ If ( $copy -eq $True ) {
 			if ($isDirectory) {
 				New-Item -Path "$destination" -ItemType Directory > $null
 			}
-			Write-Host "Executing $robocopy $sourceDirFullPath $destination $filename $flag /E /NP /NJH /NJS /NC /NS /MT:32"
-			& $robocopy "$sourceDirFullPath" "$destination" "$filename" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
+			Write-Host "Executing $robocopy `"$sourceDirFullPath`" `"$destination`" `"$filename`" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /MT:32"
+			& $robocopy "$sourceDirFullPath" "$destination" "$filename" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /MT:32
 
 			if ($command -eq "rcmov" -and $isDirectory) {
 				#Write-Host "removing: $sourceDirFullPath"
@@ -319,6 +322,9 @@ If ( $copy -eq $True ) {
 
 						if (Test-Path -LiteralPath "$fullPath" -PathType Container) { #if source is a folder
 							$isDirectory = $true
+
+							$copyEmptyDirectoriesFlag = "/E"
+
 							if ($psversiontable.PSVersion.Major -eq 2) {
 								$sourceDir = ($fullPath -split "\\")[-1]
 							} else {
@@ -338,7 +344,9 @@ If ( $copy -eq $True ) {
 
 						} elseif (Test-Path -LiteralPath "$fullPath" -PathType Leaf) { #if source is a file
 							$isDirectory = $false
-							write-host "source is a file"
+
+							$copyEmptyDirectoriesFlag = ""
+
 							if ($psversiontable.PSVersion.Major -eq 2) {
 								$sourceDir = ($fullPath -split "\\")[-2]
 								$filename = ($fullPath -split "\\")[-1]
@@ -364,8 +372,8 @@ If ( $copy -eq $True ) {
 							continue
 						}
 
-						Write-Host "Executing $robocopy $sourceDirFullPath $destination $filename $flag /E /NP /NJH /NJS /NC /NS /MT:32"
-						& $robocopy "$sourceDirFullPath" "$destination" "$filename" "$flag" /E /NP /NJH /NJS /NC /NS /MT:32
+						Write-Host "Executing $robocopy `"$sourceDirFullPath`" `"$destination`" `"$filename`" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /MT:32"
+						& $robocopy "$sourceDirFullPath" "$destination" "$filename" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /MT:32
 
 						if ($command -eq "rcmov" -and $isDirectory) {
 							#Write-Host "removing: $sourceDirFullPath"
@@ -383,6 +391,9 @@ If ( $copy -eq $True ) {
 
 						if (Test-Path -LiteralPath "$fullPath" -PathType Container) { #if source is a folder
 							$isDirectory = $true
+
+							$copyEmptyDirectoriesFlag = "/E"
+
 							if ($psversiontable.PSVersion.Major -eq 2) {
 								$sourceDir = ($fullPath -split "\\")[-1]
 							} else {
@@ -402,7 +413,9 @@ If ( $copy -eq $True ) {
 
 						} elseif (Test-Path -LiteralPath "$fullPath" -PathType Leaf) { #if source is a file
 							$isDirectory = $false
-							write-host "source is a file"
+
+							$copyEmptyDirectoriesFlag = ""
+
 							if ($psversiontable.PSVersion.Major -eq 2) {
 								$sourceDir = ($fullPath -split "\\")[-2]
 								$filename = ($fullPath -split "\\")[-1]
@@ -428,8 +441,8 @@ If ( $copy -eq $True ) {
 							continue
 						}
 
-						Write-Host "Executing $robocopy $sourceDirFullPath $destination $filename $flag  /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32"
-						& $robocopy "$sourceDirFullPath" "$destination" "$filename" "$flag" /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
+						Write-Host "Executing $robocopy `"$sourceDirFullPath`" `"$destination`" `"$filename`" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32"
+						& $robocopy "$sourceDirFullPath" "$destination" "$filename" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
 
 						if ($command -eq "rcmov" -and $isDirectory) {
 							#Write-Host "removing: $sourceDirFullPath"
