@@ -1,6 +1,12 @@
 $arch = cmd.exe /c echo "%PROCESSOR_ARCHITECTURE%"
 $ps = $psversiontable.psversion.major
-$os = [System.Environment]::OSVersion.Version.Major
+
+$osMajor = [System.Environment]::OSVersion.Version.Major
+$osMinor = [System.Environment]::OSVersion.Version.Minor
+
+$os = Get-CimInstance Win32_OperatingSystem
+$build = [int]$os.BuildNumber
+
 
 cd ..\files\Temp
 
@@ -17,15 +23,12 @@ $AddOptions = @(
 	New-Object PSObject -Property @{Name = 'RunPwshAsAdmin'; RegFile = 'RunPwshAsAdmin.reg'; Desc = 'Do you want to add Run (PowerShell) script as Administrator'}
 	New-Object PSObject -Property @{Name = 'ControlPanel'; RegFile = 'ControlPanel.reg'; Desc = 'Do you want to add Control Panel to Desktop'}
 	New-Object PSObject -Property @{Name = 'CopyToFolder'; RegFile = 'CopyToFolder.reg'; Desc = 'Do you want to add Copy To Folder'}
-	New-Object PSObject -Property @{Name = 'GodMode'; RegFile = 'GodMode.reg'; Desc = 'Do you want to add God Mode'; exception = "GodMode"}
 	New-Object PSObject -Property @{Name = 'Links'; RegFile = 'Links.reg'; Desc = 'Do you want to add symbolic/hard links'}
 	New-Object PSObject -Property @{Name = 'Logoff'; RegFile = 'Logoff.reg'; Desc = 'Do you want to add Sign Out to desktop background'}
 	New-Object PSObject -Property @{Name = 'Killall'; RegFile = 'Killall.reg'; Desc = 'Do you want to add Kill All to backgrounds'}
 	New-Object PSObject -Property @{Name = 'Mirror'; RegFile = 'Mirror.reg'; Desc = 'Do you want to add Mirror option (using robocopy /MIR)'}
 	New-Object PSObject -Property @{Name = 'MoveToFolder'; RegFile = 'MoveToFolder.reg'; Desc = 'Do you want to add Move To Folder'}
 	New-Object PSObject -Property @{Name = 'RCopyStructure'; RegFile = 'RCopyStructure.reg'; Desc = 'Do you want to add the option to copy Folder Structure only (exclude files)'}
-	New-Object PSObject -Property @{Name = 'RebootToRecovery'; RegFile = 'RebootToRecovery.reg'; Desc = 'Do you want to add Reboot to Recovery to "This PC"'}
-	New-Object PSObject -Property @{Name = 'RebootToRecoveryDesktop'; RegFile = 'RebootToRecoveryDesktop.reg'; Desc = 'Do you want to add Reboot to Recovery to Desktop'}
 	New-Object PSObject -Property @{Name = 'Shutdown'; RegFile = 'Shutdown.reg'; Desc = 'Do you want to add option to Shutdown in x seconds'}
 	New-Object PSObject -Property @{Name = 'Reboot'; RegFile = 'Reboot.reg'; Desc = 'Do you want to add option to Reboot in x seconds'}
 	New-Object PSObject -Property @{Name = 'RunWithPriority'; RegFile = 'RunWithPriority.reg'; Desc = 'Do you want to add Run with Priority'}
@@ -34,6 +37,18 @@ $AddOptions = @(
 	New-Object PSObject -Property @{Name = 'TakeOwn'; RegFile = 'TakeOwn.reg'; Desc = 'Do you want to add Take Ownership to files and directories'}
 	New-Object PSObject -Property @{Name = 'TakeOwnDrive'; RegFile = 'TakeOwnDrive.reg'; Desc = 'Do you want to add Take Ownership to drives (All but C:\ drive)'}
 )
+
+#Add GodMode if OS is not windows 11
+if (($osMajor -ne 10) -or ($build -lt 22000)) {
+     $AddOptions += New-Object PSObject -Property @{Name = 'GodMode'; RegFile = 'GodMode.reg'; Desc = 'Do you want to add God Mode'; exception = "GodMode"}
+}
+
+#Add RebootToRecovery if OS is newer than windows 7
+if ( ($osMajor -gt 6) -or ( ($osMajor -eq 6) -and ($osMinor -gt 1))) {
+    $AddOptions += New-Object PSObject -Property @{Name = 'RebootToRecovery'; RegFile = 'RebootToRecovery.reg'; Desc = 'Do you want to add Reboot to Recovery to "This PC"'}
+	$AddOptions += New-Object PSObject -Property @{Name = 'RebootToRecoveryDesktop'; RegFile = 'RebootToRecoveryDesktop.reg'; Desc = 'Do you want to add Reboot to Recovery to Desktop'}
+}
+
 
 $RemoveOptions = @(
 	New-Object PSObject -Property @{Name = 'DeleteLibrary'; RegFile = 'DeleteLibrary.reg'; Desc = 'Do you want to remove Include in Library (only possible to remove for ALL users)'}
@@ -97,7 +112,7 @@ function powershellCheck(){
 
 	#todo: check 32bit!
 	#https://superuser.com/questions/305901/possible-values-of-processor-architecture
-	if ($os -eq 6){
+	if ($osMajor -eq 6){
 		if ($arch -eq "amd64"){
 			enableReg -regFile "pwrshell64.reg" -name "Pwrshell64"
 		} else {
