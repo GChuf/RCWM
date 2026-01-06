@@ -39,7 +39,7 @@ $AddOptions = @(
 )
 
 #Add GodMode if OS is not windows 11
-if (($osMajor -ne 10) -or ($build -lt 22000)) {
+if (($osMajor -lt 10) -or ($build -lt 22000)) {
      $AddOptions += New-Object PSObject -Property @{Name = 'GodMode'; RegFile = 'GodMode.reg'; Desc = 'Do you want to add God Mode'; exception = "GodMode"}
 }
 
