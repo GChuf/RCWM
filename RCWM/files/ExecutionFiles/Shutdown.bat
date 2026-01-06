@@ -17,7 +17,7 @@ if %seconds% GTR 315360000 (
 )
 
 echo Shutting down in %seconds% seconds.
-shutdown /s /t %seconds%
+shutdown.exe /s /t %seconds%
 
 endlocal
 pause

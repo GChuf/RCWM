@@ -17,7 +17,7 @@ if %seconds% GTR 315360000 (
 )
 
 echo Rebooting in %seconds% seconds.
-shutdown /r /t %seconds%
+shutdown.exe /r /t %seconds%
 
 endlocal
 pause
