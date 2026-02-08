@@ -73,9 +73,9 @@ if ($os -eq 6) {
 
 
 #win11 - enable old context menu
-$winver = ([Environment]::OSVersion).Version.Major
+$winVerMajorMajor = ([Environment]::OSVersion).Version.Major
 
-if ($winver -eq 11) {
+if ($winVerMajorMajor -eq 11) {
 	
 	while ($true) {
 		$mode1 = Read-Host "Enable old context menu in Windows 11 (Y/N)"
@@ -91,7 +91,7 @@ if ($winver -eq 11) {
 		Start-Process explorer.exe
 		Write-Host "Restarted."
 	}
-} elseif ($winver -eq 10) {
+} elseif ($winVerMajorMajor -eq 10) {
 	#edge case - some win11 still return major version 10
 	#check build number instead
 	$version = (Get-CimInstance Win32_OperatingSystem).Version
@@ -162,7 +162,7 @@ function installRCWM() {
 	cmd.exe /c icacls $rcwmRoot /grant users:F /T /C | Out-Null
 
 	#add exclusion - just in case, except for old win versions
-	if ($winver -ne 6) {
+	if ($winVerMajor -ne 6) {
 		Add-MpPreference -ExclusionPath "$rcwmRoot" | Out-Null
 	}
 	echo "Created directory at $rcwmRoot and copied all files."

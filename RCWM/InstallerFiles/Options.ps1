@@ -1,11 +1,16 @@
 $arch = cmd.exe /c echo "%PROCESSOR_ARCHITECTURE%"
 $ps = $psversiontable.psversion.major
 
-$osMajor = [System.Environment]::OSVersion.Version.Major
-$osMinor = [System.Environment]::OSVersion.Version.Minor
+$winVerMajor = [System.Environment]::OSVersion.Version.Major
+$winVerMinor = [System.Environment]::OSVersion.Version.Minor
 
-$os = Get-CimInstance Win32_OperatingSystem
-$build = [int]$os.BuildNumber
+
+if ($winVerMajorMajor -eq 10) {
+	$os = Get-CimInstance Win32_OperatingSystem
+	$build = [int]$os.BuildNumber
+} else {
+	$build = 9999999
+}
 
 
 cd ..\files\Temp
@@ -39,12 +44,12 @@ $AddOptions = @(
 )
 
 #Add GodMode if OS is not windows 11
-if (($osMajor -lt 10) -or ($build -lt 22000)) {
+if (($winVerMajor -lt 10) -or ($build -lt 22000)) {
      $AddOptions += New-Object PSObject -Property @{Name = 'GodMode'; RegFile = 'GodMode.reg'; Desc = 'Do you want to add God Mode'; exception = "GodMode"}
 }
 
 #Add RebootToRecovery if OS is newer than windows 7
-if ( ($osMajor -gt 6) -or ( ($osMajor -eq 6) -and ($osMinor -gt 1))) {
+if ( ($winVerMajor -gt 6) -or ( ($winVerMajor -eq 6) -and ($winVerMinor -gt 1))) {
     $AddOptions += New-Object PSObject -Property @{Name = 'RebootToRecovery'; RegFile = 'RebootToRecovery.reg'; Desc = 'Do you want to add Reboot to Recovery to "This PC"'}
 	$AddOptions += New-Object PSObject -Property @{Name = 'RebootToRecoveryDesktop'; RegFile = 'RebootToRecoveryDesktop.reg'; Desc = 'Do you want to add Reboot to Recovery to Desktop'}
 }
@@ -112,7 +117,7 @@ function powershellCheck(){
 
 	#todo: check 32bit!
 	#https://superuser.com/questions/305901/possible-values-of-processor-architecture
-	if ($osMajor -eq 6){
+	if ($winVerMajor -eq 6){
 		if ($arch -eq "amd64"){
 			enableReg -regFile "pwrshell64.reg" -name "Pwrshell64"
 		} else {
