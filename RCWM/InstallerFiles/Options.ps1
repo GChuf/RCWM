@@ -25,7 +25,6 @@ $AddOptions = @(
 	New-Object PSObject -Property @{Name = 'CMD'; RegFile = 'CMD.reg'; Desc = 'Do you want to add open CMD to background/folders/drives'}
 	New-Object PSObject -Property @{Name = 'CMDshift'; RegFile = 'CMDshift.reg'; Desc = 'Do you want to add open CMD to (shift! + right click)'}
 	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add open PowerShell to background/folders/drives'; exception = "powershellCheck"}
-	New-Object PSObject -Property @{Name = 'RunPwshAsAdmin'; RegFile = 'RunPwshAsAdmin.reg'; Desc = 'Do you want to add Run (PowerShell) script as Administrator'}
 	New-Object PSObject -Property @{Name = 'ControlPanel'; RegFile = 'ControlPanel.reg'; Desc = 'Do you want to add Control Panel to Desktop'}
 	New-Object PSObject -Property @{Name = 'CopyToFolder'; RegFile = 'CopyToFolder.reg'; Desc = 'Do you want to add Copy To Folder'}
 	New-Object PSObject -Property @{Name = 'Links'; RegFile = 'Links.reg'; Desc = 'Do you want to add symbolic/hard links'}
@@ -42,6 +41,12 @@ $AddOptions = @(
 	New-Object PSObject -Property @{Name = 'TakeOwn'; RegFile = 'TakeOwn.reg'; Desc = 'Do you want to add Take Ownership to files and directories'}
 	New-Object PSObject -Property @{Name = 'TakeOwnDrive'; RegFile = 'TakeOwnDrive.reg'; Desc = 'Do you want to add Take Ownership to drives (All but C:\ drive)'}
 )
+
+#Add running powershell scripts as admin if on windows 10+
+if ($winVerMajor -ge 10) {
+     $AddOptions += New-Object PSObject -Property @{Name = 'RunPwshAsAdmin'; RegFile = 'RunPwshAsAdmin.reg'; Desc = 'Do you want to add Run (PowerShell) script as Administrator'}
+}
+
 
 #Add GodMode if OS is not windows 11
 if (($winVerMajor -lt 10) -or ($build -lt 22000)) {
