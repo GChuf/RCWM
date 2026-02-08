@@ -2,7 +2,6 @@
 [system.console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 $host.UI.RawUI.WindowTitle = "RCWM: SCP from ..."
-Write-host "RCWM v3.0.0"
 
 $dest = '"' + $args[0] + '"'
 

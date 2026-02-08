@@ -23,7 +23,6 @@
 [system.console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 $Host.UI.RawUI.WindowTitle = "RCWM: robocopy"
-Write-Host "RCWM v3.0.0"
 
 #set high process priority
 [System.Diagnostics.Process]::GetCurrentProcess().PriorityClass = 'High'
