@@ -93,10 +93,8 @@ if ($args[2] -eq $null) #pwsh 4 and less, uses rcp.cmd: reg add HKCU\SOFTWARE\RC
 		[string]$destDir = [string]$tempString.substring(0,$tempString.length-2)
 
 	}
-	if ($regInsert[0][2] -eq '"') { #copying directly into a drive
+	elseif ($regInsert[0][2] -eq '"') { #copying directly into a drive
 		$destDir = $reginsert[0].substring(0,2)
-	} else {
-		$destDir = [string](Get-ItemProperty -Path 'HKCU:\SOFTWARE\RCWM').dir
 	}
 
 } else {
