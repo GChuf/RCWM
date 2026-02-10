@@ -3,11 +3,8 @@ $ps = $psversiontable.psversion.major
 
 $winVerMajor = [System.Environment]::OSVersion.Version.Major
 $winVerMinor = [System.Environment]::OSVersion.Version.Minor
-$version = (Get-CimInstance Win32_OperatingSystem).Version
-$build = [int]($version.Split('.')[2])
 
-
-if ($winVerMajorMajor -eq 10) {
+if ($winVerMajor -eq 10) {
 	$os = Get-CimInstance Win32_OperatingSystem
 	$build = [int]$os.BuildNumber
 } else {
@@ -17,7 +14,7 @@ if ($winVerMajorMajor -eq 10) {
 
 cd ..\files\Temp
 
-if ($winVerMajorMajor -ge 11) {
+if ($winVerMajor -ge 11) {
 
 	while ($true) {
 		$mode1 = Read-Host "Enable old context menu (show more options) in Windows 11 (Y/N)"
@@ -34,7 +31,7 @@ if ($winVerMajorMajor -ge 11) {
 		Write-Host "Restarted."
 	}
 
-} elseif ($winVerMajorMajor -eq 10) {
+} elseif ($winVerMajor -eq 10) {
 	#edge case - some win11 still return major version 10
 	#check build number instead
 	if ($build -ge 22000) {
