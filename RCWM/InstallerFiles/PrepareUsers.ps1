@@ -25,14 +25,14 @@ function prepareUserRegKeys(){
 	}
 
 	if ($install) {
-		New-Item -Path RCWM  | Out-Null
+		New-Item -Path RCWM  2>&1>$null
 		cd RCWM
-		New-Item -Path dlink | Out-Null
-		New-Item -Path flink | Out-Null
-		New-Item -Path miror | Out-Null
-		New-Item -Path rcmov | Out-Null
-		New-Item -Path rcopy | Out-Null
-		New-Item -Path rstrc | Out-Null
+		New-Item -Path dlink 2>&1>$null
+		New-Item -Path flink 2>&1>$null
+		New-Item -Path miror 2>&1>$null
+		New-Item -Path rcmov 2>&1>$null
+		New-Item -Path rcopy 2>&1>$null
+		New-Item -Path rstrc 2>&1>$null
 
 	} else {
 
