@@ -14,7 +14,7 @@ if ($winVerMajor -eq 10) {
 
 cd ..\files\Temp
 
-if ( ($winVerMajor -ge 11) || ( ($winVerMajor -eq 10) && ($build -ge 22000) ) )  {
+if ( ($winVerMajor -ge 11) -or ( ($winVerMajor -eq 10) -and ($build -ge 22000) ) )  {
 	#it's windows 11
 
 	while ($true) {
