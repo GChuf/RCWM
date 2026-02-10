@@ -100,9 +100,11 @@ function loopThroughUsers() {
 			$profilePath = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID").GetValue("ProfileImagePath")
 			if (-not $install) {
 				Write-Host "Removing reg keys for $UUID"
-			} else {
-				Write-Host "Preparing reg keys for $UUID"
-			}
+			} 
+			#else {
+				#Write-Host "Preparing reg keys for $UUID"
+			#}
+
 			#load reg hives in case of uninstalling
 			try {
 				cd REGISTRY::HKEY_USERS
@@ -115,12 +117,12 @@ function loopThroughUsers() {
 					$UUIDsloadedManually += $UUID
 					cd $UUID -ErrorAction Stop
 					prepareUserRegKeys -user $UUID -install $install
-					try {
-						reg unload HKU\$UUID
-					} catch {
-						#Write-Host "User logged in"
-						continue
-					}
+					#try {
+					#	reg unload HKU\$UUID
+					#} catch {
+					#	#Write-Host "User logged in"
+					#	continue
+					#}
 				} catch {
 					#user might have been deleted, C:\users\$user does not exist
 					continue
@@ -264,6 +266,28 @@ function regReplacements() {
 			}
 		}
 	}
+
+	if ($mode -eq "all") {
+		if ($install) {
+
+			#create folders for all users
+			#for specific options that need HKCU inserts as well as HKLM
+			#example win11 old context menu
+
+			#reg hives are already loaded
+			foreach ($user in $allUsers)
+			{
+				$userName = $user.Name
+				#todo pwsh v2
+				$UUID = $userName.Split("\")[-1]
+
+				New-Item .\Temp\$UUID -ItemType "directory" 2>&1>$null
+				(Get-Content .\Temp\Win11AddOldContextMenu.reg) -Replace "HKEY_LOCAL_MACHINE", "HKEY_USERS\$UUID" | Set-Content .\Temp\$UUID\Win11AddOldContextMenu.reg
+
+			}
+		}
+	}
+
 
 	#in case sysRoot is not C:\, replace
 	if ($sysDrive -ne "C:") {
