@@ -29,13 +29,16 @@ if ($winVerMajor -ge 11) {
 
 		cmd.exe /c start /w regedit /s Win11AddOldContextMenu.reg #HKLM
 		foreach ($file in $regFiles) {
-    		cmd.exe /c start /w regedit /s "`"$($file.FullName)`"" #HKU
+			cmd.exe /c start /w regedit /s "`"$($file.FullName)`"" #HKU
 		}
 
 		Write-Host "A reboot might be necessary to see the changes."
 	}
 
 } elseif ($winVerMajor -eq 10) {
+	$regFiles = Get-ChildItem -Path . -Filter "Win11AddOldContextMenu.reg" -Recurse -File -ErrorAction SilentlyContinue
+
+
 	#edge case - some win11 still return major version 10
 	#check build number instead
 	if ($build -ge 22000) {
