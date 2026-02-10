@@ -14,7 +14,7 @@ function prepareUserRegKeys(){
 		cd REGISTRY::HKEY_CURRENT_USER
 	} else {
 		#errors if user is not logged in or hive loaded - caught at "cd software" below
-		cd REGISTRY::HKEY_USERS\$user
+		cd REGISTRY::HKEY_USERS\$user -erroraction SilentlyContinue
 	}
 
 	try {
