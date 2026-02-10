@@ -3,6 +3,8 @@ $ps = $psversiontable.psversion.major
 
 $winVerMajor = [System.Environment]::OSVersion.Version.Major
 $winVerMinor = [System.Environment]::OSVersion.Version.Minor
+$version = (Get-CimInstance Win32_OperatingSystem).Version
+$build = [int]($version.Split('.')[2])
 
 
 if ($winVerMajorMajor -eq 10) {
@@ -14,6 +16,45 @@ if ($winVerMajorMajor -eq 10) {
 
 
 cd ..\files\Temp
+
+if ($winVerMajorMajor -ge 11) {
+
+	while ($true) {
+		$mode1 = Read-Host "Enable old context menu (show more options) in Windows 11 (Y/N)"
+		if ($mode1 -eq "Y") {break}
+		elseif ($mode1 -eq "N") {break}
+		else {echo "Invalid input!"}
+	}
+
+	if ($mode1 -eq "Y") {
+	    cmd.exe /c start /w regedit /s ..\files\RegistryFiles\Win11AddOldContextMenu.reg
+		Write-Host "Restarting explorer.exe ..."
+		Stop-Process -Name explorer -Force
+		Start-Process explorer.exe
+		Write-Host "Restarted."
+	}
+
+} elseif ($winVerMajorMajor -eq 10) {
+	#edge case - some win11 still return major version 10
+	#check build number instead
+	if ($build -ge 22000) {
+		#it's windows 11
+		while ($true) {
+			$mode1 = Read-Host "Enable old context menu (show more options) in Windows 11 (Y/N)"
+			if ($mode1 -eq "Y") {break}
+			elseif ($mode1 -eq "N") {break}
+			else {echo "Invalid input!"}
+		}
+
+		if ($mode1 -eq "Y") {
+			cmd.exe /c start /w regedit /s ..\files\RegistryFiles\Win11AddOldContextMenu.reg
+			Write-Host "Restarting explorer.exe ..."
+			Stop-Process -Name explorer -Force
+			Start-Process explorer.exe
+			Write-Host "Restarted."
+		}
+	}
+}
 
 $AddOptions = @(
 	New-Object PSObject -Property @{Name = 'x'; RegFile = 'x'; Desc = 'Do you want to add Copy files (using robocopy)'; exception = "rcopy"}

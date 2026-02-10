@@ -44,7 +44,6 @@ function prepareUserRegKeys(){
 
 function prepareHKLMRegKeys(){
 
-	#cd REGISTRY::$user
 	cd REGISTRY::HKEY_LOCAL_MACHINE
 
 	cd SOFTWARE -ErrorAction Stop
@@ -84,7 +83,7 @@ function loopThroughUsers() {
 			}
 		} else {
 			regReplacements -mode "all" -install $install
-			prepareHKLMRegKeys
+			#prepareHKLMRegKeys
 		}
 
 		#prepare reg keys - works for logged in users only
@@ -114,8 +113,6 @@ function loopThroughUsers() {
 						continue
 					}
 				}
-
-				#reg unload HKU\$UUID "$sysDrive\Users\$currentUserName\NTUSER.DAT" | out-null
 
 			} else {
 				prepareUserRegKeys -mode "all" -user $UUID -install $install
@@ -174,7 +171,6 @@ function loopThroughUsers() {
 function writeVersion(){
 	param([string]$mode)
 	$currentDir = Get-Location
-	write-host $currentDir
 
 	#write under hkcu for current user, or hklm for all users
 	cd REGISTRY::HKEY_LOCAL_MACHINE
@@ -204,7 +200,6 @@ function regReplacements() {
 		#HKLM:
 		$exceptions = @()
 		$exceptions += Get-ChildItem ".\Temp\Multiple*.reg"
-		$exceptions += Get-ChildItem ".\Temp\Win11*.reg"
 		$exceptions += Get-ChildItem ".\Temp\ThisPC.reg"
 		$exceptions += Get-ChildItem ".\Temp\CMDAdmin.reg"
 	} else {
@@ -217,13 +212,13 @@ function regReplacements() {
 
 		foreach ($file in $files){
 			$fileName = $file.Name
-			(Get-Content $file) -Replace "HKEY_CLASSES_ROOT\\", "HKEY_CURRENT_USER\Software\Classes\" | Set-Content .\Temp\CurrentUser\$fileName
+			(Get-Content $file) -Replace "HKEY_CLASSES_ROOT", "HKEY_CURRENT_USER\Software\Classes" | Set-Content .\Temp\CurrentUser\$fileName
 		}
 
 		foreach ($file in $exceptions){
 			$fileName = $file.Name
 			if ($file.Name -ne $null) {
-				(Get-Content $file) -Replace "HKEY_LOCAL_MACHINE\\", "HKEY_CURRENT_USER\Software\Classes\" | Set-Content .\Temp\CurrentUser\$fileName
+				(Get-Content $file) -Replace "HKEY_LOCAL_MACHINE", "HKEY_CURRENT_USER" | Set-Content .\Temp\CurrentUser\$fileName
 			}
 		}
 
@@ -233,7 +228,6 @@ function regReplacements() {
 				regedit /s .\Temp\CurrentUser\$reg
 			}
 		}
-
 	}
 
 	#in case sysRoot is not C:\, replace

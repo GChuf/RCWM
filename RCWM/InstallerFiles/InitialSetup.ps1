@@ -2,6 +2,9 @@ $ps = $PSVersionTable.PSVersion.Major
 $arch = cmd.exe /c echo "%PROCESSOR_ARCHITECTURE%"
 $os = [System.Environment]::OSVersion.Version.Major
 
+
+
+
 #if major==6, minor==1 => windows 2008
 #2008 needs different icons
 #minor 3 == 2012 R2
@@ -70,51 +73,6 @@ if ($os -eq 6) {
 #rcp script
 #"minify" - take out tabs
 (Get-Content .\Temp\rcp.ps1) -replace "`t", "" | Set-Content .\Temp\rcp.ps1
-
-
-#win11 - enable old context menu
-$winVerMajorMajor = ([Environment]::OSVersion).Version.Major
-
-if ($winVerMajorMajor -eq 11) {
-	
-	while ($true) {
-		$mode1 = Read-Host "Enable old context menu in Windows 11 (Y/N)"
-		if ($mode1 -eq "Y") {break}
-		elseif ($mode1 -eq "N") {break}
-		else {echo "Invalid input!"}
-	}
-
-	if ($mode1 -eq "Y") { #todo check location
-	    cmd.exe /c start /w regedit /s Win11AddOldContextMenu.reg
-		Write-Host "Restarting explorer.exe ..."
-		Stop-Process -Name explorer -Force
-		Start-Process explorer.exe
-		Write-Host "Restarted."
-	}
-} elseif ($winVerMajorMajor -eq 10) {
-	#edge case - some win11 still return major version 10
-	#check build number instead
-	$version = (Get-CimInstance Win32_OperatingSystem).Version
-	$build = [int]($version.Split('.')[2])
-	if ($build -ge 22000) {
-		#it's windows 11
-		while ($true) {
-			$mode1 = Read-Host "Enable old context menu in Windows 11 (Y/N)"
-			if ($mode1 -eq "Y") {break}
-			elseif ($mode1 -eq "N") {break}
-			else {echo "Invalid input!"}
-		}
-
-		if ($mode1 -eq "Y") { #todo check location
-			cmd.exe /c start /w regedit /s Win11AddOldContextMenu.reg
-			Write-Host "Restarting explorer.exe ..."
-			Stop-Process -Name explorer -Force
-			Start-Process explorer.exe
-			Write-Host "Restarted."
-		}
-	}
-
-}
 
 
 #copy only: executionFiles and Icons for now

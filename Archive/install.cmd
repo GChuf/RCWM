@@ -133,16 +133,6 @@ echo(
 choice /C CA /M "Do you want to install RCWM for [C]urrent user only, or for [A]ll users "
 if %errorlevel% == 1 ( powershell Set-ExecutionPolicy Bypass -Scope Process; ..\PrepareUsers.ps1 "current" ) else ( powershell Set-ExecutionPolicy Bypass -Scope Process; ..\PrepareUsers.ps1 "all" )
 
-
-FOR /F "tokens=*" %%g IN ('powershell "([Environment]::OSVersion).Version.Major"') do (SET WinVer=%%g)
-
-IF %WinVer% == 11 (
-    choice /C yn /M "Do you want to enable old context menu in Windows 11 "
-	if !errorlevel! == 1 (
-	    start /w regedit /s Win11AddOldContextMenu.reg
-	)
-)
-
 echo(
 
 
