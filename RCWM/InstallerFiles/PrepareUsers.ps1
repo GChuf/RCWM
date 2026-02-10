@@ -117,12 +117,12 @@ function loopThroughUsers() {
 					$UUIDsloadedManually += $UUID
 					cd $UUID -ErrorAction Stop
 					prepareUserRegKeys -user $UUID -install $install
-					#try {
-					#	reg unload HKU\$UUID
-					#} catch {
-					#	#Write-Host "User logged in"
-					#	continue
-					#}
+					try {
+						reg unload HKU\$UUID
+					} catch {
+						#Write-Host "User logged in"
+						continue
+					}
 				} catch {
 					#user might have been deleted, C:\users\$user does not exist
 					continue

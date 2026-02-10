@@ -13,7 +13,7 @@ $os = [System.Environment]::OSVersion.Version.Major
 #new win servers(!) return "10"
 
 $currentUserWithoutDomain = [Environment]::UserName
-$currentUSer = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+$currentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
 
 Write-Host "Running script as " -NoNewLine; Write-Host $currentUser -ForegroundColor red
 Write-Host "Initialising setup ..."

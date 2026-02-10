@@ -14,9 +14,8 @@ if ($winVerMajor -eq 10) {
 
 cd ..\files\Temp
 
-if ($winVerMajor -ge 11) {
-
-	$regFiles = Get-ChildItem -Path . -Filter "Win11AddOldContextMenu.reg" -Recurse -File -ErrorAction SilentlyContinue
+if ( ($winVerMajor -ge 11) || ( ($winVerMajor -eq 10) && ($build -ge 22000) ) )  {
+	#it's windows 11
 
 	while ($true) {
 		$mode1 = Read-Host "Enable old context menu (show more options) in Windows 11 (Y/N)"
@@ -27,37 +26,63 @@ if ($winVerMajor -ge 11) {
 
 	if ($mode1 -eq "Y") {
 
+
+
+		$currentDir = Get-Location
+
+		#load all reg hives, apply registry, and unload
+
+		$allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
+
+		foreach ($user in $allUsers)
+		{
+			$userName = $user.Name
+			#todo pwsh v2
+			$UUID = $userName.Split("\")[-1]
+			#$profilePath = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID" -Name ProfileImagePath
+			$profilePath = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID").GetValue("ProfileImagePath")
+
+			try {
+				cd REGISTRY::HKEY_USERS
+				cd $UUID -ErrorAction Stop
+			} catch {
+				try {
+					cd REGISTRY::HKEY_USERS
+					reg load HKU\$UUID "$profilePath\NTUSER.DAT"
+					$UUIDsloadedManually += $UUID
+					cd $UUID -ErrorAction Stop
+				} catch {
+					continue
+				}
+			}
+		}
+
+		cd $currentDir
+		#apply
+		$regFiles = Get-ChildItem -Path . -Filter "Win11AddOldContextMenu.reg" -Recurse -File -ErrorAction SilentlyContinue
 		cmd.exe /c start /w regedit /s Win11AddOldContextMenu.reg #HKLM
 		foreach ($file in $regFiles) {
 			cmd.exe /c start /w regedit /s "`"$($file.FullName)`"" #HKU
 		}
 
-		Write-Host "A reboot might be necessary to see the changes."
-	}
+		#load all reg hives, apply registry, and unload
+		$allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
 
-} elseif ($winVerMajor -eq 10) {
-	$regFiles = Get-ChildItem -Path . -Filter "Win11AddOldContextMenu.reg" -Recurse -File -ErrorAction SilentlyContinue
-
-
-	#edge case - some win11 still return major version 10
-	#check build number instead
-	if ($build -ge 22000) {
-		#it's windows 11
-		while ($true) {
-			$mode1 = Read-Host "Enable old context menu (show more options) in Windows 11 (Y/N)"
-			if ($mode1 -eq "Y") {break}
-			elseif ($mode1 -eq "N") {break}
-			else {echo "Invalid input!"}
-		}
-
-		if ($mode1 -eq "Y") {
-			cmd.exe /c start /w regedit /s Win11AddOldContextMenu.reg #HKLM
-			foreach ($file in $regFiles) {
-				cmd.exe /c start /w regedit /s "`"$($file.FullName)`"" #HKU
+		foreach ($user in $allUsers)
+		{
+			$userName = $user.Name
+			$UUID = $userName.Split("\")[-1]
+			try {
+				reg unload HKU\$UUID
+			} catch {
+				continue
 			}
-			Write-Host "A reboot might be necessary to see the changes."
 		}
+
+		cd $currentDir
+
 	}
+
 }
 
 $AddOptions = @(
