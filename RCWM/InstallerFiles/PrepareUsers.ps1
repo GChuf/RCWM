@@ -24,10 +24,9 @@ function prepareUserRegKeys(){
 		return
 	}
 
-	Remove-Item -Path $rcwmRoot -Recurse 2>&1>$null
+
 
 	if ($install) {
-
 		New-Item -Path RCWM  | Out-Null
 		cd RCWM
 		New-Item -Path dlink | Out-Null
@@ -38,7 +37,10 @@ function prepareUserRegKeys(){
 		New-Item -Path rstrc | Out-Null
 
 	} else {
+		Remove-Item -Path $rcwmRoot -Recurse 2>&1>$null
+		Remove-Item -Path RCWM -Recurse 2>&1>$null
 		#Make sure Temp is clean.
+
 		cmd.exe /c del .\Temp\* /s /q 2>&1>$null
 		cmd.exe /c rd /s /q .\Temp /s /q 2>&1>$null
 		New-Item Temp -ItemType "directory" 2>&1>$null
