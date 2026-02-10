@@ -2,28 +2,28 @@ Windows Registry Editor Version 5.00
 
 ;robocopy
 
-[HKEY_CLASSES_ROOT\Directory\shell\rcopy]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\shell\rcopy]
 @="Copy directory"
 "NoWorkingDirectory"=""
 "MultiSelectModel"="Single"
 "Icon"="rcwmimg.dll,-5"
 
-[HKEY_CLASSES_ROOT\Directory\shell\rcopy\command]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\shell\rcopy\command]
 @="C:\\Program Files\\RCWM\\rcwm-single.exe rcopy %V"
 
-[HKEY_CLASSES_ROOT\*\shell\rcopy]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\*\shell\rcopy]
 @="Copy file"
 "NoWorkingDirectory"=""
 "MultiSelectModel"="Single"
 "Icon"="rcwmimg.dll,-5"
 
-[HKEY_CLASSES_ROOT\*\shell\rcopy\command]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\*\shell\rcopy\command]
 @="C:\\Program Files\\RCWM\\rcwm-single.exe rcopy %V"
 
-[HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\Background\shell\rpaste]
 @="Paste here"
 "Icon"="rcwmimg.dll,-6"
 
-[HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste\command]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\Background\shell\rpaste\command]
 @="pwsh -NoProfile -ExecutionPolicy Bypass \"C:\\Program Files\\RCWM\\rcp.ps1\" rcopy s \"%V\""
 ; end

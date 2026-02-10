@@ -2,8 +2,8 @@ Windows Registry Editor Version 5.00
 
 ;remove Shutdown in x seconds
 
-[-HKEY_CLASSES_ROOT\Directory\Background\shell\shutdown]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\Background\shell\shutdown]
 
-[-HKEY_CLASSES_ROOT\Directory\Background\shell\shutdown\command]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\Background\shell\shutdown\command]
 
 ; end

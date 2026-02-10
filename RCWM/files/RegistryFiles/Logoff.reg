@@ -2,12 +2,12 @@ Windows Registry Editor Version 5.00
 
 ;Add "Sign Out" command to desktop background
 
-[HKEY_CLASSES_ROOT\DesktopBackground\Shell\signout]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\DesktopBackground\Shell\signout]
 "MUIVerb"="Sign Out"
 "icon"="rcwmimg.dll,-28"
 
 
-[HKEY_CLASSES_ROOT\DesktopBackground\Shell\signout\command]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\DesktopBackground\Shell\signout\command]
 @="logoff"
 
 ;done

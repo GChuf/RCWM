@@ -2,14 +2,14 @@ Windows Registry Editor Version 5.00
 
 ;remove robocopy structure
 
-[-HKEY_CLASSES_ROOT\Directory\shell\rstrc]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\shell\rstrc]
 
-[-HKEY_CLASSES_ROOT\Directory\Background\shell\rstrc]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\Background\shell\rstrc]
 
 ;v2
 
-[-HKEY_CLASSES_ROOT\Directory\shell\rcopys]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\shell\rcopys]
 
-[-HKEY_CLASSES_ROOT\Directory\Background\shell\rpastes]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\Background\shell\rpastes]
 
 ; end

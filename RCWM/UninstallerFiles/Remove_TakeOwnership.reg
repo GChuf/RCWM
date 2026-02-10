@@ -2,13 +2,13 @@ Windows Registry Editor Version 5.00
 
 ;Remove TakeOwn from context menu
 
-[-HKEY_CLASSES_ROOT\*\shell\takeown]
-[-HKEY_CLASSES_ROOT\*\shell\runas]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\*\shell\takeown]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\*\shell\runas]
 
-[-HKEY_CLASSES_ROOT\Directory\shell\takeown]
-[-HKEY_CLASSES_ROOT\Directory\shell\runas]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\shell\takeown]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\shell\runas]
 
-[-HKEY_CLASSES_ROOT\Drive\shell\takeown]
-[-HKEY_CLASSES_ROOT\Drive\shell\runas]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Drive\shell\takeown]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Drive\shell\runas]
 
 ; end

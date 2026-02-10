@@ -2,8 +2,8 @@ Windows Registry Editor Version 5.00
 
 ;remove scp to
 
-[-HKEY_CLASSES_ROOT\Directory\shell\scpto]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\shell\scpto]
 
-[-HKEY_CLASSES_ROOT\*\shell\scpto]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\*\shell\scpto]
 
 ;done

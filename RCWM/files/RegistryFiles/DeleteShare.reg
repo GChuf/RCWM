@@ -2,6 +2,6 @@ Windows Registry Editor Version 5.00
 
 ;delete "share" from context menu
 
-[-HKEY_CLASSES_ROOT\*\shellex\ContextMenuHandlers\ModernSharing]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\*\shellex\ContextMenuHandlers\ModernSharing]
 
 ;done

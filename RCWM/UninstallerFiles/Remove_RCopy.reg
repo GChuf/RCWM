@@ -2,8 +2,8 @@ Windows Registry Editor Version 5.00
 
 ;Remove RoboCopy from context menu
 
-[-HKEY_CLASSES_ROOT\Directory\shell\rcopy]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\shell\rcopy]
 
-[-HKEY_CLASSES_ROOT\Directory\Background\shell\rpaste]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\Background\shell\rpaste]
 
 ; end

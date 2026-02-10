@@ -2,6 +2,6 @@ Windows Registry Editor Version 5.00
 
 ;remove GodMode
 
-[-HKEY_CLASSES_ROOT\Directory\Background\shell\GodMode]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\Background\shell\GodMode]
 
 ; end

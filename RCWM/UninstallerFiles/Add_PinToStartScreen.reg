@@ -2,10 +2,10 @@ Windows Registry Editor Version 5.00
 
 ;Add "pin to start" back to context menu
 
-[HKEY_CLASSES_ROOT\Folder\shellex\ContextMenuHandlers\PintoStartScreen]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Folder\shellex\ContextMenuHandlers\PintoStartScreen]
 @="{470C0EBD-5D73-4d58-9CED-E91E22E23282}"
 
-[HKEY_CLASSES_ROOT\exefile\shellex\ContextMenuHandlers\PintoStartScreen]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\exefile\shellex\ContextMenuHandlers\PintoStartScreen]
 @="{470C0EBD-5D73-4d58-9CED-E91E22E23282}"
 
 ;done

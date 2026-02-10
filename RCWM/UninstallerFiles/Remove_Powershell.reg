@@ -2,11 +2,11 @@ Windows Registry Editor Version 5.00
 
 ;Remove OpenPowershell from context menu
 
-[-HKEY_CLASSES_ROOT\Directory\shell\pwrshell]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\shell\pwrshell]
 
-[-HKEY_CLASSES_ROOT\Directory\Background\shell\pwrshell]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\Background\shell\pwrshell]
 
-[-HKEY_CLASSES_ROOT\Drive\shell\pwrshell]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Drive\shell\pwrshell]
 
 
 ;done

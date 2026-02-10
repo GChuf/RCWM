@@ -2,6 +2,6 @@ Windows Registry Editor Version 5.00
 
 ;remove paste form clipboard
 
-[-HKEY_CLASSES_ROOT\Directory\Background\shell\pasteFromClipboard]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\Background\shell\pasteFromClipboard]
 
 ; end

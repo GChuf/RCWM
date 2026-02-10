@@ -232,13 +232,7 @@ function regReplacements() {
 
 
 	if ($install) {
-		#HKCR:
 		$files = Get-ChildItem ".\Temp\*.reg"
-		#HKLM:
-		$exceptions = @()
-		$exceptions += Get-ChildItem ".\Temp\Multiple*.reg"
-		$exceptions += Get-ChildItem ".\Temp\ThisPC.reg"
-		$exceptions += Get-ChildItem ".\Temp\CMDAdmin.reg"
 	} else {
 		$files = Get-ChildItem "..\UninstallerFiles\*.reg"
 	}
@@ -250,13 +244,6 @@ function regReplacements() {
 		foreach ($file in $files){
 			$fileName = $file.Name
 			(Get-Content $file) -Replace "HKEY_CLASSES_ROOT", "HKEY_CURRENT_USER\Software\Classes" | Set-Content .\Temp\CurrentUser\$fileName
-		}
-
-		foreach ($file in $exceptions){
-			$fileName = $file.Name
-			if ($file.Name -ne $null) {
-				(Get-Content $file) -Replace "HKEY_LOCAL_MACHINE", "HKEY_CURRENT_USER" | Set-Content .\Temp\CurrentUser\$fileName
-			}
 		}
 
 		if (-not $install) {

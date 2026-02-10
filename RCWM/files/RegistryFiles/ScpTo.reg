@@ -2,22 +2,22 @@ Windows Registry Editor Version 5.00
 
 ;scp to
 
-[HKEY_CLASSES_ROOT\Directory\shell\scpto]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\shell\scpto]
 @="SCP to ..."
 "NoWorkingDirectory"=""
 "Icon"="rcwmimg.dll,-32"
 "MultiSelectModel"="Single"
 
-[HKEY_CLASSES_ROOT\Directory\shell\scpto\command]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\shell\scpto\command]
 @="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\scpTo.ps1\" \"%V\""
 
-[HKEY_CLASSES_ROOT\*\shell\scpto]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\*\shell\scpto]
 @="SCP to ..."
 "NoWorkingDirectory"=""
 "Icon"="rcwmimg.dll,-32"
 "MultiSelectModel"="Single"
 
-[HKEY_CLASSES_ROOT\*\shell\scpto\command]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\*\shell\scpto\command]
 @="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\scpTo.ps1\" \"%V\""
 
 ;done

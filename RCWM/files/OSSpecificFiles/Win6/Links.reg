@@ -2,26 +2,26 @@ Windows Registry Editor Version 5.00
 
 ; cmd.exe mklink
 
-[HKEY_CLASSES_ROOT\Directory\Shell\mklink]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\Shell\mklink]
 "MUIVerb"="Link Source"
 "MultiSelectModel"="Single"
 "Icon"="rcwmimg.dll,-8"
 
-[HKEY_CLASSES_ROOT\Directory\Shell\mklink\command]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\Shell\mklink\command]
 @="C:\\Program Files\\RCWM\\rcwm-single.exe dlink %V"
 ;dir link
 
-[HKEY_CLASSES_ROOT\*\shell\mklink]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\*\shell\mklink]
 @="Link Source"
 "MultiSelectModel"="Single"
 "Icon"="rcwmimg.dll,-8"
 
-[HKEY_CLASSES_ROOT\*\shell\mklink\command]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\*\shell\mklink\command]
 @="C:\\Program Files\\RCWM\\rcwm-single.exe flink %V"
 ;file link
 
 
-[HKEY_CLASSES_ROOT\Directory\Background\Shell\mklink]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\Background\Shell\mklink]
 "MUIVerb"="Link Destination"
 "SubCommands"="SymbolicLinkF;SymbolicLinkD;DirectoryJunction;HardLink"
 "Icon"="rcwmimg.dll,-8"

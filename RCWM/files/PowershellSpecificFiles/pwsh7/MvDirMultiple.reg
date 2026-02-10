@@ -2,28 +2,28 @@ Windows Registry Editor Version 5.00
 
 ;move dir
 
-[HKEY_CLASSES_ROOT\*\shell\rcmov]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\*\shell\rcmov]
 @="Move items"
 "NoWorkingDirectory"=""
 "MultiSelectModel"="Document"
 "Icon"="rcwmimg.dll,-3"
 
-[HKEY_CLASSES_ROOT\*\shell\rcmov\command]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\*\shell\rcmov\command]
 @="C:\\Program Files\\RCWM\\rcwm-multiple.exe rcmov %V"
 
-[HKEY_CLASSES_ROOT\Directory\shell\rcmov]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\shell\rcmov]
 @="Move items"
 "NoWorkingDirectory"=""
 "MultiSelectModel"="Document"
 "Icon"="rcwmimg.dll,-3"
 
-[HKEY_CLASSES_ROOT\Directory\shell\rcmov\command]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\shell\rcmov\command]
 @="C:\\Program Files\\RCWM\\rcwm-multiple.exe rcmov %V"
 
-[HKEY_CLASSES_ROOT\Directory\Background\shell\rcmov]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\Background\shell\rcmov]
 @="Move files here"
 "Icon"="rcwmimg.dll,-4"
 
-[HKEY_CLASSES_ROOT\Directory\Background\shell\rcmov\command]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\Background\shell\rcmov\command]
 @="pwsh -NoProfile -ExecutionPolicy Bypass \"C:\\Program Files\\RCWM\\rcp.ps1\" rcmov m \"%V\""
 ; end

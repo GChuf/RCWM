@@ -2,8 +2,8 @@ Windows Registry Editor Version 5.00
 
 ;Remove "Kill All"
 
-[-HKEY_CLASSES_ROOT\DesktopBackground\Shell\killall]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\DesktopBackground\Shell\killall]
 
-[-HKEY_CLASSES_ROOT\Directory\Background\shell\killall]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\Background\shell\killall]
 
 ;done

@@ -2,6 +2,6 @@ Windows Registry Editor Version 5.00
 
 ;remove "pin to quick access" from context menu
 
-[-HKEY_CLASSES_ROOT\Folder\shell\pintohome]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Folder\shell\pintohome]
 
 ;done

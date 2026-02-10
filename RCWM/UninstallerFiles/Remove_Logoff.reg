@@ -2,6 +2,6 @@ Windows Registry Editor Version 5.00
 
 ;Remove "Sign Out"
 
-[-HKEY_CLASSES_ROOT\DesktopBackground\Shell\signout]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\DesktopBackground\Shell\signout]
 
 ;done

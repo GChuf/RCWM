@@ -2,27 +2,27 @@ Windows Registry Editor Version 5.00
 
 ;add powershell window to right click menu
 
-[HKEY_CLASSES_ROOT\Directory\shell\pwrshell]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\shell\pwrshell]
 @="Open Powershell Window here"
 "Icon"="rcwmimg.dll,-10"
 
-[HKEY_CLASSES_ROOT\Directory\shell\pwrshell\command]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\shell\pwrshell\command]
 @="powershell.exe -noexit -command Set-Location -literalPath '%V'"
 
-[HKEY_CLASSES_ROOT\Directory\Background\shell\pwrshell]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\Background\shell\pwrshell]
 @="Open Powershell Window here"
 "Icon"="rcwmimg.dll,-10"
 
-[HKEY_CLASSES_ROOT\Directory\Background\shell\pwrshell\command]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\Background\shell\pwrshell\command]
 @="powershell.exe -noexit -command Set-Location -literalPath '%V'"
 
 
 
-[HKEY_CLASSES_ROOT\Drive\shell\pwrshell]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Drive\shell\pwrshell]
 @="Open Powershell Window here"
 "Icon"="rcwmimg.dll,-10"
 
-[HKEY_CLASSES_ROOT\Drive\shell\pwrshell\command]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Drive\shell\pwrshell\command]
 @="powershell.exe -noexit -command Set-Location -literalPath '%V'"
 
 ;done

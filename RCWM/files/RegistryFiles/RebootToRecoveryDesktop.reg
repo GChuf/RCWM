@@ -2,10 +2,10 @@ Windows Registry Editor Version 5.00
 
 ;stolen and adapted from an unknown source
 
-[HKEY_CLASSES_ROOT\DesktopBackground\Shell\RebootToRecovery]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\DesktopBackground\Shell\RebootToRecovery]
 "Icon"="C:\\Windows\\System32\\imageres.dll,-110"
 
-[HKEY_CLASSES_ROOT\DesktopBackground\Shell\RebootToRecovery\command]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\DesktopBackground\Shell\RebootToRecovery\command]
 @="shutdown.exe -r -o -f -t 0"
 
 ;done

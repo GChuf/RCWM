@@ -2,6 +2,6 @@ Windows Registry Editor Version 5.00
 
 ;Remove Copy To from context menu
 
-[-HKEY_CLASSES_ROOT\AllFilesystemObjects\shellex\ContextMenuHandlers\CopyToFolder]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\AllFilesystemObjects\shellex\ContextMenuHandlers\CopyToFolder]
 
 ; end

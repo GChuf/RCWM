@@ -2,6 +2,6 @@ Windows Registry Editor Version 5.00
 
 ;remove run pwsh as admin
 
-[-HKEY_CLASSES_ROOT\Microsoft.PowershellScript.1\Shell\runas]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Microsoft.PowerShellScript.1\Shell\runas]
 
 ;done
