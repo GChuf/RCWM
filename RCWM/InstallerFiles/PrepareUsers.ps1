@@ -173,15 +173,41 @@ function writeVersion(){
 	$currentDir = Get-Location
 
 	#write under hkcu for current user, or hklm for all users
-	cd REGISTRY::HKEY_LOCAL_MACHINE
-	cd SOFTWARE\RCWM
 
-	#remove if exists - in case of reinstalls
-	Remove-ItemProperty -Path . -Name "Version" -ErrorAction SilentlyContinue | out-null
-	Remove-ItemProperty -Path . -Name "Mode" -ErrorAction SilentlyContinue | out-null
+	if ($mode -eq "current") {
+		cd REGISTRY::HKEY_CURRENT_USER
+		cd SOFTWARE
 
-	New-ItemProperty -Path . -Name "Version" -Value "3.0.0" -PropertyType String -Force | out-null
-	New-ItemProperty -Path . -Name "Mode" -Value $mode -PropertyType String -Force | out-null
+		Remove-Item -Path RCWM -Recurse 2>&1>$null
+		New-Item -Path RCWM  | Out-Null
+
+		cd RCWM
+
+		#remove if exists - in case of reinstalls
+		Remove-ItemProperty -Path . -Name "Version" -ErrorAction SilentlyContinue | out-null
+		Remove-ItemProperty -Path . -Name "Mode" -ErrorAction SilentlyContinue | out-null
+
+		New-ItemProperty -Path . -Name "Version" -Value "3.0.0" -PropertyType String -Force | out-null
+		New-ItemProperty -Path . -Name "Mode" -Value $mode -PropertyType String -Force | out-null
+	}
+
+	elseif ($mode -eq "all") {
+		cd REGISTRY::HKEY_LOCAL_MACHINE
+		cd SOFTWARE
+
+		Remove-Item -Path RCWM -Recurse 2>&1>$null
+		New-Item -Path RCWM  | Out-Null
+
+		cd RCWM
+
+		#remove if exists - in case of reinstalls
+		Remove-ItemProperty -Path . -Name "Version" -ErrorAction SilentlyContinue | out-null
+		Remove-ItemProperty -Path . -Name "Mode" -ErrorAction SilentlyContinue | out-null
+
+		New-ItemProperty -Path . -Name "Version" -Value "3.0.0" -PropertyType String -Force | out-null
+		New-ItemProperty -Path . -Name "Mode" -Value $mode -PropertyType String -Force | out-null
+	}
+
 	cd $currentDir
 }
 
