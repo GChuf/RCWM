@@ -89,38 +89,42 @@ function loopThroughUsers() {
 			#prepareHKLMRegKeys
 		}
 
-		#prepare reg keys - works for logged in users only
+		#prepare reg keys - works for logged in users without loading reg hives
+		#with loading reg hives works for all users, except some exceptions
 		foreach ($user in $allUsers)
 		{
-			$user = $user.Name
+			$userName = $user.Name
 			#todo pwsh v2
-			$UUID = $user.Split("\")[-1]
+			$UUID = $userName.Split("\")[-1]
 			#$profilePath = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID" -Name ProfileImagePath
 			$profilePath = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID").GetValue("ProfileImagePath")
 			if (-not $install) {
 				Write-Host "Removing reg keys for $UUID"
-
-				#load reg hives in case of uninstalling
+			} else {
+				Write-Host "Preparing reg keys for $UUID"
+			}
+			#load reg hives in case of uninstalling
+			try {
+				cd REGISTRY::HKEY_USERS
+				cd $UUID -ErrorAction Stop
+				prepareUserRegKeys -user $UUID -install $install
+			} catch {
 				try {
 					cd REGISTRY::HKEY_USERS
+					reg load HKU\$UUID "$profilePath\NTUSER.DAT"
+					$UUIDsloadedManually += $UUID
 					cd $UUID -ErrorAction Stop
 					prepareUserRegKeys -user $UUID -install $install
-				} catch {
 					try {
-						cd REGISTRY::HKEY_USERS
-						reg load HKU\$UUID "$profilePath\NTUSER.DAT"
-						$UUIDsloadedManually += $UUID
-						cd $UUID -ErrorAction Stop
-						prepareUserRegKeys -user $UUID -install $install
-						reg unload "$sysDrive\Users\$profilePath\NTUSER.DAT"
+						reg unload HKU\$UUID
 					} catch {
-						#user might have been deleted, C:\users\$user does not exist
+						#Write-Host "User logged in"
 						continue
 					}
+				} catch {
+					#user might have been deleted, C:\users\$user does not exist
+					continue
 				}
-
-			} else {
-				prepareUserRegKeys -mode "all" -user $UUID -install $install
 			}
 		}
 
