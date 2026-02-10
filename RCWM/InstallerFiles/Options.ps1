@@ -25,10 +25,7 @@ if ($winVerMajor -ge 11) {
 
 	if ($mode1 -eq "Y") {
 	    cmd.exe /c start /w regedit /s ..\files\RegistryFiles\Win11AddOldContextMenu.reg
-		Write-Host "Restarting explorer.exe ..."
-		Stop-Process -Name explorer -Force
-		Start-Process explorer.exe
-		Write-Host "Restarted."
+		Write-Host "A reboot might be necessary to see the changes."
 	}
 
 } elseif ($winVerMajor -eq 10) {
@@ -45,10 +42,7 @@ if ($winVerMajor -ge 11) {
 
 		if ($mode1 -eq "Y") {
 			cmd.exe /c start /w regedit /s ..\files\RegistryFiles\Win11AddOldContextMenu.reg
-			Write-Host "Restarting explorer.exe ..."
-			Stop-Process -Name explorer -Force
-			Start-Process explorer.exe
-			Write-Host "Restarted."
+			Write-Host "A reboot might be necessary to see the changes."
 		}
 	}
 }
