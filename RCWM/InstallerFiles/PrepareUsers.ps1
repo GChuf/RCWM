@@ -4,6 +4,9 @@ param(
     [bool]$install
 )
 
+$sysDrive = ($env:SystemRoot).Substring(0, 3)
+$rcwmRoot = Join-Path $sysDrive 'Program Files\RCWM'
+
 function prepareUserRegKeys(){
 	param([string]$mode, [string[]]$user, [bool]$install)
 
@@ -21,7 +24,7 @@ function prepareUserRegKeys(){
 		return
 	}
 
-	Remove-Item -Path RCWM -Recurse 2>&1>$null
+	Remove-Item -Path $rcwmRoot -Recurse 2>&1>$null
 
 	if ($install) {
 
