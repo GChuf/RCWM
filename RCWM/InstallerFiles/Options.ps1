@@ -16,6 +16,8 @@ cd ..\files\Temp
 
 if ($winVerMajor -ge 11) {
 
+	$regFiles = Get-ChildItem -Path . -Filter "Win11AddOldContextMenu.reg" -Recurse -File -ErrorAction SilentlyContinue
+
 	while ($true) {
 		$mode1 = Read-Host "Enable old context menu (show more options) in Windows 11 (Y/N)"
 		if ($mode1 -eq "Y") {break}
@@ -24,7 +26,12 @@ if ($winVerMajor -ge 11) {
 	}
 
 	if ($mode1 -eq "Y") {
-	    cmd.exe /c start /w regedit /s ..\files\RegistryFiles\Win11AddOldContextMenu.reg
+
+		cmd.exe /c start /w regedit /s Win11AddOldContextMenu.reg #HKLM
+		foreach ($file in $regFiles) {
+    		cmd.exe /c start /w regedit /s "`"$($file.FullName)`"" #HKU
+		}
+
 		Write-Host "A reboot might be necessary to see the changes."
 	}
 
@@ -41,7 +48,10 @@ if ($winVerMajor -ge 11) {
 		}
 
 		if ($mode1 -eq "Y") {
-			cmd.exe /c start /w regedit /s ..\files\RegistryFiles\Win11AddOldContextMenu.reg
+			cmd.exe /c start /w regedit /s Win11AddOldContextMenu.reg #HKLM
+			foreach ($file in $regFiles) {
+				cmd.exe /c start /w regedit /s "`"$($file.FullName)`"" #HKU
+			}
 			Write-Host "A reboot might be necessary to see the changes."
 		}
 	}
