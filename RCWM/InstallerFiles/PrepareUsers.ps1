@@ -8,19 +8,19 @@ $sysDrive = ($env:SystemRoot).Substring(0, 3)
 $rcwmRoot = Join-Path $sysDrive 'Program Files\RCWM'
 
 function prepareUserRegKeys(){
-	param([string]$mode, [string[]]$user, [bool]$install)
+	param([string]$mode, [string]$user, [bool]$install)
 
 	if ($mode -eq "current") {
 		cd REGISTRY::HKEY_CURRENT_USER
 	} else {
 		#errors if user is not logged in or hive loaded - caught at "cd software" below
-		cd REGISTRY::HKEY_USERS\$user -erroraction SilentlyContinue
+		cd REGISTRY::HKEY_USERS\$user
 	}
 
 	try {
 		cd SOFTWARE -ErrorAction Stop
 	} catch {
-		#Write-Host "Error loading registry for UUID $user"
+		Write-Host "Error loading registry for UUID $UUID"
 		return
 	}
 
@@ -35,7 +35,8 @@ function prepareUserRegKeys(){
 		New-Item -Path rstrc | Out-Null
 
 	} else {
-		Remove-Item -Path RCWM -Recurse 2>&1>$null
+
+		Remove-Item -Path RCWM -Recurse
 		#Make sure Temp is clean.
 
 		cmd.exe /c del .\Temp\* /s /q 2>&1>$null
@@ -97,19 +98,21 @@ function loopThroughUsers() {
 			#$profilePath = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID" -Name ProfileImagePath
 			$profilePath = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID").GetValue("ProfileImagePath")
 			if (-not $install) {
-				Write-Host "Removing reg keys for $uuid"
+				Write-Host "Removing reg keys for $UUID"
 
 				#load reg hives in case of uninstalling
 				try {
 					cd REGISTRY::HKEY_USERS
 					cd $UUID -ErrorAction Stop
+					prepareUserRegKeys -user $UUID -install $install
 				} catch {
 					try {
-						reg load HKU\$UUID "$profilePath\NTUSER.DAT" 2>&1>$null
+						cd REGISTRY::HKEY_USERS
+						reg load HKU\$UUID "$profilePath\NTUSER.DAT"
 						$UUIDsloadedManually += $UUID
 						cd $UUID -ErrorAction Stop
 						prepareUserRegKeys -user $UUID -install $install
-						reg unload "$sysDrive\Users\$profilePath\NTUSER.DAT" 2>&1>$null
+						reg unload "$sysDrive\Users\$profilePath\NTUSER.DAT"
 					} catch {
 						#user might have been deleted, C:\users\$user does not exist
 						continue
