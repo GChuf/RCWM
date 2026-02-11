@@ -1,0 +1,8 @@
+Windows Registry Editor Version 5.00
+
+;show hidden files in explorer
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+"Hidden"=dword:1
+
+;done

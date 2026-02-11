@@ -1,0 +1,8 @@
+Windows Registry Editor Version 5.00
+
+;show file extensions in explorer
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced]
+"HideFileExt"=dword:0
+
+;done

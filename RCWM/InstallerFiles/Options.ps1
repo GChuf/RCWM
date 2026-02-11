@@ -142,6 +142,8 @@ $RemoveOptions = @(
 )
 
 $MiscOptions = @(
+	New-Object PSObject -Property @{Name = 'ShowFileExtensions'; RegFile = 'ShowFileExtensions.reg'; Desc = 'Do you want to show file extensions in explorer'}
+	New-Object PSObject -Property @{Name = 'ShowHiddenFiles'; RegFile = 'ShowHiddenFiles.reg'; Desc = 'Do you want to show hidden files in explorer'}
 	New-Object PSObject -Property @{Name = 'DisableUAC'; RegFile = 'DisableUAC.reg'; Desc = 'Do you want to always disable User Account Control (UAC)'}
 	New-Object PSObject -Property @{Name = 'CMDadmin'; RegFile = 'CMDadmin.reg'; Desc = 'Do you want to always open cmd.exe as admin'}
 	New-Object PSObject -Property @{Name = 'ThisPC'; RegFile = 'ThisPC.reg'; Desc = 'Do you want to add "This PC" shortcut to Desktop'}
