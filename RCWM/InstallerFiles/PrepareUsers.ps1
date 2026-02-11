@@ -329,12 +329,19 @@ if ($mode1 -eq "A") {
 	$rcwmRoot = Join-Path $sysDrive 'Program Files\RCWM'
 
 
+	#OLD:
 	#add rcwm_createregkeys to HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
 	#runs at startup for all users
-	$startupRegistryPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
-	$rcwmRegistryPath = "HKLM:\SOFTWARE\RCWM"
-	$valueName = "RCWM"
-	$initregkeysPath = '"' + $sysDrive + '\Program Files\RCWM\RCWMInit.exe' + '"'
+	#$startupRegistryPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+	#$rcwmRegistryPath = "HKLM:\SOFTWARE\RCWM"
+	#$valueName = "RCWM"
+	#$initregkeysPath = '"' + $sysDrive + '\Program Files\RCWM\RCWMInit.exe' + '"'
+
+	#install scheduled task that runs RCWMInit at log on of every user
+	#does nothing if reg keys are already there
+	#but creates new regkeys for users that will login for the first time after this script is run
+	Write-Host "Creating RCWM Init scheduled task ..."
+	schtasks /Create /TN "RCWM Init" /XML "RCWMInit-task.xml" /F
 
 	
 	if ($install) {
