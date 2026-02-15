@@ -35,16 +35,7 @@ function prepareUserRegKeys(){
 		New-Item -Path rstrc 2>&1>$null
 
 	} else {
-
 		Remove-Item -Path RCWM -Recurse
-
-		#Make sure Temp is clean.
-		cmd.exe /c del .\Temp\* /s /q 2>&1>$null
-		cmd.exe /c rd /s /q .\Temp /s /q 2>&1>$null
-		New-Item Temp -ItemType "directory" 2>&1>$null
-
-		#Remove scheduled task for rcwminit
-		schtasks /Delete /TN "RCWM Init" /F
 	}
 }
 
@@ -87,6 +78,14 @@ function loopThroughUsers() {
 			foreach ($reg in $regs) {
 				regedit /s ..\UninstallerFiles\$reg
 			}
+
+			#Make sure Temp is clean.
+			cmd.exe /c del .\Temp\* /s /q 2>&1>$null
+			cmd.exe /c rd /s /q .\Temp /s /q 2>&1>$null
+
+			#Remove scheduled task for rcwminit
+			schtasks /Delete /TN "RCWM Init" /F
+
 		} else {
 			regReplacements -mode "all" -install $install
 			#prepareHKLMRegKeys
