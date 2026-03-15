@@ -286,6 +286,11 @@ If ( $copy -eq $True ) {
 			#if the source! is a folder, make new directory with the same name as the folder being copied
 			if ($isDirectory) {
 				New-Item -Path "$destination" -ItemType Directory > $null
+				if ($LASTEXITCODE -ne 0) {
+					Write-Host "Error!"
+					Start-Sleep 3
+					exit
+				}
 			}
 			Write-Host "Executing $robocopy `"$sourceDirFullPath`" `"$destination`" `"$filename`" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /MT:32"
 			& $robocopy "$sourceDirFullPath" "$destination" "$filename" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /MT:32
