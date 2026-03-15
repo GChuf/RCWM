@@ -85,6 +85,11 @@ function loopThroughUsers() {
 
 			#Remove scheduled task for rcwminit
 			schtasks /Delete /TN "RCWM Init" /F
+			
+			#Remove registry keys under HKLM
+			$rcwmRegistryPath = "HKLM:\SOFTWARE\RCWM"
+			Remove-Item -Path $rcwmRoot -Recurse -Force -ErrorAction SilentlyContinue | out-null
+			Remove-Item -Path $rcwmRegistryPath -Recurse -Force -ErrorAction SilentlyContinue | out-null
 
 		} else {
 			regReplacements -mode "all" -install $install
@@ -329,33 +334,6 @@ if ($mode1 -eq "A") {
 
 	$sysDrive = $env:SystemDrive
 	$rcwmRoot = Join-Path $sysDrive 'Program Files\RCWM'
-
-
-	#OLD:
-	#add rcwm_createregkeys to HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
-	#runs at startup for all users
-	#$startupRegistryPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
-	#$rcwmRegistryPath = "HKLM:\SOFTWARE\RCWM"
-	#$valueName = "RCWM"
-	#$initregkeysPath = '"' + $sysDrive + '\Program Files\RCWM\RCWMInit.exe' + '"'
-
-	#install scheduled task that runs RCWMInit at log on of every user
-	#does nothing if reg keys are already there
-	#but creates new regkeys for users that will login for the first time after this script is run
-	Write-Host "Creating RCWM Init scheduled task ..."
-	schtasks /Create /TN "RCWM Init" /XML "RCWMInit-task.xml" /F
-
-	
-	if ($install) {
-		New-ItemProperty -Path $startupRegistryPath -Name $valueName -Value $initregkeysPath -PropertyType String -Force | out-null
-	} else {
-		Remove-Item -Path $rcwmRoot -Recurse -Force -ErrorAction SilentlyContinue | out-null
-		Remove-Item -Path $initregkeysPath -ErrorAction SilentlyContinue| out-null
-
-		Remove-Item -Path $rcwmRegistryPath -Recurse -Force -ErrorAction SilentlyContinue | out-null
-
-		Remove-ItemProperty -Path $startupRegistryPath -Name $valueName -ErrorAction SilentlyContinue | out-null
-	}
 
 	loopThroughUsers -mode "all" -install $install
 
