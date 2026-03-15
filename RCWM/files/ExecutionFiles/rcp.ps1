@@ -295,11 +295,12 @@ If ( $copy -eq $True ) {
 			Write-Host "Executing $robocopy `"$sourceDirFullPath`" `"$destination`" `"$filename`" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /MT:32"
 			& $robocopy "$sourceDirFullPath" "$destination" "$filename" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /MT:32
 
-			if ($command -eq "rcmov" -and $isDirectory) {
-				#Write-Host "removing: $sourceDirFullPath"
-				cmd.exe /c rd /s /q "$sourceDirFullPath"
+			if ($LASTEXITCODE -le 8) { #anything less than 8 is OK from robocopy
+				if ($command -eq "rcmov" -and $isDirectory) {
+					#Write-Host "removing: $sourceDirFullPath"
+					cmd.exe /c rd /s /q "$sourceDirFullPath"
+				}
 			}
-
 			echo "Finished $string3 $sourceDirFullPath\$filename"
 		}
 	}
