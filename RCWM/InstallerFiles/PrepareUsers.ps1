@@ -102,7 +102,6 @@ function loopThroughUsers() {
 		#with loading reg hives works for all users, except some exceptions
 		foreach ($user in $allUsers)
 		{
-			write-host "foreach"
 			$userName = $user.Name
 			#todo pwsh v2
 			$UUID = $userName.Split("\")[-1]
