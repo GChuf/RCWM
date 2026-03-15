@@ -113,6 +113,8 @@ if ($args[2] -eq $null) #pwsh 4 and less, uses rcp.cmd: reg add HKCU\SOFTWARE\RC
 
 $destDirectoryDisplay = "'" + $destDir + "'"
 
+$pwshV2 = ($psversiontable.PSVersion.Major -eq 2)
+
 if ($mode -eq "p") {
 
 	#get list form clipboard
@@ -231,7 +233,7 @@ If ( $copy -eq $True ) {
 			$filename = ""
 			$copyEmptyDirectoriesFlag = "/E"
 
-			if ($psversiontable.PSVersion.Major -eq 2) {
+			if ($pwshV2) {
 				$sourceDir = ($fullPath -split "\\")[-1]
 			} else {
 				$sourceDir = $fullPath.split("\")[-1]
@@ -251,7 +253,7 @@ If ( $copy -eq $True ) {
 
 			$copyEmptyDirectoriesFlag = ""
 
-			if ($psversiontable.PSVersion.Major -eq 2) {
+			if ($pwshV2) {
 				$sourceDir = ($fullPath -split "\\")[-2]
 				$filename = ($fullPath -split "\\")[-1]
 			} else {
@@ -326,7 +328,7 @@ If ( $copy -eq $True ) {
 
 							$copyEmptyDirectoriesFlag = "/E"
 
-							if ($psversiontable.PSVersion.Major -eq 2) {
+							if ($pwshV2) {
 								$sourceDir = ($fullPath -split "\\")[-1]
 							} else {
 								$sourceDir = $fullPath.split("\")[-1]
@@ -348,7 +350,7 @@ If ( $copy -eq $True ) {
 
 							$copyEmptyDirectoriesFlag = ""
 
-							if ($psversiontable.PSVersion.Major -eq 2) {
+							if ($pwshV2) {
 								$sourceDir = ($fullPath -split "\\")[-2]
 								$filename = ($fullPath -split "\\")[-1]
 							} else {
@@ -395,7 +397,7 @@ If ( $copy -eq $True ) {
 
 							$copyEmptyDirectoriesFlag = "/E"
 
-							if ($psversiontable.PSVersion.Major -eq 2) {
+							if ($pwshV2) {
 								$sourceDir = ($fullPath -split "\\")[-1]
 							} else {
 								$sourceDir = $fullPath.split("\")[-1]
@@ -417,7 +419,7 @@ If ( $copy -eq $True ) {
 
 							$copyEmptyDirectoriesFlag = ""
 
-							if ($psversiontable.PSVersion.Major -eq 2) {
+							if ($pwshV2) {
 								$sourceDir = ($fullPath -split "\\")[-2]
 								$filename = ($fullPath -split "\\")[-1]
 							} else {
