@@ -35,7 +35,7 @@ function prepareUserRegKeys(){
 		New-Item -Path rstrc 2>&1>$null
 
 	} else {
-		Remove-Item -Path RCWM -Recurse
+		Remove-Item -Path RCWM -Recurse 2>&1>$null
 	}
 }
 
@@ -127,7 +127,7 @@ function loopThroughUsers() {
 					cd $UUID -ErrorAction Stop
 					prepareUserRegKeys -user $UUID -install $install
 					try {
-						reg unload HKU\$UUID 2>$null
+						reg unload HKU\$UUID
 						if ($LASTEXITCODE -ne 0) {throw "reg unload failed with exit code $LASTEXITCODE"}
 					} catch {
 						#Write-Host "User logged in"
