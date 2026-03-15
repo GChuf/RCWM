@@ -48,7 +48,8 @@ if ( ($winVerMajor -ge 11) -or ( ($winVerMajor -eq 10) -and ($build -ge 22000) )
 			} catch {
 				try {
 					cd REGISTRY::HKEY_USERS
-					reg load HKU\$UUID "$profilePath\NTUSER.DAT"
+					reg load HKU\$UUID "$profilePath\NTUSER.DAT" 2>$null
+					if ($LASTEXITCODE -ne 0) {throw "reg load failed with exit code $LASTEXITCODE"}
 					$UUIDsloadedManually += $UUID
 					cd $UUID -ErrorAction Stop
 				} catch {
@@ -74,6 +75,7 @@ if ( ($winVerMajor -ge 11) -or ( ($winVerMajor -eq 10) -and ($build -ge 22000) )
 			$UUID = $userName.Split("\")[-1]
 			try {
 				reg unload HKU\$UUID
+				if ($LASTEXITCODE -ne 0) {throw "reg unload failed with exit code $LASTEXITCODE"}
 			} catch {
 				continue
 			}

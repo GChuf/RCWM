@@ -92,14 +92,17 @@ function loopThroughUsers() {
 			Remove-Item -Path $rcwmRegistryPath -Recurse -Force -ErrorAction SilentlyContinue | out-null
 
 		} else {
+			Write-Host "Preparing RCWM task to initialize registry keys for all users ..."
+			schtasks /Create /TN "RCWM Init" /xml "..\InstallerFiles\RCWMInit-task.xml" /F
+
 			regReplacements -mode "all" -install $install
-			#prepareHKLMRegKeys
 		}
 
 		#prepare reg keys - works for logged in users without loading reg hives
 		#with loading reg hives works for all users, except some exceptions
 		foreach ($user in $allUsers)
 		{
+			write-host "foreach"
 			$userName = $user.Name
 			#todo pwsh v2
 			$UUID = $userName.Split("\")[-1]
@@ -111,7 +114,6 @@ function loopThroughUsers() {
 			#else {
 				#Write-Host "Preparing reg keys for $UUID"
 			#}
-
 			#load reg hives in case of uninstalling
 			try {
 				cd REGISTRY::HKEY_USERS
@@ -120,12 +122,14 @@ function loopThroughUsers() {
 			} catch {
 				try {
 					cd REGISTRY::HKEY_USERS
-					reg load HKU\$UUID "$profilePath\NTUSER.DAT"
+					reg load HKU\$UUID "$profilePath\NTUSER.DAT" 2>$null
+					if ($LASTEXITCODE -ne 0) {throw "reg load failed with exit code $LASTEXITCODE"}
 					$UUIDsloadedManually += $UUID
 					cd $UUID -ErrorAction Stop
 					prepareUserRegKeys -user $UUID -install $install
 					try {
-						reg unload HKU\$UUID
+						reg unload HKU\$UUID 2>$null
+						if ($LASTEXITCODE -ne 0) {throw "reg unload failed with exit code $LASTEXITCODE"}
 					} catch {
 						#Write-Host "User logged in"
 						continue
@@ -136,7 +140,6 @@ function loopThroughUsers() {
 				}
 			}
 		}
-
 		
 		#only move all files to "ALL" folder, no reg replacements needed
 		cd $initialLocation
@@ -274,8 +277,8 @@ function regReplacements() {
 				$userName = $user.Name
 				#todo pwsh v2
 				$UUID = $userName.Split("\")[-1]
-
 				New-Item .\Temp\$UUID -ItemType "directory" 2>&1>$null
+
 				(Get-Content .\Temp\Win11AddOldContextMenu.reg) -Replace "HKEY_LOCAL_MACHINE", "HKEY_USERS\$UUID" | Set-Content .\Temp\$UUID\Win11AddOldContextMenu.reg
 
 			}
