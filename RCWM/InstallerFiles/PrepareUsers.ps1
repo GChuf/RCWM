@@ -8,34 +8,36 @@ $sysDrive = ($env:SystemRoot).Substring(0, 3)
 $rcwmRoot = Join-Path $sysDrive 'Program Files\RCWM'
 
 function prepareUserRegKeys(){
+
 	param([string]$mode, [string]$user, [bool]$install)
 
 	if ($mode -eq "current") {
-		cd REGISTRY::HKEY_CURRENT_USER
+		$baseRegPath = "REGISTRY::HKEY_CURRENT_USER\SOFTWARE"
 	} else {
-		#errors if user is not logged in or hive loaded - caught at "cd software" below
-		cd REGISTRY::HKEY_USERS\$user -erroraction SilentlyContinue
+		#errors if user is not logged in or hive loaded - caught at "get-item" below
+		$baseRegPath = "REGISTRY::HKEY_USERS\$user\SOFTWARE"
 	}
 
-	try {
-		cd SOFTWARE -ErrorAction Stop
-	} catch {
-		Write-Host "Error loading registry for UUID $UUID"
-		return
-	}
+    try {
+        Get-Item $baseRegPath -ErrorAction Stop | Out-Null
+    } catch {
+        #Write-Host "Error loading registry for UUID $user"
+        throw "Error loading registry for UUID $user"
+    }
+
+	$rcwm = "$baseRegPath\RCWM"
 
 	if ($install) {
-		New-Item -Path RCWM  2>&1>$null
-		cd RCWM
-		New-Item -Path dlink 2>&1>$null
-		New-Item -Path flink 2>&1>$null
-		New-Item -Path miror 2>&1>$null
-		New-Item -Path rcmov 2>&1>$null
-		New-Item -Path rcopy 2>&1>$null
-		New-Item -Path rstrc 2>&1>$null
+		New-Item -Path $rcwm 2>&1>$null
+		New-Item -Path $rcwm\dlink 2>&1>$null
+		New-Item -Path $rcwm\flink 2>&1>$null
+		New-Item -Path $rcwm\miror 2>&1>$null
+		New-Item -Path $rcwm\rcmov 2>&1>$null
+		New-Item -Path $rcwm\rcopy 2>&1>$null
+		New-Item -Path $rcwm\rstrc 2>&1>$null
 
 	} else {
-		Remove-Item -Path RCWM -Recurse 2>&1>$null
+		Remove-Item -Path $rcwm -Recurse 2>&1>$null
 	}
 }
 
@@ -84,8 +86,8 @@ function loopThroughUsers() {
 			cmd.exe /c rd /s /q .\Temp /s /q 2>&1>$null
 
 			#Remove scheduled task for rcwminit
-			schtasks /Delete /TN "RCWM Init" /F
-			
+			schtasks /Delete /TN "RCWM Init" /F 2>&1>$null
+
 			#Remove registry keys under HKLM
 			$rcwmRegistryPath = "HKLM:\SOFTWARE\RCWM"
 			Remove-Item -Path $rcwmRoot -Recurse -Force -ErrorAction SilentlyContinue | out-null
@@ -93,20 +95,24 @@ function loopThroughUsers() {
 
 		} else {
 			Write-Host "Preparing RCWM task to initialize registry keys for all users ..."
-			schtasks /Create /TN "RCWM Init" /xml "..\InstallerFiles\RCWMInit-task.xml" /F
+			schtasks /Create /TN "RCWM Init" /xml "..\InstallerFiles\RCWMInit-task.xml" /F 2>&1>$null
 
 			regReplacements -mode "all" -install $install
 		}
 
 		#prepare reg keys - works for logged in users without loading reg hives
 		#with loading reg hives works for all users, except some exceptions
+		Write-Host "Preparing registry ..."
 		foreach ($user in $allUsers)
 		{
+			#write-host "foreach"
 			$userName = $user.Name
 			#todo pwsh v2
 			$UUID = $userName.Split("\")[-1]
 			#$profilePath = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID" -Name ProfileImagePath
-			$profilePath = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID").GetValue("ProfileImagePath")
+			$profilePathKey = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID")
+			$profilePath = $profilePathKey.GetValue("ProfileImagePath")
+			$profilePathKey.Close()
 			if (-not $install) {
 				Write-Host "Removing reg keys for $UUID"
 			} 
@@ -115,31 +121,29 @@ function loopThroughUsers() {
 			#}
 			#load reg hives in case of uninstalling
 			try {
-				cd REGISTRY::HKEY_USERS
-				cd $UUID -ErrorAction Stop
 				prepareUserRegKeys -user $UUID -install $install
 			} catch {
 				try {
-					cd REGISTRY::HKEY_USERS
-					reg load HKU\$UUID "$profilePath\NTUSER.DAT" 2>$null
+					reg load HKU\$UUID "$profilePath\NTUSER.DAT" 2>&1>$null
 					if ($LASTEXITCODE -ne 0) {throw "reg load failed with exit code $LASTEXITCODE"}
 					$UUIDsloadedManually += $UUID
-					cd $UUID -ErrorAction Stop
 					prepareUserRegKeys -user $UUID -install $install
-					try {
-						reg unload HKU\$UUID
-						if ($LASTEXITCODE -ne 0) {throw "reg unload failed with exit code $LASTEXITCODE"}
-					} catch {
-						#Write-Host "User logged in"
-						continue
-					}
+					cd $initialLocation
 				} catch {
 					#user might have been deleted, C:\users\$user does not exist
 					continue
 				}
 			}
+			finally {
+				# Force release any handles
+				[gc]::Collect()
+				[gc]::WaitForPendingFinalizers()
+				reg unload HKU\$UUID 2>&1>$null
+			}
+
 		}
 		
+
 		#only move all files to "ALL" folder, no reg replacements needed
 		cd $initialLocation
 		cd ../files
@@ -179,6 +183,7 @@ function loopThroughUsers() {
 			Write-Host "Exiting ..."; start-sleep 2; break
 		}
 
+		Write-Host "Preparing registry ..."
 		prepareUserRegKeys -mode "current" -user $UUID -install $install
 
 		regReplacements -mode "current" -install $install
@@ -232,17 +237,17 @@ function writeVersion(){
 }
 
 function regReplacements() {
-
 	param([string]$mode, [bool]$install)
 
-	#Write-Host "Generating all necessary registry files ..."
 	cd $initialLocation
 	cd ../files
 
 
 	if ($install) {
+		Write-Host "Preparing installation reg files ..."
 		$files = Get-ChildItem ".\Temp\*.reg"
 	} else {
+		Write-Host "Preparing uninstallation reg files ..."
 		$files = Get-ChildItem "..\UninstallerFiles\*.reg"
 	}
 
@@ -265,7 +270,6 @@ function regReplacements() {
 
 	if ($mode -eq "all") {
 		if ($install) {
-
 			#create folders for all users
 			#for specific options that need HKCU inserts as well as HKLM
 			#example win11 old context menu

@@ -78,7 +78,9 @@ if ($command -eq "rcmov") {
 if ($args[2] -eq $null) #pwsh 4 and less, uses rcp.cmd: reg add HKCU\SOFTWARE\RCWM /v dir /t REG_MULTI_SZ /f /d %1 1>NUL
 {
 	#$regInsert = (Get-ItemProperty -Path 'HKCU:\SOFTWARE\RCWM').dir #must not be string, but string array
-	$regInsert = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey("SOFTWARE\RCWM").GetValue("dir")
+	$regInsertKey = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey("SOFTWARE\RCWM")
+	$regInsert = $regInsertKey.GetValue("dir")
+	$regInsertKey.Close()
 	#fix inserts like "\0" into registry, which translates into new line ... (every folder that starts with "0" has this problem)
 	#if folder name begins with "0", registry doesn't work ..... (\0) == "newline"
 
@@ -128,7 +130,9 @@ if ($mode -eq "p") {
 	#get array of contents of paths inside HKCU\SOFTWARE\RCWM\command
 
 	#$sourcesArray = (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\$command).property 2> $null
-	$sourcesArray = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey("SOFTWARE\RCWM\$command").GetValueNames()
+	$sourcesArrayKey = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey("SOFTWARE\RCWM\$command")
+    $sourcesArray = $sourcesArrayKey.GetValueNames()
+    $sourcesArrayKey.Close()
 
 	$sourcesArrayLength = ($sourcesArray|measure).count
 

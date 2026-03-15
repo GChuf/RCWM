@@ -40,15 +40,16 @@ if ( ($winVerMajor -ge 11) -or ( ($winVerMajor -eq 10) -and ($build -ge 22000) )
 			#todo pwsh v2
 			$UUID = $userName.Split("\")[-1]
 			#$profilePath = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID" -Name ProfileImagePath
-			$profilePath = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID").GetValue("ProfileImagePath")
-
+			$profilePathKey = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID")
+			$profilePath = $profilePathKey.GetValue("ProfileImagePath")
+			$profilePathKey.Close()
 			try {
 				cd REGISTRY::HKEY_USERS
 				cd $UUID -ErrorAction Stop
 			} catch {
 				try {
 					cd REGISTRY::HKEY_USERS
-					reg load HKU\$UUID "$profilePath\NTUSER.DAT" 2>$null
+					reg load HKU\$UUID "$profilePath\NTUSER.DAT" 2>&1>$null
 					if ($LASTEXITCODE -ne 0) {throw "reg load failed with exit code $LASTEXITCODE"}
 					$UUIDsloadedManually += $UUID
 					cd $UUID -ErrorAction Stop
@@ -74,7 +75,7 @@ if ( ($winVerMajor -ge 11) -or ( ($winVerMajor -eq 10) -and ($build -ge 22000) )
 			$userName = $user.Name
 			$UUID = $userName.Split("\")[-1]
 			try {
-				reg unload HKU\$UUID
+				reg unload HKU\$UUID 2>&1>$null
 				if ($LASTEXITCODE -ne 0) {throw "reg unload failed with exit code $LASTEXITCODE"}
 			} catch {
 				continue
