@@ -72,7 +72,7 @@ if ($os -eq 6) {
 
 #rcp script
 #"minify" - take out tabs
-(Get-Content .\Temp\rcp.ps1) -replace "`t", "" | Set-Content .\Temp\rcp.ps1
+#(Get-Content .\Temp\rcp.ps1) -replace "`t", "" | Set-Content .\Temp\rcp.ps1
 
 
 #copy only: executionFiles and Icons for now
