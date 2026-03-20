@@ -32,7 +32,7 @@ if ( ($winVerMajor -ge 11) -or ( ($winVerMajor -eq 10) -and ($build -ge 22000) )
 
 		$allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
 
-		$regFiles = Get-ChildItem -Path . -Filter "Win11AddOldContextMenu.reg" -Recurse -File -ErrorAction SilentlyContinue
+		$regFiles = Get-ChildItem -Path . -Filter "Win11AddOldContextMenu.reg" -Recurse -ErrorAction SilentlyContinue
 		cmd.exe /c start /w regedit /s Win11AddOldContextMenu.reg #HKLM
 
 		foreach ($user in $allUsers)
@@ -168,7 +168,7 @@ function ShowFileExtensions() {
 
 		$allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
 
-		$regFiles = Get-ChildItem -Path . -Filter "ShowFileExtensions.reg" -Recurse -File -ErrorAction SilentlyContinue
+		$regFiles = Get-ChildItem -Path . -Filter "ShowFileExtensions.reg" -Recurse -ErrorAction SilentlyContinue
 		cmd.exe /c start /w regedit /s ShowFileExtensions.reg #HKLM
 
 		foreach ($user in $allUsers)
@@ -219,7 +219,7 @@ function ShowHiddenFiles(){
 
 		$allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
 
-		$regFiles = Get-ChildItem -Path . -Filter "ShowHiddenFiles.reg" -Recurse -File -ErrorAction SilentlyContinue
+		$regFiles = Get-ChildItem -Path . -Filter "ShowHiddenFiles.reg" -Recurse -ErrorAction SilentlyContinue
 		cmd.exe /c start /w regedit /s ShowHiddenFiles.reg #HKLM
 
 		foreach ($user in $allUsers)
