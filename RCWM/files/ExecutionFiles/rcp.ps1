@@ -286,7 +286,7 @@ If ( $copy -eq $True ) {
 			#if the source! is a folder, make new directory with the same name as the folder being copied
 			if ($isDirectory) {
 				New-Item -Path "$destination" -ItemType Directory
-				if ($LASTEXITCODE -ne 0) {
+				if (!$?) { #if last command failed
 					Write-Host "Error!"
 					Start-Sleep 3
 					exit
@@ -299,7 +299,7 @@ If ( $copy -eq $True ) {
 				if ($LASTEXITCODE -le 8) { #anything less than 8 is OK from robocopy
 					#Write-Host "removing: $sourceDirFullPath"
 					cmd.exe /c rd /s /q "$sourceDirFullPath"
-					if ($LASTEXITCODE -ne 0) {
+					if (!$?) { #if last command failed
 						Write-Host "Error!"
 						Start-Sleep 3
 						exit
