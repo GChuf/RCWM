@@ -65,17 +65,17 @@ powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\InitialS
 
 powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\PrepareUsers.ps1 -install $true
 
-IF !powershellVersion! LEQ 4 (
-    echo explorer.exe restart might be needed.
-    set /p choice=Do you want to restart explorer.exe now? [Y/N] 
-    if /I "!choice!"=="Y" (
-        taskkill /im explorer.exe /f >nul 2>&1
-        start explorer.exe
-        echo Explorer has been restarted.
-    ) else (
-        echo Explorer restart skipped.
-    )
+
+echo explorer.exe restart might be needed.
+set /p choice=Do you want to restart explorer.exe now? [Y/N] 
+if /I "!choice!"=="Y" (
+    taskkill /im explorer.exe /f /fi "USERNAME eq %USERNAME%" >nul 2>&1
+    start explorer.exe
+    echo Explorer has been restarted.
+) else (
+    echo Explorer restart skipped.
 )
+
 
 echo(
 echo(
