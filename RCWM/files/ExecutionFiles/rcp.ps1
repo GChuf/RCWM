@@ -264,13 +264,17 @@ If ( $copy -eq $True ) {
 
 			#trim filename from the path - filename is passed as another argument into robocopy
 			#and is empty in case source is a folder
-			$sourceDirFullPath = ($fullPath -replace "\\$filename$", "")
+			#$sourceDirFullPath = ($fullPath -replace "\\$filename$", "") - does not work for special chars inside filename
+
+			$stringLength = $fullPath.length - $fileName.length
+			$sourceDirFullPath = $fullpath.substring(0,$stringLength)
 
 			#dest: target dir
 			[string]$destination = [string]$destDir
 
 			#destination check for merge
 			[string]$destinationToCheck = [string]$destDir + "\" + [string]$filename
+
 		} else {
 			Write-Host "Source file or folder" $fullPath "does not exist!"
 			Start-Sleep 1
@@ -376,7 +380,9 @@ If ( $copy -eq $True ) {
 
 							#trim filename from the path - filename is passed as another argument into robocopy
 							#and is empty in case source is a folder
-							$sourceDirFullPath = ($fullPath -replace "\\$filename$", "")
+							$stringLength = $fullPath.length - $fileName.length
+							$sourceDirFullPath = $fullpath.substring(0,$stringLength)
+
 
 							#dest: target dir
 							[string]$destination = [string]$destDir
@@ -445,8 +451,8 @@ If ( $copy -eq $True ) {
 
 							#trim filename from the path - filename is passed as another argument into robocopy
 							#and is empty in case source is a folder
-							$sourceDirFullPath = ($fullPath -replace "\\$filename$", "")
-
+							$stringLength = $fullPath.length - $fileName.length
+							$sourceDirFullPath = $fullpath.substring(0,$stringLength)
 							#dest: target dir
 							[string]$destination = [string]$destDir
 
