@@ -19,7 +19,7 @@ if "!powershellVersion!" EQU "1" (
 )
 
 rem Set window size for pwsh 4 and older
-IF !pwsh! EQU 4 ( mode con: cols=110 )
+IF !powershellVersion! EQU 4 ( mode con: cols=110 )
 
 color 0b
 
@@ -65,7 +65,7 @@ powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\InitialS
 
 powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\PrepareUsers.ps1 -install $true
 
-IF !pwsh! LEQ 4 (
+IF !powershellVersion! LEQ 4 (
     echo explorer.exe restart might be needed.
     set /p choice=Do you want to restart explorer.exe now? [Y/N] 
     if /I "!choice!"=="Y" (
