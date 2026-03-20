@@ -285,7 +285,7 @@ If ( $copy -eq $True ) {
 		} else {
 			#if the source! is a folder, make new directory with the same name as the folder being copied
 			if ($isDirectory) {
-				New-Item -Path "$destination" -ItemType Directory > $null
+				New-Item -Path "$destination" -ItemType Directory
 				if ($LASTEXITCODE -ne 0) {
 					Write-Host "Error!"
 					Start-Sleep 3
