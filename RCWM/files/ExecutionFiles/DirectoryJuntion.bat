@@ -4,7 +4,6 @@ rem 65000: UTF-7
 rem 65001: UTF-8 does not work on Win7
 chcp 65001 > nul
 title RCWM: Directory Junction
-echo RCWM v3.0.0
 
 set curdir=%cd%
 FOR /F "tokens=*" %%g IN ('powershell "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\dlink).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\dlink).property }"') do (SET folder=%%g)
