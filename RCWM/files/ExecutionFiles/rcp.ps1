@@ -81,6 +81,8 @@ if ($args[2] -eq $null) #pwsh 4 and less, uses rcp.cmd: reg add HKCU\SOFTWARE\RC
 	$regInsertKey = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey("SOFTWARE\RCWM")
 	$regInsert = $regInsertKey.GetValue("dir")
 	$regInsertKey.Close()
+	$destDir = $regInsert
+
 	#fix inserts like "\0" into registry, which translates into new line ... (every folder that starts with "0" has this problem)
 	#if folder name begins with "0", registry doesn't work ..... (\0) == "newline"
 
