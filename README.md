@@ -1,4 +1,4 @@
-# Right Click Windows Magic - v3.0.0 soon!
+# Right Click Windows Magic
 
 Right Click Windows Magic is a set of right-click (context) menu tools for admins, power users and other magic beings. If you consider yerself a wizard and would like to save yourself some time and headaches, this is the *right* set of context menu tools for you.
 
@@ -6,15 +6,19 @@ This little magic pack includes:
 - option to add the old context menu back in Windows 11
 - robocopy for copying and moving directories (much faster than regular copy)
 - robocopy also works for copying/moving across network shares
+- pasting from clipboard (with robocopy)
+- SCP from/to
 - opening CMD or powershell windows into folders or drives
+- running scripts as Administrator for .ps1 scripts
 - taking ownership of files, or directories with recursion (takeown && icacls)
 - options to boot into Safe Mode
 - option to Reboot to Recovery
-- opening Control Panel
+- opening Control Panel from Desktop
 - running programs with custom priority
 - option to always open cmd as admin
-- making symbolic/hard links
+- creating symbolic/hard links
 - opening "God Mode"
+- rebooting/shutting down in x seconds
 - options to MoveTo / SendTo folder (from Windows 7)
 - signing out from desktop background
 - opening GodMode
@@ -37,11 +41,9 @@ Other removals:
 
 TODO (magic takes time):
 - takeown for files (.exe and other)
-- copying files
 - directory juntions for multiple files/folders
 - pwsh opened with admin priv
 - adding other admin tools to right click in background
-- remove "cast to device", check "add to win media player list"
 - your suggestions
 
 
@@ -52,7 +54,7 @@ TODO (magic takes time):
 
 
 To install the tools: download the latest zip file under releases ([here](https://github.com/GChuf/RCWM/releases/latest)), unzip it and run the install.cmd script __as administrator__ - after that, you'll only need the two most abused keys: __*Y*__ and __*N*__ (and maybe a few others).
-If you don't have the administrator privileges on your Windows OS, some magic might not work properly.
+If the user running RCWM commands does not have the administrator privileges, some magic might not work properly.
 
 
 # How does it work?
@@ -64,25 +66,29 @@ Right now, the magic happens inside the Windows registry with some help of batch
 The goal was to automate command line tools like robocopy, so that 1) everybody could use it, and 2) it would save some time to those who already know how to use it. While automating the tasks, I've accidentally discovered that I could automate much more than what I thought - and so now, you can select multiple folders to copy/move and paste them all into one folder, just like you can with the regular, slow, lazy windows GUI copy.
 
 
-# RoboCopy: Copy and Move File/Directory options
+# RoboCopy: Copy and Move items options
 
-Copy/Paste & Move FIle/Directory both use robocopy to do the work. 
+Copy/Paste & Move File/Directory both use robocopy to do the work. 
 You have two options: you can copy multiple or single directories at a time.
 
 __Single__:
-The folder (directory path) to be copied (when you right-click "Copy") is written into registry and __overwrites__ any previous folder paths stored there. If you specify a new folder to be copied, the old one (if existing) will be overwritten.
+The file/folder (directory path) to be copied (when you right-click "Copy") is written into registry and __overwrites__ any previous folder paths stored there. If you specify a new folder to be copied, the old one (if existing) will be overwritten.
 
 __Multiple__:
-The list of the folder paths to be copied is __appended__ to registry under *HKCU:\SOFTWARE\RCWM\{rcopy || rcmov}* keys. Then the script goes through a powershell loop to copy all of them.
+The list of the file/folder paths to be copied is __appended__ to registry under *HKCU:\SOFTWARE\RCWM\{rcopy || rcmov}* keys. Then the script goes through a powershell loop to copy all of them.
 
 By default, you can only select up to 15 folders to be copied (the default windows limit for right-click options is 15, you can increase it to 31 or more in the install script - see the *MultipleInvokeMinimum.reg* file for more info). Recursive copying/moving is also never a problem (you can have as many subfolders as you like).
 
 Use this option if you intend to use RoboCopy a lot. You can read the rcp.ps1 powershell file to understand how the script works.
 
-
 Copy (multiple) versus Move (single):
 
 ![Single vs Multiple](img/sm.gif)
+
+# RoboCopy: other options
+
+You can also paste folders that you selected with ctrl+c. The option is called "Paste from clipboard.
+Additionally, you can also use the mirroring option (/MIR) to mirror a directory. This only works, if you mirror the directory somewhere, where a directory with the same name already exists.
 
 # Known bugs
 
