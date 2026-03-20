@@ -62,7 +62,14 @@ if ( ($winVerMajor -ge 11) -or ( ($winVerMajor -eq 10) -and ($build -ge 22000) )
 		# Force release any handles
 		[gc]::Collect()
 		[gc]::WaitForPendingFinalizers()
-		reg unload HKU\$UUID 2>&1>$null
+
+		foreach ($user in $allUsers)
+		{
+			$userName = $user.Name
+			#todo pwsh v2
+			$UUID = $userName.Split("\")[-1]
+			reg unload HKU\$UUID 2>&1>$null
+		}
 
 		cd $initialLocation
 
@@ -191,7 +198,13 @@ function ShowFileExtensions() {
 		# Force release any handles
 		[gc]::Collect()
 		[gc]::WaitForPendingFinalizers()
-		reg unload HKU\$UUID 2>&1>$null
+		foreach ($user in $allUsers)
+		{
+			$userName = $user.Name
+			#todo pwsh v2
+			$UUID = $userName.Split("\")[-1]
+			reg unload HKU\$UUID 2>&1>$null
+		}
 
 		cd $initialLocation
 
@@ -228,15 +241,20 @@ function ShowHiddenFiles(){
 			}
 
 		}
-
 		foreach ($file in $regFiles) {
 			cmd.exe /c start /w regedit /s "`"$($file.FullName)`"" #HKU
 		}
 
-		# Force release any handles
 		[gc]::Collect()
 		[gc]::WaitForPendingFinalizers()
-		reg unload HKU\$UUID 2>&1>$null
+
+		foreach ($user in $allUsers)
+		{
+			$userName = $user.Name
+			#todo pwsh v2
+			$UUID = $userName.Split("\")[-1]
+			reg unload HKU\$UUID 2>&1>$null
+		}
 
 		cd $initialLocation
 

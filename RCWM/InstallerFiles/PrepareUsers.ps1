@@ -281,7 +281,7 @@ function regReplacements() {
 				New-Item .\Temp\$UUID -ItemType "directory" 2>&1>$null
 
 				(Get-Content .\Temp\Win11AddOldContextMenu.reg) -Replace "HKEY_LOCAL_MACHINE", "HKEY_USERS\$UUID" | Set-Content .\Temp\$UUID\Win11AddOldContextMenu.reg
-				(Get-Content .\Temp\ShowFileExtensions.reg.reg) -Replace "HKEY_LOCAL_MACHINE", "HKEY_USERS\$UUID" | Set-Content .\Temp\$UUID\ShowFileExtensions.reg
+				(Get-Content .\Temp\ShowFileExtensions.reg) -Replace "HKEY_LOCAL_MACHINE", "HKEY_USERS\$UUID" | Set-Content .\Temp\$UUID\ShowFileExtensions.reg
 				(Get-Content .\Temp\ShowHiddenFiles.reg) -Replace "HKEY_LOCAL_MACHINE", "HKEY_USERS\$UUID" | Set-Content .\Temp\$UUID\ShowHiddenFiles.reg
 			}
 		}
