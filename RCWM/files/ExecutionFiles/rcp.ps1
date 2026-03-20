@@ -288,7 +288,7 @@ If ( $copy -eq $True ) {
 			#store folders for merge prompt
 			#overwrite - or just copy
 			[string[]]$merge += $fullPath
-		} else {
+		} elseif ($command -ne "miror") {
 			#if the source! is a folder, make new directory with the same name as the folder being copied
 			if ($isDirectory) {
 				New-Item -Path "$destination" -ItemType Directory
@@ -310,8 +310,6 @@ If ( $copy -eq $True ) {
 						Start-Sleep 3
 						exit
 					}
-				} else {
-					Write-Host "Not removing source directory due to errors"
 				}
 			}
 		
@@ -322,200 +320,215 @@ If ( $copy -eq $True ) {
 	#if merge array exists
 	if ($merge) {
 
-		Write-host "Successfully copied" $($sourcesArrayLength - $merge.length) "out of" $sourcesArrayLength "items."
+		if ($command -eq "miror") {
+			#Write-host "You're about to $string4 the following file/folder into" $destDirectoryDisplay":"
+			#$merge
 
-		if ($merge.length -eq 1) {
-			Write-host "The following folder or file already exists inside" $destDirectoryDisplay":"
+			Write-Host "Executing $robocopy `"$sourceDirFullPath`" `"$destination`" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /MT:32"
+			& $robocopy "$sourceDirFullPath" "$destination" $flag /E /NP /NJH /NJS /NC /NS /MT:32
+
+			echo "Finished $string3 $sourceDirFullPath"
 		} else {
-			Write-host "The following" $merge.length "folders or files already exist inside" $destDirectoryDisplay":"
-		}
-		$merge
 
-		Do {
-			$Valid = $True
-			Write-host "Would you like to [O]verwrite files, [M]erge, or [A]bort?"
-			Write-host "Overwrite flags: /E"
-			Write-host "Merge flags:     /E /XC /XN /XO"
-			[string]$prompt = Read-Host -Prompt "(O/M/A)"
-			Switch ($prompt) {
-				{"o", "overwrite" -contains $_} {
-					echo "Overwriting ..."
+			Write-host "Successfully copied" $($sourcesArrayLength - $merge.length) "out of" $sourcesArrayLength "items."
 
-					foreach ($fullPath in $merge) {
-
-						if (Test-Path -LiteralPath "$fullPath" -PathType Container) { #if source is a folder
-							$isDirectory = $true
-
-							$copyEmptyDirectoriesFlag = "/E"
-
-							if ($pwshV2) {
-								$sourceDir = ($fullPath -split "\\")[-1]
-							} else {
-								$sourceDir = $fullPath.split("\")[-1]
-							}
-
-							$filename = ""
-
-							$sourceDirFullPath = $fullPath
-							#dest: target dir + folder
-							[string]$destination = [string]$destDir + "\" + [string]$sourceDir
-
-							#destination check for merge
-							[string]$destinationToCheck = [string]$destination
-							#echo "checking destination: folder:"
-							#echo $destinationToCheck
-
-						} elseif (Test-Path -LiteralPath "$fullPath" -PathType Leaf) { #if source is a file
-							$isDirectory = $false
-
-							$copyEmptyDirectoriesFlag = ""
-
-							if ($pwshV2) {
-								$sourceDir = ($fullPath -split "\\")[-2]
-								$filename = ($fullPath -split "\\")[-1]
-							} else {
-								$sourceDir = $fullPath.split("\")[-2]
-								$filename = $fullPath.split("\")[-1]
-								Write-Host "directory: $sourceDir, filename: $filename"
-								#start-sleep 5
-							}
-
-							#trim filename from the path - filename is passed as another argument into robocopy
-							#and is empty in case source is a folder
-							$stringLength = $fullPath.length - $fileName.length
-							$sourceDirFullPath = $fullpath.substring(0,$stringLength)
-
-
-							#dest: target dir
-							[string]$destination = [string]$destDir
-
-							#destination check for merge
-							[string]$destinationToCheck = [string]$destDir + "\" + [string]$filename
-						} else {
-							Write-Host "Source file or folder" $fullPath "does not exist!"
-							Start-Sleep 1
-							continue
-						}
-
-						Write-Host "Executing $robocopy `"$sourceDirFullPath`" `"$destination`" `"$filename`" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /MT:32"
-						& $robocopy "$sourceDirFullPath" "$destination" "$filename" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /MT:32
-
-						if ($command -eq "rcmov" -and $isDirectory) {
-							#Write-Host "removing: $sourceDirFullPath"
-							cmd.exe /c rd /s /q "$sourceDirFullPath"
-						}
-
-						echo "Finished $string3 $sourceDirFullPath\$filename"
-
-					}
-				}
-				{"m", "merge" -contains $_} {
-					Write-Host "Merging ..."
-
-					foreach ($fullPath in $merge) {
-
-						if (Test-Path -LiteralPath "$fullPath" -PathType Container) { #if source is a folder
-							$isDirectory = $true
-
-							$copyEmptyDirectoriesFlag = "/E"
-
-							if ($pwshV2) {
-								$sourceDir = ($fullPath -split "\\")[-1]
-							} else {
-								$sourceDir = $fullPath.split("\")[-1]
-							}
-
-							$filename = ""
-
-							$sourceDirFullPath = $fullPath
-							#dest: target dir + folder
-							[string]$destination = [string]$destDir + "\" + [string]$sourceDir
-
-							#destination check for merge
-							[string]$destinationToCheck = [string]$destination
-							#echo "checking destination: folder:"
-							#echo $destinationToCheck
-
-						} elseif (Test-Path -LiteralPath "$fullPath" -PathType Leaf) { #if source is a file
-							$isDirectory = $false
-
-							$copyEmptyDirectoriesFlag = ""
-
-							if ($pwshV2) {
-								$sourceDir = ($fullPath -split "\\")[-2]
-								$filename = ($fullPath -split "\\")[-1]
-							} else {
-								$sourceDir = $fullPath.split("\")[-2]
-								$filename = $fullPath.split("\")[-1]
-								Write-Host "directory: $sourceDir, filename: $filename"
-								#start-sleep 5
-							}
-
-							#trim filename from the path - filename is passed as another argument into robocopy
-							#and is empty in case source is a folder
-							$stringLength = $fullPath.length - $fileName.length
-							$sourceDirFullPath = $fullpath.substring(0,$stringLength)
-							#dest: target dir
-							[string]$destination = [string]$destDir
-
-							#destination check for merge
-							[string]$destinationToCheck = [string]$destDir + "\" + [string]$filename
-						} else {
-							Write-Host "Source file or folder" $fullPath "does not exist!"
-							Start-Sleep 1
-							continue
-						}
-
-						Write-Host "Executing $robocopy `"$sourceDirFullPath`" `"$destination`" `"$filename`" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32"
-						& $robocopy "$sourceDirFullPath" "$destination" "$filename" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
-
-						if ($command -eq "rcmov" -and $isDirectory) {
-							#Write-Host "removing: $sourceDirFullPath"
-							cmd.exe /c rd /s /q "$sourceDirFullPath"
-						}
-
-						echo "Finished $string3 $sourceDirFullPath\$filename"
-
-					}
-				}
-				{"A", "abort" -contains $_} {
-					Write-Host "Aborted $string3 the remaining folders."
-
-					Do {
-						[string]$prompt = Read-Host -Prompt "Delete list of remaining folders? (Y/N)"
-						Switch ($prompt) {
-						
-							default {
-								Write-Host "Not a valid entry."
-								$Valid = $False
-							}	
-
-							{"y", "yes" -contains $_} {
-
-								if ($mode -eq "p") {
-									[System.Windows.Forms.Clipboard]::Clear()
-								} else {
-									Remove-ItemProperty -Path "HKCU:\SOFTWARE\RCWM\$command" -Name * | Out-Null
-								}
-								Write-Host "List deleted."
-								Start-Sleep 2
-								exit
-							}
-
-							{"n", "no" -contains $_} {
-								Write-Host "Aborting."
-								Start-Sleep 3
-								exit
-							}
-						}
-					} Until ($Valid)
-				}
-				default {
-					Write-Host "Not a valid entry."
-					$Valid = $False
-				}
+			if ($merge.length -eq 1) {
+				Write-host "The following folder or file already exists inside" $destDirectoryDisplay":"
+			} else {
+				Write-host "The following" $merge.length "folders or files already exist inside" $destDirectoryDisplay":"
 			}
-		} Until ($Valid)
+			$merge
+
+			Do {
+				$Valid = $True
+				Write-host "Would you like to [O]verwrite files, [M]erge, or [A]bort?"
+				Write-host "Overwrite flags: /E"
+				Write-host "Merge flags:     /E /XC /XN /XO"
+				[string]$prompt = Read-Host -Prompt "(O/M/A)"
+				Switch ($prompt) {
+					{"o", "overwrite" -contains $_} {
+						echo "Overwriting ..."
+
+						foreach ($fullPath in $merge) {
+
+							if (Test-Path -LiteralPath "$fullPath" -PathType Container) { #if source is a folder
+								$isDirectory = $true
+
+								$copyEmptyDirectoriesFlag = "/E"
+
+								if ($pwshV2) {
+									$sourceDir = ($fullPath -split "\\")[-1]
+								} else {
+									$sourceDir = $fullPath.split("\")[-1]
+								}
+
+								$filename = ""
+
+								$sourceDirFullPath = $fullPath
+								#dest: target dir + folder
+								[string]$destination = [string]$destDir + "\" + [string]$sourceDir
+
+								#destination check for merge
+								[string]$destinationToCheck = [string]$destination
+								#echo "checking destination: folder:"
+								#echo $destinationToCheck
+
+							} elseif (Test-Path -LiteralPath "$fullPath" -PathType Leaf) { #if source is a file
+								$isDirectory = $false
+
+								$copyEmptyDirectoriesFlag = ""
+
+								if ($pwshV2) {
+									$sourceDir = ($fullPath -split "\\")[-2]
+									$filename = ($fullPath -split "\\")[-1]
+								} else {
+									$sourceDir = $fullPath.split("\")[-2]
+									$filename = $fullPath.split("\")[-1]
+									Write-Host "directory: $sourceDir, filename: $filename"
+									#start-sleep 5
+								}
+
+								#trim filename from the path - filename is passed as another argument into robocopy
+								#and is empty in case source is a folder
+								$stringLength = $fullPath.length - $fileName.length
+								$sourceDirFullPath = $fullpath.substring(0,$stringLength)
+
+
+								#dest: target dir
+								[string]$destination = [string]$destDir
+
+								#destination check for merge
+								[string]$destinationToCheck = [string]$destDir + "\" + [string]$filename
+							} else {
+								Write-Host "Source file or folder" $fullPath "does not exist!"
+								Start-Sleep 1
+								continue
+							}
+
+							Write-Host "Executing $robocopy `"$sourceDirFullPath`" `"$destination`" `"$filename`" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /MT:32"
+							& $robocopy "$sourceDirFullPath" "$destination" "$filename" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /MT:32
+
+							if ($command -eq "rcmov" -and $isDirectory) {
+								#Write-Host "removing: $sourceDirFullPath"
+								cmd.exe /c rd /s /q "$sourceDirFullPath"
+							}
+
+							echo "Finished $string3 $sourceDirFullPath\$filename"
+
+						}
+					}
+					{"m", "merge" -contains $_} {
+						Write-Host "Merging ..."
+
+						foreach ($fullPath in $merge) {
+
+							if (Test-Path -LiteralPath "$fullPath" -PathType Container) { #if source is a folder
+								$isDirectory = $true
+
+								$copyEmptyDirectoriesFlag = "/E"
+
+								if ($pwshV2) {
+									$sourceDir = ($fullPath -split "\\")[-1]
+								} else {
+									$sourceDir = $fullPath.split("\")[-1]
+								}
+
+								$filename = ""
+
+								$sourceDirFullPath = $fullPath
+								#dest: target dir + folder
+								[string]$destination = [string]$destDir + "\" + [string]$sourceDir
+
+								#destination check for merge
+								[string]$destinationToCheck = [string]$destination
+								#echo "checking destination: folder:"
+								#echo $destinationToCheck
+
+							} elseif (Test-Path -LiteralPath "$fullPath" -PathType Leaf) { #if source is a file
+								$isDirectory = $false
+
+								$copyEmptyDirectoriesFlag = ""
+
+								if ($pwshV2) {
+									$sourceDir = ($fullPath -split "\\")[-2]
+									$filename = ($fullPath -split "\\")[-1]
+								} else {
+									$sourceDir = $fullPath.split("\")[-2]
+									$filename = $fullPath.split("\")[-1]
+									Write-Host "directory: $sourceDir, filename: $filename"
+									#start-sleep 5
+								}
+
+								#trim filename from the path - filename is passed as another argument into robocopy
+								#and is empty in case source is a folder
+								$stringLength = $fullPath.length - $fileName.length
+								$sourceDirFullPath = $fullpath.substring(0,$stringLength)
+								#dest: target dir
+								[string]$destination = [string]$destDir
+
+								#destination check for merge
+								[string]$destinationToCheck = [string]$destDir + "\" + [string]$filename
+							} else {
+								Write-Host "Source file or folder" $fullPath "does not exist!"
+								Start-Sleep 1
+								continue
+							}
+
+							Write-Host "Executing $robocopy `"$sourceDirFullPath`" `"$destination`" `"$filename`" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32"
+							& $robocopy "$sourceDirFullPath" "$destination" "$filename" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
+
+							if ($command -eq "rcmov" -and $isDirectory) {
+								#Write-Host "removing: $sourceDirFullPath"
+								cmd.exe /c rd /s /q "$sourceDirFullPath"
+							}
+
+							echo "Finished $string3 $sourceDirFullPath\$filename"
+
+						}
+					}
+					{"A", "abort" -contains $_} {
+						Write-Host "Aborted $string3 the remaining folders."
+
+						Do {
+							[string]$prompt = Read-Host -Prompt "Delete list of remaining folders? (Y/N)"
+							Switch ($prompt) {
+
+								default {
+									Write-Host "Not a valid entry."
+									$Valid = $False
+								}
+
+								{"y", "yes" -contains $_} {
+
+									if ($mode -eq "p") {
+										[System.Windows.Forms.Clipboard]::Clear()
+									} else {
+										Remove-ItemProperty -Path "HKCU:\SOFTWARE\RCWM\$command" -Name * | Out-Null
+									}
+									Write-Host "List deleted."
+									Start-Sleep 2
+									exit
+								}
+
+								{"n", "no" -contains $_} {
+									Write-Host "Aborting."
+									Start-Sleep 3
+									exit
+								}
+							}
+						} Until ($Valid)
+					}
+					default {
+						Write-Host "Not a valid entry."
+						$Valid = $False
+					}
+				}
+			} Until ($Valid)
+		}
+	} elseif ($command -eq "miror") {
+		Write-Host "Destination directory with the same name does not exist under $destDir" -ForegroundColor red
+		Start-Sleep 3
+		exit
 	}
 
 	if ($mode -eq "p") {
