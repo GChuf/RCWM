@@ -26,63 +26,45 @@ if ( ($winVerMajor -ge 11) -or ( ($winVerMajor -eq 10) -and ($build -ge 22000) )
 
 	if ($mode1 -eq "Y") {
 
-
-
-		$currentDir = Get-Location
+		$initialLocation = Get-Location
 
 		#load all reg hives, apply registry, and unload
 
 		$allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
+
+		$regFiles = Get-ChildItem -Path . -Filter "Win11AddOldContextMenu.reg" -Recurse -File -ErrorAction SilentlyContinue
+		cmd.exe /c start /w regedit /s Win11AddOldContextMenu.reg #HKLM
 
 		foreach ($user in $allUsers)
 		{
 			$userName = $user.Name
 			#todo pwsh v2
 			$UUID = $userName.Split("\")[-1]
-			#$profilePath = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID" -Name ProfileImagePath
 			$profilePathKey = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID")
 			$profilePath = $profilePathKey.GetValue("ProfileImagePath")
 			$profilePathKey.Close()
+
 			try {
-				cd REGISTRY::HKEY_USERS
-				cd $UUID -ErrorAction Stop
+				reg load HKU\$UUID "$profilePath\NTUSER.DAT" 2>&1>$null
+				if ($LASTEXITCODE -ne 0) {throw "reg load failed with exit code $LASTEXITCODE"}
+				cd $initialLocation
 			} catch {
-				try {
-					cd REGISTRY::HKEY_USERS
-					reg load HKU\$UUID "$profilePath\NTUSER.DAT" 2>&1>$null
-					if ($LASTEXITCODE -ne 0) {throw "reg load failed with exit code $LASTEXITCODE"}
-					$UUIDsloadedManually += $UUID
-					cd $UUID -ErrorAction Stop
-				} catch {
-					continue
-				}
+				#user might have been deleted, C:\users\$user does not exist
+				continue
 			}
+
 		}
 
-		cd $currentDir
-		#apply
-		$regFiles = Get-ChildItem -Path . -Filter "Win11AddOldContextMenu.reg" -Recurse -File -ErrorAction SilentlyContinue
-		cmd.exe /c start /w regedit /s Win11AddOldContextMenu.reg #HKLM
 		foreach ($file in $regFiles) {
 			cmd.exe /c start /w regedit /s "`"$($file.FullName)`"" #HKU
 		}
 
-		#load all reg hives, apply registry, and unload
-		$allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
+		# Force release any handles
+		[gc]::Collect()
+		[gc]::WaitForPendingFinalizers()
+		reg unload HKU\$UUID 2>&1>$null
 
-		foreach ($user in $allUsers)
-		{
-			$userName = $user.Name
-			$UUID = $userName.Split("\")[-1]
-			try {
-				reg unload HKU\$UUID 2>&1>$null
-				if ($LASTEXITCODE -ne 0) {throw "reg unload failed with exit code $LASTEXITCODE"}
-			} catch {
-				continue
-			}
-		}
-
-		cd $currentDir
+		cd $initialLocation
 
 	}
 
@@ -145,8 +127,8 @@ $RemoveOptions = @(
 )
 
 $MiscOptions = @(
-	New-Object PSObject -Property @{Name = 'ShowFileExtensions'; RegFile = 'ShowFileExtensions.reg'; Desc = 'Do you want to show file extensions in explorer'}
-	New-Object PSObject -Property @{Name = 'ShowHiddenFiles'; RegFile = 'ShowHiddenFiles.reg'; Desc = 'Do you want to show hidden files in explorer'}
+	New-Object PSObject -Property @{Name = 'ShowFileExtensions'; RegFile = 'ShowFileExtensions.reg'; Desc = 'Do you want to show file extensions in explorer'; exception = "ShowFileExtensions"}
+	New-Object PSObject -Property @{Name = 'ShowHiddenFiles'; RegFile = 'ShowHiddenFiles.reg'; Desc = 'Do you want to show hidden files in explorer'; exception = "ShowHiddenFiles"}
 	New-Object PSObject -Property @{Name = 'DisableUAC'; RegFile = 'DisableUAC.reg'; Desc = 'Do you want to always disable User Account Control (UAC)'}
 	New-Object PSObject -Property @{Name = 'CMDadmin'; RegFile = 'CMDadmin.reg'; Desc = 'Do you want to always open cmd.exe as admin'}
 	New-Object PSObject -Property @{Name = 'ThisPC'; RegFile = 'ThisPC.reg'; Desc = 'Do you want to add "This PC" shortcut to Desktop'}
@@ -170,6 +152,96 @@ function GodMode(){
 	#cmd.exe /c md C:\Program Files\RCWM\GodMode.{ED7BA470-8E54-465E-825C-99712043E01C} 2>NUL
 	cmd.exe /c ..\..\InstallerFiles\GodMode.bat | out-null
 }
+
+function ShowFileExtensions() {
+
+		$initialLocation = Get-Location
+
+		#load all reg hives, apply registry, and unload
+
+		$allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
+
+		$regFiles = Get-ChildItem -Path . -Filter "ShowFileExtensions.reg" -Recurse -File -ErrorAction SilentlyContinue
+		cmd.exe /c start /w regedit /s ShowFileExtensions.reg #HKLM
+
+		foreach ($user in $allUsers)
+		{
+			$userName = $user.Name
+			#todo pwsh v2
+			$UUID = $userName.Split("\")[-1]
+			$profilePathKey = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID")
+			$profilePath = $profilePathKey.GetValue("ProfileImagePath")
+			$profilePathKey.Close()
+
+			try {
+				reg load HKU\$UUID "$profilePath\NTUSER.DAT" 2>&1>$null
+				if ($LASTEXITCODE -ne 0) {throw "reg load failed with exit code $LASTEXITCODE"}
+				cd $initialLocation
+			} catch {
+				#user might have been deleted, C:\users\$user does not exist
+				continue
+			}
+
+		}
+
+		foreach ($file in $regFiles) {
+			cmd.exe /c start /w regedit /s "`"$($file.FullName)`"" #HKU
+		}
+
+		# Force release any handles
+		[gc]::Collect()
+		[gc]::WaitForPendingFinalizers()
+		reg unload HKU\$UUID 2>&1>$null
+
+		cd $initialLocation
+
+}
+
+function ShowHiddenFiles(){
+
+
+		$initialLocation = Get-Location
+
+		#load all reg hives, apply registry, and unload
+
+		$allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
+
+		$regFiles = Get-ChildItem -Path . -Filter "ShowHiddenFiles.reg" -Recurse -File -ErrorAction SilentlyContinue
+		cmd.exe /c start /w regedit /s ShowHiddenFiles.reg #HKLM
+
+		foreach ($user in $allUsers)
+		{
+			$userName = $user.Name
+			#todo pwsh v2
+			$UUID = $userName.Split("\")[-1]
+			$profilePathKey = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID")
+			$profilePath = $profilePathKey.GetValue("ProfileImagePath")
+			$profilePathKey.Close()
+
+			try {
+				reg load HKU\$UUID "$profilePath\NTUSER.DAT" 2>&1>$null
+				if ($LASTEXITCODE -ne 0) {throw "reg load failed with exit code $LASTEXITCODE"}
+				cd $initialLocation
+			} catch {
+				#user might have been deleted, C:\users\$user does not exist
+				continue
+			}
+
+		}
+
+		foreach ($file in $regFiles) {
+			cmd.exe /c start /w regedit /s "`"$($file.FullName)`"" #HKU
+		}
+
+		# Force release any handles
+		[gc]::Collect()
+		[gc]::WaitForPendingFinalizers()
+		reg unload HKU\$UUID 2>&1>$null
+
+		cd $initialLocation
+
+}
+
 
 function rcmov(){
 	while ($true) {

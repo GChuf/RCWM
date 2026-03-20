@@ -272,9 +272,7 @@ function regReplacements() {
 		if ($install) {
 			#create folders for all users
 			#for specific options that need HKCU inserts as well as HKLM
-			#example win11 old context menu
 
-			#reg hives are already loaded
 			foreach ($user in $allUsers)
 			{
 				$userName = $user.Name
@@ -283,7 +281,8 @@ function regReplacements() {
 				New-Item .\Temp\$UUID -ItemType "directory" 2>&1>$null
 
 				(Get-Content .\Temp\Win11AddOldContextMenu.reg) -Replace "HKEY_LOCAL_MACHINE", "HKEY_USERS\$UUID" | Set-Content .\Temp\$UUID\Win11AddOldContextMenu.reg
-
+				(Get-Content .\Temp\ShowFileExtensions.reg.reg) -Replace "HKEY_LOCAL_MACHINE", "HKEY_USERS\$UUID" | Set-Content .\Temp\$UUID\ShowFileExtensions.reg
+				(Get-Content .\Temp\ShowHiddenFiles.reg) -Replace "HKEY_LOCAL_MACHINE", "HKEY_USERS\$UUID" | Set-Content .\Temp\$UUID\ShowHiddenFiles.reg
 			}
 		}
 	}
