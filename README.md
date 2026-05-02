@@ -1,3 +1,35 @@
+
+<div align="right">
+  <details>
+    <summary >🌐 Language</summary>
+    <div>
+      <div align="center">
+        <a href="https://openaitx.github.io/view.html?user=GChuf&project=RCWM&lang=en">English</a>
+        | <a href="https://openaitx.github.io/view.html?user=GChuf&project=RCWM&lang=zh-CN">简体中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=GChuf&project=RCWM&lang=zh-TW">繁體中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=GChuf&project=RCWM&lang=ja">日本語</a>
+        | <a href="https://openaitx.github.io/view.html?user=GChuf&project=RCWM&lang=ko">한국어</a>
+        | <a href="https://openaitx.github.io/view.html?user=GChuf&project=RCWM&lang=hi">हिन्दी</a>
+        | <a href="https://openaitx.github.io/view.html?user=GChuf&project=RCWM&lang=th">ไทย</a>
+        | <a href="https://openaitx.github.io/view.html?user=GChuf&project=RCWM&lang=fr">Français</a>
+        | <a href="https://openaitx.github.io/view.html?user=GChuf&project=RCWM&lang=de">Deutsch</a>
+        | <a href="https://openaitx.github.io/view.html?user=GChuf&project=RCWM&lang=es">Español</a>
+        | <a href="https://openaitx.github.io/view.html?user=GChuf&project=RCWM&lang=it">Italiano</a>
+        | <a href="https://openaitx.github.io/view.html?user=GChuf&project=RCWM&lang=ru">Русский</a>
+        | <a href="https://openaitx.github.io/view.html?user=GChuf&project=RCWM&lang=pt">Português</a>
+        | <a href="https://openaitx.github.io/view.html?user=GChuf&project=RCWM&lang=nl">Nederlands</a>
+        | <a href="https://openaitx.github.io/view.html?user=GChuf&project=RCWM&lang=pl">Polski</a>
+        | <a href="https://openaitx.github.io/view.html?user=GChuf&project=RCWM&lang=ar">العربية</a>
+        | <a href="https://openaitx.github.io/view.html?user=GChuf&project=RCWM&lang=fa">فارسی</a>
+        | <a href="https://openaitx.github.io/view.html?user=GChuf&project=RCWM&lang=tr">Türkçe</a>
+        | <a href="https://openaitx.github.io/view.html?user=GChuf&project=RCWM&lang=vi">Tiếng Việt</a>
+        | <a href="https://openaitx.github.io/view.html?user=GChuf&project=RCWM&lang=id">Bahasa Indonesia</a>
+        | <a href="https://openaitx.github.io/view.html?user=GChuf&project=RCWM&lang=as">অসমীয়া</
+      </div>
+    </div>
+  </details>
+</div>
+
 # Right Click Windows Magic
 
 Right Click Windows Magic is a set of right-click (context) menu tools for admins, power users and other magic beings. If you consider yerself a wizard and would like to save yourself some time and headaches, this is the *right* set of context menu tools for you.
