@@ -3,7 +3,7 @@
 
 $host.UI.RawUI.WindowTitle = "RCWM: Remove"
 
-Remove-Item $args[0] -Recurse
+Remove-Item -LiteralPath $args[0] -Recurse
 if (-not $?) {
     Start-Sleep -Seconds 3
 } else {
