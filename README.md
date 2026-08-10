@@ -56,6 +56,9 @@ TODO (magic takes time):
 To install the tools: download the latest zip file under releases ([here](https://github.com/GChuf/RCWM/releases/latest)), unzip it and run the install.cmd script __as administrator__ - after that, you'll only need the two most abused keys: __*Y*__ and __*N*__ (and maybe a few others).
 If the user running RCWM commands does not have the administrator privileges, some magic might not work properly.
 
+# Requirements
+
+RCWM runs on Windows 7, Windows 8, Windows 8.1, Windows 10 and Windows 11. Powershell versions supported are v2, v4, v5 and v7.
 
 # How does it work?
 
