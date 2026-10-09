@@ -409,8 +409,12 @@ If ( $copy -eq $True ) {
 							& $robocopy "$sourceDirFullPath" "$destination" "$filename" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /MT:32
 
 							if ($command -eq "rcmov" -and $isDirectory) {
-								#Write-Host "removing: $sourceDirFullPath"
-								cmd.exe /c rd /s /q "$sourceDirFullPath"
+								if ($LASTEXITCODE -lt 8) { #anything less than 8 is OK from robocopy
+									#Write-Host "removing: $sourceDirFullPath"
+									cmd.exe /c rd /s /q "$sourceDirFullPath"
+								} else {
+									Write-Host "Robocopy failed (exit code $LASTEXITCODE), source not removed: $sourceDirFullPath" -ForegroundColor red
+								}
 							}
 
 							echo "Finished $string3 $sourceDirFullPath\$filename"
