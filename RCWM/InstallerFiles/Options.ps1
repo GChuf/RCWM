@@ -7,8 +7,8 @@ $winVerMajor = [System.Environment]::OSVersion.Version.Major
 $winVerMinor = [System.Environment]::OSVersion.Version.Minor
 
 if ($winVerMajor -eq 10) {
-	$os = Get-CimInstance Win32_OperatingSystem
-	$build = [int]$os.BuildNumber
+	#powershell.exe is manifested for windows 10+, so this reports the real build (no WMI query needed)
+	$build = [System.Environment]::OSVersion.Version.Build
 } else {
 	$build = 9999999
 }
