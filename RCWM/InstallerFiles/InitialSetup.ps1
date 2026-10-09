@@ -100,7 +100,8 @@ function recreateFiles() {
 function mergeFiles() {
 	$sysDrive = ($env:SystemRoot).Substring(0, 3)
 	$rcwmRoot = Join-Path $sysDrive 'Program Files\RCWM'
-	robocopy .\Temp\* $rcwmRoot /XC /XN /XO | Out-Null
+	#robocopy takes a source directory, not a wildcard
+	robocopy .\Temp $rcwmRoot /XC /XN /XO /XF *.reg *.cpp | Out-Null
 
 	#older versions granted users full control - remove that explicit grant (inherited read/execute stays)
 	cmd.exe /c icacls $rcwmRoot /remove:g *S-1-5-32-545 /T /C | Out-Null
