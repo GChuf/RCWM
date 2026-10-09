@@ -7,7 +7,7 @@ title RCWM: File Symbolic Link
 
 set curdir=%cd%
 set "file="
-FOR /F "tokens=*" %%g IN ('powershell "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\flink).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\flink).property }"') do (SET file=%%g)
+FOR /F "tokens=*" %%g IN ('powershell -NoProfile "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\flink).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\flink).property }"') do (SET file=%%g)
 cd %curdir%
 
 IF "%file%" == "" set "file=0"
