@@ -8,6 +8,6 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-17"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\Background\shell\GodMode\command]
-@="explorer C:\\Program Files\\RCWM\\GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}"
+@="explorer \"C:\\Program Files\\RCWM\\GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}\""
 
 ; end
