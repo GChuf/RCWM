@@ -269,7 +269,9 @@ If ( $copy -eq $True ) {
 			#$sourceDirFullPath = ($fullPath -replace "\\$filename$", "") - does not work for special chars inside filename
 
 			$stringLength = $fullPath.length - $fileName.length
-			$sourceDirFullPath = $fullpath.substring(0,$stringLength)
+			$sourceDirFullPath = $fullpath.substring(0,$stringLength).TrimEnd("\")
+			#keep root as "C:\" - a quoted trailing backslash only breaks robocopy when the path contains spaces
+			if ($sourceDirFullPath.EndsWith(":")) { $sourceDirFullPath += "\" }
 
 			#dest: target dir
 			[string]$destination = [string]$destDir
@@ -391,7 +393,9 @@ If ( $copy -eq $True ) {
 								#trim filename from the path - filename is passed as another argument into robocopy
 								#and is empty in case source is a folder
 								$stringLength = $fullPath.length - $fileName.length
-								$sourceDirFullPath = $fullpath.substring(0,$stringLength)
+								$sourceDirFullPath = $fullpath.substring(0,$stringLength).TrimEnd("\")
+								#keep root as "C:\" - a quoted trailing backslash only breaks robocopy when the path contains spaces
+								if ($sourceDirFullPath.EndsWith(":")) { $sourceDirFullPath += "\" }
 
 
 								#dest: target dir
@@ -466,7 +470,9 @@ If ( $copy -eq $True ) {
 								#trim filename from the path - filename is passed as another argument into robocopy
 								#and is empty in case source is a folder
 								$stringLength = $fullPath.length - $fileName.length
-								$sourceDirFullPath = $fullpath.substring(0,$stringLength)
+								$sourceDirFullPath = $fullpath.substring(0,$stringLength).TrimEnd("\")
+								#keep root as "C:\" - a quoted trailing backslash only breaks robocopy when the path contains spaces
+								if ($sourceDirFullPath.EndsWith(":")) { $sourceDirFullPath += "\" }
 								#dest: target dir
 								[string]$destination = [string]$destDir
 
