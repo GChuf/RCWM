@@ -4,7 +4,9 @@ setlocal
 rem The valid range is 0-315360000 (10 years)
 
 :input
+set "seconds="
 set /p seconds=Seconds before shutdown (0-315360000): 
+if not defined seconds goto input
 
 for /f "delims=0123456789" %%A in ("%seconds%") do (
     echo Invalid input
