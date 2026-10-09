@@ -33,6 +33,7 @@ if ( ($winVerMajor -ge 11) -or ( ($winVerMajor -eq 10) -and ($build -ge 22000) )
 		#load all reg hives, apply registry, and unload
 
 		$allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
+		$loadedHives = @()
 
 		$regFiles = Get-ChildItem -Path . -Filter "Win11AddOldContextMenu.reg" -Recurse -ErrorAction SilentlyContinue
 		cmd.exe /c start /w regedit /s Win11AddOldContextMenu.reg #HKLM
@@ -49,6 +50,7 @@ if ( ($winVerMajor -ge 11) -or ( ($winVerMajor -eq 10) -and ($build -ge 22000) )
 			try {
 				reg load HKU\$UUID "$profilePath\NTUSER.DAT" 2>&1>$null
 				if ($LASTEXITCODE -ne 0) {throw "reg load failed with exit code $LASTEXITCODE"}
+				$loadedHives += $UUID
 				cd $initialLocation
 			} catch {
 				#user might have been deleted, C:\users\$user does not exist
@@ -65,13 +67,8 @@ if ( ($winVerMajor -ge 11) -or ( ($winVerMajor -eq 10) -and ($build -ge 22000) )
 		[gc]::Collect()
 		[gc]::WaitForPendingFinalizers()
 
-		foreach ($user in $allUsers)
-		{
-			$userName = $user.Name
-			#todo pwsh v2
-			$UUID = $userName.Split("\")[-1]
-			reg unload HKU\$UUID 2>&1>$null
-		}
+		#only unload hives loaded above - logged in users' hives are loaded by windows
+		foreach ($UUID in $loadedHives) { reg unload HKU\$UUID 2>&1>$null }
 
 		cd $initialLocation
 
@@ -169,6 +166,7 @@ function ShowFileExtensions() {
 		#load all reg hives, apply registry, and unload
 
 		$allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
+		$loadedHives = @()
 
 		$regFiles = Get-ChildItem -Path . -Filter "ShowFileExtensions.reg" -Recurse -ErrorAction SilentlyContinue
 		cmd.exe /c start /w regedit /s ShowFileExtensions.reg #HKLM
@@ -185,6 +183,7 @@ function ShowFileExtensions() {
 			try {
 				reg load HKU\$UUID "$profilePath\NTUSER.DAT" 2>&1>$null
 				if ($LASTEXITCODE -ne 0) {throw "reg load failed with exit code $LASTEXITCODE"}
+				$loadedHives += $UUID
 				cd $initialLocation
 			} catch {
 				#user might have been deleted, C:\users\$user does not exist
@@ -200,13 +199,8 @@ function ShowFileExtensions() {
 		# Force release any handles
 		[gc]::Collect()
 		[gc]::WaitForPendingFinalizers()
-		foreach ($user in $allUsers)
-		{
-			$userName = $user.Name
-			#todo pwsh v2
-			$UUID = $userName.Split("\")[-1]
-			reg unload HKU\$UUID 2>&1>$null
-		}
+		#only unload hives loaded above - logged in users' hives are loaded by windows
+		foreach ($UUID in $loadedHives) { reg unload HKU\$UUID 2>&1>$null }
 
 		cd $initialLocation
 
@@ -220,6 +214,7 @@ function ShowHiddenFiles(){
 		#load all reg hives, apply registry, and unload
 
 		$allUsers = Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*"| Select-Object Name
+		$loadedHives = @()
 
 		$regFiles = Get-ChildItem -Path . -Filter "ShowHiddenFiles.reg" -Recurse -ErrorAction SilentlyContinue
 		cmd.exe /c start /w regedit /s ShowHiddenFiles.reg #HKLM
@@ -236,6 +231,7 @@ function ShowHiddenFiles(){
 			try {
 				reg load HKU\$UUID "$profilePath\NTUSER.DAT" 2>&1>$null
 				if ($LASTEXITCODE -ne 0) {throw "reg load failed with exit code $LASTEXITCODE"}
+				$loadedHives += $UUID
 				cd $initialLocation
 			} catch {
 				#user might have been deleted, C:\users\$user does not exist
@@ -250,13 +246,8 @@ function ShowHiddenFiles(){
 		[gc]::Collect()
 		[gc]::WaitForPendingFinalizers()
 
-		foreach ($user in $allUsers)
-		{
-			$userName = $user.Name
-			#todo pwsh v2
-			$UUID = $userName.Split("\")[-1]
-			reg unload HKU\$UUID 2>&1>$null
-		}
+		#only unload hives loaded above - logged in users' hives are loaded by windows
+		foreach ($UUID in $loadedHives) { reg unload HKU\$UUID 2>&1>$null }
 
 		cd $initialLocation
 
