@@ -233,6 +233,7 @@ If ( $copy -eq $True ) {
 	Write-Host "Begin $string3 ..."
 	Write-Host ""
 
+	$missingCount = 0
 	foreach ($fullPath in $sourcesArray) {
 
 		if (Test-Path -LiteralPath "$fullPath" -PathType Container) { #if source is a folder
@@ -284,6 +285,7 @@ If ( $copy -eq $True ) {
 
 		} else {
 			Write-Host "Source file or folder" $fullPath "does not exist!"
+			$missingCount++
 			Start-Sleep 1
 			continue
 		}
@@ -351,7 +353,7 @@ If ( $copy -eq $True ) {
 			echo "Finished $string3 $sourceDirFullPath"
 		} else {
 
-			Write-host "Successfully copied" $($sourcesArrayLength - $merge.length) "out of" $sourcesArrayLength "items."
+			Write-host "Successfully copied" $($sourcesArrayLength - $merge.length - $missingCount) "out of" $sourcesArrayLength "items."
 
 			if ($merge.length -eq 1) {
 				Write-host "The following folder or file already exists inside" $destDirectoryDisplay":"
