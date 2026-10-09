@@ -370,10 +370,12 @@ if ($install) {
 
 	if ($mode1 -eq "C") {
 		writeVersion("current")
-		powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 current
+		#runs in this session, which already has execution policy Bypass (set by install.cmd)
+		..\InstallerFiles\Options.ps1 current
 	} elseif ($mode1 -eq "A" ) { 
 		writeVersion("all")
-		powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 all
+		#runs in this session, which already has execution policy Bypass (set by install.cmd)
+		..\InstallerFiles\Options.ps1 all
 	}
 
 
