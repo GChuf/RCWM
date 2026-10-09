@@ -267,7 +267,6 @@ If ( $copy -eq $True ) {
 			} else {
 				$sourceDir = $fullPath.split("\")[-2]
 				$filename = $fullPath.split("\")[-1]
-				Write-Host "directory: $sourceDir, filename: $filename"
 			}
 
 			#trim filename from the path - filename is passed as another argument into robocopy
@@ -409,8 +408,6 @@ If ( $copy -eq $True ) {
 								} else {
 									$sourceDir = $fullPath.split("\")[-2]
 									$filename = $fullPath.split("\")[-1]
-									Write-Host "directory: $sourceDir, filename: $filename"
-									#start-sleep 5
 								}
 
 								#trim filename from the path - filename is passed as another argument into robocopy
@@ -486,8 +483,6 @@ If ( $copy -eq $True ) {
 								} else {
 									$sourceDir = $fullPath.split("\")[-2]
 									$filename = $fullPath.split("\")[-1]
-									Write-Host "directory: $sourceDir, filename: $filename"
-									#start-sleep 5
 								}
 
 								#trim filename from the path - filename is passed as another argument into robocopy
