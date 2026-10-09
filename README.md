@@ -25,6 +25,7 @@ This little magic pack includes:
 - options to uninstall the changes you've made
 - disabling UAC
 - enabling Long Paths (paths over 260 characters)
+- disabling PowerShell 7 telemetry
 
 You can also remove some right-click menu options, so that your menu doesn't become too cluttered:
 - Pin to Quick access

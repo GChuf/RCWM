@@ -142,7 +142,25 @@ $MiscOptions = @(
 	New-Object PSObject -Property @{Name = 'EnableLongPaths'; RegFile = 'EnableLongPaths.reg'; Desc = 'Do you want to enable long paths (over 260 characters)'}
 )
 
+#telemetry only exists in powershell 7 (pwsh)
+if (Get-Command pwsh -ErrorAction SilentlyContinue) {
+	$MiscOptions += New-Object PSObject -Property @{Name = 'DisablePwshTelemetry'; RegFile = 'x'; Desc = 'Do you want to disable PowerShell 7 telemetry for all users (also slightly faster startup)'; exception = "DisablePwshTelemetry"}
+}
+
 #exceptions:
+function DisablePwshTelemetry(){
+	#machine-wide environment variable - SetEnvironmentVariable also notifies running programs (explorer),
+	#so windows opened from the context menu pick it up without logging off
+	[System.Environment]::SetEnvironmentVariable("POWERSHELL_TELEMETRY_OPTOUT", "1", "Machine")
+
+	if ($installMode -eq "all") {
+		New-ItemProperty -Path "REGISTRY::HKEY_LOCAL_MACHINE\SOFTWARE\RCWM\InstallInfo" -Name "DisablePwshTelemetry" 2>&1>$null
+	} else {
+		New-ItemProperty -Path "REGISTRY::HKEY_CURRENT_USER\SOFTWARE\RCWM\InstallInfo" -Name "DisablePwshTelemetry" 2>&1>$null
+	}
+}
+
+
 function MultipleInvoke(){
 	while ($true) {
 		$mode1 = Read-Host "* Increase to 32[1], 64[2] or 128[3]"
