@@ -116,7 +116,7 @@ function installRCWM() {
 	cmd.exe /c md $rcwmRoot
 
 	#copy binaries, shortcuts, icons, .bat and .ps1 files into RCWM folder
-	Copy-Item -Path "Temp\*" -Destination $rcwmRoot
+	Copy-Item -Path "Temp\*" -Destination $rcwmRoot -Exclude *.reg, *.cpp
 
 	#take ownership of that folder for administrators (by SID - group names are localized)
 	#users only get the read/execute rights inherited from Program Files - they must not be able to modify files that admins run
