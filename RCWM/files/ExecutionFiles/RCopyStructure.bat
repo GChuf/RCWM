@@ -5,9 +5,11 @@ rem 65001: UTF-8 does not work on Win7
 chcp 65001 > nul
 title RCWM: Copy Structure
 
+set "folder="
 FOR /F "tokens=*" %%g IN ('powershell "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\rstrc).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\rstrc).property }"') do (SET folder=%%g)
 
-IF "%folder%" == 0 (
+IF "%folder%" == "" set "folder=0"
+IF "%folder%" == "0" (
 echo Source folder not specified!
 echo Right-Click and select 'Copy Structure'.
 timeout /t 3 > nul

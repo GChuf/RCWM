@@ -6,10 +6,12 @@ chcp 65000 > nul
 title RCWM: Directory Junction
 
 set curdir=%cd%
+set "folder="
 FOR /F "tokens=*" %%g IN ('powershell "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\dlink).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\dlink).property }"') do (SET folder=%%g)
 cd %curdir%
 
-IF "%folder%" == 0 (
+IF "%folder%" == "" set "folder=0"
+IF "%folder%" == "0" (
 echo Source folder not specified!
 echo Right-Click on a directory and select a Link Source.
 timeout /t 3 > nul

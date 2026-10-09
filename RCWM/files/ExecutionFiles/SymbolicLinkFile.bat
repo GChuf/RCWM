@@ -6,10 +6,12 @@ chcp 65001 > nul
 title RCWM: File Symbolic Link
 
 set curdir=%cd%
+set "file="
 FOR /F "tokens=*" %%g IN ('powershell "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\flink).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\flink).property }"') do (SET file=%%g)
 cd %curdir%
 
-IF "%file%" == 0 (
+IF "%file%" == "" set "file=0"
+IF "%file%" == "0" (
 echo Source file not specified!
 echo Right-Click on a file and select a Link Source.
 timeout /t 3 > nul
