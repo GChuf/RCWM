@@ -202,7 +202,11 @@ if ($mode -ne "s") {
 						}	
 
 						{"y", "yes" -contains $_} {
-							Remove-ItemProperty -Path "HKCU:\SOFTWARE\RCWM\$command" -Name * | Out-Null
+							if ($mode -eq "p") {
+								[System.Windows.Forms.Clipboard]::Clear()
+							} else {
+								Remove-ItemProperty -Path "HKCU:\SOFTWARE\RCWM\$command" -Name * | Out-Null
+							}
 							Write-Host "List deleted."
 							Start-Sleep 2
 							exit
