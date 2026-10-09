@@ -23,7 +23,9 @@ int WINAPI wWinMain(HINSTANCE, HINSTANCE, LPWSTR arg, int) {
 
     if (RegOpenKeyExW(HKEY_CURRENT_USER, regKeyPath.c_str(), 0, KEY_READ | KEY_WRITE, &hSubKey) == ERROR_SUCCESS) {
         // Delete all existing values
-        wchar_t nameBuf[256];
+        // value names are full paths - size for the registry maximum (16383 chars + null),
+        // otherwise RegEnumValueW fails on long paths and stale entries are never deleted
+        static wchar_t nameBuf[16384];
         DWORD nameLen;
         while (true) {
             nameLen = sizeof(nameBuf) / sizeof(wchar_t);
