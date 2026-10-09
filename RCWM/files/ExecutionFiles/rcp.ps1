@@ -329,8 +329,25 @@ If ( $copy -eq $True ) {
 	if ($merge) {
 
 		if ($command -eq "miror") {
-			#Write-host "You're about to $string4 the following file/folder into" $destDirectoryDisplay":"
-			#$merge
+			#mirror runs in single mode (no prompt above), but /MIR deletes files - always confirm
+			Write-Host "You're about to mirror '$sourceDirFullPath' into '$destination'."
+			Write-Host "Files and folders in the destination that don't exist in the source will be DELETED." -ForegroundColor red
+			Do {
+				$Valid = $True
+				[string]$prompt = Read-Host -Prompt "Is this okay? (Y/N)"
+				Switch ($prompt) {
+					{"y", "yes" -contains $_} {}
+					{"n", "no" -contains $_} {
+						Write-Host "Aborting."
+						Start-Sleep 2
+						exit
+					}
+					default {
+						Write-Host "Not a valid entry."
+						$Valid = $False
+					}
+				}
+			} Until ($Valid)
 
 			Write-Host "Executing $robocopy `"$sourceDirFullPath`" `"$destination`" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /R:1 /W:1 /MT:32"
 			& $robocopy "$sourceDirFullPath" "$destination" $flag /E /NP /NJH /NJS /NC /NS /R:1 /W:1 /MT:32
