@@ -48,7 +48,7 @@ echo.
 echo Copying . . .
 echo.
 md "%fname%"
-robocopy "%folder%" "%fname%" /XF * /E /NP /NJH /NJS /NC /NS /MT:16
+robocopy "%folder%" "%fname%" /XF * /E /NP /NJH /NJS /NC /NS /R:1 /W:1 /MT:16
 reg delete "HKCU\SOFTWARE\RCWM\rstrc" /f >NUL
 reg add "HKCU\SOFTWARE\RCWM\rstrc" /f >NUL
 echo Finished!
@@ -63,7 +63,7 @@ goto option%errorlevel%
 echo.
 echo Merging . . .
 echo.
-robocopy "%folder%" "%fname%" /XF * /E /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:16
+robocopy "%folder%" "%fname%" /XF * /E /NP /NJH /NJS /NC /NS /XC /XN /XO /R:1 /W:1 /MT:16
 reg delete "HKCU\SOFTWARE\RCWM\rstrc" /f >NUL
 reg add "HKCU\SOFTWARE\RCWM\rstrc" /f >NUL
 echo Finished!
@@ -74,7 +74,7 @@ exit
 echo.
 echo Overwriting . . .
 echo.
-robocopy "%folder%" "%fname%" /XF * /E /NP /NJH /NJS /NC /NS /MT:16
+robocopy "%folder%" "%fname%" /XF * /E /NP /NJH /NJS /NC /NS /R:1 /W:1 /MT:16
 reg delete "HKCU\SOFTWARE\RCWM\rstrc" /f >NUL
 reg add "HKCU\SOFTWARE\RCWM\rstrc" /f >NUL
 echo Finished!
