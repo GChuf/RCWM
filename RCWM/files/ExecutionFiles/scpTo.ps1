@@ -3,7 +3,8 @@
 
 $host.UI.RawUI.WindowTitle = "RCWM: SCP to ..."
 
-$item = '"' + $args[0] + '"'
+# pass paths unquoted - powershell adds quotes when needed, manual quotes become literal in pwsh 7.3+
+$item = $args[0]
 
 #read previous from reg
 
@@ -14,6 +15,6 @@ $dest = Read-Host "Enter destination directory (default is /tmp)"
 if ($dest -eq "") {$dest = "/tmp"}
 
 $command = $user + "@" + $h0st + ":" + $dest
-Write-Host "Executing scp -r $item $command"
+Write-Host "Executing scp -r `"$item`" $command"
 scp -r $item $command
 start-sleep 1
