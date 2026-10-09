@@ -87,10 +87,10 @@ function recreateFiles() {
 	#copy binaries, shortcuts, icons, .bat and .ps1 files into RCWM folder
 	Copy-Item -Path "Temp\*" -Destination $rcwmRoot -Exclude *.reg, *.cpp
 
-	#take ownership of that folder for administrators & users
+	#take ownership of that folder for administrators (by SID - group names are localized)
+	#users only get the read/execute rights inherited from Program Files - they must not be able to modify files that admins run
 	cmd.exe /c takeown /F $rcwmRoot /R /D Y | Out-Null
-	cmd.exe /c icacls $rcwmRoot /grant administrators:F /T /C | Out-Null
-	cmd.exe /c icacls $rcwmRoot /grant users:F /T /C | Out-Null
+	cmd.exe /c icacls $rcwmRoot /grant *S-1-5-32-544:F /T /C | Out-Null
 
 	#Files copied.
 	
@@ -101,6 +101,9 @@ function mergeFiles() {
 	$sysDrive = ($env:SystemRoot).Substring(0, 3)
 	$rcwmRoot = Join-Path $sysDrive 'Program Files\RCWM'
 	robocopy .\Temp\* $rcwmRoot /XC /XN /XO | Out-Null
+
+	#older versions granted users full control - remove that explicit grant (inherited read/execute stays)
+	cmd.exe /c icacls $rcwmRoot /remove:g *S-1-5-32-545 /T /C | Out-Null
 
 	echo "New files copied"
 }
@@ -114,10 +117,10 @@ function installRCWM() {
 	#copy binaries, shortcuts, icons, .bat and .ps1 files into RCWM folder
 	Copy-Item -Path "Temp\*" -Destination $rcwmRoot
 
-	#take ownership of that folder for administrators & users
+	#take ownership of that folder for administrators (by SID - group names are localized)
+	#users only get the read/execute rights inherited from Program Files - they must not be able to modify files that admins run
 	cmd.exe /c takeown /F $rcwmRoot /R /D Y | Out-Null
-	cmd.exe /c icacls $rcwmRoot /grant administrators:F /T /C | Out-Null
-	cmd.exe /c icacls $rcwmRoot /grant users:F /T /C | Out-Null
+	cmd.exe /c icacls $rcwmRoot /grant *S-1-5-32-544:F /T /C | Out-Null
 
 	#add exclusion - just in case, except for old win versions
 	if ($winVerMajor -ne 6) {
