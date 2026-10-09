@@ -265,7 +265,22 @@ function regReplacements() {
 
 		foreach ($file in $files){
 			$fileName = $file.Name
-			(Get-Content $file) -Replace "HKEY_CLASSES_ROOT", "HKEY_CURRENT_USER\Software\Classes" | Set-Content .\Temp\CurrentUser\$fileName
+
+			#Delete*/Add_* remove/restore entries windows registers under HKLM - deleting them from HKCU would do nothing
+			if ($fileName -like "Delete*.reg" -or $fileName -like "Add_*.reg") {
+				Copy-Item $file.FullName .\Temp\CurrentUser\$fileName
+				continue
+			}
+
+			#install into the current user's registry - except machine-only keys:
+			#CommandStore (explorer reads submenu commands only from HKLM), SYSTEM (long paths), Policies (UAC)
+			(Get-Content $file) | ForEach-Object {
+				if ($_ -match '^\[-?HKEY_LOCAL_MACHINE\\(?i)(SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\CommandStore|SYSTEM|SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies)\\') {
+					$_
+				} else {
+					$_ -replace '^\[(-?)HKEY_LOCAL_MACHINE\\', '[$1HKEY_CURRENT_USER\'
+				}
+			} | Set-Content .\Temp\CurrentUser\$fileName
 		}
 
 		if (-not $install) {
