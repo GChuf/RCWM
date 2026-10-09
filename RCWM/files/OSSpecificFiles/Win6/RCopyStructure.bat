@@ -6,7 +6,7 @@ chcp 65000 > nul
 title RCWM: Copy Structure
 
 set "folder="
-FOR /F "tokens=*" %%g IN ('powershell "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\rstrc).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\rstrc).property }"') do (SET folder=%%g)
+FOR /F "tokens=*" %%g IN ('powershell -NoProfile "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\rstrc).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\rstrc).property }"') do (SET folder=%%g)
 
 IF "%folder%" == "" set "folder=0"
 IF "%folder%" == "0" (

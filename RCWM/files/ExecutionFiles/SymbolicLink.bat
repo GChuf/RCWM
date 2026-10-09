@@ -7,7 +7,7 @@ title RCWM: Directory Symbolic Link
 
 set curdir=%cd%
 set "folder="
-FOR /F "tokens=*" %%g IN ('powershell "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\dlink).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\dlink).property }"') do (SET folder=%%g)
+FOR /F "tokens=*" %%g IN ('powershell -NoProfile "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\dlink).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\dlink).property }"') do (SET folder=%%g)
 cd %curdir%
 
 IF "%folder%" == "" set "folder=0"
