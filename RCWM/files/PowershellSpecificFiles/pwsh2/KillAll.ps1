@@ -8,4 +8,5 @@ $explorerPID = (Get-Process | Where-Object { $_.ProcessName -eq "explorer" }).ID
 #killall
 #get all processes with visible main window
 
-Get-Process | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero } | Select-Object -ExpandProperty Id | Where-Object {($_ -ne $id -and $_ -ne $explorerPID )} | foreach-object -process {taskkill /f /pid $_}
+$ids = @(Get-Process | Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero } | Select-Object -ExpandProperty Id | Where-Object {($_ -ne $id -and $_ -ne $explorerPID )})
+if ($ids) { Stop-Process -Id $ids -Force }

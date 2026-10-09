@@ -3,4 +3,5 @@ $host.UI.RawUI.WindowTitle = "RCWM: Kill All"
 $id = [System.Diagnostics.Process]::GetCurrentProcess() | Select-Object -ExpandProperty ID
 #killall
 #get all processes with visible main window, except explorer
-(gps | ? {$_.mainwindowtitle -and $_.ProcessName -ne "explorer"}).Id | Where-Object {($_ -ne $id)} | foreach-object -parallel {taskkill /f /pid $_}
+$ids = @((gps | ? {$_.mainwindowtitle -and $_.ProcessName -ne "explorer"}).Id | Where-Object {($_ -ne $id)})
+if ($ids) { Stop-Process -Id $ids -Force }
