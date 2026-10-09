@@ -25,7 +25,7 @@ wmic process where name="conhost.exe" CALL setpriority 128 2>nul 1>nul
 set curdir=%cd%
 
 IF NOT EXIST "%folder%" (echo Source folder does not exist! && timeout /t 1 >nul && echo Exiting . . . && timeout /t 2 > nul && exit )
-cd /d %folder%
+cd /d "%folder%"
 for %%I in (.) do set fname=%%~nxI
 cd /d "%curdir%"
 

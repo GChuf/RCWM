@@ -22,7 +22,7 @@ goto start )
 set curdir=%cd%
 
 IF NOT EXIST "%folder%" (echo Source folder does not exist: %folder% && timeout /t 1 >nul && echo Exiting . . . && timeout /t 2 > nul && exit )
-cd /d %folder%
+cd /d "%folder%"
 for %%I in (.) do set fname=%%~nxI
 cd /d "%curdir%"
 
