@@ -482,8 +482,19 @@ If ( $copy -eq $True ) {
 							& $robocopy "$sourceDirFullPath" "$destination" "$filename" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
 
 							if ($command -eq "rcmov" -and $isDirectory) {
-								#Write-Host "removing: $sourceDirFullPath"
-								cmd.exe /c rd /s /q "$sourceDirFullPath"
+								if ($LASTEXITCODE -lt 8) { #anything less than 8 is OK from robocopy
+									#files skipped by /XC /XN /XO stay in source - only remove directories left empty, deepest first
+									Get-ChildItem -LiteralPath "$sourceDirFullPath" -Recurse -Force | Where-Object { $_.PSIsContainer } | Sort-Object { $_.FullName.Length } -Descending | ForEach-Object {
+										if (-not (Get-ChildItem -LiteralPath $_.FullName -Force)) { Remove-Item -LiteralPath $_.FullName -Force }
+									}
+									if (-not (Get-ChildItem -LiteralPath "$sourceDirFullPath" -Force)) {
+										Remove-Item -LiteralPath "$sourceDirFullPath" -Force
+									} else {
+										Write-Host "Files that already exist in the destination were not moved and remain in $sourceDirFullPath" -ForegroundColor yellow
+									}
+								} else {
+									Write-Host "Robocopy failed (exit code $LASTEXITCODE), source not removed: $sourceDirFullPath" -ForegroundColor red
+								}
 							}
 
 							echo "Finished $string3 $sourceDirFullPath\$filename"
