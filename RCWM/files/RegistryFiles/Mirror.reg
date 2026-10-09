@@ -18,5 +18,5 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-20"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\Background\shell\mirror\command]
-@="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\rcp.ps1\" miror s \"%V\""
+@="powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\rcp.ps1\" miror s \"%V\""
 ; end

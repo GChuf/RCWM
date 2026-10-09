@@ -26,5 +26,5 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-6"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\Background\shell\rpaste\command]
-@="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\rcp.ps1\" rcopy m \"%V\""
+@="powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\rcp.ps1\" rcopy m \"%V\""
 ; end

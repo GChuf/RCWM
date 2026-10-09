@@ -13,9 +13,9 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-2"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\shell\rmdir\command]
-@="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\rmitem.ps1\" \"%V\""
+@="powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\rmitem.ps1\" \"%V\""
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\*\shell\rmdir\command]
-@="cmd /c powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\rmitem.ps1\" \"%V\""
+@="powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Program Files\\RCWM\\rmitem.ps1\" \"%V\""
 
 ;done
