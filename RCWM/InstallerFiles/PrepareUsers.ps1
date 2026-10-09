@@ -28,6 +28,7 @@ function prepareUserRegKeys(){
 	$rcwm = "$baseRegPath\RCWM"
 
 	if ($install) {
+		Remove-Item -Path $rcwm -Recurse 2>&1>$null
 		New-Item -Path $rcwm 2>&1>$null
 		New-Item -Path $rcwm\dlink 2>&1>$null
 		New-Item -Path $rcwm\flink 2>&1>$null
@@ -39,23 +40,6 @@ function prepareUserRegKeys(){
 	} else {
 		Remove-Item -Path $rcwm -Recurse 2>&1>$null
 	}
-}
-
-function prepareHKLMRegKeys(){
-
-	cd REGISTRY::HKEY_LOCAL_MACHINE
-
-	cd SOFTWARE -ErrorAction Stop
-
-	Remove-Item -Path RCWM -Recurse 2>&1>$null
-	New-Item -Path RCWM  | Out-Null
-	cd RCWM
-	New-Item -Path dlink | Out-Null
-	New-Item -Path flink | Out-Null
-	New-Item -Path miror | Out-Null
-	New-Item -Path rcmov | Out-Null
-	New-Item -Path rcopy | Out-Null
-	New-Item -Path rstrc | Out-Null
 }
 
 function loopThroughUsers() {
@@ -106,20 +90,17 @@ function loopThroughUsers() {
 		$UUIDsloadedManually = @()
 		foreach ($user in $allUsers)
 		{
-			#write-host "foreach"
+
 			$userName = $user.Name
-			#todo pwsh v2
+
 			$UUID = $userName.Split("\")[-1]
-			#$profilePath = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID" -Name ProfileImagePath
 			$profilePathKey = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\$UUID")
 			$profilePath = $profilePathKey.GetValue("ProfileImagePath")
 			$profilePathKey.Close()
 			if (-not $install) {
 				Write-Host "Removing reg keys for $UUID"
 			} 
-			#else {
-				#Write-Host "Preparing reg keys for $UUID"
-			#}
+
 			#load reg hives in case of uninstalling
 			try {
 				prepareUserRegKeys -user $UUID -install $install
@@ -192,7 +173,6 @@ function loopThroughUsers() {
 
 		regReplacements -mode "current" -install $install
 
-
 	}
 
 }
@@ -207,8 +187,6 @@ function writeVersion(){
 		cd REGISTRY::HKEY_CURRENT_USER
 		cd SOFTWARE
 
-		Remove-Item -Path RCWM -Recurse 2>&1>$null
-		New-Item -Path RCWM  | Out-Null
 		#options enabled by Options.ps1 are recorded here
 		New-Item -Path RCWM\InstallInfo | Out-Null
 
@@ -226,6 +204,7 @@ function writeVersion(){
 		cd REGISTRY::HKEY_LOCAL_MACHINE
 		cd SOFTWARE
 
+		#HKLM\SOFTWARE\RCWM only holds install info (no copy lists) - recreate it, nothing else creates it
 		Remove-Item -Path RCWM -Recurse 2>&1>$null
 		New-Item -Path RCWM  | Out-Null
 		#options enabled by Options.ps1 are recorded here
