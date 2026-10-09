@@ -7,7 +7,7 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-10"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\shell\pwrshell\command]
-@="C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe -noexit -command Set-Location -literalPath '%V'"
+@="cmd.exe /s /c \"cd /d \"%V\" && C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe -noexit\""
 
 
 
@@ -16,7 +16,7 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-10"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\Background\shell\pwrshell\command]
-@="C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe -noexit -command Set-Location -literalPath '%V'"
+@="cmd.exe /s /c \"cd /d \"%V\" && C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe -noexit\""
 
 
 
@@ -25,6 +25,6 @@ Windows Registry Editor Version 5.00
 "Icon"="rcwmimg.dll,-10"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Drive\shell\pwrshell\command]
-@="C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe -noexit -command Set-Location -literalPath '%V'"
+@="cmd.exe /s /c \"cd /d \"%V\" && C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe -noexit\""
 
 ;done
