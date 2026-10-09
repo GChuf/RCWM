@@ -366,7 +366,6 @@ if ($install) {
 	Write-Host ""
 	Write-Host " Choose the options that you want to apply to your right-click menu."
 	Write-Host " There are 3 sections: Add options, Remove options, and Miscellaneous."
-	Write-Host ""
 
 	if ($mode1 -eq "C") {
 		writeVersion("current")
