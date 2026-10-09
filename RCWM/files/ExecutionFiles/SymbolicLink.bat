@@ -6,10 +6,12 @@ chcp 65001 > nul
 title RCWM: Directory Symbolic Link
 
 set curdir=%cd%
+set "folder="
 FOR /F "tokens=*" %%g IN ('powershell "$a='(default)'; if ( (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\dlink).property -eq $a) { echo 0 } else { echo (Get-Item -Path Registry::HKCU\SOFTWARE\RCWM\dlink).property }"') do (SET folder=%%g)
 cd %curdir%
 
-IF "%folder%" == 1 (
+IF "%folder%" == "" set "folder=0"
+IF "%folder%" == "0" (
 echo Source folder not specified!
 echo Right-Click on a directory and select a Link Source.
 timeout /t 3 > nul
@@ -33,12 +35,12 @@ goto :f2
 
 :f1
 IF EXIST "%fname%\" (
-echo Folder with the same name already exists: %f%
+echo Folder with the same name already exists: %fname%
 echo Cannot continue!
 timeout /t 4
 exit
 ) ELSE (
-echo File with the same name already exists: %f%
+echo File with the same name already exists: %fname%
 echo Cannot continue!
 timeout /t 4
 exit
