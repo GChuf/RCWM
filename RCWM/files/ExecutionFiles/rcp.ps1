@@ -8,6 +8,8 @@
 #/NC     : No Class - don't log file classes
 #/NS     : No Size - don't log file sizes
 #/MT[:n] : Do multi-threaded copies with n threads (default 8)
+#/R:1    : Retry once on failed copies (default is 1 million retries - hangs on locked files)
+#/W:1    : Wait 1 second between retries (default 30)
 
 # When overwriting, flags remain the same. Destination files with the same names will be overwritten with source files.
 
@@ -300,8 +302,8 @@ If ( $copy -eq $True ) {
 					exit
 				}
 			}
-			Write-Host "Executing $robocopy `"$sourceDirFullPath`" `"$destination`" `"$filename`" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /MT:32"
-			& $robocopy "$sourceDirFullPath" "$destination" "$filename" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /MT:32
+			Write-Host "Executing $robocopy `"$sourceDirFullPath`" `"$destination`" `"$filename`" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /R:1 /W:1 /MT:32"
+			& $robocopy "$sourceDirFullPath" "$destination" "$filename" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /R:1 /W:1 /MT:32
 
 			if ($command -eq "rcmov" -and $isDirectory) {
 				if ($LASTEXITCODE -lt 8) { #anything less than 8 is OK from robocopy
@@ -326,8 +328,8 @@ If ( $copy -eq $True ) {
 			#Write-host "You're about to $string4 the following file/folder into" $destDirectoryDisplay":"
 			#$merge
 
-			Write-Host "Executing $robocopy `"$sourceDirFullPath`" `"$destination`" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /MT:32"
-			& $robocopy "$sourceDirFullPath" "$destination" $flag /E /NP /NJH /NJS /NC /NS /MT:32
+			Write-Host "Executing $robocopy `"$sourceDirFullPath`" `"$destination`" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /R:1 /W:1 /MT:32"
+			& $robocopy "$sourceDirFullPath" "$destination" $flag /E /NP /NJH /NJS /NC /NS /R:1 /W:1 /MT:32
 
 			echo "Finished $string3 $sourceDirFullPath"
 		} else {
@@ -409,8 +411,8 @@ If ( $copy -eq $True ) {
 								continue
 							}
 
-							Write-Host "Executing $robocopy `"$sourceDirFullPath`" `"$destination`" `"$filename`" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /MT:32"
-							& $robocopy "$sourceDirFullPath" "$destination" "$filename" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /MT:32
+							Write-Host "Executing $robocopy `"$sourceDirFullPath`" `"$destination`" `"$filename`" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /R:1 /W:1 /MT:32"
+							& $robocopy "$sourceDirFullPath" "$destination" "$filename" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /R:1 /W:1 /MT:32
 
 							if ($command -eq "rcmov" -and $isDirectory) {
 								if ($LASTEXITCODE -lt 8) { #anything less than 8 is OK from robocopy
@@ -484,8 +486,8 @@ If ( $copy -eq $True ) {
 								continue
 							}
 
-							Write-Host "Executing $robocopy `"$sourceDirFullPath`" `"$destination`" `"$filename`" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32"
-							& $robocopy "$sourceDirFullPath" "$destination" "$filename" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /XC /XN /XO /MT:32
+							Write-Host "Executing $robocopy `"$sourceDirFullPath`" `"$destination`" `"$filename`" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /XC /XN /XO /R:1 /W:1 /MT:32"
+							& $robocopy "$sourceDirFullPath" "$destination" "$filename" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /XC /XN /XO /R:1 /W:1 /MT:32
 
 							if ($command -eq "rcmov" -and $isDirectory) {
 								if ($LASTEXITCODE -lt 8) { #anything less than 8 is OK from robocopy
