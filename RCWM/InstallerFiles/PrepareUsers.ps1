@@ -103,6 +103,7 @@ function loopThroughUsers() {
 		#prepare reg keys - works for logged in users without loading reg hives
 		#with loading reg hives works for all users, except some exceptions
 		Write-Host "Preparing registry ..."
+		$UUIDsloadedManually = @()
 		foreach ($user in $allUsers)
 		{
 			#write-host "foreach"
@@ -135,10 +136,13 @@ function loopThroughUsers() {
 				}
 			}
 			finally {
-				# Force release any handles
-				[gc]::Collect()
-				[gc]::WaitForPendingFinalizers()
-				reg unload HKU\$UUID 2>&1>$null
+				#only unload hives loaded above - logged in users' hives are loaded by windows
+				if ($UUIDsloadedManually -contains $UUID) {
+					# Force release any handles
+					[gc]::Collect()
+					[gc]::WaitForPendingFinalizers()
+					reg unload HKU\$UUID 2>&1>$null
+				}
 			}
 
 		}
