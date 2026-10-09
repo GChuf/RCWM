@@ -6,6 +6,7 @@ Windows Registry Editor Version 5.00
 @="Mirror Source Directory"
 "NoWorkingDirectory"=""
 "Icon"="rcwmimg.dll,-20"
+"MultiSelectModel"="Single"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Directory\shell\mirror\command]
 @="C:\\Program Files\\RCWM\\rcwm-single.exe miror %V"
