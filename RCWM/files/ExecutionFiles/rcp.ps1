@@ -289,6 +289,22 @@ If ( $copy -eq $True ) {
 			#overwrite - or just copy
 			[string[]]$merge += $fullPath
 		} elseif ($command -ne "miror") {
+			#moving within the same volume - rename instead of copying all data and deleting the source
+			if ($command -eq "rcmov" -and ([System.IO.Path]::GetPathRoot($fullPath) -eq [System.IO.Path]::GetPathRoot($destinationToCheck))) {
+				try {
+					if ($isDirectory) {
+						[System.IO.Directory]::Move($fullPath, $destinationToCheck)
+					} else {
+						[System.IO.File]::Move($fullPath, $destinationToCheck)
+					}
+					echo "Finished $string3 $fullPath"
+					continue
+				} catch {
+					#e.g. a different volume mounted into a folder, or files in use - fall back to robocopy
+					Write-Host "Could not move by renaming ($($_.Exception.Message.Trim())), using robocopy ..."
+				}
+			}
+
 			#if the source! is a folder, make new directory with the same name as the folder being copied
 			if ($isDirectory) {
 				New-Item -Path "$destination" -ItemType Directory
