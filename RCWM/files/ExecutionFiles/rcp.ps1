@@ -346,8 +346,16 @@ If ( $copy -eq $True ) {
 	if ($merge) {
 
 		if ($command -eq "miror") {
+			#mirror sources are folders - mirror each one into the folder with the same name under the destination
+			#(don't rely on $sourceDirFullPath/$destination, they hold whatever item the loop above handled last)
+			$mirrorPairs = foreach ($fullPath in $merge) {
+				New-Object PSObject -Property @{ Source = $fullPath; Destination = [string]$destDir + "\" + ($fullPath -split "\\")[-1] }
+			}
+
 			#mirror runs in single mode (no prompt above), but /MIR deletes files - always confirm
-			Write-Host "You're about to mirror '$sourceDirFullPath' into '$destination'."
+			foreach ($pair in $mirrorPairs) {
+				Write-Host "You're about to mirror '$($pair.Source)' into '$($pair.Destination)'."
+			}
 			Write-Host "Files and folders in the destination that don't exist in the source will be DELETED." -ForegroundColor red
 			Do {
 				$Valid = $True
@@ -366,10 +374,12 @@ If ( $copy -eq $True ) {
 				}
 			} Until ($Valid)
 
-			Write-Host "Executing $robocopy `"$sourceDirFullPath`" `"$destination`" $flag $copyEmptyDirectoriesFlag /NP /NJH /NJS /NC /NS /R:1 /W:1 /MT:32"
-			& $robocopy "$sourceDirFullPath" "$destination" $flag /E /NP /NJH /NJS /NC /NS /R:1 /W:1 /MT:32
+			foreach ($pair in $mirrorPairs) {
+				Write-Host "Executing $robocopy `"$($pair.Source)`" `"$($pair.Destination)`" $flag /E /NP /NJH /NJS /NC /NS /R:1 /W:1 /MT:32"
+				& $robocopy "$($pair.Source)" "$($pair.Destination)" $flag /E /NP /NJH /NJS /NC /NS /R:1 /W:1 /MT:32
 
-			echo "Finished $string3 $sourceDirFullPath"
+				echo "Finished $string3 $($pair.Source)"
+			}
 		} else {
 
 			Write-host "Successfully copied" $($sourcesArrayLength - $merge.length - $missingCount) "out of" $sourcesArrayLength "items."
