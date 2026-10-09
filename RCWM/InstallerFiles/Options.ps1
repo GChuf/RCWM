@@ -1,3 +1,5 @@
+#"current" or "all" - passed by PrepareUsers.ps1, decides where enabled options are recorded
+$installMode = $args[0]
 $arch = cmd.exe /c echo "%PROCESSOR_ARCHITECTURE%"
 $ps = $psversiontable.psversion.major
 
@@ -317,7 +319,7 @@ function prompt() {
 }
 
 function enableReg() {
-	param([string]$regFile, [string]$name, [string]$mode)
+	param([string]$regFile, [string]$name, [string]$mode = $installMode)
 	#pwsh v2
 	$reg = get-childitem -path . -recurse -include $regFile -ErrorAction SilentlyContinue
 

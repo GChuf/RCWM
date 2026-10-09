@@ -205,6 +205,8 @@ function writeVersion(){
 
 		Remove-Item -Path RCWM -Recurse 2>&1>$null
 		New-Item -Path RCWM  | Out-Null
+		#options enabled by Options.ps1 are recorded here
+		New-Item -Path RCWM\InstallInfo | Out-Null
 
 		cd RCWM
 
@@ -222,6 +224,8 @@ function writeVersion(){
 
 		Remove-Item -Path RCWM -Recurse 2>&1>$null
 		New-Item -Path RCWM  | Out-Null
+		#options enabled by Options.ps1 are recorded here
+		New-Item -Path RCWM\InstallInfo | Out-Null
 
 		cd RCWM
 
@@ -362,10 +366,10 @@ if ($install) {
 
 	if ($mode1 -eq "C") {
 		writeVersion("current")
-		powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $null
+		powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 current
 	} elseif ($mode1 -eq "A" ) { 
 		writeVersion("all")
-		powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 $null
+		powershell Set-ExecutionPolicy Bypass -Scope Process; ..\InstallerFiles\Options.ps1 all
 	}
 
 
