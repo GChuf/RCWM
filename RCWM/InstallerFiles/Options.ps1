@@ -142,12 +142,69 @@ $MiscOptions = @(
 	New-Object PSObject -Property @{Name = 'EnableLongPaths'; RegFile = 'EnableLongPaths.reg'; Desc = 'Do you want to enable long paths (over 260 characters)'}
 )
 
+$MiscOptions += New-Object PSObject -Property @{Name = 'PowershellConsole'; RegFile = 'x'; Desc = 'Do you want faster PowerShell windows (1000-line scrollback instead of 3000+, TrueType font for unicode characters)'; exception = "PowershellConsole"}
+
 #telemetry only exists in powershell 7 (pwsh)
 if (Get-Command pwsh -ErrorAction SilentlyContinue) {
 	$MiscOptions += New-Object PSObject -Property @{Name = 'DisablePwshTelemetry'; RegFile = 'x'; Desc = 'Do you want to disable PowerShell 7 telemetry for all users (also slightly faster startup)'; exception = "DisablePwshTelemetry"}
 }
 
 #exceptions:
+function setConsoleKey($userKey, [string]$consoleKey) {
+	$k = $userKey.CreateSubKey("Console\$consoleKey")
+
+	#smaller buffer = much faster output (3000 lines: ~0.7s with 300, ~1s with 1000, ~1.6s with 3000+), but less scrollback
+	#keep the width - the buffer can't be narrower than the window
+	$size = $k.GetValue("ScreenBufferSize")
+	$width = if ($size) { $size -band 0xFFFF } else { 120 }
+	$k.SetValue("ScreenBufferSize", [int]((1000 -shl 16) -bor $width), [Microsoft.Win32.RegistryValueKind]::DWord)
+
+	#raster fonts (or no font = raster on windows 7) can't display unicode characters - use a TrueType font
+	#keep a TrueType font the user already chose (FontFamily bit 0x4 = TrueType)
+	$face = $k.GetValue("FaceName")
+	$family = $k.GetValue("FontFamily")
+	if (-not $face -or $face -eq "Terminal" -or ($family -ne $null -and -not ($family -band 4))) {
+		$k.SetValue("FaceName", "Consolas")
+		$k.SetValue("FontFamily", 0x36, [Microsoft.Win32.RegistryValueKind]::DWord)
+		$k.SetValue("FontWeight", 400, [Microsoft.Win32.RegistryValueKind]::DWord)
+		$k.SetValue("FontSize", 0x00100000, [Microsoft.Win32.RegistryValueKind]::DWord) #16px height (raster sizes are width x height)
+	}
+	$k.Close()
+}
+
+function PowershellConsole(){
+	#console settings are per user and per executable - key name is the exe path with \ replaced by _
+	$consoleKeys = @("%SystemRoot%_System32_WindowsPowerShell_v1.0_powershell.exe")
+	$pwsh = Get-Command pwsh -ErrorAction SilentlyContinue
+	if ($pwsh) { $consoleKeys += ($pwsh.Source -replace '\\', '_') }
+
+	if ($installMode -eq "all") {
+		$loadedHives = @()
+		foreach ($user in Get-ChildItem -Path Registry::"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-*") {
+			$UUID = $user.PSChildName
+			$userKey = [Microsoft.Win32.Registry]::Users.OpenSubKey($UUID, $true)
+			if (-not $userKey) {
+				#user not logged in - load the hive
+				reg load HKU\$UUID "$($user.GetValue('ProfileImagePath'))\NTUSER.DAT" 2>&1>$null
+				if ($LASTEXITCODE -ne 0) { continue } #user might have been deleted
+				$loadedHives += $UUID
+				$userKey = [Microsoft.Win32.Registry]::Users.OpenSubKey($UUID, $true)
+			}
+			foreach ($c in $consoleKeys) { setConsoleKey $userKey $c }
+			$userKey.Close()
+		}
+		# Force release any handles
+		[gc]::Collect()
+		[gc]::WaitForPendingFinalizers()
+		foreach ($UUID in $loadedHives) { reg unload HKU\$UUID 2>&1>$null }
+
+		New-ItemProperty -Path "REGISTRY::HKEY_LOCAL_MACHINE\SOFTWARE\RCWM\InstallInfo" -Name "PowershellConsole" 2>&1>$null
+	} else {
+		foreach ($c in $consoleKeys) { setConsoleKey ([Microsoft.Win32.Registry]::CurrentUser) $c }
+		New-ItemProperty -Path "REGISTRY::HKEY_CURRENT_USER\SOFTWARE\RCWM\InstallInfo" -Name "PowershellConsole" 2>&1>$null
+	}
+}
+
 function DisablePwshTelemetry(){
 	#machine-wide environment variable - SetEnvironmentVariable also notifies running programs (explorer),
 	#so windows opened from the context menu pick it up without logging off
